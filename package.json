@@ -1,0 +1,15 @@
+{
+  "name": "Kyra",
+  "version": "0.0.0",
+  "description": "Kyrandia in phaser",
+  "repository": {
+    "type": "git",
+    "url": "?.git"
+  },
+  "author": "Joshua Cox",
+  "devDependencies": {
+    "gulp": "^3.8.8",
+    "gulp-util": "^2.2.20",
+    "gulp-webserver": "^0.8.1"
+  }
+}

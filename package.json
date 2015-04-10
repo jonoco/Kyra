@@ -4,7 +4,7 @@
   "description": "Kyrandia in phaser",
   "repository": {
     "type": "git",
-    "url": "?.git"
+    "url": "https://github.com/jonoco/Kyra.git"
   },
   "author": "Joshua Cox",
   "devDependencies": {

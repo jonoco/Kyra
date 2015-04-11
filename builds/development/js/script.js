@@ -46,55 +46,6 @@ slots = [
 	{x:438, y:454, name: null, item: null, occupied: false} 
 ];
 
-/*
-__rooms = {
-	room01: {
-		texture: 'room01',
-		music: null,
-		items: [],
-		group: null,
-		blocks: [],
-		doors: [ 
-			{ name: 'room02', x: 400, y: 330, height: 10, width: 200} 
-		],
-		path: 'assets/screens/room01.png',
-		from: {
-			room02: {x: 388, y: 288} 
-		}
-	},
-	room02: {
-		texture: 'room02',
-		music: null,
-		items: [],
-		group: null,
-		blocks: [],
-		doors: [ 
-			{ name: 'room01', x: 600, y: 200, height: 20, width: 50 },
-			{ name: 'room03', x: 20, y: 220, height: 100, width: 10 }
-		],
-		path: 'assets/screens/room02.png',
-		from: {
-			room01: { x: 560, y: 278 },
-			room03: { x: 70, y: 270 } 
-		}
-	},
-	room03: {
-		texture: 'room03',
-		music: null,
-		items: [],
-		group: null,
-		blocks: [],
-		doors: [ 
-			{ name: 'room02', x: 760, y: 220, height: 120, width: 20 } 
-		],
-		path: 'assets/screens/room03.png',
-		from: {
-			room02: {x: 660, y: 258} 
-		}
-	}
-}; // TODO load rooms from rooms.json
-*/
-
 itemAtlas = {
 	garnet        : 0,
 	amythyst      : 1,
@@ -410,6 +361,8 @@ function makeDoors () {
 function update () {
 	
 	if( go.moving ) { 
+		// check for collision with blocks, if collided then
+		// transfer velocity to non-blocked axis
 		move()
 		checkDestination() 
 	};

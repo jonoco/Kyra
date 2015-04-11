@@ -1,8 +1,8 @@
 # Kyra
 
-KyrandiaJS
+##KyrandiaJS
 
-Todo:
+###Todo:
   - refactor everything; everything is currently sitting in the global scope
   - add boundary system; to prevent player from moving onto/thru solid objects, e.g., trees, walls
     - this is to prevent the need for a more complex pathfinding system, which will need more exploration   

@@ -22,7 +22,10 @@ var player,
  		debug = true,
  		slot,
 		slots,
-		start;
+		start,
+		music,
+		musicName,
+		musicLoaded = [];
 
 var go = { 
 	moving: false,
@@ -182,7 +185,6 @@ function preload () {
 	game.load.image('gui', 'assets/img/gui.png');
 	game.load.image('player', 'assets/img/brandon.png');
 	game.load.spritesheet('items', 'assets/img/item_sheet.png', 32, 32);
-	game.load.audio('music_forest', 'assets/music/the_forest.mp3');
 	
 	game.load.onFileComplete.add(function(progress, key) {
 		//console.log(progress + '%');
@@ -198,6 +200,17 @@ function loadRoomData () {
 
 	for (room in rooms) {
 		game.load.image(rooms[room].texture, rooms[room].path);
+		loadAudio(room, rooms);
+	}
+}
+
+function loadAudio (room, rooms) {
+	var roomMusic = rooms[room].music;
+	var loading = game.load.checkKeyExists('audio', roomMusic);
+	if (roomMusic !== null && !loading) {
+		console.log('loading music: ' + roomMusic);
+		game.load.audio(roomMusic, rooms[room].music_path);
+		musicLoaded.push(roomMusic);
 	}
 }
 
@@ -224,9 +237,17 @@ function create () {
 	
 	game.physics.arcade.enable([ player, room ]);
 	player.body.setSize(110, 40, 0, 50);
+}
 
-	//var music = game.sound.play('music_forest');
-
+function checkMusic() {
+	
+	if (musicName != rooms[currentRoom].music) {
+		game.sound.stopAll();
+		musicName = rooms[currentRoom].music;
+		if (musicName != null) {
+			music = game.sound.play(musicName);	
+		}
+	} 
 }
 
 function saveItems () {
@@ -456,7 +477,8 @@ function changeRoom (nextRoom) {
 	player.position = rooms[nextRoom].from[currentRoom];
 	room.loadTexture(rooms[nextRoom].texture);
 	currentRoom = rooms[nextRoom].texture;
-	
+	checkMusic();
+
 	// make objects
 	makeDoors();
 	makeItems();

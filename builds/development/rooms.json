@@ -2,8 +2,10 @@
 	"room01": {
 		"texture": "room01",
 		"music": null,
-		"items": [],
-		"group": null,
+		"items": [
+			{ "name": "apple", "x": 570, "y": 180 },
+			{ "name": "saw", "x": 560, "y": 250 }
+		],
 		"blocks": [],
 		"doors": [ 
 			{ "name": "room02", "x": 400, "y": 330, "height": 10, "width": 200} 
@@ -17,7 +19,6 @@
 		"texture": "room02",
 		"music": null,
 		"items": [],
-		"group": null,
 		"blocks": [],
 		"doors": [ 
 			{ "name": "room01", "x": 600, "y": 200, "height": 20, "width": 50 },
@@ -33,7 +34,6 @@
 		"texture": "room03",
 		"music": null,
 		"items": [],
-		"group": null,
 		"blocks": [],
 		"doors": [ 
 			{ "name": "room02", "x": 760, "y": 220, "height": 120, "width": 20 } 

@@ -9,11 +9,20 @@ var player,
  		rooms,
  		currentRoom = 'room01',
  		timeout,
- 		group,
+ 		doorGroup,
+ 		itemGroup,
+ 		slotsGroup,
+ 		item,
+ 		items,
  		door,
+ 		doors,
  		speed = 220,
  		inventory,
- 		itemAtlas;
+ 		itemAtlas,
+ 		debug = true,
+ 		slot,
+		slots,
+		start;
 
 var go = { 
 	moving: false,
@@ -21,8 +30,20 @@ var go = {
 	to: {} 
 };
 
-inventory = {};
+slots = [ 
+	{x:238, y:402, name: null, item: null, occupied: false},
+ 	{x:288, y:402, name: null, item: null, occupied: false},
+  {x:338, y:402, name: null, item: null, occupied: false},
+  {x:388, y:402, name: null, item: null, occupied: false},
+	{x:438, y:402, name: null, item: null, occupied: false},
+	{x:238, y:454, name: null, item: null, occupied: false},
+	{x:288, y:454, name: null, item: null, occupied: false},
+	{x:338, y:454, name: null, item: null, occupied: false}, 
+	{x:388, y:454, name: null, item: null, occupied: false}, 
+	{x:438, y:454, name: null, item: null, occupied: false} 
+];
 
+/*
 __rooms = {
 	room01: {
 		texture: 'room01',
@@ -69,6 +90,7 @@ __rooms = {
 		}
 	}
 }; // TODO load rooms from rooms.json
+*/
 
 itemAtlas = {
 	garnet        : 0,
@@ -84,96 +106,96 @@ itemAtlas = {
 	topaz         : 10,
 	coal          : 11,
 	sunstone      : 12,
-	pearl         : 13,
-	moonstone     : 14,
-	rainbowstone  : 15,
-	lodestone     : 16,
-	rose          : 17,
-	tulip         : 18,
-	orchid        : 19,
-	magic_rose    : 20,
-	horse         : 21,
-	silver_coin   : 22,
-	gold_coin     : 23,
-	ring          : 24,
-	chalice       : 25,
-	pinecone      : 26,
-	acorn         : 27,
-	walnut        : 28,
-	fireberry1    : 29,
-	fireberry2    : 30,
-	fireberry3    : 31,
-	fireberry4    : 32,
-	fireberry5    : 33,
-	fireberry6    : 34,
-	fish          : 35,
-	fishbone      : 36,
-	meat          : 37,
-	bone          : 38,
-	apple         : 39,
-	apple_core    : 40,
-	blueberry     : 41,
-	mushroom      : 42,
-	note          : 43,
-	marble        : 44,
-	saw           : 45,
-	figure        : 46,
-	feather       : 47,
-	item48        : 48,
-	shell         : 49,
-	clover        : 50,
-	star          : 51,
-	fountainorb   : 52,
-	tear          : 53,
-	mirror        : 54,
-	dish          : 55,
-	flute         : 56,
-	hourglass     : 57,
-	iron_key      : 58,
-	green_key     : 59,
-	blue_key      : 60,
-	red_potion    : 61,
-	red_flask     : 62,
-	blue_potion   : 63,
-	blue_flask    : 64,
-	yellow_potion : 65,
-	yellow_flask  : 66,
-	green_flask   : 67,
-	orange_flask  : 68,
-	purple_flask  : 69,
-	rainbow_flask : 70,
-	water_potion  : 71,
-	water_flask   : 72,
-	water_potion  : 73,
-	water_flask   : 74,
-	water_potion  : 75,
-	water_flask   : 76,
-	water_potion  : 77,
-	water_flask   : 78,
-	potion        : 79,
-	flask         : 80,
-	scroll        : 81
+	moonstone     : 13,
+	rainbowstone  : 14,
+	lodestone     : 15,
+	rose          : 16,
+	tulip         : 17,
+	orchid        : 18,
+	magic_rose    : 19,
+	horse         : 20,
+	silver_coin   : 21,
+	gold_coin     : 22,
+	ring          : 23,
+	chalice       : 24,
+	pinecone      : 25,
+	acorn         : 26,
+	walnut        : 27,
+	fireberry1    : 28,
+	fireberry2    : 29,
+	fireberry3    : 30,
+	fireberry4    : 31,
+	fireberry5    : 32,
+	fireberry6    : 33,
+	fish          : 34,
+	fishbone      : 35,
+	meat          : 36,
+	bone          : 37,
+	apple         : 38,
+	apple_core    : 39,
+	blueberry     : 40,
+	mushroom      : 41,
+	note          : 42,
+	marble        : 43,
+	saw           : 44,
+	figure        : 45,
+	feather       : 46,
+	item48        : 47,
+	shell         : 48,
+	clover        : 49,
+	star          : 50,
+	fountainorb   : 51,
+	tear          : 52,
+	mirror        : 53,
+	dish          : 54,
+	flute         : 55,
+	hourglass     : 56,
+	iron_key      : 57,
+	green_key     : 58,
+	blue_key      : 59,
+	red_potion    : 60,
+	red_flask     : 61,
+	blue_potion   : 62,
+	blue_flask    : 63,
+	yellow_potion : 64,
+	yellow_flask  : 65,
+	green_flask   : 66,
+	orange_flask  : 67,
+	purple_flask  : 68,
+	rainbow_flask : 69,
+	water_potion  : 70,
+	water_flask   : 71,
+	water_potion  : 72,
+	water_flask   : 73,
+	water_potion  : 74,
+	water_flask   : 75,
+	water_potion  : 76,
+	water_flask   : 77,
+	potion        : 78,
+	flask         : 79,
+	scroll        : 80
 }; // TODO load atlas from item-atlas.json
 
 function preload () {
 
-	//load rooms.json
 	game.load.json('rooms', 'rooms.json');
 	game.load.image('gui', 'assets/img/gui.png');
 	game.load.image('player', 'assets/img/brandon.png');
 	game.load.spritesheet('items', 'assets/img/item_sheet.png', 32, 32);
-	//game.load.audio('explosion', 'assets/audio/explosion.mp3');
+	game.load.audio('music_forest', 'assets/music/the_forest.mp3');
+	
 	game.load.onFileComplete.add(function(progress, key) {
-		console.log(progress + '%');
-		console.log(key + ' loaded');
+		//console.log(progress + '%');
+		//console.log(key + ' loaded');
 		if (key == 'rooms') {
 			rooms = game.cache.getJSON('rooms');
-			loadRoomImages();
+			loadRoomData();
 		}
-	}, game)
+	}, game);
 }
 
-function loadRoomImages() {
+function loadRoomData () {
+
 	for (room in rooms) {
 		game.load.image(rooms[room].texture, rooms[room].path);
 	}
@@ -181,7 +203,7 @@ function loadRoomImages() {
 
 function create () {
 
-	game.input.onDown.add(click, this);
+	game.input.onTap.add(click, this);
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
 	room = game.add.sprite(19, 20, rooms.room01.texture);
@@ -197,13 +219,50 @@ function create () {
 	makeDoors();
 	
 	makeItems();
+
+	makeInventory();
 	
 	game.physics.arcade.enable([ player, room ]);
 	player.body.setSize(110, 40, 0, 50);
 
+	//var music = game.sound.play('music_forest');
+
 }
 
-function makeItems() {
+function saveItems () {
+	// iter each item in itemGroup, the local items
+	// save new position of each item to room.items
+
+	itemGroup.forEach(function(item) {
+		for (var i = 0; i < rooms[currentRoom].items.length ; i++) {
+			if (item.name == rooms[currentRoom].items[i].name) {
+				console.log('saving ' + item.name + ' location');
+				rooms[currentRoom].items[i].x = item.x;
+				rooms[currentRoom].items[i].y = item.y;
+				break;	
+			}
+		}
+	}, this);
+}
+
+function makeInventory () {
+	slotsGroup = game.add.group(); // group for slot objects
+	inventory = game.add.group(); // group for items held in slots
+
+	for (var i = 0; i < slots.length ; i++) {
+		slot = game.make.image(slots[i].x, slots[i].y);
+		slot.width = 40;
+		slot.height = 40;
+		slotsGroup.add(slot);
+		
+		if (debug) {
+			slot.loadTexture('items', 4);	
+			slot.alpha = 0.2;
+		}
+	}
+}
+
+function makeItems () {
 	/*
 		iter each item in room.items
 		check item sprite sheet frame from itemAtlas
@@ -211,13 +270,111 @@ function makeItems() {
 		save inventory items in separate inventory object
 		?make all inventory items a separate group?
 	*/
-	var item = game.add.sprite(300, 300, 'items')
-	item.frame = 0;
+	itemGroup = game.add.group();
+	items = rooms[currentRoom].items;
+
+	for (var i = 0 ; i < items.length ;i++) {
+		//console.log(items[i]);
+		item = game.make.image(items[i].x, items[i].y, 'items');
+		item.name = items[i].name;
+		frame = itemAtlas[item.name];
+		item.frame = frame;
+		item.inputEnabled = true;
+		item.input.enableDrag(true, true);
+		//item.input.enableSnap(30, 30, false, true, 240, 400);
+
+		// drag stop
+		// check if item was in inventory, if so, remove from slot
+		// then check drop location
+		item.events.onDragStop.add(function(item) {
+			traceItem(item);
+		});
+
+		itemGroup.add(item);
+	}
 }
 
-function makeDoors() {
-	group = game.add.group();
-	var doors = rooms[currentRoom].doors;
+function traceItem (item) {
+	start = item.input.dragStartPoint;
+	
+	// check if item is from inventory 
+	// if so, remove it from its slot
+	if (inventory.getIndex(item) > 0) {
+		slotsGroup.forEach(function(slot) {
+			var bound = slot.getBounds();
+			var centerX = start.x + item.width/2;
+			var centerY = start.y + item.height/2;
+			
+			// find which slot item came from > free the slot
+			// move item from inventory grou to itemGroup
+			if (centerX > bound.x &&
+					centerX < (bound.x + bound.width) &&
+					centerY > bound.y &&
+					centerY < (bound.y + bound.height)) {
+				console.log('moving item from: ' + slot.x + ' ' + slot.y);
+				slot.name = null;
+				slot.item = null;
+				slot.occupied = false;
+
+				inventory.remove(slot.item);
+				itemGroup.add(item);
+			}
+		})// slotsGroup.forEach
+	}// inventory check
+	
+	// check if item dropped into inventory > add it
+	slotsGroup.forEach(function(slot) {
+		if (inBounds(item, slot)) {
+			moveToInventory(item, slot);
+		}	
+	}, this);
+}
+
+function moveToInventory (item, slot) {
+	// move item from itemGroup to inventory group
+	// if slot occupied, move item to room floor, random pos
+	// and move from inventory group to itemGroup
+	if (slot.occupied) {	
+		slot.item.position = {x: (Math.random()*300 + 50), y: 300};
+		inventory.remove(slot.item);
+		itemGroup.add(slot.item);
+	}
+	
+	moveToCenter(item, slot);
+	slot.name = item.name;
+	slot.item = item;
+	slot.occupied = true;
+
+	itemGroup.remove(item);
+	inventory.add(item);
+}
+
+function inBounds (obj1, obj2) {
+	/* 
+	 * sprite bounds comparison
+	 * checks if obj1 is in the bounds of obj2
+	 */
+	//console.log(bound);
+	var obj = obj1.getBounds();
+	var bound = obj2.getBounds();
+
+	if (bound.x < obj.centerX && (bound.x + bound.width) > obj.centerX &&
+			bound.y < obj.centerY && (bound.y + bound.height) > obj.centerY) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function moveToCenter (obj1, obj2) {
+	obj1.x = obj2.x + obj2.width/2 - obj1.width/2;
+	obj1.y = obj2.y + obj2.height/2 - obj1.height/2;
+}
+
+function makeDoors () {
+	doorGroup = game.add.group();
+	doors = rooms[currentRoom].doors;
+
 	for (var i = 0 ; i < doors.length ; i++) {
 		door = game.make.sprite(doors[i].x, doors[i].y);
 		game.physics.arcade.enable(door);
@@ -225,7 +382,7 @@ function makeDoors() {
 		door.body.setSize(doors[i].width, doors[i].height);
 		door.name = doors[i].name;
 
-		group.add(door);
+		doorGroup.add(door);
 	}
 }
 
@@ -235,7 +392,7 @@ function update () {
 		move()
 		checkDestination() 
 	};
-	game.physics.arcade.collide(player, group, collisionHandler, null, this);
+	game.physics.arcade.collide(player, doorGroup, collisionHandler, null, this);
 }
 
 function collisionHandler (player, obj) {
@@ -246,11 +403,11 @@ function collisionHandler (player, obj) {
 }
 
 function render () {
-	var debug = true;
+
 	if (debug){
 		game.debug.body(player);
-		for (var i = 0 ; i < group.children.length ; i++) {
-			game.debug.body(group.children[i]); 
+		for (var i = 0 ; i < doorGroup.children.length ; i++) {
+			game.debug.body(doorGroup.children[i]); 
 		}
 	}
 }
@@ -287,11 +444,22 @@ function changeRoom (nextRoom) {
 	// move player on from off screen
 	// do not create doors, and prevent input until sequence finished
 	stopMoving();
+
+	// save room state
+	saveItems();
+	
+	// destroy objects
+	doorGroup.destroy();
+	itemGroup.destroy();
+	
+	// setup next room
 	player.position = rooms[nextRoom].from[currentRoom];
-	group.destroy();
 	room.loadTexture(rooms[nextRoom].texture);
 	currentRoom = rooms[nextRoom].texture;
+	
+	// make objects
 	makeDoors();
+	makeItems();
 }
 
 function setDestination (pointer) {
@@ -312,3 +480,16 @@ function stopMoving () {
 	go.moving = false;
 }
 
+function debugOff () {
+	debug = false;
+}
+
+function debugOn () {
+	debug = true;
+}
+
+function checkInventory () {
+	inventory.forEach(function(item) {
+		console.log(item.name);
+	});
+}

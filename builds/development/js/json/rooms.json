@@ -1,0 +1,65 @@
+{
+	"room01": {
+		"texture": "room01",
+		"music": null,
+		"music_path": null,
+		"items": [
+			{ "name": "apple", "x": 570, "y": 180 },
+			{ "name": "saw", "x": 560, "y": 250 }
+		],
+		"grid": "js/json/room01.json",
+		"doors": [ 
+			{ "name": "room02", "x": 450, "y": 390, "height": 20, "width": 340} 
+		],
+		"path": "assets/screens/room01.png",
+		"from": {
+			"room02": {"x": 388, "y": 288} 
+		}
+	},
+	"room02": {
+		"texture": "room02",
+		"music": "forest",
+		"music_path": "assets/music/the_forest.mp3",
+		"items": [],
+		"grid": "js/json/room02.json",
+		"doors": [ 
+			{ "name": "room01", "x": 755, "y": 320, "height": 20, "width": 50 },
+			{ "name": "room03", "x": 20, "y": 240, "height": 150, "width": 20 }
+		],
+		"path": "assets/screens/room02.png",
+		"from": {
+			"room01": { "x": 700, "y": 350 },
+			"room03": { "x": 70, "y": 270 } 
+		}
+	},
+	"room03": {
+		"texture": "room03",
+		"music": "forest",
+		"music_path": "assets/music/the_forest.mp3",
+		"items": [],
+		"grid": "js/json/room03.json",
+		"doors": [ 
+			{ "name": "room04", "x": 20, "y": 340, "height": 60, "width": 20 },
+			{ "name": "room02", "x": 900, "y": 340, "height": 60, "width": 20 } 
+		],
+		"path": "assets/screens/room03.png",
+		"from": {
+			"room02": {"x": 660, "y": 358},
+			"room04": {"x": 160, "y": 358} 
+		}
+	},
+	"room04": {
+		"texture": "room04",
+		"music": "forest",
+		"music_path": "assets/music/the_forest.mp3",
+		"items": [],
+		"grid": "js/json/room04.json",
+		"doors": [ 
+			{ "name": "room03", "x": 920, "y": 20, "height": 140, "width": 20 } 
+		],
+		"path": "assets/screens/room04.png",
+		"from": {
+			"room03": {"x": 800, "y": 130} 
+		}
+	}
+}

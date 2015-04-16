@@ -6,6 +6,11 @@ Further project description coming soon...
 
 ###Version changes
 
+####v0.1.1
+- player animations are in
+- inventory system working
+- some bug fixes
+
 ####v0.1.0
 - pathfinding is in; 
 	- this is possible by the great pathfinding library [PathFinding.js](https://github.com/qiao/PathFinding.js)

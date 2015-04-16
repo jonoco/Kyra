@@ -1,6 +1,7 @@
 {
 	"room01": {
 		"texture": "room01",
+		"name": "",
 		"music": null,
 		"music_path": null,
 		"items": [
@@ -18,6 +19,7 @@
 	},
 	"room02": {
 		"texture": "room02",
+		"name": "",
 		"music": "forest",
 		"music_path": "assets/music/the_forest.mp3",
 		"items": [],
@@ -34,6 +36,7 @@
 	},
 	"room03": {
 		"texture": "room03",
+		"name": "",
 		"music": "forest",
 		"music_path": "assets/music/the_forest.mp3",
 		"items": [],

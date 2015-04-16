@@ -28,13 +28,7 @@ BasicGame.Game = function (game) {
   this.tileX = 120;
   this.tileY = 75;
   this.map = null;
-  this.marker = null;
-  this.cursors = null;
-  this.currentTile = 0;
   this.layer = null;
-  this.remove = false;
-  this.modTiles = true;
-  this.updateMarkerIndex;
 
   // grid variables
   this.grid;
@@ -44,20 +38,21 @@ BasicGame.Game = function (game) {
   // sprite variabels
   this.player = null;
   this.tween = null;
-  this.speed = 30; // lower is faster tweening
+  this.speed = 40; // lower is faster tweening
+  this.direction = null;
 
   // inventory variables
   this.slots = [ 
-    {x:238, y:402, name: null, item: null, occupied: false},
-    {x:288, y:402, name: null, item: null, occupied: false},
-    {x:338, y:402, name: null, item: null, occupied: false},
-    {x:388, y:402, name: null, item: null, occupied: false},
-    {x:438, y:402, name: null, item: null, occupied: false},
-    {x:238, y:454, name: null, item: null, occupied: false},
-    {x:288, y:454, name: null, item: null, occupied: false},
-    {x:338, y:454, name: null, item: null, occupied: false}, 
-    {x:388, y:454, name: null, item: null, occupied: false}, 
-    {x:438, y:454, name: null, item: null, occupied: false} 
+    {x:286, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
+    {x:346, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
+    {x:406, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
+    {x:466, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
+    {x:526, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
+    {x:286, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
+    {x:346, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
+    {x:406, y:545, height: 46, width: 44, name: null, item: null, occupied: false}, 
+    {x:466, y:545, height: 46, width: 44, name: null, item: null, occupied: false}, 
+    {x:526, y:545, height: 46, width: 44, name: null, item: null, occupied: false} 
   ];
   this.itemAtlas = {
     garnet        : 0,
@@ -151,6 +146,7 @@ BasicGame.Game = function (game) {
   this.rooms;
   this.currentRoom;
   this.door;
+  this.doors;
   this.doorGroup;
   this.music;
   this.currentMusic;
@@ -173,11 +169,10 @@ BasicGame.Game.prototype = {
     this.createStartRoom();
 
     this.createPlayer();
-    this.game.add.image( 0, 0, 'gui').scale.setTo(0.5);
-
+    this.createGui();
     this.createMap();
     this.createInputs();
-    this.createDoors(); // for debugging
+    this.createDoors();
     this.createItems();
     this.createInventory();
 
@@ -186,7 +181,7 @@ BasicGame.Game.prototype = {
   update: function () {
 
     this.openDoor ? this.checkDoors(): null;
-
+    
   },
 
   render: function () {
@@ -198,7 +193,47 @@ BasicGame.Game.prototype = {
       this.game.debug.body(this.doorGroup.children[i]); 
     }
     */
-  
+
+    this.changePlayerAnimation();
+ 
+  },
+
+  changePlayerAnimation: function () {
+
+    if (Math.abs(this.player.deltaY) > Math.abs(this.player.deltaX)) {
+      // change to up//down texture
+      
+      if (this.player.deltaY > 0) {
+
+        this.player.animations.play('walk-down');
+        this.direction = 'down';
+
+      } else if ( this.player.deltaY < 0) {
+
+        this.player.animations.play('walk-up');        
+        this.direction = 'up';
+      }
+
+    } else if (this.player.deltaX > 0) {
+
+      this.player.animations.play('walk-right');
+      this.direction = 'right';
+
+    } else if (this.player.deltaX < 0) {
+
+      this.player.animations.play('walk-left');
+      this.direction = 'left';
+
+    } else {
+      //stop
+      if (this.direction == 'left' || this.direction == 'up') {
+        this.player.animations.stop();
+        this.player.frameName = 'stand-left';
+      } else {
+        this.player.animations.stop();
+        this.player.frameName = 'stand-right';
+      }
+    }      
   },
 
   quitGame: function (pointer) {
@@ -223,8 +258,7 @@ BasicGame.Game.prototype = {
   checkDoors: function () {
     
     for (var i = 0 ; i < this.doors.length ; i++) {
-      if ( 
-          this.player.x > this.doors[i].x &&
+      if (this.player.x > this.doors[i].x &&
           this.player.x < (this.doors[i].x + this.doors[i].width) &&
           this.player.y > this.doors[i].y &&
           this.player.y < (this.doors[i].y + this.doors[i].height)) {
@@ -234,16 +268,43 @@ BasicGame.Game.prototype = {
     } 
   },
 
+  createGui: function () {
+
+    this.game.add.image( 0, 0, 'gui').scale.setTo(0.5);
+  },
+
   createInventory: function () {
     
+    //todo need slot bg for debugging
+
     this.slotsGroup = this.game.add.group(); // group for slot objects
     this.inventory = this.game.add.group(); // group for items held in slots
 
     for (var i = 0; i < this.slots.length ; i++) {
-      var slot = this.game.make.image(this.slots[i].x, this.slots[i].y);
-      slot.width = 40;
-      slot.height = 40;
-      this.slotsGroup.add(slot);
+      var x = this.slots[i].x,
+          y = this.slots[i].y,
+          height = this.slots[i].height,
+          width = this.slots[i].width;
+
+      // for debug
+      /*
+      var slotBackground = this.game.make.graphics();
+        slotBackground.beginFill(0xffffff, 0.5);
+        slotBackground.drawRect(x, y, width, height);
+        slotBackground.endFill();
+        this.slotsGroup.add(slotBackground);
+      */
+
+      var slot = this.slotsGroup.create( x, y );
+        slot.width = width;
+        slot.height = height;
+        slot.name = null;
+        slot.item = null;
+        slot.occupied = false;
+        //slot.inputEnabled = true;
+        //slot.input.useHandCursor = true;
+        //slot.events.onDragStop.add(function (data) {console.log('item dragged to slot' + slot);}, this);
+        //slot.events.onInputUp.add(function () {console.log('slot up');}, this);
     }
   },
 
@@ -253,7 +314,6 @@ BasicGame.Game.prototype = {
       check item sprite sheet frame from itemAtlas
       make each item draggable
       save inventory items in separate inventory object
-      ?make all inventory items a separate group?
     */
     this.itemGroup = this.game.add.group();
     this.items = this.rooms[this.currentRoom].items;
@@ -266,15 +326,18 @@ BasicGame.Game.prototype = {
       item.frame = frame;
       item.inputEnabled = true;
       item.input.enableDrag(true, true);
-      //item.input.enableSnap(30, 30, false, true, 240, 400);
 
-      // drag stop
       // check if item was in inventory, if so, remove from slot
+      item.events.onDragStart.add(function (data) {
+        //console.log(data);
+        this.checkItemOrigin(data);
+      }, this);
+
       // then check drop location
-      item.events.onDragStop.add(function(item) {
-        //todo use physics.overlap to check if item hit inventory slot
-        //this.traceItem(item);
-      });
+      item.events.onDragStop.add(function (data) {
+        //console.log(data);
+        this.checkItemDest(data);
+      }, this);
 
       this.itemGroup.add(item);
     }
@@ -282,9 +345,32 @@ BasicGame.Game.prototype = {
 
   createPlayer: function () {
 
-    this.player = this.game.add.sprite(318, 338, 'player');
-    this.player.scale.setTo(0.5);
-    this.player.anchor = {x:0.45, y:0.9};
+    //this.player = this.game.add.sprite(318, 338, 'player', 'brandon-1');
+    this.player = this.game.add.sprite(318, 338, 'player', 'stand-right');
+
+    this.player.animations.add('walk-right', [
+      'right-1','right-2','right-3','right-4',
+      'right-5','right-6','right-7'
+    ], 7, true, false);
+    
+    this.player.animations.add('walk-left', [
+      'left-1','left-2','left-3','left-4',
+      'left-5','left-6','left-7'
+    ], 7, true, false);
+    
+    this.player.animations.add('walk-up', [
+      'up-1','up-2','up-3','up-4',
+      'up-5','up-6'
+    ], 7, true, false);
+    
+    this.player.animations.add('walk-down', [
+      'down-1','down-2','down-3','down-4',
+      'down-5','down-6'
+    ], 7, true, false);
+    //this.player.animations.play('walk-right');
+
+    this.player.scale.setTo(1);
+    this.player.anchor = {x:0.5, y:0.9};
     this.physics.arcade.enableBody(this.player);
     this.player.body.setSize(100, 30);
 
@@ -313,7 +399,6 @@ BasicGame.Game.prototype = {
     this.map.tileHeight = this.tileSize;
 
     this.layer = this.map.create('level1', this.tileX, this.tileY, this.tileSize, this.tileSize);
-    //this.layer.resizeWorld();
     
   },
 
@@ -333,48 +418,45 @@ BasicGame.Game.prototype = {
       door.width = width;
       door.inputEnabled = true;
       door.input.useHandCursor = true;
-      door.events.onInputDown.add(function() {
-        console.log('open the door');
+      door.events.onInputDown.add(function(myDoor) {
         this.openDoor = true;
       }, this);
       
     }
   },
 
-  traceItem: function (item) {
-    var start = item.input.dragStartPoint;
+  checkItemOrigin: function (item) {
     
-    // check if item is from inventory 
-    // if so, remove it from its slot
-    if (this.inventory.getIndex(item) > 0) {
-      this.slotsGroup.forEach(function (slot) {
-        var bound = slot.getBounds();
-        var centerX = start.x + item.width/2;
-        var centerY = start.y + item.height/2;
-        
-        // find which slot item came from > free the slot
-        // move item from inventory grou to itemGroup
-        if (centerX > bound.x &&
-            centerX < (bound.x + bound.width) &&
-            centerY > bound.y &&
-            centerY < (bound.y + bound.height)) {
-          //console.log('moving item from: ' + slot.x + ' ' + slot.y);
-          slot.name = null;
-          slot.item = null;
-          slot.occupied = false;
+    // if item is from inventory : clear its slot
+    var slots = this.slotsGroup.children;  
+    for (var i = 0 ; i < slots.length ; i++) {
+      
+      if (this.inBounds(item, slots[i])) {
+        //console.log('removing item from: ' + slots[i].x + ' ' + slots[i].y);
+        this.inventory.remove(slots[i].item);
+        this.itemGroup.add(item);
+        this.clearSlot(slots[i]);
+      }
+    };
+  },
 
-          this.inventory.remove(slot.item);
-          this.itemGroup.add(item);
-        }
-      });// slotsGroup.forEach
-    }// inventory check
-    
-    // check if item dropped into inventory > add it
+  checkItemDest: function (item) {
+
+    // if item dropped into inventory > add it
+
     this.slotsGroup.forEach(function (slot) {
       if (this.inBounds(item, slot)) {
         this.moveToInventory(item, slot);
       } 
     }, this);
+  },
+
+  clearSlot: function (slot) {
+
+    slot.name = null;
+    //slot.item = null;
+    slot.occupied = false;
+
   },
 
   moveToInventory: function (item, slot) {
@@ -409,11 +491,9 @@ BasicGame.Game.prototype = {
   },
 
   inBounds: function (obj1, obj2) {
-    /* 
-     * sprite bounds comparison
-     * checks if obj1 is in the bounds of obj2
-     */
-    //console.log(bound);
+  
+    // sprite bounds comparison
+    // checks if obj1 is in the bounds of obj2 
 
     var obj = obj1.getBounds();
     var bound = obj2.getBounds();
@@ -428,9 +508,8 @@ BasicGame.Game.prototype = {
 
   changeRoom: function (room) {
     var nextRoom = this.rooms[room];
-    //console.log(nextRoom);
 
-    // move player on from off screen
+    // todo move player on from off screen
     // do not create doors, and prevent input until sequence finished
     
     this.stopMoving();
@@ -445,7 +524,9 @@ BasicGame.Game.prototype = {
     // setup next room
     this.player.position = nextRoom.from[this.currentRoom];
     this.room.loadTexture(nextRoom.texture);
+
     this.currentRoom = nextRoom.texture;
+    
     this.importGrid();
     this.checkMusic();
 
@@ -483,7 +564,11 @@ BasicGame.Game.prototype = {
 
   stopMoving: function () {
     
-    this.tween.stop(true);
+    //console.log('stop moving');
+    if (this.tween.isRunning) this.tween.stop(true);
+    //this.player.animations.stop();
+    //this.player.frameName = 'stand-right';
+    //this.openDoor = false; // reset door checking after each move
 
   },
 
@@ -492,7 +577,6 @@ BasicGame.Game.prototype = {
     var roomJson = this.currentRoom + '_json';
     var gridJson = this.game.cache.getJSON(roomJson);
     this.grid.nodes = gridJson;
-
   },
 
   move: function (pointer) {
@@ -502,9 +586,6 @@ BasicGame.Game.prototype = {
   },
 
   findWay: function (pointer) {
-
-    //console.log(Math.floor(pointer.x), Math.floor(pointer.y));
-    //todo error on player click
 
     var startX = this.layer.getTileX(this.player.position.x);
     var startY = this.layer.getTileY(this.player.position.y);
@@ -527,9 +608,7 @@ BasicGame.Game.prototype = {
   createTween: function (path) {
     
     this.tween = this.game.add.tween(this.player);
-    this.tween.onComplete.addOnce(function () {
-      this.openDoor = false;
-    }, this); // resets door checking after each move
+    this.tween.onComplete.add(this.stopMoving, this); 
     
     var prevX = this.player.position.x/this.tileSize;
     var prevY = this.player.position.y/this.tileSize;
@@ -537,27 +616,19 @@ BasicGame.Game.prototype = {
     for ( var i = 0; i < path.length ; i++ ) {
       var x = path[i][0];
       var y = path[i][1];
-  
       var dist = this.game.physics.arcade.distanceBetween({x: x, y: y}, {x: prevX, y: prevY});
-      //console.log(dist);
 
       if (i == path.length - 1) {
-
         this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
-
       } else if (x == prevX || y == prevY && i%3) {
         // pass
       }  else {
-
         this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
         prevX = x;
         prevY = y;
-
       }
     }
     
     this.tween.start();
-    
   }
-
 };

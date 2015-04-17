@@ -12,8 +12,8 @@
 - **ADDED:** add boundary system; to prevent player from moving onto/thru solid objects, e.g., trees, walls
 	- this is to prevent the need for a more complex pathfinding system, which will need more exploration
 - add animation handling system; certain scenes contain animated areas/objects, e.g., sparkling gems, moving water
-- *cough cough* rip animation scenes from source, as well as player animation *cough*
-- add text system; item and scenes create text on interaction, entrance
+- **ADDED:** *cough cough* rip animation scenes from source, as well as player animation *cough*
+- **ADDED:** add text system; item and scenes create text on interaction, entrance
 - add scene event system; first time in certain locations prompt an animated scene, e.g., things moving around and talking
 	- complex: step through an animated precedure, or simple: play a video overlayed on the room then disappear
 - add quest system; simply marks and tracks when certain events occur

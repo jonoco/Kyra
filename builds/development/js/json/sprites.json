@@ -1,0 +1,41 @@
+{
+	"sprites": [
+		{
+			"name": "brandon",
+			"path": "/assets/sprites/brandon.png",
+			"json": "/assets/sprites/brandon.json",
+			"action": {
+				"click": { "text": "I'm getting tired" }
+				},
+			"animated": true,
+			"animations": { 
+				"walk-right": {
+					"frames": [ "right-1","right-2","right-3","right-4","right-5","right-6","right-7" ],
+					"speed": 8,
+					"loop": true
+				},
+				"walk-left" : {
+					"frames": [ "left-1", "left-2", "left-3", "left-4", "left-5", "left-6", "left-7" ],
+					"speed": 8,
+					"loop": true
+				}
+			}	
+		},
+		{
+			"name": "bed",
+			"path": "/assets/sprites/xxx.png",
+			"json": "/assets/sprites/xxx.json",
+			"action": null,
+			"animated": false,
+			"animations": {}
+		},
+		{
+			"name": "lamp",
+			"path": "/assets/sprites/xxx.png",
+			"json": "/assets/sprites/xxx.json",
+			"action": null,
+			"animated": true,
+			"animations": {}
+		}
+	]
+}

@@ -23,6 +23,9 @@ BasicGame.Game = function (game) {
   //  You can use any of these from any function within this State.
   //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
+  // game debugging
+  this.debug = false;
+
   // tilemap variables
   this.tileSize = 8;
   this.tileX = 120;
@@ -149,8 +152,12 @@ BasicGame.Game = function (game) {
   this.doors;
   this.doorGroup;
   this.music;
+  this.text;
   this.currentMusic;
   this.openDoor = false; // checks if last click was on a door > reset on move complete
+
+  //game sprites
+  this.fairy;
 
 };
 
@@ -166,15 +173,14 @@ BasicGame.Game.prototype = {
     this.room = this.game.add.image( 23, 24);
     this.room.scale.setTo(0.5);
 
-    this.createStartRoom();
-
     this.createPlayer();
     this.createGui();
+    this.createText();
     this.createMap();
     this.createInputs();
-    this.createDoors();
-    this.createItems();
     this.createInventory();
+
+    this.createStartRoom();
 
   },
 
@@ -186,13 +192,7 @@ BasicGame.Game.prototype = {
 
   render: function () {
 
-    this.game.debug.text('Open door: ' + this.openDoor, 16, 500);
-    /*
-    this.game.debug.body(this.player);
-    for (var i = 0 ; i < this.doorGroup.children.length ; i++) {
-      this.game.debug.body(this.doorGroup.children[i]); 
-    }
-    */
+    //this.game.debug.text('Open door: ' + this.openDoor, 16, 500);
 
     this.changePlayerAnimation();
  
@@ -246,12 +246,20 @@ BasicGame.Game.prototype = {
 
   },
 
+  createText: function () {
+    
+    this.text = this.game.add.text( 25, 426, 'testing the text', {fill: '#ffffff'} );
+  },
+
   createStartRoom: function () {
 
     this.currentRoom = 'room01';
     this.room.loadTexture(this.currentRoom);
+    this.createDoors();
+    this.createItems();
     this.importGrid();
     this.checkMusic();
+    this.changeText(this.rooms[this.currentRoom].name);
 
   },
 
@@ -274,8 +282,6 @@ BasicGame.Game.prototype = {
   },
 
   createInventory: function () {
-    
-    //todo need slot bg for debugging
 
     this.slotsGroup = this.game.add.group(); // group for slot objects
     this.inventory = this.game.add.group(); // group for items held in slots
@@ -343,6 +349,13 @@ BasicGame.Game.prototype = {
     }
   },
 
+  createFairy: function () {
+
+    this.fairy = this.game.add.sprite(700, 100, 'fairy', 'sit-1');
+    this.fairy.animations.add('fly', ['fly-1', 'fly-2', 'fly-3'], 5, true, false);
+    this.fairy.animations.add('sit', ['sit-1', 'sit-2'], 5, true, false);
+
+  },
   createPlayer: function () {
 
     //this.player = this.game.add.sprite(318, 338, 'player', 'brandon-1');
@@ -351,22 +364,22 @@ BasicGame.Game.prototype = {
     this.player.animations.add('walk-right', [
       'right-1','right-2','right-3','right-4',
       'right-5','right-6','right-7'
-    ], 7, true, false);
+    ], 8, true, false);
     
     this.player.animations.add('walk-left', [
       'left-1','left-2','left-3','left-4',
       'left-5','left-6','left-7'
-    ], 7, true, false);
+    ], 8, true, false);
     
     this.player.animations.add('walk-up', [
       'up-1','up-2','up-3','up-4',
       'up-5','up-6'
-    ], 7, true, false);
+    ], 10, true, false);
     
     this.player.animations.add('walk-down', [
       'down-1','down-2','down-3','down-4',
       'down-5','down-6'
-    ], 7, true, false);
+    ], 9, true, false);
     //this.player.animations.play('walk-right');
 
     this.player.scale.setTo(1);
@@ -405,6 +418,9 @@ BasicGame.Game.prototype = {
   createDoors: function () {
 
     this.doorGroup = this.game.add.group();
+    this.doorDebug = this.game.add.group();
+    this.doorGroup.add(this.doorDebug);
+
     this.doors = this.rooms[this.currentRoom].doors; 
     //
     for (var i = 0 ; i < this.doors.length ; i++) {
@@ -421,7 +437,15 @@ BasicGame.Game.prototype = {
       door.events.onInputDown.add(function(myDoor) {
         this.openDoor = true;
       }, this);
-      
+
+      if (this.debug) {
+        var doorBg = this.game.make.graphics();
+        doorBg.beginFill(0xff0000, 0.3);
+        doorBg.drawRect(x, y, width, height);
+        doorBg.endFill();
+
+        this.doorDebug.add(doorBg);  
+      }
     }
   },
 
@@ -527,6 +551,7 @@ BasicGame.Game.prototype = {
 
     this.currentRoom = nextRoom.texture;
     
+    this.changeText(nextRoom.name);
     this.importGrid();
     this.checkMusic();
 
@@ -544,6 +569,10 @@ BasicGame.Game.prototype = {
         this.music = this.game.sound.play(this.currentMusic); 
       }
     } 
+  },
+
+  changeText: function (string) {
+    this.text.text = string;
   },
 
   saveItems: function () {
@@ -565,7 +594,10 @@ BasicGame.Game.prototype = {
   stopMoving: function () {
     
     //console.log('stop moving');
-    if (this.tween.isRunning) this.tween.stop(true);
+    this.openDoor = false;
+    if (this.tween.isRunning) {
+      this.tween.stop(true);
+    } 
     //this.player.animations.stop();
     //this.player.frameName = 'stand-right';
     //this.openDoor = false; // reset door checking after each move
@@ -592,7 +624,9 @@ BasicGame.Game.prototype = {
     var endX = this.layer.getTileX(pointer.x);
     var endY = this.layer.getTileY(pointer.y);
 
-    console.log(startX +','+ startY + ' to ' + endX +','+ endY);
+    //console.log(startX +','+ startY + ' to ' + endX +','+ endY);
+    console.log(Math.floor(pointer.x), Math.floor(pointer.y));
+
     if (startX != endX || startY != endY) {
 
       var grid = this.grid.clone();

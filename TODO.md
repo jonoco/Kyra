@@ -1,8 +1,8 @@
 #Todo
 
 ###To be implemented
-- area 1 rooms json data, up to the river cave
-- grids for area 1 rooms
+- **ADDED:** area 1 rooms json data, up to the river cave
+- **ADDED:** grids for area 1 rooms
 - random item placement generator
 - **ADDED:** animated player movements
 - **ADDED:** player movement direction detection
@@ -25,3 +25,5 @@
 ###Bugs
 - **FIXED:** tapping on player causes him to disappear
 - **FIXED:** inventory no longer reacts to items
+- player starting in wrong location after room change
+- interrupting player during move can cause him to jump to previous move point

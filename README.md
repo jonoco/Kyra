@@ -9,6 +9,7 @@ Further project description coming soon...
 ####v0.1.1
 - player animations are in
 - inventory system working
+- all area 1 rooms are in
 - some bug fixes
 
 ####v0.1.0

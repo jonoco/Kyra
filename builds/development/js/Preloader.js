@@ -20,7 +20,8 @@ BasicGame.Preloader.prototype = {
 		//	Here we load the rest of the assets our game needs.
 		//	As this is just a Project Template I've not provided these assets, swap them for your own.
 		
-		this.load.atlasJSONArray('player', 'assets/img/brandon.png', 'assets/img/brandon.json');
+		this.load.atlasJSONArray('player', 'assets/sprites/brandon.png', 'assets/sprites/brandon.json');
+		this.load.atlasJSONArray('fairy', 'assets/sprites/fairy.png', 'assets/sprites/fairy.json');
 		this.load.image('titlepage', 'assets/img/title.png');
 		this.load.image('gui', 'assets/img/gui.png');
 		this.load.json('rooms', 'js/json/rooms.json');

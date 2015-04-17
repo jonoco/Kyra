@@ -22,15 +22,23 @@ BasicGame.Preloader.prototype = {
 		
 		this.load.atlasJSONArray('player', 'assets/sprites/brandon.png', 'assets/sprites/brandon.json');
 		this.load.atlasJSONArray('fairy', 'assets/sprites/fairy.png', 'assets/sprites/fairy.json');
+		
 		this.load.image('titlepage', 'assets/img/title.png');
 		this.load.image('gui', 'assets/img/gui.png');
+		
 		this.load.json('rooms', 'js/json/rooms.json');
+		this.load.json('music', 'js/json/music.json');
+		
 		this.load.spritesheet('items', 'assets/img/item_sheet.png', 32, 32);
 	
 		this.load.onFileComplete.add(function(progress, key) {
 			
 			if (key == 'rooms') {
 				this.loadRoomData();
+
+			} else if (key == 'music') {
+				this.loadAudio();
+
 			}
 
 			if (progress == 100) {
@@ -74,23 +82,18 @@ BasicGame.Preloader.prototype = {
 
 		for (room in rooms) {
 			this.load.image(rooms[room].texture, rooms[room].path);
-			this.loadAudio(room, rooms);
 			this.loadGrid(room, rooms);
 		}
 
 	},
 
-	loadAudio: function (room, rooms) {
+	loadAudio: function () {
 
-		var roomMusic = rooms[room].music;
-		var loading = this.load.checkKeyExists('audio', roomMusic);
+		var music = this.cache.getJSON('music');
 		
-		// checks if music is already queued to load
-		if (roomMusic !== null && !loading) {
-			this.load.audio(roomMusic, rooms[room].music_path);
-			//musicLoaded.push(roomMusic);
+		for (track in music) {
+			this.load.audio(music[track].name, music[track].path);
 		}
-
 	},
 
 	loadGrid: function (room, rooms) {

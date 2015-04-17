@@ -187,7 +187,6 @@ BasicGame.Game.prototype = {
   update: function () {
 
     this.openDoor ? this.checkDoors(): null;
-    
   },
 
   render: function () {
@@ -195,7 +194,6 @@ BasicGame.Game.prototype = {
     //this.game.debug.text('Open door: ' + this.openDoor, 16, 500);
 
     this.changePlayerAnimation();
- 
   },
 
   changePlayerAnimation: function () {
@@ -243,12 +241,11 @@ BasicGame.Game.prototype = {
 
     //  Then let's go back to the main menu.
     this.state.start('MainMenu');
-
   },
 
   createText: function () {
     
-    this.text = this.game.add.text( 25, 426, 'testing the text', {fill: '#ffffff'} );
+    this.text = this.game.add.text( 25, 426, 'testing the text', {fill: '#bbbbbb'} );
   },
 
   createStartRoom: function () {
@@ -354,8 +351,8 @@ BasicGame.Game.prototype = {
     this.fairy = this.game.add.sprite(700, 100, 'fairy', 'sit-1');
     this.fairy.animations.add('fly', ['fly-1', 'fly-2', 'fly-3'], 5, true, false);
     this.fairy.animations.add('sit', ['sit-1', 'sit-2'], 5, true, false);
-
   },
+
   createPlayer: function () {
 
     //this.player = this.game.add.sprite(318, 338, 'player', 'brandon-1');
@@ -386,7 +383,6 @@ BasicGame.Game.prototype = {
     this.player.anchor = {x:0.5, y:0.9};
     this.physics.arcade.enableBody(this.player);
     this.player.body.setSize(100, 30);
-
   },
 
   createGrid: function () {
@@ -396,13 +392,11 @@ BasicGame.Game.prototype = {
       allowDiagonal: true,
       dontCrossCorners: true
     });
-    
   },
 
   createInputs: function () {
     
     this.game.input.onTap.add(this.move, this);
-
   },
 
   createMap: function () {
@@ -412,7 +406,6 @@ BasicGame.Game.prototype = {
     this.map.tileHeight = this.tileSize;
 
     this.layer = this.map.create('level1', this.tileX, this.tileY, this.tileSize, this.tileSize);
-    
   },
 
   createDoors: function () {
@@ -480,7 +473,6 @@ BasicGame.Game.prototype = {
     slot.name = null;
     //slot.item = null;
     slot.occupied = false;
-
   },
 
   moveToInventory: function (item, slot) {
@@ -502,7 +494,6 @@ BasicGame.Game.prototype = {
 
     this.itemGroup.remove(item);
     this.inventory.add(item);
-
   },
 
   moveToCenter: function (obj1, obj2) {
@@ -511,7 +502,6 @@ BasicGame.Game.prototype = {
 
     obj1.x = obj2.x + obj2.width/2 - obj1.width/2;
     obj1.y = obj2.y + obj2.height/2 - obj1.height/2;
-
   },
 
   inBounds: function (obj1, obj2) {
@@ -572,6 +562,7 @@ BasicGame.Game.prototype = {
   },
 
   changeText: function (string) {
+    
     this.text.text = string;
   },
 
@@ -601,7 +592,6 @@ BasicGame.Game.prototype = {
     //this.player.animations.stop();
     //this.player.frameName = 'stand-right';
     //this.openDoor = false; // reset door checking after each move
-
   },
 
   importGrid: function () {
@@ -614,7 +604,6 @@ BasicGame.Game.prototype = {
   move: function (pointer) {
 
     this.findWay(pointer);
-
   },
 
   findWay: function (pointer) {

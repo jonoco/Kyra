@@ -3,10 +3,9 @@
 		"texture": "room01",
 		"name": "Brandon's home",
 		"music": null,
-		"music_path": null,
 		"items": [
-			{ "name": "apple", "x": 570, "y": 180 },
-			{ "name": "saw", "x": 560, "y": 250 }
+			{ "name": "apple", "x": 690, "y": 220 },
+			{ "name": "saw", "x": 670, "y": 290 }
 		],
 		"grid": "js/json/room01.json",
 		"doors": [ 
@@ -21,7 +20,6 @@
 		"texture": "room02",
 		"name": "Below Brandon's home",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room02.json",
 		"doors": [ 
@@ -32,14 +30,14 @@
 		"path": "assets/screens/room02.png",
 		"from": {
 			"room07": { "x": 700, "y": 350 },
-			"room03": { "x": 70, "y": 270 } 
+			"room03": { "x": 70, "y": 270 },
+			"room08": { "x": 700, "y": 270 }  
 		}
 	},
 	"room03": {
 		"texture": "room03",
 		"name": "A dying tree",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room03.json",
 		"doors": [ 
@@ -56,7 +54,6 @@
 		"texture": "room04",
 		"name": "A southern cliff",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room04.json",
 		"doors": [ 
@@ -73,7 +70,6 @@
 		"texture": "room05",
 		"name": "The Temple of Kyrandia",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room05.json",
 		"doors": [ 
@@ -90,7 +86,6 @@
 		"texture": "room06",
 		"name": "Inside the Temple",
 		"music": "temple",
-		"music_path": "assets/music/Temple.m4a",
 		"items": [],
 		"grid": "js/json/room06.json",
 		"doors": [ 
@@ -105,7 +100,6 @@
 		"texture": "room07",
 		"name": "Outside Brandon's home",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room07.json",
 		"doors": [ 
@@ -122,16 +116,15 @@
 		"texture": "room08",
 		"name": "Dark forest",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room08.json",
 		"doors": [ 
-			{ "name": "room09", "x": 0, "y": 100, "height": 350, "width": 60 },
-			{ "name": "room02", "x": 900, "y": 100, "height": 350, "width": 60 } 
+			{ "name": "room02", "x": 0, "y": 100, "height": 350, "width": 60 },
+			{ "name": "room09", "x": 900, "y": 100, "height": 350, "width": 60 } 
 		],
 		"path": "assets/screens/room08.png",
 		"from": {
-			"room09": { "x": 630, "y": 300 }, 
+			"room09": { "x": 790, "y": 200 }, 
 			"room02": { "x": 120, "y": 300 } 
 		}
 	},
@@ -139,7 +132,6 @@
 		"texture": "room09",
 		"name": "Pool of Sorrow",
 		"music": "pool",
-		"music_path": "assets/music/Pool of Sorrow.m4a",
 		"items": [],
 		"grid": "js/json/room09.json",
 		"doors": [ 
@@ -148,7 +140,7 @@
 		],
 		"path": "assets/screens/room09.png",
 		"from": {
-			"room08": { "x": 120, "y": 300 }, 
+			"room08": { "x": 130, "y": 300 }, 
 			"room11": { "x": 630, "y": 300 } 
 		}
 	},
@@ -156,7 +148,6 @@
 		"texture": "room11",
 		"name": "Dark forest",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room11.json",
 		"doors": [ 
@@ -175,7 +166,6 @@
 		"texture": "room12",
 		"name": "Dark forest",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room12.json",
 		"doors": [ 
@@ -194,7 +184,6 @@
 		"texture": "room13",
 		"name": "Dark forest",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room13.json",
 		"doors": [ 
@@ -209,7 +198,6 @@
 		"texture": "room14",
 		"name": "A forest altar",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room14.json",
 		"doors": [ 
@@ -226,7 +214,6 @@
 		"texture": "room16",
 		"name": "A tall cliff",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room16.json",
 		"doors": [ 
@@ -241,7 +228,6 @@
 		"texture": "room17",
 		"name": "A rocky outcropping",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room17.json",
 		"doors": [ 
@@ -258,7 +244,6 @@
 		"texture": "room18",
 		"name": "A cavernous entrance",
 		"music": "forest",
-		"music_path": "assets/music/Forest.m4a",
 		"items": [],
 		"grid": "js/json/room18.json",
 		"doors": [ 
@@ -274,8 +259,7 @@
 	"room19": {
 		"texture": "room19",
 		"name": "A rickety bridge",
-		"music": "Caves",
-		"music_path": "assets/music/Caves.m4a",
+		"music": "cave",
 		"items": [],
 		"grid": "js/json/room19.json",
 		"doors": [ 

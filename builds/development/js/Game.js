@@ -355,7 +355,6 @@ BasicGame.Game.prototype = {
 
   createPlayer: function () {
 
-    //this.player = this.game.add.sprite(318, 338, 'player', 'brandon-1');
     this.player = this.game.add.sprite(318, 338, 'player', 'stand-right');
 
     this.player.animations.add('walk-right', [
@@ -377,7 +376,6 @@ BasicGame.Game.prototype = {
       'down-1','down-2','down-3','down-4',
       'down-5','down-6'
     ], 9, true, false);
-    //this.player.animations.play('walk-right');
 
     this.player.scale.setTo(1);
     this.player.anchor = {x:0.5, y:0.9};
@@ -522,41 +520,49 @@ BasicGame.Game.prototype = {
 
   changeRoom: function (room) {
     var nextRoom = this.rooms[room];
-
-    // todo move player on from off screen
-    // do not create doors, and prevent input until sequence finished
     
-    this.stopMoving();
-
-    // save room state
-    this.saveItems();
+    // door hit > disable room
+    this.enableInput(false);
     
-    // destroy objects
+    //begin offtweening
+
+    //offtweening complete > save room
+    //this.stopMoving();
+    this.saveItems(); // save room state
     this.doorGroup.destroy();
     this.itemGroup.destroy();
     
-    // setup next room
-    this.player.position = nextRoom.from[this.currentRoom];
+    // ready next room
+    //this.player.position = nextRoom.from[this.currentRoom];
     this.room.loadTexture(nextRoom.texture);
-
     this.currentRoom = nextRoom.texture;
-    
     this.changeText(nextRoom.name);
-    this.importGrid();
     this.checkMusic();
 
-    // make objects
+    //begin ontweening
+
+    // ontweening complete > enable room
+    this.importGrid();
     this.createDoors();
     this.createItems();
+    this.enableInput(true);
+  },
+
+  enableInput: function (bool) {
+    this.input.enabled = bool;
   },
 
   checkMusic: function () {
   
     if (this.currentMusic != this.rooms[this.currentRoom].music) {
-      this.game.sound.stopAll();
+      //this.game.sound.stopAll();
+      console.log('stopping music');
+      this.music ? this.music.fadeOut(): null;
       this.currentMusic = this.rooms[this.currentRoom].music;
+
       if (this.currentMusic != null) {
-        this.music = this.game.sound.play(this.currentMusic); 
+        this.music = this.game.sound.add(this.currentMusic, 1, true);
+        this.music.fadeIn(); 
       }
     } 
   },

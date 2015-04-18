@@ -24,7 +24,7 @@ BasicGame.Game = function (game) {
   //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
   // game debugging
-  this.debug = false;
+  this.debug = true;
 
   // tilemap variables
   this.tileSize = 8;
@@ -172,6 +172,7 @@ BasicGame.Game.prototype = {
 
     this.room = this.game.add.image( 23, 24);
     this.room.scale.setTo(0.5);
+    this.room.inputEnabled = true;
 
     this.createPlayer();
     this.createGui();
@@ -186,12 +187,13 @@ BasicGame.Game.prototype = {
 
   update: function () {
 
-    this.openDoor ? this.checkDoors(): null;
+    //this.openDoor ? this.checkDoors(): null;
+    this.physics.arcade.overlap(this.player, this.doorGroup, this.checkDoor);
   },
 
   render: function () {
 
-    //this.game.debug.text('Open door: ' + this.openDoor, 16, 500);
+    this.game.debug.text('Open door: ' + this.openDoor, 16, 500);
 
     this.changePlayerAnimation();
   },
@@ -250,7 +252,7 @@ BasicGame.Game.prototype = {
 
   createStartRoom: function () {
 
-    this.currentRoom = 'room01';
+    this.currentRoom = 'room02';
     this.room.loadTexture(this.currentRoom);
     this.createDoors();
     this.createItems();
@@ -260,13 +262,22 @@ BasicGame.Game.prototype = {
 
   },
 
+  checkDoor: function (player, door) {
+
+    // todo door collision check finally successful
+    // on collision, check for correct door, then begin exit procedure
+
+    console.log(player);
+    console.log(door.name);
+  },
+
   checkDoors: function () {
     
     for (var i = 0 ; i < this.doors.length ; i++) {
-      if (this.player.x > this.doors[i].x &&
-          this.player.x < (this.doors[i].x + this.doors[i].width) &&
-          this.player.y > this.doors[i].y &&
-          this.player.y < (this.doors[i].y + this.doors[i].height)) {
+      if (this.player.x+this.player.width/2 > this.doors[i].x &&
+          this.player.x+this.player.width/2 < (this.doors[i].x + this.doors[i].width) &&
+          this.player.y+this.player.height/2 > this.doors[i].y &&
+          this.player.y+this.player.height/2 < (this.doors[i].y + this.doors[i].height)) {
 
         this.changeRoom(this.doors[i].name);
       }
@@ -394,7 +405,10 @@ BasicGame.Game.prototype = {
 
   createInputs: function () {
     
-    this.game.input.onTap.add(this.move, this);
+    //this.game.input.onTap.add(this.move, this);
+    this.room.events.onInputDown.add(function (pointer) {
+      this.move(this.game.input.position);
+    }, this);
   },
 
   createMap: function () {
@@ -410,7 +424,7 @@ BasicGame.Game.prototype = {
 
     this.doorGroup = this.game.add.group();
     this.doorDebug = this.game.add.group();
-    this.doorGroup.add(this.doorDebug);
+    //this.doorGroup.add(this.doorDebug);
 
     this.doors = this.rooms[this.currentRoom].doors; 
     //
@@ -418,16 +432,22 @@ BasicGame.Game.prototype = {
       var x = this.doors[i].x,
           y = this.doors[i].y,
           height = this.doors[i].height,
-          width = this.doors[i].width;
+          width = this.doors[i].width,
+          entry = this.doors[i].entry;
 
       var door = this.doorGroup.create( x, y );
-      door.height = height;
-      door.width = width;
-      door.inputEnabled = true;
-      door.input.useHandCursor = true;
-      door.events.onInputDown.add(function(myDoor) {
-        this.openDoor = true;
-      }, this);
+        door.height = height;
+        door.width = width;
+        door.name = this.doors[i].name;
+        door.inputEnabled = true;
+        door.input.useHandCursor = true;
+        this.physics.arcade.enable(door);
+
+        door.events.onInputDown.add(function (myDoor) {
+          console.log(myDoor.name);
+          this.openDoor = true;
+          this.move(entry);
+        }, this);
 
       if (this.debug) {
         var doorBg = this.game.make.graphics();
@@ -520,11 +540,16 @@ BasicGame.Game.prototype = {
 
   changeRoom: function (room) {
     var nextRoom = this.rooms[room];
+    var currRoom = this.rooms[this.currentRoom];
     
     // door hit > disable room
     this.enableInput(false);
     
     //begin offtweening
+    this.between = this.game.add.tween(this.player)
+    this.between.to(currentRoom.off, 100);
+    this.tween.chain(this.between);
+    //console.log(this.rooms[this.currentRoom].to[room]);
 
     //offtweening complete > save room
     //this.stopMoving();
@@ -533,13 +558,14 @@ BasicGame.Game.prototype = {
     this.itemGroup.destroy();
     
     // ready next room
-    //this.player.position = nextRoom.from[this.currentRoom];
+    this.player.position = nextRoom.from[this.currentRoom];
     this.room.loadTexture(nextRoom.texture);
     this.currentRoom = nextRoom.texture;
     this.changeText(nextRoom.name);
     this.checkMusic();
 
     //begin ontweening
+    //this.between.from()
 
     // ontweening complete > enable room
     this.importGrid();
@@ -556,7 +582,7 @@ BasicGame.Game.prototype = {
   
     if (this.currentMusic != this.rooms[this.currentRoom].music) {
       //this.game.sound.stopAll();
-      console.log('stopping music');
+      //console.log('stopping music');
       this.music ? this.music.fadeOut(): null;
       this.currentMusic = this.rooms[this.currentRoom].music;
 
@@ -628,13 +654,13 @@ BasicGame.Game.prototype = {
       this.path = this.finder.findPath(startX, startY, endX, endY, grid);
       var newPath = PF.Util.smoothenPath(this.grid, this.path);
       
-      this.createTween(newPath);
+      this.tweenPath(newPath);
       this.path = null;
 
     }
   },
 
-  createTween: function (path) {
+  tweenPath: function (path) {
     
     this.tween = this.game.add.tween(this.player);
     this.tween.onComplete.add(this.stopMoving, this); 

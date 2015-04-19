@@ -31,3 +31,12 @@
 - when items are dragged onto the inventory, the item is checked against the slotsGroup to find which slot of the inventory they hit
 - the item is then transferred from the room's itemGroup, and the inventory's inventory group
 - if an item already exists at the slot hit, it is placed on the ground, and the new item takes its slot; both items have their groups swapped
+
+####7. Doors
+##### Doors are the interface between rooms, and contain all transition information.
+- each door consists of shape parameters, as well as entry and offPoint, and animation information
+- entry refers to the point the player will move to when clicking onto a door, and the point the player will move to on entering a room through that door
+- offPoint is a point off screen that the player is tweened to to create a smoother transition effect
+- animations are included in certain doors during exiting or entering
+	- the only door planned to have an animation is the door to brandon's house from the branch of the tree
+	- an animation is used in place of an offPoint

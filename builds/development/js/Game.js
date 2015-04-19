@@ -24,7 +24,7 @@ BasicGame.Game = function (game) {
   //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
   // game debugging
-  this.debug = true;
+  this.debug = false;
 
   // tilemap variables
   this.tileSize = 8;
@@ -41,6 +41,7 @@ BasicGame.Game = function (game) {
   // sprite variabels
   this.player = null;
   this.tween = null;
+  this.between = null;
   this.speed = 40; // lower is faster tweening
   this.direction = null;
 
@@ -189,13 +190,14 @@ BasicGame.Game.prototype = {
 
   update: function () {
 
+    //console.log(this.rooms.room03.doors['room02'].offPoint);
+
     this.game.debug.text('Open door: ' + this.openDoor, 16, 475);
     this.game.debug.soundInfo(this.music, 216, 475);
 
-    //this.openDoor ? this.checkDoors(): null;
     if (this.openDoor) {
 
-      this.physics.arcade.overlap(this.player, this.doorGroup, this.checkDoor, null, this);
+      this.physics.arcade.overlap(this.player, this.doorGroup, this.peekInDoor, null, this);
     }
   },
 
@@ -265,7 +267,6 @@ BasicGame.Game.prototype = {
     this.importGrid();
     this.checkMusic();
     this.changeText(this.rooms[this.currentRoom].name);
-
   },
 
   createGui: function () {
@@ -458,51 +459,32 @@ BasicGame.Game.prototype = {
     this.move(myDoor.entry);
   },
 
-  checkDoor: function (player, door) {
-    
-    //console.log(door.name, this.openDoor);
-    //console.log(player.door == door.name);
-    //var myDoor = this.rooms[this.currentRoom].doors[door.name];
+  peekInDoor: function (player, door) {
 
     if (door.name == this.openDoor) {
-      console.log('correct door!');
       this.openDoor = false;
+      this.door = door.name;
     
-      this.exitRoom(door); 
+      this.exitRoom(); 
     }
   },
 
-  exitRoom: function (door) {
+  exitRoom: function () {
     console.log('exiting room');
 
-    var myDoor = this.rooms[this.currentRoom].doors[door.name];
-
-    // begin exiting procedure
+    var myDoor = this.rooms[this.currentRoom].doors[this.door];
+    
     this.enableInput(false);
 
     // offtweening
-    if (myDoor.off) {
-      this.between = this.game.add.tween(this.player)
-      this.between.to(myDoor.off, 50); //todo adjust betweening speed
-      this.tween.chain(this.between);  
-      this.between.onComplete.add(function() {
-        
-        console.log('betweened off')
-        
-        //check for exit animations
-        if (myDoor.animation) {
-          //start exiting animation
-        }
-        //change room
-        this.changeRoom(door);
-
-      }, this); 
-    } else {
-
+    if (myDoor.offPoint) {
+      
+      this.tweenOut();
+      
+    } else if (myDoor.animation) {
+      console.log('door has animation');
       //check for exit animations
-      if (myDoor.animation) {
-        //start exiting animation
-      }
+      //start exiting animation
 
       //change room
       this.changeRoom(door);
@@ -512,30 +494,64 @@ BasicGame.Game.prototype = {
   enterRoomFrom: function (room) {
     console.log('entering room');
     // entering this <door> into this <currRoom>
-    var currRoom = this.rooms[this.currentRoom];
-    var doorFrom = room.texture;
-    console.log(room);
+    var myDoor = this.rooms[this.currentRoom].doors[room.texture];
 
     // check for enter animation
-    if (currRoom.doors[doorFrom].animation) {
-      // entrance animation exists
+    if (myDoor.animation) {
       // play animation
     }
 
     //move player into position for ontweening
-    this.player.position = currRoom.doors[doorFrom].off;
+    var startPoint = {};
+    for (val in myDoor.offPoint) {
+      startPoint[val] = myDoor.offPoint[val];
+    }
+    
+    this.player.position = startPoint;
+    this.tweenIn(myDoor);
+  },
 
-    //begin ontweening
+  tweenIn: function (door) {
+    
+    var entryPoint = door.entry;
+    console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
+    
     this.tween = this.game.add.tween(this.player)
-    this.tween.to(currRoom.doors[doorFrom].entry, 80); //todo adjust tween speed
-    this.tween.start();
+    this.tween.to(entryPoint, 440); //todo adjust tween speed
+    this.tween.onComplete.addOnce(function () {
+      
+      console.log('tween in finished');
+      this.openRoom();
+    }, this);
 
-    //after ontweening complete, enable room
-    //this.importGrid();
-    //this.createDoors();
-    //this.createItems();
-    //this.enableInput(true);
-    this.openRoom();
+    this.tween.start();
+  },
+
+  tweenOut: function () {
+    
+    var myDoor = this.rooms[this.currentRoom].doors[this.door];
+    var offPoint = myDoor.offPoint;
+
+    console.log('tweening out to:' + myDoor.offPoint.x +' '+ myDoor.offPoint.y);
+
+    this.between = this.game.add.tween(this.player)
+    this.between.to(offPoint, 440); //todo adjust betweening speed
+    
+    this.between.onComplete.addOnce(function () {
+      //check for exit animations
+
+      console.log('tween out finished');
+      this.changeRoom(myDoor);
+
+    }, this); 
+
+    if (this.tween.isRunning) {
+      console.log('chaining tween');
+      this.tween.chain(this.between); 
+    } else {
+      console.log('running between alone');
+      this.between.start();
+    }
   },
 
   changeRoom: function (door) {
@@ -555,13 +571,11 @@ BasicGame.Game.prototype = {
     this.changeText(nextRoom.name);
     this.checkMusic();
 
-    this.enterRoomFrom(currRoom);
+    this.importGrid();
+    this.createDoors();
+    this.createItems();
 
-    // ontweening complete > enable room
-    //this.importGrid();
-    //this.createDoors();
-    //this.createItems();
-    //this.enableInput(true);
+    this.enterRoomFrom(currRoom);
   },
 
   closeRoom: function () {
@@ -574,9 +588,6 @@ BasicGame.Game.prototype = {
 
   openRoom: function () {
 
-    this.importGrid();
-    this.createDoors();
-    this.createItems();
     this.enableInput(true);
   },
 
@@ -705,16 +716,11 @@ BasicGame.Game.prototype = {
   },
 
   stopMoving: function () {
-    
-    //console.log('stop moving');
-    //this.openDoor = false;
+      
     if (this.tween) {
       this.tween.stop(true);
       this.tweens.remove(this.tween);
     } 
-    //this.player.animations.stop();
-    //this.player.frameName = 'stand-right';
-    //this.openDoor = false; // reset door checking after each move
   },
 
   importGrid: function () {
@@ -742,7 +748,7 @@ BasicGame.Game.prototype = {
   },
 
   closeDoor: function () {
-    console.log('closing door');
+    //console.log('closing door');
     
     this.openDoor = null;
   },
@@ -761,7 +767,7 @@ BasicGame.Game.prototype = {
     var endY = this.layer.getTileY(pointer.y);
 
     //console.log(startX +','+ startY + ' to ' + endX +','+ endY);
-    console.log(Math.floor(pointer.x), Math.floor(pointer.y));
+    //console.log(Math.floor(pointer.x), Math.floor(pointer.y));
 
     if (startX != endX || startY != endY) {
 
@@ -778,7 +784,7 @@ BasicGame.Game.prototype = {
   tweenPath: function (path) {
     
     this.tween = this.game.add.tween(this.player);
-    this.tween.onComplete.add(this.tweenComplete, this); 
+    this.tween.onComplete.addOnce(this.tweenComplete, this); 
     
     var prevX = this.player.position.x/this.tileSize;
     var prevY = this.player.position.y/this.tileSize;

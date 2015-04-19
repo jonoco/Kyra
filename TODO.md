@@ -10,7 +10,7 @@
 - **ADDED:** refactor everything; everything is currently sitting in the global scope
 - **ADDED:** add boundary system; to prevent player from moving onto/thru solid objects, e.g., trees, walls
 	- this is to prevent the need for a more complex pathfinding system, which will need more exploration
-- add animation handling system; certain scenes contain animated areas/objects, e.g., sparkling gems, moving water
+- add sprite animation handling system; certain scenes contain animated areas/objects, e.g., sparkling gems, moving water
 - **ADDED:** *cough cough* rip animation scenes from source, as well as player animation *cough*
 - **ADDED:** add text system; item and scenes create text on interaction, entrance
 - add scene event system; first time in certain locations prompt an animated scene, e.g., things moving around and talking
@@ -20,6 +20,10 @@
 - move itemAtlas to json file
 - add locational sprite events; clicking on certain sprites or dragging items onto them causes an event
 - **ADDED:** fade music on music transition
+- prevent items from being placed anywhere but inventory and walkable locations
+- make items bounce when you put them somewhere they shouldn't go, *cause why not!*
+- add sprite assets
+- add sprite placement and animation information
 
 ###Bugs
 - **FIXED:** tapping on player causes him to disappear

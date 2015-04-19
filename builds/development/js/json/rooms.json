@@ -8,12 +8,16 @@
 			{ "name": "saw", "x": 670, "y": 290 }
 		],
 		"grid": "js/json/room01.json",
-		"doors": [ 
-			{ "name": "room07", "x": 450, "y": 390, "height": 20, "width": 340} 
-		],
 		"path": "assets/screens/room01.png",
-		"from": {
-			"room07": {"x": 388, "y": 328} 
+		"doors": { 
+			"room07": { 
+				"name": "room07",
+			  "x": 450, "y": 390,
+			  "height": 20, "width": 340,
+				"entry": {"x": 520, "y": 380},
+				"offPoint": {"x": 510, "y": 500},
+				"animation": false
+			} 
 		}
 	},
 	"room02": {
@@ -24,22 +28,22 @@
 			{ "name": "sapphire", "x": 400, "y": 300 }
 		],
 		"grid": "js/json/room02.json",
-		"comment": "doors should have exact locations to move to when clicked, which links the entire betweening exit chain they also need to include whether they trigger animations they should also hold the enter tweening information chain",
+		"path": "assets/screens/room02.png",
 		"doors": { 
 			"room07": 
 			{ 
 				"name": "room07",
 				"x": 755, "y": 320,
 			 	"height": 20, "width": 50,
-			 	"entry": {"x": 40, "y": 330},
-			 	"offPoint": {"x": -50, "y": 330}, 
+			 	"entry": {"x": 780, "y": 330}, 
+			 	"offPoint": {"x": 780, "y": 330}, 
 			 	"animation": false
 			},
 			"room03": 
 			{ 
 				"name": "room03",
-			 	"x": 0, "y": 240,
-			  "height": 180, "width": 40,
+			 	"x": 0, "y": 0,
+			  "height": 600, "width": 40,
 			  "entry": {"x": 40, "y": 330},
 			  "offPoint": {"x": -50, "y": 330}, 
 			  "animation": false
@@ -47,18 +51,12 @@
 			"room08": 
 			{ 
 				"name": "room08",
-			 	"x": 920, "y": 240,
-			  "height": 180, "width": 40,
-			  "entry": {"x": 40, "y": 330},
-			  "offPoint": {"x": -50, "y": 330}, 
+			 	"x": 900, "y": 0,
+			  "height": 600, "width": 40,
+			  "entry": {"x": 920, "y": 330},
+			  "offPoint": {"x": 1020, "y": 330}, 
 			  "animation": false
 			}
-		},
-		"path": "assets/screens/room02.png",
-		"from": {
-			"room07": { "x": 700, "y": 350 },
-			"room03": { "x": 70, "y": 270 },
-			"room08": { "x": 700, "y": 270 }  
 		}
 	},
 	"room03": {
@@ -67,28 +65,24 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room03.json",
+		"path": "assets/screens/room03.png",
 		"doors": { 
 			"room04": { 
 				"name": "room04",
-				"x": 0, "y": 340,
-				"height": 80, "width": 60,
-				"entry": {"x": 40, "y": 330},
-				"offPoint": {"x": -50, "y": 330},
+				"x": 0, "y": 0,
+				"height": 600, "width": 60,
+				"entry": {"x": 50, "y": 380},
+				"offPoint": {"x": -50, "y": 380},
 				"animation": false 
 			},
 			"room02": { 
 				"name": "room02",
 			 	"x": 900, "y": 340,
 				"height": 80, "width": 60,
-				"entry": {"x": 901, "y": 380},
+				"entry": {"x": 920, "y": 380},
 			  "offPoint": {"x": 1020, "y": 380},
 			  "animation": false  
 			} 
-		},
-		"path": "assets/screens/room03.png",
-		"from": {
-			"room02": {"x": 840, "y": 358},
-			"room04": {"x": 160, "y": 358} 
 		}
 	},
 	"room04": {
@@ -97,14 +91,24 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room04.json",
-		"doors": [ 
-			{ "name": "room03", "x": 900, "y": 20, "height": 140, "width": 40 },
-			{ "name": "room05", "x": 520, "y": 20, "height": 20, "width": 100 }  
-		],
 		"path": "assets/screens/room04.png",
-		"from": {
-			"room03": { "x": 800, "y": 230 },
-			"room05": { "x": 520, "y": 200 } 
+		"doors": { 
+			"room03": { 
+				"name": "room03", 
+				"x": 900, "y": 20, 
+				"height": 140, "width": 40,
+				"entry": {"x": 848, "y": 184},
+				"offPoint": {"x": 1020, "y": 80},
+				"animation": false
+			},
+			"room05": { 
+				"name": "room05", 
+				"x": 520, "y": 20, 
+				"height": 20, "width": 100,
+				"entry": {"x": 550, "y": 30},
+				"offPoint": {"x": 580, "y": 0},
+				"animation": false 
+			}  
 		}
 	},
 	"room05": {
@@ -113,14 +117,24 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room05.json",
-		"doors": [ 
-			{ "name": "room04", "x": 320, "y": 380, "height": 80, "width": 600 },
-			{ "name": "room06", "x": 440, "y": 100, "height": 200, "width": 130 }  
-		],
 		"path": "assets/screens/room05.png",
-		"from": {
-			"room04": { "x": 800, "y": 130 },
-			"room06": { "x": 600, "y": 330 }  
+		"doors": { 
+			"room04": { 
+				"name": "room04", 
+				"x": 320, "y": 380, 
+				"height": 80, "width": 600,
+				"entry": {"x": 600, "y": 390},
+				"offPoint": {"x": 600, "y": 480},
+				"animation": false 
+			},
+			"room06": { 
+				"name": "room06", 
+				"x": 440, "y": 100, 
+				"height": 200, "width": 130,
+				"entry": {"x": 600, "y": 280},
+				"offPoint": {"x": 500, "y": 280},
+				"animation": false 
+			}  
 		}
 	},
 	"room06": {
@@ -129,12 +143,16 @@
 		"music": "temple",
 		"items": [],
 		"grid": "js/json/room06.json",
-		"doors": [ 
-			{ "name": "room05", "x": 920, "y": 300, "height": 1240, "width": 40 } 
-		],
 		"path": "assets/screens/room06-1.png",
-		"from": {
-			"room05": { "x": 800, "y": 330 } 
+		"doors": {
+			"room05": { 
+				"name": "room05", 
+				"x": 920, "y": 300,
+				"height": 240, "width": 40,
+				"entry": {"x": 890, "y": 380},
+				"offPoint": {"x": 1020, "y": 380},
+				"animation": false 
+			} 
 		}
 	},
 	"room07": {
@@ -143,14 +161,24 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room07.json",
-		"doors": [ 
-			{ "name": "room01", "x": 520, "y": 80, "height": 200, "width": 120 },
-			{ "name": "room02", "x": 520, "y": 330, "height": 100, "width": 200 }  
-		],
 		"path": "assets/screens/room07.png",
-		"from": {
-			"room01": { "x": 630, "y": 300 }, 
-			"room02": { "x": 630, "y": 300 } 
+		"doors": { 
+			"room01": { 
+				"name": "room01", 
+				"x": 520, "y": 80,
+				"height": 200, "width": 120,
+				"entry": {"x": 590, "y": 290},
+				"offPoint": {"x": 550, "y": 170},
+				"animation": false 
+			},
+			"room02": { 
+				"name": "room02", 
+				"x": 520, "y": 330,
+				"height": 100, "width": 200,
+				"entry": {"x": 620, "y": 340},
+				"offPoint": {"x": 630, "y": 500},
+				"animation": false 
+			}  
 		}
 	},
 	"room08": {
@@ -159,14 +187,24 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room08.json",
-		"doors": [ 
-			{ "name": "room02", "x": 0, "y": 100, "height": 350, "width": 60 },
-			{ "name": "room09", "x": 900, "y": 100, "height": 350, "width": 60 } 
-		],
 		"path": "assets/screens/room08.png",
-		"from": {
-			"room09": { "x": 790, "y": 200 }, 
-			"room02": { "x": 120, "y": 300 } 
+		"doors": { 
+			"room02": { 
+				"name": "room02", 
+				"x": 0, "y": 100,
+				"height": 350, "width": 60,
+				"entry": {"x": 60, "y": 275},
+				"offPoint": {"x": -50, "y": 225},
+				"animation": false 
+			},
+			"room09": { 
+				"name": "room09", 
+				"x": 900, "y": 100,
+				"height": 350, "width": 60,
+				"entry": {"x": 920, "y": 275},
+				"offPoint": {"x": 1020, "y": 275},
+				"animation": false 
+			} 
 		}
 	},
 	"room09": {
@@ -175,14 +213,24 @@
 		"music": "pool",
 		"items": [],
 		"grid": "js/json/room09.json",
-		"doors": [ 
-			{ "name": "room08", "x": 0, "y": 100, "height": 350, "width": 60 },
-			{ "name": "room11", "x": 900, "y": 100, "height": 350, "width": 60 } 
-		],
 		"path": "assets/screens/room09.png",
-		"from": {
-			"room08": { "x": 130, "y": 300 }, 
-			"room11": { "x": 630, "y": 300 } 
+		"doors": { 
+			"room08": { 
+				"name": "room08", 
+				"x": 0, "y": 0,
+				"height": 600, "width": 60,
+				"entry": {"x": 60, "y": 385},
+				"offPoint": {"x": -50, "y": 385},
+				"animation": false 
+			},
+			"room11": { 
+				"name": "room11", 
+				"x": 900, "y": 0,
+				"height": 600, "width": 60,
+				"entry": {"x": 920, "y": 325},
+				"offPoint": {"x": 1020, "y": 325},
+				"animation": false 
+			} 
 		}
 	},
 	"room11": {
@@ -191,16 +239,32 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room11.json",
-		"doors": [ 
-			{ "name": "room09", "x": 0, "y": 100, "height": 350, "width": 60 },
-			{ "name": "room12", "x": 0, "y": 0, "height": 60, "width": 960 },
-			{ "name": "room17", "x": 200, "y": 380, "height": 80, "width": 700 }
-		],
 		"path": "assets/screens/room11.png",
-		"from": {
-			"room09": { "x": 630, "y": 300 }, 
-			"room12": { "x": 350, "y": 200 },
-			"room17": { "x": 350, "y": 300 }  
+		"doors":  {
+			"room09": { 
+				"name": "room09", 
+				"x": 0, "y": 20,
+				"height": 550, "width": 60,
+				"entry": {"x": 60, "y": 325},
+				"offPoint": {"x": -50, "y": 325},
+				"animation": false 
+			},
+			"room12": { 
+				"name": "room12", 
+				"x": 0, "y": 0,
+				"height": 60, "width": 960,
+				"entry": {"x": 500, "y": 175},
+				"offPoint": {"x": 505, "y": -20},
+				"animation": false 
+			},
+			"room17": { 
+				"name": "room17", 
+				"x": 50, "y": 380,
+				"height": 80, "width": 900,
+				"entry": {"x": 450, "y": 400},
+				"offPoint": {"x": 450, "y": 500},
+				"animation": false 
+			}
 		}
 	},
 	"room12": {
@@ -209,16 +273,32 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room12.json",
-		"doors": [ 
-			{ "name": "room13", "x": 0, "y": 100, "height": 350, "width": 60 },
-			{ "name": "room14", "x": 900, "y": 20, "height": 350, "width": 60 },
-			{ "name": "room11", "x": 200, "y": 380, "height": 80, "width": 700 }
-		],
 		"path": "assets/screens/room12.png",
-		"from": {
-			"room13": { "x": 130, "y": 300 }, 
-			"room14": { "x": 850, "y": 200 },
-			"room11": { "x": 375, "y": 320 }  
+		"doors": {
+			"room11": { 
+				"name": "room11", 
+				"x": 200, "y": 380,
+				"height": 80, "width": 700,
+				"entry": {"x": 450, "y": 400},
+				"offPoint": {"x": 450, "y": 500},
+				"animation": false 
+			},
+			"room13": { 
+				"name": "room13", 
+				"x": 0, "y": 0,
+				"height": 500, "width": 60,
+				"entry": {"x": 40, "y": 355},
+				"offPoint": {"x": -50, "y": 220},
+				"animation": false 
+			},
+			"room14": { 
+				"name": "room14", 
+				"x": 900, "y": 20,
+				"height": 350, "width": 60,
+				"entry": {"x": 920, "y": 250},
+				"offPoint": {"x": 1020, "y": 250},
+				"animation": false 
+			}
 		}
 	},
 	"room13": {
@@ -227,12 +307,16 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room13.json",
-		"doors": [ 
-			{ "name": "room12", "x": 900, "y": 250, "height": 220, "width": 60 }
-		],
 		"path": "assets/screens/room13.png",
-		"from": {
-			"room12": { "x": 855, "y": 390 }  
+		"doors": {
+			"room12": { 
+				"name": "room12", 
+				"x": 890, "y": 250,
+				"height": 220, "width": 60,
+				"entry": {"x": 900, "y": 360},
+				"offPoint": {"x": 1020, "y": 360},
+				"animation": false 
+			}
 		}
 	},
 	"room14": {
@@ -241,14 +325,24 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room14.json",
-		"doors": [ 
-			{ "name": "room16", "x": 900, "y": 100, "height": 220, "width": 60 },
-			{ "name": "room12", "x": 0, "y": 100, "height": 320, "width": 60 }
-		],
 		"path": "assets/screens/room14-2.png",
-		"from": {
-			"room16": { "x": 785, "y": 230 },  
-			"room12": { "x": 455, "y": 300 }  
+		"doors": { 
+			"room12": { 
+				"name": "room12", 
+				"x": 0, "y": 0,
+				"height": 500, "width": 60,
+				"entry": {"x": 45, "y": 250},
+				"offPoint": {"x": -50, "y": 250},
+				"animation": false 
+			},
+			"room16": { 
+				"name": "room16", 
+				"x": 900, "y": 100,
+				"height": 220, "width": 60,
+				"entry": {"x": 910, "y": 190},
+				"offPoint": {"x": 1020, "y": 190},
+				"animation": false 
+			}
 		}
 	},
 	"room16": {
@@ -257,12 +351,16 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room16.json",
-		"doors": [ 
-			{ "name": "room14", "x": 0, "y": 200, "height": 220, "width": 60 }
-		],
 		"path": "assets/screens/room16.png",
-		"from": { 
-			"room14": { "x": 105, "y": 300 }  
+		"doors": { 
+			"room14": { 
+				"name": "room14", 
+				"x": 0, "y": 0,
+				"height": 500, "width": 60,
+				"entry": {"x": 45, "y": 305},
+				"offPoint": {"x": -50, "y": 305},
+				"animation": false 
+			}
 		}
 	},
 	"room17": {
@@ -271,14 +369,24 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room17.json",
-		"doors": [ 
-			{ "name": "room11", "x": 440, "y": 0, "height": 60, "width": 350 },
-			{ "name": "room18", "x": 0, "y": 380, "height": 80, "width": 500 }
-		],
 		"path": "assets/screens/room17.png",
-		"from": { 
-			"room11": { "x": 500, "y": 200 },
-			"room18": { "x": 300, "y": 340 }  
+		"doors": { 
+			"room11": { 
+				"name": "room11", 
+				"x": 0, "y": 0,
+				"height": 60, "width": 960,
+				"entry": {"x": 570, "y": 180},
+				"offPoint": {"x": 600, "y": -20},
+				"animation": false 
+			},
+			"room18": { 
+				"name": "room18", 
+				"x": 0, "y": 360,
+				"height": 80, "width": 960,
+				"entry": {"x": 320, "y": 390},
+				"offPoint": {"x": 300, "y": 520},
+				"animation": false 
+			}
 		}
 	},
 	"room18": {
@@ -287,14 +395,24 @@
 		"music": "forest",
 		"items": [],
 		"grid": "js/json/room18.json",
-		"doors": [ 
-			{ "name": "room17", "x": 600, "y": 0, "height": 60, "width": 360 },
-			{ "name": "room19", "x": 0, "y": 0, "height": 300, "width": 280 }
-		],
 		"path": "assets/screens/room18.png",
-		"from": { 
-			"room17": { "x": 750, "y": 240 },
-			"room19": { "x": 200, "y": 300 }  
+		"doors": {
+			"room17": { 
+				"name": "room17", 
+				"x": 450, "y": 0,
+				"height": 60, "width": 510,
+				"entry": {"x": 740, "y": 200},
+				"offPoint": {"x": 750, "y": -30},
+				"animation": false 
+			},
+			"room19": { 
+				"name": "room19", 
+				"x": 0, "y": 0,
+				"height": 300, "width": 280,
+				"entry": {"x": 250, "y": 285},
+				"offPoint": {"x": 50, "y": 190},
+				"animation": false 
+			}
 		}
 	},
 	"room19": {
@@ -303,13 +421,16 @@
 		"music": "cave",
 		"items": [],
 		"grid": "js/json/room19.json",
-		"doors": [ 
-			{ "name": "room18", "x": 900, "y": 200, "height": 270, "width": 60 }
-		],
 		"path": "assets/screens/room19.png",
-		"from": { 
-			"room18": { "x": 830, "y": 340 }
+		"doors": {
+			"room18": { 
+				"name": "room18", 
+				"x": 890, "y": 200,
+				"height": 270, "width": 60,
+				"entry": {"x": 900, "y": 320},
+				"offPoint": {"x": 1020, "y": 320},
+				"animation": false 
+			}
 		}
 	}
-
 }

@@ -170,9 +170,7 @@ BasicGame.Game.prototype = {
     this.stage.backgroundColor = '#2d2d2d';
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    this.room = this.game.add.image( 23, 24);
-    this.room.scale.setTo(0.5);
-    this.room.inputEnabled = true;
+    this.createRoom();
     
     this.createPlayer();
     this.createGui();
@@ -190,10 +188,9 @@ BasicGame.Game.prototype = {
 
   update: function () {
 
-    //console.log(this.rooms.room03.doors['room02'].offPoint);
-
     this.game.debug.text('Open door: ' + this.openDoor, 16, 475);
-    this.game.debug.soundInfo(this.music, 216, 475);
+    this.game.debug.text('Player position: ' + this.player.x +', '+ this.player.y, 16, 500);
+    //this.game.debug.soundInfo(this.music, 286, 475);
 
     if (this.openDoor) {
 
@@ -251,6 +248,13 @@ BasicGame.Game.prototype = {
 
     //  Then let's go back to the main menu.
     this.state.start('MainMenu');
+  },
+
+  createRoom: function () {
+
+    this.room = this.game.add.image( 23, 24);
+    this.room.scale.setTo(0.5);
+    this.room.inputEnabled = true;
   },
 
   createText: function () {

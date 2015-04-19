@@ -6,6 +6,12 @@ Further project description coming soon...
 
 ###Version changes
 
+####v0.1.2
+- beginning to implement tweening player off and on scene during entrance/exit
+	- each door will contain it's entrance/exit blocking and animation cues
+- doors are better at detecting when player is interacting with them
+- click inputs are more defined and better controlled; no global input filtering, each interactive body will manage it’s own input
+
 ####v0.1.1
 - player animations are in
 - inventory system working

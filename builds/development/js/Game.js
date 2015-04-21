@@ -35,6 +35,9 @@ BasicGame.Game = function (game) {
   // game debugging
   this.debug = false;
 
+  //utility variables
+  this.timer;
+
   // quest variables
   this.quests;
   this.eventTriggers;
@@ -244,6 +247,11 @@ BasicGame.Game.prototype = {
   },
 
   createQuests: function () {
+    /*
+    * current available event commands:
+    * say, wait, turn
+    * see exeQuestEvent for handling
+    */
 
     this.quests = {
       willow: {
@@ -253,18 +261,29 @@ BasicGame.Game.prototype = {
         treehealed: false,
         events : {
           active: [ 
-            { say: "even the willow tree is dying" },
-            { say: "what's going on around here?!" } 
+            { say: "Even the willow tree is dying" }, 
+            { wait: 100 },
+            { say: "What's going on around here?!" }, 
           ],
-          tear: [{ say: "now i can heal the willow tree" }],
-          treehealed: [{ say: "wow!" }]
+          tear: [ { say: "now i can heal the willow tree" } ],
+          treehealed: [ { say: "wow!" } ]
         }
       },
 
       brynn: {
         active: false,
         events: {
-          active: [{ say: "where the hell is brynn?" }]
+          active: [{ say: "Where the hell is Brynn?" }]
+        }
+      },
+
+      bridge: {
+        active: false,
+        events: {
+          active: [
+            { say: "What happened to the friggn' bridge!?" },
+            { say: "Herman you goob, where are you??" }
+          ]
         }
       }
     };
@@ -274,25 +293,24 @@ BasicGame.Game.prototype = {
     this.eventTriggers = {
       tear: { name: "willow", step: "treehealed" },
       room03: { name: "willow", step: "active" },
-      room06: { name: "brynn", step: "active" }
+      room06: { name: "brynn", step: "active" },
+      room19: { name: "bridge", step: "active" }
     };
-
-    //this.questAlert = new Phaser.Signal();
-    //this.questAlert.add(this.updateQuest, this);
-    //this.questAlert.dispatch("willow");
   },
 
   updateQuest: function (quest) {
-    // update quest status
-    console.log('update quest');
+    // update quest status 
+    // then executes event chain for new status
+    //console.log('update quest');
     
     if (!this.quests[quest.name][quest.step]) {
       this.quests[quest.name][quest.step] = true;
 
       // queue quest related events to run > queue 
       var events = this.quests[quest.name].events[quest.step];
-      for (var i = 0 ; i < events.length ; i++) { this.questQueue.unshift(events[i]); }
-      //this.exeQuestEvent(events);
+      for (var i = 0 ; i < events.length ; i++) { 
+        this.questQueue.unshift(events[i]); 
+      }
     }
   },
 
@@ -311,7 +329,7 @@ BasicGame.Game.prototype = {
   },
 
   popQuestQueue: function () {
-    console.log('popping quest queue');
+    //console.log('popping quest queue');
 
     var event = this.questQueue.pop();
     event ? this.exeQuestEvent(event): null;
@@ -321,6 +339,8 @@ BasicGame.Game.prototype = {
     // evaluate events related to quest state
 
     event.say ? this.say(event.say):null;
+    event.turn ? this.turnPlayer(event.turn):null;
+    event.wait ? this.wait(event.wait):null;
   },
 
   createSprites: function () {
@@ -376,6 +396,12 @@ BasicGame.Game.prototype = {
             
           }, this);
         }// if has click action
+
+        if (action.drag) {
+          // have sprite respond to item dragged onto it
+          // sprite should have array of drag-actionable items to compare to
+
+        }// if has drag action
       }//if has action
     }
   },
@@ -389,7 +415,18 @@ BasicGame.Game.prototype = {
 
   createText: function () {
     
-    this.text = this.game.add.text( 25, 426, 'testing the text', {fill: '#bbbbbb'} );
+    this.speech = this.add.text();
+    this.speech.font = 'kyrandia';
+    this.speech.fontSize = 20;
+    this.speech.stroke = '#000000';
+    this.speech.strokeThickness = 2;
+    this.speech.kill();
+    
+    this.text = this.add.text();
+    this.text.font = 'kyrandia';
+    this.text.x = 25;
+    this.text.y = 426;
+    this.text.fill = '#bbbbbb';
   },
 
   createStartRoom: function () {
@@ -490,12 +527,12 @@ BasicGame.Game.prototype = {
 
     this.player.animations.add('walk-right', [
       'right-1','right-2','right-3','right-4',
-      'right-5','right-6','right-7'
+      'right-5','right-6','right-7', 'right-8'
     ], 8, true, false);
     
     this.player.animations.add('walk-left', [
       'left-1','left-2','left-3','left-4',
-      'left-5','left-6','left-7'
+      'left-5','left-6','left-7', 'left-7'
     ], 8, true, false);
     
     this.player.animations.add('walk-up', [
@@ -508,7 +545,13 @@ BasicGame.Game.prototype = {
       'down-5','down-6'
     ], 9, true, false);
 
-    this.player.scale.setTo(1);
+    this.player.animations.add('talk', [
+      'talk-1', 'talk-2', 'talk-3', 'talk-4', 
+      'talk-5', 'talk-6', 'talk-7', 'talk-8', 
+      'talk-9', 'talk-10', 'talk-11', 'talk-12', 
+    ], 8, true, false);
+
+    this.player.scale.setTo(3);
     this.player.anchor = {x:0.5, y:0.9};
     this.physics.arcade.enableBody(this.player);
     //this.player.body.setSize(100, 30);
@@ -634,7 +677,11 @@ BasicGame.Game.prototype = {
       this.player.animations.play('walk-left');
       this.direction = 'left';
 
-    } else {
+    } else if (this.speech.alive) {
+
+      this.player.animations.play('talk');
+
+    } else {  
       //stop
       if (this.direction == 'left' || this.direction == 'up') {
         this.player.animations.stop();
@@ -649,7 +696,12 @@ BasicGame.Game.prototype = {
   say: function (string, key) {
     // include key for event evaluation
     
-    this.speech = this.game.add.text( (this.player.x), (this.player.top-40), string, {fill: '#eeeeee'});
+    this.speech.revive(); 
+    this.speech.x = this.player.x;
+    this.speech.y = this.player.top-40;
+    this.speech.text = string; 
+    this.speech.fill = '#eeeeee';
+
     var speechKey = key ? key:null;
     
     if (this.speech.right > 920) {
@@ -667,16 +719,38 @@ BasicGame.Game.prototype = {
 
     var length = string.split(' ').length; 
     var timer = this.time.create();
-    timer.add(length*800, function () {
+    timer.add(length*400, function () {
       this.speech.kill();
     },this);
     timer.start();
   },
 
+  turnPlayer: function (direction) {
+    console.log('turning ' + direction);
+
+    if (direction == 'left') {
+      this.player.frameName = 'stand-left';  
+    } else if (direction == 'right') {
+      this.player.frameName = 'stand-right';  
+    }
+    
+    this.evalEvent(direction);
+  },
+
+  wait: function (time) {
+    //console.log('wait called for ' + time + ' ms');
+    var timer;
+    timer ? timer.destroy():null;
+
+    timer = this.time.create()
+    timer.add(time, function () {
+      this.evalEvent(time);  
+    }, this)
+    timer.start();
+  },
+
   moveToDoor: function (door) {
     var myDoor = this.rooms[this.currentRoom].doors[door.name];
-
-    //console.log('move to door:');
 
     this.stopMoving();
     this.openDoor = myDoor.name;

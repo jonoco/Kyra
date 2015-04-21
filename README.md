@@ -9,10 +9,12 @@ Further project description coming soon...
 ####v0.1.3-alpha
 - sprites and sprite animations are in
 - quest system being implemented
+	- quest event triggering now capable of intercepting a variety of events to trigger quest conditions
 - sprite reactions to input are in
 	- clicking on sprites may triggers events, e.g., brandon talking about the object, quest events, animations
 - event queuing now possible
 	- events comprising of multiple distinct events (talking, animations, tweening) can be queued together to run
+- original Kyrandia font added, made by [kanoalgiz](http://fontstruct.com/fontstructors/1099009/kanoalgiz)
 
 ####v0.1.2
 - entering/exiting tweening system is in 

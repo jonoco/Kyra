@@ -35,9 +35,10 @@ BasicGame.Game = function (game) {
   // game debugging
   this.debug = false;
 
-  // signals
-  this.questAlert;
+  // quest variables
   this.quests;
+  this.eventTriggers;
+  this.questQueue = [];
 
   // tilemap variables
   this.tileSize = 8;
@@ -211,13 +212,15 @@ BasicGame.Game.prototype = {
     this.game.debug.text('Pointer position: ' + this.game.input.position.x + ', ' + this.game.input.position.y, 16, 525);
     
     //this.game.debug.soundInfo(this.music, 286, 475);
-    this.game.debug.text('Text z index: ' + this.text.z, 276, 450);
-    this.game.debug.text('Player z index: ' + this.player.z, 276, 475);
-    this.game.debug.text('GUI z index: ' + this.gui.z, 276, 500);
-    this.game.debug.text('room z index: ' + this.room.z, 276, 525);
-    this.game.debug.text('itemGroup z index: ' + this.itemGroup.z, 276, 550);
-    this.game.debug.text('spritesGroup z index: ' + this.spritesGroup.z, 276, 575);
-    this.game.debug.text('slotsGroup z index: ' + this.slotsGroup.z, 276, 600);
+    if (this.debug) {
+      this.game.debug.text('Text z index: ' + this.text.z, 276, 450);
+      this.game.debug.text('Player z index: ' + this.player.z, 276, 475);
+      this.game.debug.text('GUI z index: ' + this.gui.z, 276, 500);
+      this.game.debug.text('room z index: ' + this.room.z, 276, 525);
+      this.game.debug.text('itemGroup z index: ' + this.itemGroup.z, 276, 550);
+      this.game.debug.text('spritesGroup z index: ' + this.spritesGroup.z, 276, 575);
+      this.game.debug.text('slotsGroup z index: ' + this.slotsGroup.z, 276, 600);
+    }
 
     if (this.openDoor) {
 
@@ -249,16 +252,19 @@ BasicGame.Game.prototype = {
         tear: false,
         treehealed: false,
         events : {
-          active: { say: "even the willow tree is dying" },
-          tear: { say: "now i can heal the willow tree" },
-          treehealed: { say: "wow!" }
+          active: [ 
+            { say: "even the willow tree is dying" },
+            { say: "what's going on around here?!" } 
+          ],
+          tear: [{ say: "now i can heal the willow tree" }],
+          treehealed: [{ say: "wow!" }]
         }
       },
 
       brynn: {
         active: false,
         events: {
-          active: { say: "where the hell is brynn?" }
+          active: [{ say: "where the hell is brynn?" }]
         }
       }
     };
@@ -277,45 +283,44 @@ BasicGame.Game.prototype = {
   },
 
   updateQuest: function (quest) {
-    console.log('update quest');
     // update quest status
+    console.log('update quest');
+    
     if (!this.quests[quest.name][quest.step]) {
       this.quests[quest.name][quest.step] = true;
 
-      var event = this.quests[quest.name].events[quest.step];
-      
-      if (event.say) {
-        this.say(event.say);
-      }
+      // queue quest related events to run > queue 
+      var events = this.quests[quest.name].events[quest.step];
+      for (var i = 0 ; i < events.length ; i++) { this.questQueue.unshift(events[i]); }
+      //this.exeQuestEvent(events);
     }
   },
 
   evalEvent: function (event) {
-
+    // evaluate whether event is linked to quest event
     console.log(event + ' has triggered');
 
     if (this.eventTriggers[event]) {
       console.log('there is a quest linked to this event');
       this.updateQuest(this.eventTriggers[event]);
     }
+
+    // pop next item in questQueue
+    this.questQueue.length ? this.popQuestQueue():null;
+
   },
 
-  evalQuestEvent: function () {
+  popQuestQueue: function () {
+    console.log('popping quest queue');
 
+    var event = this.questQueue.pop();
+    event ? this.exeQuestEvent(event): null;
   },
 
-  // DEPRECATED - use evalEvent
-  getRoomQuests: function () {
+  exeQuestEvent: function (event) {
+    // evaluate events related to quest state
 
-    if (this.rooms[this.currentRoom].quests) {
-      //console.log('this room has quest signals');
-      var quests = this.rooms[this.currentRoom].quests;
-      
-      for ( var i = 0 ; i < quests.length ; i++ ) {
-        console.log(quests[i]);
-        this.updateQuest(quests[i]);
-      }
-    }
+    event.say ? this.say(event.say):null;
   },
 
   createSprites: function () {
@@ -528,7 +533,11 @@ BasicGame.Game.prototype = {
     
     //this.game.input.onTap.add(this.move, this);
     this.room.events.onInputDown.add(function (pointer) {
-      this.speech ? this.speech.destroy(): null;
+      //this.speech.alive ? this.speech.kill(): null;
+      if (this.speech.alive) {
+        this.speech.kill();
+        return null;
+      }
       this.closeDoor();
       this.stopMoving();
       this.move(this.game.input.position);
@@ -637,9 +646,11 @@ BasicGame.Game.prototype = {
     }      
   },
 
-  say: function (string) {
+  say: function (string, key) {
+    // include key for event evaluation
     
     this.speech = this.game.add.text( (this.player.x), (this.player.top-40), string, {fill: '#eeeeee'});
+    var speechKey = key ? key:null;
     
     if (this.speech.right > 920) {
       this.speech.x -= this.speech.right - 920;
@@ -649,10 +660,15 @@ BasicGame.Game.prototype = {
       this.speech.y = 40;
     }
 
+    this.speech.events.onKilled.add(function (data) {
+      //console.log(speechKey);
+      this.evalEvent(speechKey);
+    }, this);
+
     var length = string.split(' ').length; 
     var timer = this.time.create();
     timer.add(length*800, function () {
-      this.speech.destroy();
+      this.speech.kill();
     },this);
     timer.start();
   },
@@ -809,7 +825,6 @@ BasicGame.Game.prototype = {
 
   openRoom: function () {
 
-    //this.getRoomQuests();
     this.evalEvent(this.currentRoom);
     this.enableInput(true);
   },

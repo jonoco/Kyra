@@ -25,6 +25,7 @@
 - add sprite assets
 - add sprite placement and animation information
 - add quest information
+- **ADDED:** add event queueing system
 
 ###Bugs
 - **FIXED:** tapping on player causes him to disappear

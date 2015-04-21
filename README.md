@@ -11,6 +11,8 @@ Further project description coming soon...
 - quest system being implemented
 - sprite reactions to input are in
 	- clicking on sprites may triggers events, e.g., brandon talking about the object, quest events, animations
+- event queuing now possible
+	- events comprising of multiple distinct events (talking, animations, tweening) can be queued together to run
 
 ####v0.1.2
 - entering/exiting tweening system is in 
@@ -27,6 +29,7 @@ Further project description coming soon...
 - some bug fixes
 
 ####v0.1.0
+-	first playable, event driven build
 - pathfinding is in; 
 	- this is possible by the great pathfinding library [PathFinding.js](https://github.com/qiao/PathFinding.js)
 	- creating pathing for each room is done using the new [Kyra Mapper](https://github.com/jonoco/Kyra-Mapper) utility; this allows anyone to *somewhat* easily overlay an image with walkable and non-walkable areas

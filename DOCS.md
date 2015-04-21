@@ -40,3 +40,12 @@
 - animations are included in certain doors during exiting or entering
 	- the only door planned to have an animation is the door to brandon's house from the branch of the tree
 	- an animation is used in place of an offPoint
+
+####8. Quests
+##### Quests track events that occur during play, such as completing tasks or visiting people, and control progress through the game
+-	quests are controlled by two objects, the quests and eventTriggers objects
+-	the quests object tracks quest conditions, and holds events triggered on completion of certain steps of the quest
+- the eventTriggers object links various game events (such as animations, room changes, item collection) with steps in various quests
+	- this prevents the need to assign rooms, sprites, or items with quest related data, and allows these varying events to be consolidated into a single object for convenience and ease of scaling
+
+

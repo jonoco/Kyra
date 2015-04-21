@@ -1,41 +1,88 @@
 {
-	"sprites": [
-		{
-			"name": "brandon",
-			"path": "/assets/sprites/brandon.png",
-			"json": "/assets/sprites/brandon.json",
-			"action": {
-				"click": { "text": "I'm getting tired" }
-				},
-			"animated": true,
-			"animations": { 
-				"walk-right": {
-					"frames": [ "right-1","right-2","right-3","right-4","right-5","right-6","right-7" ],
-					"speed": 8,
-					"loop": true
-				},
-				"walk-left" : {
-					"frames": [ "left-1", "left-2", "left-3", "left-4", "left-5", "left-6", "left-7" ],
-					"speed": 8,
-					"loop": true
-				}
-			}	
-		},
-		{
-			"name": "bed",
-			"path": "/assets/sprites/xxx.png",
-			"json": "/assets/sprites/xxx.json",
-			"action": null,
-			"animated": false,
-			"animations": {}
-		},
-		{
-			"name": "lamp",
-			"path": "/assets/sprites/xxx.png",
-			"json": "/assets/sprites/xxx.json",
-			"action": null,
-			"animated": true,
-			"animations": {}
+	"_brandon": {
+		"name": "_brandon",
+		"png": "/assets/sprites/brandon.png",
+		"json": "/assets/sprites/brandon.json",
+		"action": {
+			"click": { "text": "I'm getting tired" }
+			},
+		"animated": true,
+		"animations": { 
+			"walk-right": {
+				"frames": [ "right-1","right-2","right-3","right-4","right-5","right-6","right-7" ],
+				"speed": 8,
+				"loop": true,
+				"start": false
+			},
+			"walk-left" : {
+				"frames": [ "left-1", "left-2", "left-3", "left-4", "left-5", "left-6", "left-7" ],
+				"speed": 8,
+				"loop": true,
+				"start": false
+			}
+		}	
+	},
+	"lamp": {
+		"name": "lamp",
+		"png": "/assets/sprites/lamp.png",
+		"json": "/assets/sprites/lamp.json",
+		"action": {
+			"click": { "text": "look at that damn lamp!" }
+			},
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ "lamp-1", "lamp-2", "lamp-3"],
+			 	"speed": 5,
+			 	"loop": true,
+			 	"start": true 
+			}
 		}
-	]
+	},
+	"river": {
+		"name": "river",
+		"png": "/assets/sprites/river.png",
+		"json": "/assets/sprites/river.json",
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ "river-1", "river-2", "river-3", "river-4", "river-5", "river-6",
+			 		"river-7", "river-8", "river-9", "river-10", "river-11", "river-12"],
+			 	"speed": 5,
+			 	"loop": true,
+			 	"start": true 
+			}
+		}
+	},
+	"temple entrance": {
+		"name": "temple entrance",
+		"png": "/assets/sprites/temple_entrance.png",
+		"json": null,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
+	"willow": {
+		"name": "willow",
+		"png": "/assets/sprites/willow.png",
+		"json": "/assets/sprites/willow.json",
+		"action": {
+			"click": { "animation":"tear" }
+			},
+		"animated": true,
+		"animations": {
+			"tear": {
+				"name": "tear",
+			 	"frames": [ "willow-1", "willow-2", "willow-3", "willow-4", "willow-5",
+			 	 	"willow-6", "willow-7", "willow-8", "willow-9", "willow-10",
+			 	  "willow-11", "willow-12", "willow-13", "willow-14", "willow-15"],
+			 	"speed": 5,
+			 	"loop": false,
+			 	"start": false 
+			}
+		}
+	}
 }

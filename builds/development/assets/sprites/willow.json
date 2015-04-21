@@ -1,0 +1,132 @@
+{"frames": [
+
+{
+	"filename": "willow-1",
+	"frame": {"x":2,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-2",
+	"frame": {"x":36,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-3",
+	"frame": {"x":70,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-4",
+	"frame": {"x":104,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-5",
+	"frame": {"x":138,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-6",
+	"frame": {"x":172,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-7",
+	"frame": {"x":206,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-8",
+	"frame": {"x":240,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-9",
+	"frame": {"x":274,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-10",
+	"frame": {"x":308,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-11",
+	"frame": {"x":342,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-12",
+	"frame": {"x":376,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-13",
+	"frame": {"x":410,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-14",
+	"frame": {"x":444,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+{
+	"filename": "willow-15",
+	"frame": {"x":478,"y":2,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "willow.png",
+	"format": "RGBA8888",
+	"size": {"w":512,"h":34},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:1a0a4f01e4a555f0dd0af794467a942a:0e2d6d54295f1c7609a2708b811204ec:5b1fa209ed5968eeb49b5c50866164bb$"
+}
+}

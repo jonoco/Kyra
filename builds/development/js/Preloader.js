@@ -22,24 +22,28 @@ BasicGame.Preloader.prototype = {
 		
 		this.load.atlasJSONArray('player', 'assets/sprites/brandon.png', 'assets/sprites/brandon.json');
 		this.load.atlasJSONArray('fairy', 'assets/sprites/fairy.png', 'assets/sprites/fairy.json');
-		
+
 		this.load.image('titlepage', 'assets/img/title.png');
 		this.load.image('gui', 'assets/img/gui.png');
 		this.load.image('pathing', 'assets/tiles/pathing.png');
 		
 		this.load.json('rooms', 'js/json/rooms.json');
 		this.load.json('music', 'js/json/music.json');
+		this.load.json('sprites', 'js/json/sprites.json');
 		
 		this.load.spritesheet('items', 'assets/img/item_sheet.png', 32, 32);
 	
 		this.load.onFileComplete.add(function(progress, key) {
 			
 			if (key == 'rooms') {
+				
 				this.loadRoomData();
-
 			} else if (key == 'music') {
+				
 				this.loadAudio();
+			} else if (key == 'sprites') {
 
+				this.loadSprites();
 			}
 
 			if (progress == 100) {
@@ -75,6 +79,25 @@ BasicGame.Preloader.prototype = {
 		if (this.ready) {
 			this.state.start('Game');
 		};
+	},
+
+	loadSprites: function () {
+		var sprites = this.cache.getJSON('sprites');
+
+		for (sprite in sprites) {
+			
+			if (sprites[sprite].json) {
+
+				//console.log('sprite has json');
+				this.load.atlasJSONArray(sprites[sprite].name, sprites[sprite].png, sprites[sprite].json);	
+
+			} else {
+
+				//console.log('sprite has no json');
+				this.load.image(sprites[sprite].name, sprites[sprite].png);
+
+			}			
+		}
 	},
 
 	loadRoomData: function (rooms) {

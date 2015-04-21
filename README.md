@@ -6,6 +6,12 @@ Further project description coming soon...
 
 ###Version changes
 
+####v0.1.3
+- sprites and sprite animations are in
+- quest system being implemented
+- sprite reactions to input are in
+	- clicking on sprites may triggers events, e.g., brandon talking about the object, quest events, animations
+
 ####v0.1.2
 - entering/exiting tweening system is in 
 	- player is tweened on and off screen during room changes

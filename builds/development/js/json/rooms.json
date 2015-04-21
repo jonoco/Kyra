@@ -7,6 +7,9 @@
 			{ "name": "apple", "x": 690, "y": 220 },
 			{ "name": "saw", "x": 670, "y": 290 }
 		],
+		"sprites": [
+			{ "name": "lamp", "x": 660, "y": 150 }
+		],
 		"grid": "js/json/room01.json",
 		"path": "assets/screens/room01.png",
 		"doors": { 
@@ -27,6 +30,7 @@
 		"items": [
 			{ "name": "sapphire", "x": 400, "y": 300 }
 		],
+		"sprites": [],
 		"grid": "js/json/room02.json",
 		"path": "assets/screens/room02.png",
 		"doors": { 
@@ -64,6 +68,7 @@
 		"name": "A dying tree",
 		"music": "forest",
 		"items": [],
+		"sprites": [{ "name":"willow", "x": 424, "y": 210 }],
 		"grid": "js/json/room03.json",
 		"path": "assets/screens/room03.png",
 		"doors": { 
@@ -77,8 +82,8 @@
 			},
 			"room02": { 
 				"name": "room02",
-			 	"x": 900, "y": 340,
-				"height": 80, "width": 60,
+			 	"x": 900, "y": 0,
+				"height": 500, "width": 60,
 				"entry": {"x": 920, "y": 380},
 			  "offPoint": {"x": 1020, "y": 380},
 			  "animation": false  
@@ -90,21 +95,22 @@
 		"name": "A southern cliff",
 		"music": "forest",
 		"items": [],
+		"sprites": [{ "name": "river", "x":23, "y":220 }],
 		"grid": "js/json/room04.json",
 		"path": "assets/screens/room04.png",
 		"doors": { 
 			"room03": { 
 				"name": "room03", 
 				"x": 900, "y": 20, 
-				"height": 140, "width": 40,
-				"entry": {"x": 848, "y": 184},
+				"height": 440, "width": 70,
+				"entry": {"x": 910, "y": 184},
 				"offPoint": {"x": 1020, "y": 80},
 				"animation": false
 			},
 			"room05": { 
 				"name": "room05", 
-				"x": 520, "y": 20, 
-				"height": 20, "width": 100,
+				"x": 0, "y": 0, 
+				"height": 50, "width": 900,
 				"entry": {"x": 550, "y": 30},
 				"offPoint": {"x": 580, "y": 0},
 				"animation": false 
@@ -116,6 +122,7 @@
 		"name": "The Temple of Kyrandia",
 		"music": "forest",
 		"items": [],
+		"sprites": [{ "name": "temple entrance", "x": 410, "y": 120 }],
 		"grid": "js/json/room05.json",
 		"path": "assets/screens/room05.png",
 		"doors": { 
@@ -142,14 +149,15 @@
 		"name": "Inside the Temple",
 		"music": "temple",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room06.json",
 		"path": "assets/screens/room06-1.png",
 		"doors": {
 			"room05": { 
 				"name": "room05", 
-				"x": 920, "y": 300,
-				"height": 240, "width": 40,
-				"entry": {"x": 890, "y": 380},
+				"x": 900, "y": 0,
+				"height": 500, "width": 40,
+				"entry": {"x": 910, "y": 380},
 				"offPoint": {"x": 1020, "y": 380},
 				"animation": false 
 			} 
@@ -160,6 +168,7 @@
 		"name": "Outside Brandon's home",
 		"music": "forest",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room07.json",
 		"path": "assets/screens/room07.png",
 		"doors": { 
@@ -185,14 +194,15 @@
 		"texture": "room08",
 		"name": "Dark forest",
 		"music": "forest",
-		"items": [],
+		"items": [{ "name": "peridot", "x": 300, "y": 280}],
+		"sprites": [],
 		"grid": "js/json/room08.json",
 		"path": "assets/screens/room08.png",
 		"doors": { 
 			"room02": { 
 				"name": "room02", 
-				"x": 0, "y": 100,
-				"height": 350, "width": 60,
+				"x": 0, "y": 0,
+				"height": 500, "width": 60,
 				"entry": {"x": 60, "y": 275},
 				"offPoint": {"x": -50, "y": 225},
 				"animation": false 
@@ -212,6 +222,7 @@
 		"name": "Pool of Sorrow",
 		"music": "pool",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room09.json",
 		"path": "assets/screens/room09.png",
 		"doors": { 
@@ -238,6 +249,7 @@
 		"name": "Dark forest",
 		"music": "forest",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room11.json",
 		"path": "assets/screens/room11.png",
 		"doors":  {
@@ -272,6 +284,7 @@
 		"name": "Dark forest",
 		"music": "forest",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room12.json",
 		"path": "assets/screens/room12.png",
 		"doors": {
@@ -306,6 +319,7 @@
 		"name": "Dark forest",
 		"music": "forest",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room13.json",
 		"path": "assets/screens/room13.png",
 		"doors": {
@@ -324,6 +338,7 @@
 		"name": "A forest altar",
 		"music": "forest",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room14.json",
 		"path": "assets/screens/room14-2.png",
 		"doors": { 
@@ -350,6 +365,7 @@
 		"name": "A tall cliff",
 		"music": "forest",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room16.json",
 		"path": "assets/screens/room16.png",
 		"doors": { 
@@ -368,6 +384,7 @@
 		"name": "A rocky outcropping",
 		"music": "forest",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room17.json",
 		"path": "assets/screens/room17.png",
 		"doors": { 
@@ -394,6 +411,7 @@
 		"name": "A cavernous entrance",
 		"music": "forest",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room18.json",
 		"path": "assets/screens/room18.png",
 		"doors": {
@@ -420,6 +438,7 @@
 		"name": "A rickety bridge",
 		"music": "cave",
 		"items": [],
+		"sprites": [],
 		"grid": "js/json/room19.json",
 		"path": "assets/screens/room19.png",
 		"doors": {

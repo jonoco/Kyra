@@ -6,7 +6,7 @@ Further project description coming soon...
 
 ###Version changes
 
-####v0.1.3
+####v0.1.3-alpha
 - sprites and sprite animations are in
 - quest system being implemented
 - sprite reactions to input are in

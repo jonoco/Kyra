@@ -13,7 +13,9 @@
 
 ####3. Events
 ##### Events refer to the behaviors that occur when clicking on, or draggin items onto, certain objects, e.g., clicking the branch next to brandon home, dragging a rose onto Brynn
-- events are not yet implemented
+- events are handled by the event chain system: evalEvent(), eventTriggers, questQueue
+- interesting events (animations finishing, room changes, quest status change) call evalEvent to report the event
+	-	evalEvent checks if this event is linked to a quest by check eventTriggers
 
 ####4. Magic
 ##### Magic are special player events which may trigger scenes in certain rooms
@@ -38,8 +40,9 @@
 - entry refers to the point the player will move to when clicking onto a door, and the point the player will move to on entering a room through that door
 - offPoint is a point off screen that the player is tweened to to create a smoother transition effect
 - animations are included in certain doors during exiting or entering
-	- the only door planned to have an animation is the door to brandon's house from the branch of the tree
 	- an animation is used in place of an offPoint
+	- door animations are loaded with all other room sprites
+	- door animations are accomplished by assigning the door.animation property a enter and/or exit sprite
 
 ####8. Quests
 ##### Quests track events that occur during play, such as completing tasks or visiting people, and control progress through the game
@@ -47,5 +50,6 @@
 -	the quests object tracks quest conditions, and holds events triggered on completion of certain steps of the quest
 - the eventTriggers object links various game events (such as animations, room changes, item collection) with steps in various quests
 	- this prevents the need to assign rooms, sprites, or items with quest related data, and allows these varying events to be consolidated into a single object for convenience and ease of scaling
+- multiple event executions are done using the questQueue, which execuates events in sequence
 
 

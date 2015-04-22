@@ -24,9 +24,10 @@
 - make items bounce when you put them somewhere they shouldn't go, *cause why not!*
 - add sprite assets
 - add sprite placement and animation information
-- add quest information
+- add quest json data
 - **ADDED:** add event queueing system
 - **ADDED:** use original Kyrandia font
+- **ADDED:** add door animations
 
 ###Bugs
 - **FIXED:** tapping on player causes him to disappear

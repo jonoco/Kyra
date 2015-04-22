@@ -30,21 +30,23 @@
 		"items": [
 			{ "name": "sapphire", "x": 400, "y": 300 }
 		],
-		"sprites": [],
+		"sprites": [
+			{ "name": "branch up", "x": 698, "y": 24 }
+		],
 		"grid": "js/json/room02.json",
 		"path": "assets/screens/room02.png",
 		"doors": { 
-			"room07": 
-			{ 
+			"room07": { 
 				"name": "room07",
 				"x": 755, "y": 320,
 			 	"height": 20, "width": 50,
 			 	"entry": {"x": 780, "y": 330}, 
 			 	"offPoint": {"x": 780, "y": 330}, 
-			 	"animation": false
+			 	"animation": {
+			 		"exit": "branch up"
+			 	}
 			},
-			"room03": 
-			{ 
+			"room03": { 
 				"name": "room03",
 			 	"x": 0, "y": 0,
 			  "height": 600, "width": 40,
@@ -52,8 +54,7 @@
 			  "offPoint": {"x": -50, "y": 330}, 
 			  "animation": false
 			},
-			"room08": 
-			{ 
+			"room08": { 
 				"name": "room08",
 			 	"x": 900, "y": 0,
 			  "height": 600, "width": 40,
@@ -68,7 +69,10 @@
 		"name": "A dying tree",
 		"music": "forest",
 		"items": [],
-		"sprites": [{ "name":"willow", "x": 424, "y": 210 }],
+		"sprites": [
+			{ "name": "willow", "x": 424, "y": 210 },
+			{ "name": "willow branch", "x": 80, "y": 50 }
+		],
 		"grid": "js/json/room03.json",
 		"path": "assets/screens/room03.png",
 		"doors": { 
@@ -222,7 +226,7 @@
 		"name": "Pool of Sorrow",
 		"music": "pool",
 		"items": [],
-		"sprites": [],
+		"sprites": [{ "name": "stone1", "x": 558, "y": 282 }],
 		"grid": "js/json/room09.json",
 		"path": "assets/screens/room09.png",
 		"doors": { 
@@ -338,7 +342,11 @@
 		"name": "A forest altar",
 		"music": "forest",
 		"items": [],
-		"sprites": [],
+		"sprites": [
+			{ "name": "birch1", "x": 688, "y": 24 },
+		  { "name": "stone2", "x": 20, "y": 90 },
+		  { "name": "altar", "x": 370, "y": 90 }
+		],
 		"grid": "js/json/room14.json",
 		"path": "assets/screens/room14-2.png",
 		"doors": { 
@@ -384,7 +392,7 @@
 		"name": "A rocky outcropping",
 		"music": "forest",
 		"items": [],
-		"sprites": [],
+		"sprites": [{ "name": "herman sawing", "x": 170, "y": 200 }],
 		"grid": "js/json/room17.json",
 		"path": "assets/screens/room17.png",
 		"doors": { 
@@ -418,8 +426,8 @@
 			"room17": { 
 				"name": "room17", 
 				"x": 450, "y": 0,
-				"height": 60, "width": 510,
-				"entry": {"x": 740, "y": 200},
+				"height": 70, "width": 510,
+				"entry": {"x": 740, "y": 180},
 				"offPoint": {"x": 750, "y": -30},
 				"animation": false 
 			},

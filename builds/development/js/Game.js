@@ -204,8 +204,8 @@ BasicGame.Game.prototype = {
     this.createPlayer();
 
     this.createStartRoom();
-
-    //console.log(this.spritesGroup.children[0].height);
+    //console.log(this.sprites);
+    //console.log(this.spritesGroup.children);
   },
 
   update: function () {
@@ -247,9 +247,10 @@ BasicGame.Game.prototype = {
   },
 
   createQuests: function () {
-    /*
+   /*
     * current available event commands:
     * say, wait, turn
+    * TODO: togAnim, play
     * see exeQuestEvent for handling
     */
 
@@ -282,7 +283,13 @@ BasicGame.Game.prototype = {
         events: {
           active: [
             { say: "What happened to the friggn' bridge!?" },
-            { say: "Herman you goob, where are you??" }
+            { say: "Herman you goob, where are you??" },
+            { togAnim: {
+                sprite: "herman sawing",
+                animation: "saw",
+                start: true
+              }
+            }
           ]
         }
       }
@@ -341,6 +348,7 @@ BasicGame.Game.prototype = {
     event.say ? this.say(event.say):null;
     event.turn ? this.turnPlayer(event.turn):null;
     event.wait ? this.wait(event.wait):null;
+    event.togAnim ? this.toggleAnimation(event.togAnim):null;
   },
 
   createSprites: function () {
@@ -350,6 +358,8 @@ BasicGame.Game.prototype = {
     for (var i = 0 ; i < sprites.length ; i++ ) {
       var sprite = this.spritesGroup.create( sprites[i].x, sprites[i].y, sprites[i].name );
       sprite.scale.setTo(3); // all source assets scaled by 3
+
+      //console.log(sprite);
 
       if (this.sprites[sprites[i].name].animated) {
 
@@ -693,6 +703,8 @@ BasicGame.Game.prototype = {
     }      
   },
 
+  // - - - quest event functions
+
   say: function (string, key) {
     // include key for event evaluation
     
@@ -749,12 +761,60 @@ BasicGame.Game.prototype = {
     timer.start();
   },
 
+  toggleAnimation: function (data) {
+    
+    var sprite = data.sprite;
+    var animation = data.animation;
+    var toggle = data.start;
+
+    this.sprites[sprite].animations[animation].start = toggle;
+
+    this.evalEvent(animation);
+  },
+
+  // - - - movement functions
+
   moveToDoor: function (door) {
     var myDoor = this.rooms[this.currentRoom].doors[door.name];
 
     this.stopMoving();
     this.openDoor = myDoor.name;
     this.move(myDoor.entry);
+  },
+
+  move: function (pointer) {
+
+    this.findWay(pointer);
+  },
+
+  stopMoving: function () {
+      
+    if (this.tween) {
+      this.tween.stop(true);
+      this.tweens.remove(this.tween);
+    } 
+  },
+
+  findWay: function (pointer) {
+
+    var startX = this.layer.getTileX(this.player.position.x);
+    var startY = this.layer.getTileY(this.player.position.y);
+    var endX = this.layer.getTileX(pointer.x);
+    var endY = this.layer.getTileY(pointer.y);
+
+    //console.log(startX +','+ startY + ' to ' + endX +','+ endY);
+    //console.log(Math.floor(pointer.x), Math.floor(pointer.y));
+
+    if (startX != endX || startY != endY) {
+
+      var grid = this.grid.clone();
+      this.path = this.finder.findPath(startX, startY, endX, endY, grid);
+      var newPath = PF.Util.smoothenPath(this.grid, this.path);
+      
+      this.tweenPath(newPath);
+      this.path = null;
+
+    }
   },
 
   peekInDoor: function (player, door) {
@@ -767,6 +827,12 @@ BasicGame.Game.prototype = {
     }
   },
 
+  closeDoor: function () {
+    //console.log('closing door');
+    
+    this.openDoor = null;
+  },
+
   exitRoom: function () {
     //console.log('exiting room');
 
@@ -775,17 +841,36 @@ BasicGame.Game.prototype = {
     this.enableInput(false);
 
     // offtweening
-    if (myDoor.offPoint) {
+    if (myDoor.animation.exit) {
+      console.log('door has animation');
+      var spriteName;
+      var sprite;
+      var anim;
+      
+      this.player.alpha = 0;
+      
+      // find and play sprite from the room's this.spritesGroup
+      spriteName = myDoor.animation.exit;
+
+      for (var i = 0 ; i < this.spritesGroup.length ; i++) {
+        if (this.spritesGroup.children[i].key == spriteName) {
+          //console.log('exit sprite found: ' + spriteName);
+          sprite = this.spritesGroup.children[i];      
+        }
+      }
+
+      sprite.alpha = 1;
+      anim = sprite.animations.play('on', null, false, false);
+      anim.onComplete.add(function (data) {
+        this.evalEvent('on');
+        // after animation end signal, change room
+        this.loadRoom();
+      }, this);
+
+    } else if (myDoor.offPoint) {
       
       this.tweenOut();
       
-    } else if (myDoor.animation) {
-      //console.log('door has animation');
-      //check for exit animations
-      //start exiting animation
-
-      //change room
-      this.loadRoom(door);
     }
   },
 
@@ -795,18 +880,20 @@ BasicGame.Game.prototype = {
     var myDoor = this.rooms[this.currentRoom].doors[room.texture];
 
     // check for enter animation
-    if (myDoor.animation) {
+    if (myDoor.animation.enter) {
       // play animation
-    }
-
-    //move player into position for ontweening
-    var startPoint = {};
-    for (val in myDoor.offPoint) {
-      startPoint[val] = myDoor.offPoint[val];
-    }
     
-    this.player.position = startPoint;
-    this.tweenIn(myDoor);
+    } else {
+       //move player into position for ontweening
+      var startPoint = {};
+      for (val in myDoor.offPoint) {
+        startPoint[val] = myDoor.offPoint[val];
+      }
+      
+      this.player.alpha = 1;
+      this.player.position = startPoint;
+      this.tweenIn(myDoor);
+    }
   },
 
   tweenIn: function (door) {
@@ -839,7 +926,7 @@ BasicGame.Game.prototype = {
       //check for exit animations
 
       //console.log('tween out finished');
-      this.loadRoom(myDoor);
+      this.loadRoom();
 
     }, this); 
 
@@ -852,10 +939,43 @@ BasicGame.Game.prototype = {
     }
   },
 
-  loadRoom: function (door) {
+  tweenComplete: function () {
+    var timer = this.time.create();
+    timer.add(500, this.closeDoor);
+    timer.start();
+  },
+
+  tweenPath: function (path) {
+    
+    this.tween = this.game.add.tween(this.player);
+    this.tween.onComplete.addOnce(this.tweenComplete, this); 
+    
+    var prevX = this.player.position.x/this.tileSize;
+    var prevY = this.player.position.y/this.tileSize;
+
+    for ( var i = 0; i < path.length ; i++ ) {
+      var x = path[i][0];
+      var y = path[i][1];
+      var dist = this.game.physics.arcade.distanceBetween({x: x, y: y}, {x: prevX, y: prevY});
+
+      if (i == path.length - 1) {
+        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
+      } else if (x == prevX || y == prevY && i%3) {
+        // pass
+      }  else {
+        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
+        prevX = x;
+        prevY = y;
+      }
+    }
+    
+    this.tween.start();
+  },
+
+  loadRoom: function () {
     
     //console.log('changing room');
-    var nextRoom = this.rooms[door.name];
+    var nextRoom = this.rooms[this.door];
     var currRoom = this.rooms[this.currentRoom];
     
     // door hit > disable room
@@ -902,6 +1022,8 @@ BasicGame.Game.prototype = {
     this.evalEvent(this.currentRoom);
     this.enableInput(true);
   },
+
+  // - - - item and inventory functions
 
   checkItemOrigin: function (item) {
     
@@ -979,6 +1101,8 @@ BasicGame.Game.prototype = {
     obj1.y = obj2.y + obj2.height/2 - obj1.height/2;
   },
 
+  // - - -
+
   inBounds: function (obj1, obj2) {
   
     // sprite bounds comparison
@@ -1041,14 +1165,6 @@ BasicGame.Game.prototype = {
     }, this);
   },
 
-  stopMoving: function () {
-      
-    if (this.tween) {
-      this.tween.stop(true);
-      this.tweens.remove(this.tween);
-    } 
-  },
-
   importGrid: function () {
     
     var roomJson = this.currentRoom + '_json';
@@ -1066,71 +1182,5 @@ BasicGame.Game.prototype = {
         }
       }
     }
-  },
-
-  move: function (pointer) {
-
-    this.findWay(pointer);
-  },
-
-  closeDoor: function () {
-    //console.log('closing door');
-    
-    this.openDoor = null;
-  },
-
-  tweenComplete: function () {
-    var timer = this.time.create();
-    timer.add(500, this.closeDoor);
-    timer.start();
-  },
-
-  findWay: function (pointer) {
-
-    var startX = this.layer.getTileX(this.player.position.x);
-    var startY = this.layer.getTileY(this.player.position.y);
-    var endX = this.layer.getTileX(pointer.x);
-    var endY = this.layer.getTileY(pointer.y);
-
-    //console.log(startX +','+ startY + ' to ' + endX +','+ endY);
-    //console.log(Math.floor(pointer.x), Math.floor(pointer.y));
-
-    if (startX != endX || startY != endY) {
-
-      var grid = this.grid.clone();
-      this.path = this.finder.findPath(startX, startY, endX, endY, grid);
-      var newPath = PF.Util.smoothenPath(this.grid, this.path);
-      
-      this.tweenPath(newPath);
-      this.path = null;
-
-    }
-  },
-
-  tweenPath: function (path) {
-    
-    this.tween = this.game.add.tween(this.player);
-    this.tween.onComplete.addOnce(this.tweenComplete, this); 
-    
-    var prevX = this.player.position.x/this.tileSize;
-    var prevY = this.player.position.y/this.tileSize;
-
-    for ( var i = 0; i < path.length ; i++ ) {
-      var x = path[i][0];
-      var y = path[i][1];
-      var dist = this.game.physics.arcade.distanceBetween({x: x, y: y}, {x: prevX, y: prevY});
-
-      if (i == path.length - 1) {
-        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
-      } else if (x == prevX || y == prevY && i%3) {
-        // pass
-      }  else {
-        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
-        prevX = x;
-        prevY = y;
-      }
-    }
-    
-    this.tween.start();
   }
 };

@@ -1,0 +1,60 @@
+{"frames": [
+
+{
+	"filename": "altar-1",
+	"frame": {"x":379,"y":2,"w":71,"h":29},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":5,"w":71,"h":29},
+	"sourceSize": {"w":75,"h":47}
+},
+{
+	"filename": "altar-2",
+	"frame": {"x":304,"y":2,"w":73,"h":29},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":3,"w":73,"h":29},
+	"sourceSize": {"w":75,"h":47}
+},
+{
+	"filename": "altar-3",
+	"frame": {"x":154,"y":2,"w":73,"h":33},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":2,"w":73,"h":33},
+	"sourceSize": {"w":75,"h":47}
+},
+{
+	"filename": "altar-4",
+	"frame": {"x":229,"y":2,"w":73,"h":33},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":1,"w":73,"h":33},
+	"sourceSize": {"w":75,"h":47}
+},
+{
+	"filename": "altar-5",
+	"frame": {"x":79,"y":2,"w":73,"h":38},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":1,"w":73,"h":38},
+	"sourceSize": {"w":75,"h":47}
+},
+{
+	"filename": "altar-6",
+	"frame": {"x":2,"y":2,"w":75,"h":47},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":75,"h":47},
+	"sourceSize": {"w":75,"h":47}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "altar.png",
+	"format": "RGBA8888",
+	"size": {"w":452,"h":51},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:ceea360d7ea9eddad0c9579255482516:27958b8ce07ec46fb1a778746b0143c4:a66e5ac2231e9c132207315bd2c73e8c$"
+}
+}

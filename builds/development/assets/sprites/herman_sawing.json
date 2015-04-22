@@ -1,0 +1,76 @@
+{"frames": [
+
+{
+	"filename": "saw-1",
+	"frame": {"x":384,"y":2,"w":52,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":3,"w":52,"h":48},
+	"sourceSize": {"w":54,"h":51}
+},
+{
+	"filename": "saw-2",
+	"frame": {"x":114,"y":2,"w":52,"h":50},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":1,"w":52,"h":50},
+	"sourceSize": {"w":54,"h":51}
+},
+{
+	"filename": "saw-3",
+	"frame": {"x":2,"y":2,"w":54,"h":51},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":51},
+	"sourceSize": {"w":54,"h":51}
+},
+{
+	"filename": "saw-4",
+	"frame": {"x":58,"y":2,"w":54,"h":51},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":51},
+	"sourceSize": {"w":54,"h":51}
+},
+{
+	"filename": "saw-5",
+	"frame": {"x":168,"y":2,"w":52,"h":50},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":1,"w":52,"h":50},
+	"sourceSize": {"w":54,"h":51}
+},
+{
+	"filename": "saw-6",
+	"frame": {"x":222,"y":2,"w":52,"h":50},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":1,"w":52,"h":50},
+	"sourceSize": {"w":54,"h":51}
+},
+{
+	"filename": "saw-7",
+	"frame": {"x":276,"y":2,"w":52,"h":50},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":1,"w":52,"h":50},
+	"sourceSize": {"w":54,"h":51}
+},
+{
+	"filename": "saw-8",
+	"frame": {"x":330,"y":2,"w":52,"h":50},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":1,"w":52,"h":50},
+	"sourceSize": {"w":54,"h":51}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "herman_sawing.png",
+	"format": "RGBA8888",
+	"size": {"w":438,"h":55},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:e8812f2f3ac2738d6fe9fe85910e448d:77ef6b6447c1f6f678e4919aafe524a2:c3f7e8fe0acde58d48c359e84c6c7528$"
+}
+}

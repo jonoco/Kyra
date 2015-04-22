@@ -15,6 +15,8 @@ Further project description coming soon...
 - event queuing now possible
 	- events comprising of multiple distinct events (talking, animations, tweening) can be queued together to run
 - original Kyrandia font added, made by [kanoalgiz](http://fontstruct.com/fontstructors/1099009/kanoalgiz)
+- rough door animation handling is in
+	- certain doors do not transition room by on/off tweening, and rather use a sprite animation in place, e.g., brandon's house branch animation
 
 ####v0.1.2
 - entering/exiting tweening system is in 

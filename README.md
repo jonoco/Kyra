@@ -8,6 +8,8 @@ This project is an attempt to recreate the game to the extent of the original Ky
 
 This project also uses the original Roland MT-32 soundtrack, rather than the commonly heard Adlib version.
 
+Hosted: [Kyra](http://jonoco.github.io/)
+
 ###Version changes
 
 ####v0.1.4

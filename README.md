@@ -9,7 +9,9 @@ Further project description coming soon...
 ####v0.1.4
 -	door animations in and functioning
 	- door animations handled by labeling one of the room's sprites as enter or exit animation
-- more quest event types added
+- quest event system added
+	- uses quest events to trigger quest related events, e.g. animations, sprite creation, text
+	- more quest event types added
 - more assets added
 - some code refactored and rewritten for clarity
 - some bug fixes

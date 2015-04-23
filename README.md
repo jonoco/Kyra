@@ -2,7 +2,11 @@
 
 ###Kyra is a Kyrandia Javascript remake using the Phaser framework
 
-Further project description coming soon...
+[Kyrandia](http://en.wikipedia.org/wiki/The_Legend_of_Kyrandia) is a point-and-click adventure game made by Westwood Studios in 1992.
+
+This project is an attempt to recreate the game to the extent of the original Kyrandia demo game, which ends just after crossing the rickety bridge. This requires nearly all game mechanics to be functioning, while reducing the burden of cleaning/redrawing 85% of the games original art assets.
+
+This project also uses the original Roland MT-32 soundtrack, rather than the commonly heard Adlib version.
 
 ###Version changes
 

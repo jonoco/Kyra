@@ -6,7 +6,15 @@ Further project description coming soon...
 
 ###Version changes
 
-####v0.1.3-alpha
+####v0.1.4
+-	door animations in and functioning
+	- door animations handled by labeling one of the room's sprites as enter or exit animation
+- more quest event types added
+- more assets added
+- some code refactored and rewritten for clarity
+- some bug fixes
+
+####v0.1.3
 - sprites and sprite animations are in
 - quest system being implemented
 	- quest event triggering now capable of intercepting a variety of events to trigger quest conditions

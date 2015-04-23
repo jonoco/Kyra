@@ -105,7 +105,7 @@ BasicGame.Preloader.prototype = {
 		var rooms = this.cache.getJSON('rooms');
 
 		for (room in rooms) {
-			this.load.image(rooms[room].texture, rooms[room].path);
+			this.load.image(rooms[room].name, rooms[room].path);
 			this.loadGrid(room, rooms);
 		}
 
@@ -122,7 +122,7 @@ BasicGame.Preloader.prototype = {
 
 	loadGrid: function (room, rooms) {
 
-		var roomJson = rooms[room].texture + '_json';
+		var roomJson = rooms[room].name + '_json';
 		this.load.json(roomJson, rooms[room].grid);
 
 	}

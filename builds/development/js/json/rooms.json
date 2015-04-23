@@ -1,7 +1,7 @@
 {
 	"room01": {
-		"texture": "room01",
-		"name": "Brandon's home",
+		"name": "room01",
+		"text": "Brandon's home",
 		"music": null,
 		"items": [
 			{ "name": "apple", "x": 690, "y": 220 },
@@ -24,14 +24,15 @@
 		}
 	},
 	"room02": {
-		"texture": "room02",
-		"name": "Below Brandon's home",
+		"name": "room02",
+		"text": "Below Brandon's home",
 		"music": "forest",
 		"items": [
 			{ "name": "sapphire", "x": 400, "y": 300 }
 		],
 		"sprites": [
-			{ "name": "branch up", "x": 698, "y": 24 }
+			{ "name": "branch up", "x": 698, "y": 24 },
+			{ "name": "branch down", "x": 698, "y": 24 }
 		],
 		"grid": "js/json/room02.json",
 		"path": "assets/screens/room02.png",
@@ -43,7 +44,8 @@
 			 	"entry": {"x": 780, "y": 330}, 
 			 	"offPoint": {"x": 780, "y": 330}, 
 			 	"animation": {
-			 		"exit": "branch up"
+			 		"exit": "branch up",
+			 		"enter": "branch down"
 			 	}
 			},
 			"room03": { 
@@ -65,8 +67,8 @@
 		}
 	},
 	"room03": {
-		"texture": "room03",
-		"name": "A dying tree",
+		"name": "room03",
+		"text": "A dying tree",
 		"music": "forest",
 		"items": [],
 		"sprites": [
@@ -95,8 +97,8 @@
 		}
 	},
 	"room04": {
-		"texture": "room04",
-		"name": "A southern cliff",
+		"name": "room04",
+		"text": "A southern cliff",
 		"music": "forest",
 		"items": [],
 		"sprites": [{ "name": "river", "x":23, "y":220 }],
@@ -122,8 +124,8 @@
 		}
 	},
 	"room05": {
-		"texture": "room05",
-		"name": "The Temple of Kyrandia",
+		"name": "room05",
+		"text": "The Temple of Kyrandia",
 		"music": "forest",
 		"items": [],
 		"sprites": [{ "name": "temple entrance", "x": 410, "y": 120 }],
@@ -149,8 +151,8 @@
 		}
 	},
 	"room06": {
-		"texture": "room06",
-		"name": "Inside the Temple",
+		"name": "room06",
+		"text": "Inside the Temple",
 		"music": "temple",
 		"items": [],
 		"sprites": [],
@@ -168,8 +170,8 @@
 		}
 	},
 	"room07": {
-		"texture": "room07",
-		"name": "Outside Brandon's home",
+		"name": "room07",
+		"text": "Outside Brandon's home",
 		"music": "forest",
 		"items": [],
 		"sprites": [],
@@ -181,7 +183,7 @@
 				"x": 520, "y": 80,
 				"height": 200, "width": 120,
 				"entry": {"x": 590, "y": 290},
-				"offPoint": {"x": 550, "y": 170},
+				"offPoint": {"x": 570, "y": 230},
 				"animation": false 
 			},
 			"room02": { 
@@ -195,8 +197,8 @@
 		}
 	},
 	"room08": {
-		"texture": "room08",
-		"name": "Dark forest",
+		"name": "room08",
+		"text": "Dark forest",
 		"music": "forest",
 		"items": [{ "name": "peridot", "x": 300, "y": 280}],
 		"sprites": [],
@@ -222,8 +224,8 @@
 		}
 	},
 	"room09": {
-		"texture": "room09",
-		"name": "Pool of Sorrow",
+		"name": "room09",
+		"text": "Pool of Sorrow",
 		"music": "pool",
 		"items": [],
 		"sprites": [{ "name": "stone1", "x": 558, "y": 282 }],
@@ -249,8 +251,8 @@
 		}
 	},
 	"room11": {
-		"texture": "room11",
-		"name": "Dark forest",
+		"name": "room11",
+		"text": "Dark forest",
 		"music": "forest",
 		"items": [],
 		"sprites": [],
@@ -284,8 +286,8 @@
 		}
 	},
 	"room12": {
-		"texture": "room12",
-		"name": "Dark forest",
+		"name": "room12",
+		"text": "Dark forest",
 		"music": "forest",
 		"items": [],
 		"sprites": [],
@@ -319,8 +321,8 @@
 		}
 	},
 	"room13": {
-		"texture": "room13",
-		"name": "Dark forest",
+		"name": "room13",
+		"text": "Dark forest",
 		"music": "forest",
 		"items": [],
 		"sprites": [],
@@ -338,8 +340,8 @@
 		}
 	},
 	"room14": {
-		"texture": "room14",
-		"name": "A forest altar",
+		"name": "room14",
+		"text": "A forest altar",
 		"music": "forest",
 		"items": [],
 		"sprites": [
@@ -369,8 +371,8 @@
 		}
 	},
 	"room16": {
-		"texture": "room16",
-		"name": "A tall cliff",
+		"name": "room16",
+		"text": "A tall cliff",
 		"music": "forest",
 		"items": [],
 		"sprites": [],
@@ -388,8 +390,8 @@
 		}
 	},
 	"room17": {
-		"texture": "room17",
-		"name": "A rocky outcropping",
+		"name": "room17",
+		"text": "A rocky outcropping",
 		"music": "forest",
 		"items": [],
 		"sprites": [{ "name": "herman sawing", "x": 170, "y": 200 }],
@@ -415,8 +417,8 @@
 		}
 	},
 	"room18": {
-		"texture": "room18",
-		"name": "A cavernous entrance",
+		"name": "room18",
+		"text": "A cavernous entrance",
 		"music": "forest",
 		"items": [],
 		"sprites": [],
@@ -442,8 +444,8 @@
 		}
 	},
 	"room19": {
-		"texture": "room19",
-		"name": "A rickety bridge",
+		"name": "room19",
+		"text": "A rickety bridge",
 		"music": "cave",
 		"items": [],
 		"sprites": [],

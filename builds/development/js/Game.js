@@ -166,12 +166,17 @@ BasicGame.Game = function (game) {
   this.slotsGroup;
   this.itemGroup;
 
+  // gui variables
+  this.gui;
+  this.amulet;
+  this.amuletGroup;
+
   // room variables
-  this.room;
+  this.room; // sprite of current room
   this.roomsJSON;
-  this.currentRoom;
-  this.previousRoom;
-  this.door;
+  this.currentRoom; // room meta from rooms.json
+  this.previousRoom; // room meta from rooms.json
+  this.door; // door name
   this.doors;
   this.doorGroup;
   this.music;
@@ -206,8 +211,9 @@ BasicGame.Game.prototype = {
     this.createPlayer();
 
     this.createStartRoom();
-    //console.log(this.spritesJSON);
-    //console.log(this.spritesGroup.children);
+
+    // console.log(this.spritesJSON);
+    // console.log(this.spritesGroup.children);
   },
 
   update: function () {
@@ -250,7 +256,8 @@ BasicGame.Game.prototype = {
   createQuests: function () {
    /*
     * current available event commands:
-    * say, wait, turn, togAnim
+    * say, wait, turn, togAnim, amulet, modAttr 
+    * modAttr: key, attr, value - modify attribute of any current sprite or image
     * TODO: play
     * see exeQuestEvent for handling
     */
@@ -274,8 +281,13 @@ BasicGame.Game.prototype = {
 
       brynn: {
         active: false,
+        amulet: false,
         events: {
-          active: [{ say: "Where the hell is Brynn?" }]
+          active: [{ say: "Where the hell is Brynn?" }],
+          amulet: [
+            { say: "I can feel the power!!" },
+            { modAttr: { key: "amulet", attr: "alpha", value: 1 } }
+          ]
         }
       },
 
@@ -302,7 +314,8 @@ BasicGame.Game.prototype = {
       tear: { name: "willow", step: "treehealed" },
       room03: { name: "willow", step: "active" },
       room06: { name: "brynn", step: "active" },
-      room19: { name: "bridge", step: "active" }
+      room19: { name: "bridge", step: "active" },
+      altar: { name: "brynn", step: "amulet" }
     };
   },
 
@@ -311,6 +324,11 @@ BasicGame.Game.prototype = {
     // then executes event chain for new status
     //console.log('update quest');
     
+    // only update if activating quest or quest activated
+    if (quest.step == 'active' || this.quests[quest.name]['active']) {
+      return false;    
+    }
+
     if (!this.quests[quest.name][quest.step]) {
       this.quests[quest.name][quest.step] = true;
 
@@ -350,11 +368,12 @@ BasicGame.Game.prototype = {
     event.turn ? this.turnPlayer(event.turn):null;
     event.wait ? this.wait(event.wait):null;
     event.togAnim ? this.toggleAnimation(event.togAnim):null;
+    event.modAttr ? this.alterAttribute(event.modAttr):null;
   },
   // - - -
   createSprites: function () {
     
-    var roomSprites = this.roomsJSON[this.currentRoom].sprites;
+    var roomSprites = this.currentRoom.sprites;
     
     for (var i = 0 ; i < roomSprites.length ; i++ ) {
       var spriteProperty = this.spritesJSON[roomSprites[i].name];
@@ -449,26 +468,32 @@ BasicGame.Game.prototype = {
     this.text = this.add.text();
     this.text.font = 'kyrandia';
     this.text.x = 25;
-    this.text.y = 426;
+    this.text.y = 430;
     this.text.fill = '#bbbbbb';
   },
 
   createStartRoom: function () {
 
-    this.currentRoom = 'room02';
-    this.room.loadTexture(this.currentRoom);
+    var roomName = 'room14';
+    this.currentRoom = this.roomsJSON[roomName]
+    this.room.loadTexture(roomName);
     this.createDoors();
     this.createItems();
     this.createSprites();
     this.importGrid();
     this.checkMusic();
-    this.changeRoomText(this.roomsJSON[this.currentRoom].name);
+    this.changeRoomText(this.currentRoom.text);
   },
 
   createGui: function () {
 
-    this.gui = this.game.add.image( 0, 0, 'gui');
+    this.gui = this.add.image( 0, 0, 'gui');
     this.gui.scale.setTo(0.5);
+
+    this.amulet = this.add.sprite( 690, 476, 'amulet');
+    this.amulet.inputEnabled = true;
+    this.amulet.scale.setTo(3);
+    this.amulet.alpha = 0;
   },
 
   createInventory: function () {
@@ -507,7 +532,7 @@ BasicGame.Game.prototype = {
       save inventory items in separate inventory object
     */
     
-    this.items = this.roomsJSON[this.currentRoom].items;
+    this.items = this.currentRoom.items;
 
     for (var i = 0 ; i < this.items.length ;i++) {
       //console.log(items[i]);
@@ -599,6 +624,9 @@ BasicGame.Game.prototype = {
   createInputs: function () {
     
     //this.input.onTap.add(function () {}, this);
+    this.amulet.events.onInputDown.add(function (pointer) {
+      console.log('amulet hit');
+    }, this);
 
     this.room.events.onInputDown.add(function (pointer) {
       if (this.speech.alive) {
@@ -623,7 +651,7 @@ BasicGame.Game.prototype = {
 
   createDoors: function () {
 
-    this.doors = this.roomsJSON[this.currentRoom].doors;
+    this.doors = this.currentRoom.doors;
     for (door in this.doors) {
 
       var x = this.doors[door].x,
@@ -787,10 +815,45 @@ BasicGame.Game.prototype = {
     this.evalEvent(animation);
   },
 
+  alterAttribute: function (data) {
+    // much more powerful function to modify sprites, images
+    // can find objects within groups
+    // this.world.set(child, key, value);
+    var key = data.key;
+    var attr = data.attr;
+    var value = data.value;
+
+    var i = this.world.children.length;
+    while (i--) 
+    {
+      if (this.world.children[i].name == "group" && this.world.children[i].children.length) {
+        
+        var j = this.world.children[i].children.length;
+        while (j--) {
+
+          if (this.world.children[i].children[j].key == key) {
+            // hit
+            console.log(this.world.children[i].children[j]);
+            this.world.children[i].children[j][attr] = value;
+            return true; 
+          } 
+          
+        }
+      } else if (this.world.children[i].name != "group") {
+        if (this.world.children[i].key == key) {
+          // hit
+           console.log(this.world.children[i]);
+           this.world.children[i][attr] = value; 
+           return true;
+         }
+      }
+    }
+  },
+
   // - - - movement functions
 
   moveToDoor: function (door) {
-    var myDoor = this.roomsJSON[this.currentRoom].doors[door.name];
+    var myDoor = this.currentRoom.doors[door.name];
 
     this.stopMoving();
     this.openDoor = myDoor.name;
@@ -851,37 +914,15 @@ BasicGame.Game.prototype = {
   exitRoom: function () {
     //console.log('exiting room');
 
-    var myDoor = this.roomsJSON[this.currentRoom].doors[this.door];
-    this.previousRoom = this.roomsJSON[this.currentRoom];
+    var myDoor = this.currentRoom.doors[this.door];
+    this.previousRoom = this.roomsJSON[this.currentRoom.name];
     
     this.enableInput(false);
 
     // offtweening
     if (myDoor.animation.exit) {
-      console.log('door has animation');
-      var spriteName;
-      var sprite;
-      var anim;
-      
-      this.player.alpha = 0;
-      
-      // find and play sprite from the room's this.spritesGroup
-      spriteName = myDoor.animation.exit;
 
-      for (var i = 0 ; i < this.spritesGroup.length ; i++) {
-        if (this.spritesGroup.children[i].key == spriteName) {
-          //console.log('exit sprite found: ' + spriteName);
-          sprite = this.spritesGroup.children[i];      
-        }
-      }
-
-      sprite.alpha = 1;
-      anim = sprite.animations.play('on', null, false, false);
-      anim.onComplete.add(function (data) {
-        this.evalEvent('on');
-        // after animation end signal, change room
-        this.loadRoom();
-      }, this);
+      this.exitRoomAnimation();
 
     } else if (myDoor.offPoint) {
       
@@ -890,47 +931,19 @@ BasicGame.Game.prototype = {
     }
   },
 
-  enterRoomFrom: function (prevRoom) {
+  enterRoom: function () {
     //console.log('entering room');
-    var myDoor = this.roomsJSON[this.currentRoom].doors[prevRoom.texture];
-    //var myDoor = this.roomsJSON[this.currentRoom].doors[this.door];
+    var myDoor = this.currentRoom.doors[this.previousRoom.name];
 
     // check for enter animation
     if (myDoor.animation.enter) {
+      
       console.log('door has animation');
-      /*
-      var spriteName;
-      var sprite;
-      var anim;
-      var entryPoint = door.entry;
+      this.enterRoomAnimation();
       
-      this.player.alpha = 0;
-      
-      // find and play sprite from the room's this.spritesGroup
-      spriteName = myDoor.animation.enter;
-
-      for (var i = 0 ; i < this.spritesGroup.length ; i++) {
-        if (this.spritesGroup.children[i].key == spriteName) {
-          //console.log('exit sprite found: ' + spriteName);
-          sprite = this.spritesGroup.children[i];      
-        }
-      }
-
-      sprite.alpha = 1;
-      anim = sprite.animations.play('on', null, false, false);
-      anim.onComplete.add(function (data) {
-        this.evalEvent('on');
-        // after animation end signal, change room
-        this.player.position = myDoor.entry;
-        this.player.alpha = 1;
-        this.openRoom();
-        
-      }, this);
-      */
-    
     } else {
        //move player into position for ontweening
-      /*
+      
       var startPoint = {};
       for (val in myDoor.offPoint) {
         startPoint[val] = myDoor.offPoint[val];
@@ -939,17 +952,70 @@ BasicGame.Game.prototype = {
       this.player.alpha = 1;
       this.player.position = startPoint;
       this.tweenIn(myDoor);   
-      */
+      
+    }
+  },
+
+  exitRoomAnimation: function () {
+    console.log('door has animation');
+    var myDoor = this.currentRoom.doors[this.door];
+    var spriteName;
+    var exitSprite;
+    var anim;
+    
+    this.player.alpha = 0;
+    
+    // find and play sprite from the room's this.spritesGroup
+    exitSpriteName = myDoor.animation.exit;
+
+    for (var i = 0 ; i < this.spritesGroup.length ; i++) {
+      if (this.spritesGroup.children[i].key == exitSpriteName) {
+        //console.log('exit sprite found: ' + exitSpriteName);
+        exitSprite = this.spritesGroup.children[i];      
+      }
+    }
+    // remove exit sprite from spritesGroup to prevent preupdate error
+    this.spritesGroup.remove(exitSprite);
+    this.world.add(exitSprite);
+
+    exitSprite.alpha = 1;
+    anim = exitSprite.animations.play('on', null, false, true);
+    anim.onComplete.add(function (data) {
+     
+      this.evalEvent('on');
+      this.loadRoom();
+
+    }, this);
+  },
+
+  enterRoomAnimation: function () {
+    
+    var myDoor = this.currentRoom.doors[this.previousRoom.name];
+    var spriteName;
+    var sprite;
+    var anim;
+    
+    this.player.alpha = 0;
+    
+    // find and play sprite from the room's this.spritesGroup
+    spriteName = myDoor.animation.enter;
+
+    for (var i = 0 ; i < this.spritesGroup.length ; i++) {
+      if (this.spritesGroup.children[i].key == spriteName) {
+        //console.log('exit sprite found: ' + spriteName);
+        sprite = this.spritesGroup.children[i];      
+      }
     }
 
-    var startPoint = {};
-    for (val in myDoor.offPoint) {
-      startPoint[val] = myDoor.offPoint[val];
-    }
-      
-    this.player.alpha = 1;
-    this.player.position = startPoint;
-    this.tweenIn(myDoor);
+    sprite.alpha = 1;
+    anim = sprite.animations.play('on', null, false, true);
+    anim.onComplete.add(function (data) {
+      this.evalEvent('on');
+      // after animation end signal, change room
+      this.player.position = myDoor.entry;
+      this.player.alpha = 1;
+      this.openRoom();
+    }, this);
   },
 
   tweenIn: function (door) {
@@ -957,21 +1023,19 @@ BasicGame.Game.prototype = {
     var entryPoint = door.entry;
     console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
     
-    this.tween = this.game.add.tween(this.player)
+    this.tween = this.add.tween(this.player);
     this.tween.to(entryPoint, 440); //todo adjust tween speed
-    this.tween.onComplete.addOnce(function () {
+    this.tween.onComplete.add(function () {
       
-      //console.log('tween in finished');
+      console.log('tween in finished');
       this.openRoom();
     }, this);
-
     this.tween.start();
   },
 
   tweenOut: function () {
     
-    var myDoor = this.roomsJSON[this.currentRoom].doors[this.door];
-    var offPoint = myDoor.offPoint;
+    var offPoint = this.currentRoom.doors[this.door].offPoint;
 
     //console.log('tweening out to:' + myDoor.offPoint.x +' '+ myDoor.offPoint.y);
 
@@ -1003,7 +1067,7 @@ BasicGame.Game.prototype = {
 
   tweenPath: function (path) {
     
-    this.tween = this.game.add.tween(this.player);
+    this.tween = this.add.tween(this.player);
     this.tween.onComplete.addOnce(this.tweenComplete, this); 
     
     var prevX = this.player.position.x/this.tileSize;
@@ -1012,7 +1076,7 @@ BasicGame.Game.prototype = {
     for ( var i = 0; i < path.length ; i++ ) {
       var x = path[i][0];
       var y = path[i][1];
-      var dist = this.game.physics.arcade.distanceBetween({x: x, y: y}, {x: prevX, y: prevY});
+      var dist = this.physics.arcade.distanceBetween({x: x, y: y}, {x: prevX, y: prevY});
 
       if (i == path.length - 1) {
         this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
@@ -1030,21 +1094,17 @@ BasicGame.Game.prototype = {
 
   loadRoom: function () {
     
-    //console.log('changing room');
+    console.log('load room');
     var nextRoom = this.roomsJSON[this.door];
-    var currRoom = this.roomsJSON[this.currentRoom];
-    
-    // door hit > disable room
-    //this.enableInput(false);
 
     this.closeRoom();
 
     // ready next room
     //console.log('ready next room');
 
-    this.room.loadTexture(nextRoom.texture);
-    this.currentRoom = nextRoom.texture;
-    this.changeRoomText(nextRoom.name);
+    this.room.loadTexture(nextRoom.name);
+    this.currentRoom = this.roomsJSON[nextRoom.name];
+    this.changeRoomText(nextRoom.text);
     this.checkMusic();
     this.importGrid();
     this.createDoors();
@@ -1055,11 +1115,11 @@ BasicGame.Game.prototype = {
     this.world.remove(this.player);
     this.spritesGroup.add(this.player);
 
-    this.enterRoomFrom(currRoom);
+    this.enterRoom();
   },
 
   closeRoom: function () {
-    //console.log('closing room');
+    console.log('closing room');
     this.saveItems(); // save room state
 
     // save player sprite
@@ -1074,7 +1134,7 @@ BasicGame.Game.prototype = {
 
   openRoom: function () {
 
-    this.evalEvent(this.currentRoom);
+    this.evalEvent(this.currentRoom.name);
     this.enableInput(true);
   },
 
@@ -1181,10 +1241,10 @@ BasicGame.Game.prototype = {
 
   checkMusic: function () {
 
-    if (this.currentMusic != this.roomsJSON[this.currentRoom].music) {
+    if (this.currentMusic != this.currentRoom.music) {
       
       this.music ? this.music.fadeOut(): null;
-      this.currentMusic = this.roomsJSON[this.currentRoom].music;
+      this.currentMusic = this.currentRoom.music;
 
       if (this.currentMusic != null) {
         
@@ -1209,11 +1269,11 @@ BasicGame.Game.prototype = {
     // save new position of each item to room.items
 
     this.itemGroup.forEach(function(item) {
-      for (var i = 0; i < this.roomsJSON[this.currentRoom].items.length ; i++) {
-        if (item.name == this.roomsJSON[this.currentRoom].items[i].name) {
+      for (var i = 0; i < this.currentRoom.items.length ; i++) {
+        if (item.name == this.currentRoom.items[i].name) {
           //console.log('saving ' + item.name + ' location');
-          this.roomsJSON[this.currentRoom].items[i].x = item.x;
-          this.roomsJSON[this.currentRoom].items[i].y = item.y;
+          this.currentRoom.items[i].x = item.x;
+          this.currentRoom.items[i].y = item.y;
           break;  
         }
       }
@@ -1222,7 +1282,7 @@ BasicGame.Game.prototype = {
 
   importGrid: function () {
     
-    var roomJson = this.currentRoom + '_json';
+    var roomJson = this.currentRoom.name + '_json';
     var gridJson = this.cache.getJSON(roomJson);
     this.grid.nodes = gridJson;
 

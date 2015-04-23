@@ -36,4 +36,5 @@
 - **FIXED:** interrupting player during move can cause him to jump to previous move point
 -	**FIXED:** door animations causing room preupdate error
 	-	Uncaught TypeError: Cannot read property 'preUpdate' of undefined
+- **FIXED:** quests are not triggering
 

@@ -326,17 +326,15 @@ BasicGame.Game.prototype = {
     
     // only update if activating quest or quest activated
     if (quest.step == 'active' || this.quests[quest.name]['active']) {
-      return false;    
-    }
+       if (!this.quests[quest.name][quest.step]) {
+        this.quests[quest.name][quest.step] = true;
 
-    if (!this.quests[quest.name][quest.step]) {
-      this.quests[quest.name][quest.step] = true;
-
-      // queue quest related events to run > queue 
-      var events = this.quests[quest.name].events[quest.step];
-      for (var i = 0 ; i < events.length ; i++) { 
-        this.questQueue.unshift(events[i]); 
-      }
+        // queue quest related events to run > queue 
+        var events = this.quests[quest.name].events[quest.step];
+        for (var i = 0 ; i < events.length ; i++) { 
+          this.questQueue.unshift(events[i]); 
+        }
+      }  
     }
   },
 

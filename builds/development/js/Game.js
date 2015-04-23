@@ -56,7 +56,7 @@ BasicGame.Game = function (game) {
   this.path;
 
   // sprite variabels
-  this.sprites = null;
+  this.spritesJSON = null;
   this.spritesGroup = null;
   this.player = null;
   this.tween = null;
@@ -64,6 +64,7 @@ BasicGame.Game = function (game) {
   this.speed = 40; // lower is faster tweening
   this.direction = null;
   this.speech;
+  this.animation;
 
   // inventory variables
   this.slots = [ 
@@ -167,8 +168,9 @@ BasicGame.Game = function (game) {
 
   // room variables
   this.room;
-  this.rooms;
+  this.roomsJSON;
   this.currentRoom;
+  this.previousRoom;
   this.door;
   this.doors;
   this.doorGroup;
@@ -183,8 +185,8 @@ BasicGame.Game.prototype = {
 
   create: function () {
 
-    this.rooms = this.cache.getJSON('rooms');
-    this.sprites = this.cache.getJSON('sprites');
+    this.roomsJSON = this.cache.getJSON('rooms');
+    this.spritesJSON = this.cache.getJSON('sprites');
     this.stage.backgroundColor = '#2d2d2d';
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -204,18 +206,17 @@ BasicGame.Game.prototype = {
     this.createPlayer();
 
     this.createStartRoom();
-    //console.log(this.sprites);
+    //console.log(this.spritesJSON);
     //console.log(this.spritesGroup.children);
   },
 
   update: function () {
 
-    this.game.debug.text('Open door: ' + this.openDoor, 16, 475);
-    this.game.debug.text('Player position: ' + this.player.x +', '+ this.player.y, 16, 500);
-    this.game.debug.text('Pointer position: ' + this.game.input.position.x + ', ' + this.game.input.position.y, 16, 525);
-    
-    //this.game.debug.soundInfo(this.music, 286, 475);
     if (this.debug) {
+      this.game.debug.text('Open door: ' + this.openDoor, 16, 475);
+      this.game.debug.text('Player position: ' + this.player.x +', '+ this.player.y, 16, 500);
+      this.game.debug.text('Pointer position: ' + this.game.input.position.x + ', ' + this.game.input.position.y, 16, 525);
+      //this.game.debug.soundInfo(this.music, 286, 475);
       this.game.debug.text('Text z index: ' + this.text.z, 276, 450);
       this.game.debug.text('Player z index: ' + this.player.z, 276, 475);
       this.game.debug.text('GUI z index: ' + this.gui.z, 276, 500);
@@ -245,12 +246,12 @@ BasicGame.Game.prototype = {
     //  Then let's go back to the main menu.
     this.state.start('MainMenu');
   },
-
+  // - - - event chain functions
   createQuests: function () {
    /*
     * current available event commands:
-    * say, wait, turn
-    * TODO: togAnim, play
+    * say, wait, turn, togAnim
+    * TODO: play
     * see exeQuestEvent for handling
     */
 
@@ -350,70 +351,83 @@ BasicGame.Game.prototype = {
     event.wait ? this.wait(event.wait):null;
     event.togAnim ? this.toggleAnimation(event.togAnim):null;
   },
-
+  // - - -
   createSprites: function () {
     
-    var sprites = this.rooms[this.currentRoom].sprites;
+    var roomSprites = this.roomsJSON[this.currentRoom].sprites;
     
-    for (var i = 0 ; i < sprites.length ; i++ ) {
-      var sprite = this.spritesGroup.create( sprites[i].x, sprites[i].y, sprites[i].name );
-      sprite.scale.setTo(3); // all source assets scaled by 3
+    for (var i = 0 ; i < roomSprites.length ; i++ ) {
+      var spriteProperty = this.spritesJSON[roomSprites[i].name];
+      var newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name );
+      newSprite.scale.setTo(3); // all source assets scaled by 3
 
       //console.log(sprite);
 
-      if (this.sprites[sprites[i].name].animated) {
+      if (spriteProperty.animated) {
+        // sprite has animations
+        this.createSpriteAnimation(newSprite, spriteProperty);
+      }
 
-        var animations = this.sprites[sprites[i].name].animations;
-        //console.log(animations);
+      if (spriteProperty.action) {
+        // sprite has action related events
+        this.createSpriteAction(newSprite, spriteProperty); 
+      }
 
-        for (anim in animations) {
-          //console.log(animations[anim]);
-
-          sprite.animations.add(
-            animations[anim].name,
-            animations[anim].frames,
-            animations[anim].speed,
-            animations[anim].loop,
-            false);
-
-          animations[anim].start ? sprite.animations.play(animations[anim].name):sprite.alpha = 0;  
-        }  
-      }//if animated
-
-      if (this.sprites[sprites[i].name].action) {
-        var action = this.sprites[sprites[i].name].action;
-
-        if (action.click) {
-          sprite.inputEnabled = true;
-          sprite.events.onInputDown.add(function (data) {
-            
-            //console.log('sprite touched');
-            //console.log(action.click);
-            if (action.click.animation) {
-              
-              sprite.alpha = 1;
-              var anim = sprite.animations.play(action.click.animation, null, false, true);
-              anim.onComplete.add(function (data) {
-                //console.log('animation complete');
-                this.evalEvent(action.click.animation);
-              }, this);
-            }// if has animation on click
-
-            if (action.click.text) {
-              //say something
-              this.say(action.click.text);
-            }// if has text on click
-            
-          }, this);
-        }// if has click action
-
-        if (action.drag) {
-          // have sprite respond to item dragged onto it
-          // sprite should have array of drag-actionable items to compare to
-
-        }// if has drag action
-      }//if has action
     }
+  },
+
+  createSpriteAnimation: function (sprite, property) {
+    var animations = property.animations;
+        
+    //console.log(animations);
+    for (anim in animations) {
+      //console.log(animations[anim]);
+
+      sprite.animations.add(
+        animations[anim].name,
+        animations[anim].frames,
+        animations[anim].speed,
+        animations[anim].loop,
+        false);
+
+      if (animations[anim].start) {
+        sprite.animations.play(animations[anim].name);
+      } else {
+        sprite.alpha = 0;
+      }
+    }
+  },
+
+  createSpriteAction: function (sprite, property) {
+    var action = property.action;
+
+    if (action.click) {
+      sprite.inputEnabled = true;
+      sprite.events.onInputDown.add(function (data) {
+        
+        if (action.click.animation) {
+          
+          sprite.alpha = 1;
+          this.animation = sprite.animations.play(action.click.animation, null, false, true);
+          this.animation.onComplete.add(function (data) {
+            //console.log('animation complete');
+            this.evalEvent(action.click.animation);
+          }, this);
+        }// if has animation on click
+
+        if (action.click.text) {
+          //say something
+          this.say(action.click.text);
+        }// if has text on click
+        
+      }, this);
+    }// if has click action
+
+    if (action.drag) {
+      // have sprite respond to item dragged onto it
+      // sprite should have array of drag-actionable items to compare to
+
+    }// if has drag action
   },
 
   createRoom: function () {
@@ -448,7 +462,7 @@ BasicGame.Game.prototype = {
     this.createSprites();
     this.importGrid();
     this.checkMusic();
-    this.changeRoomText(this.rooms[this.currentRoom].name);
+    this.changeRoomText(this.roomsJSON[this.currentRoom].name);
   },
 
   createGui: function () {
@@ -493,7 +507,7 @@ BasicGame.Game.prototype = {
       save inventory items in separate inventory object
     */
     
-    this.items = this.rooms[this.currentRoom].items;
+    this.items = this.roomsJSON[this.currentRoom].items;
 
     for (var i = 0 ; i < this.items.length ;i++) {
       //console.log(items[i]);
@@ -584,13 +598,14 @@ BasicGame.Game.prototype = {
 
   createInputs: function () {
     
-    //this.game.input.onTap.add(this.move, this);
+    //this.input.onTap.add(function () {}, this);
+
     this.room.events.onInputDown.add(function (pointer) {
-      //this.speech.alive ? this.speech.kill(): null;
       if (this.speech.alive) {
         this.speech.kill();
         return null;
       }
+
       this.closeDoor();
       this.stopMoving();
       this.move(this.game.input.position);
@@ -608,7 +623,7 @@ BasicGame.Game.prototype = {
 
   createDoors: function () {
 
-    this.doors = this.rooms[this.currentRoom].doors;
+    this.doors = this.roomsJSON[this.currentRoom].doors;
     for (door in this.doors) {
 
       var x = this.doors[door].x,
@@ -767,7 +782,7 @@ BasicGame.Game.prototype = {
     var animation = data.animation;
     var toggle = data.start;
 
-    this.sprites[sprite].animations[animation].start = toggle;
+    this.spritesJSON[sprite].animations[animation].start = toggle;
 
     this.evalEvent(animation);
   },
@@ -775,7 +790,7 @@ BasicGame.Game.prototype = {
   // - - - movement functions
 
   moveToDoor: function (door) {
-    var myDoor = this.rooms[this.currentRoom].doors[door.name];
+    var myDoor = this.roomsJSON[this.currentRoom].doors[door.name];
 
     this.stopMoving();
     this.openDoor = myDoor.name;
@@ -836,7 +851,8 @@ BasicGame.Game.prototype = {
   exitRoom: function () {
     //console.log('exiting room');
 
-    var myDoor = this.rooms[this.currentRoom].doors[this.door];
+    var myDoor = this.roomsJSON[this.currentRoom].doors[this.door];
+    this.previousRoom = this.roomsJSON[this.currentRoom];
     
     this.enableInput(false);
 
@@ -874,17 +890,47 @@ BasicGame.Game.prototype = {
     }
   },
 
-  enterRoomFrom: function (room) {
+  enterRoomFrom: function (prevRoom) {
     //console.log('entering room');
-    // entering this <door> into this <currRoom>
-    var myDoor = this.rooms[this.currentRoom].doors[room.texture];
+    var myDoor = this.roomsJSON[this.currentRoom].doors[prevRoom.texture];
+    //var myDoor = this.roomsJSON[this.currentRoom].doors[this.door];
 
     // check for enter animation
     if (myDoor.animation.enter) {
-      // play animation
+      console.log('door has animation');
+      /*
+      var spriteName;
+      var sprite;
+      var anim;
+      var entryPoint = door.entry;
+      
+      this.player.alpha = 0;
+      
+      // find and play sprite from the room's this.spritesGroup
+      spriteName = myDoor.animation.enter;
+
+      for (var i = 0 ; i < this.spritesGroup.length ; i++) {
+        if (this.spritesGroup.children[i].key == spriteName) {
+          //console.log('exit sprite found: ' + spriteName);
+          sprite = this.spritesGroup.children[i];      
+        }
+      }
+
+      sprite.alpha = 1;
+      anim = sprite.animations.play('on', null, false, false);
+      anim.onComplete.add(function (data) {
+        this.evalEvent('on');
+        // after animation end signal, change room
+        this.player.position = myDoor.entry;
+        this.player.alpha = 1;
+        this.openRoom();
+        
+      }, this);
+      */
     
     } else {
        //move player into position for ontweening
+      /*
       var startPoint = {};
       for (val in myDoor.offPoint) {
         startPoint[val] = myDoor.offPoint[val];
@@ -892,14 +938,24 @@ BasicGame.Game.prototype = {
       
       this.player.alpha = 1;
       this.player.position = startPoint;
-      this.tweenIn(myDoor);
+      this.tweenIn(myDoor);   
+      */
     }
+
+    var startPoint = {};
+    for (val in myDoor.offPoint) {
+      startPoint[val] = myDoor.offPoint[val];
+    }
+      
+    this.player.alpha = 1;
+    this.player.position = startPoint;
+    this.tweenIn(myDoor);
   },
 
   tweenIn: function (door) {
     
     var entryPoint = door.entry;
-    //console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
+    console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
     
     this.tween = this.game.add.tween(this.player)
     this.tween.to(entryPoint, 440); //todo adjust tween speed
@@ -914,7 +970,7 @@ BasicGame.Game.prototype = {
 
   tweenOut: function () {
     
-    var myDoor = this.rooms[this.currentRoom].doors[this.door];
+    var myDoor = this.roomsJSON[this.currentRoom].doors[this.door];
     var offPoint = myDoor.offPoint;
 
     //console.log('tweening out to:' + myDoor.offPoint.x +' '+ myDoor.offPoint.y);
@@ -975,8 +1031,8 @@ BasicGame.Game.prototype = {
   loadRoom: function () {
     
     //console.log('changing room');
-    var nextRoom = this.rooms[this.door];
-    var currRoom = this.rooms[this.currentRoom];
+    var nextRoom = this.roomsJSON[this.door];
+    var currRoom = this.roomsJSON[this.currentRoom];
     
     // door hit > disable room
     //this.enableInput(false);
@@ -984,12 +1040,12 @@ BasicGame.Game.prototype = {
     this.closeRoom();
 
     // ready next room
-    //this.player.position = nextRoom.from[this.currentRoom];
+    //console.log('ready next room');
+
     this.room.loadTexture(nextRoom.texture);
     this.currentRoom = nextRoom.texture;
     this.changeRoomText(nextRoom.name);
     this.checkMusic();
-
     this.importGrid();
     this.createDoors();
     this.createItems();
@@ -1003,13 +1059,12 @@ BasicGame.Game.prototype = {
   },
 
   closeRoom: function () {
-
+    //console.log('closing room');
     this.saveItems(); // save room state
 
     // save player sprite
     this.spritesGroup.remove(this.player);
     this.world.addAt(this.player, 1);
-    //this.spritesGroup.removeAll(true);
 
     this.doorGroup.removeAll(true);
     this.doorDebug.removeAll(true);
@@ -1126,10 +1181,10 @@ BasicGame.Game.prototype = {
 
   checkMusic: function () {
 
-    if (this.currentMusic != this.rooms[this.currentRoom].music) {
+    if (this.currentMusic != this.roomsJSON[this.currentRoom].music) {
       
       this.music ? this.music.fadeOut(): null;
-      this.currentMusic = this.rooms[this.currentRoom].music;
+      this.currentMusic = this.roomsJSON[this.currentRoom].music;
 
       if (this.currentMusic != null) {
         
@@ -1154,11 +1209,11 @@ BasicGame.Game.prototype = {
     // save new position of each item to room.items
 
     this.itemGroup.forEach(function(item) {
-      for (var i = 0; i < this.rooms[this.currentRoom].items.length ; i++) {
-        if (item.name == this.rooms[this.currentRoom].items[i].name) {
+      for (var i = 0; i < this.roomsJSON[this.currentRoom].items.length ; i++) {
+        if (item.name == this.roomsJSON[this.currentRoom].items[i].name) {
           //console.log('saving ' + item.name + ' location');
-          this.rooms[this.currentRoom].items[i].x = item.x;
-          this.rooms[this.currentRoom].items[i].y = item.y;
+          this.roomsJSON[this.currentRoom].items[i].x = item.x;
+          this.roomsJSON[this.currentRoom].items[i].y = item.y;
           break;  
         }
       }

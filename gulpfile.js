@@ -4,7 +4,8 @@ var gulp = require('gulp'),
   concat = require('gulp-concat'),
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
-  jsonminify = require('gulp-jsonminify');
+  jsonminify = require('gulp-jsonminify'),
+  ghPages = require('gulp-gh-pages');
 
 gulp.task('js', function() {
   gulp.src('builds/development/js/**/*')
@@ -47,4 +48,11 @@ gulp.task('json', function() {
 });
 
 gulp.task('production', ['scripts', 'assets', 'json']);
+
+gulp.task('deploy', function() {
+  return gulp.src('builds/production/**/*')
+    .pipe(ghPages());
+});
+
+
 

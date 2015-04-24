@@ -28,6 +28,7 @@
 - **ADDED:** add event queueing system
 - **ADDED:** use original Kyrandia font
 - **ADDED:** add door animations
+- **ADDED:** host production build of the game
 
 ###Bugs
 - **FIXED:** tapping on player causes him to disappear

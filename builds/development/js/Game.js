@@ -214,6 +214,7 @@ BasicGame.Game.prototype = {
 
     // console.log(this.spritesJSON);
     // console.log(this.spritesGroup.children);
+    console.log(this.player);
   },
 
   update: function () {
@@ -256,9 +257,10 @@ BasicGame.Game.prototype = {
   createQuests: function () {
    /*
     * current available event commands:
-    * say, wait, turn, togAnim, amulet, modAttr 
-    * modAttr: key, attr, value - modify attribute of any current sprite or image
-    * TODO: play
+    * say, wait, turn, togAnim, modAttr, playAnim 
+    * modAttr: sprite, attr, value - modify attribute of any current sprite or image
+    * playAnim: sprite, animation, kill - play animation of current sprites
+    * togAnim: sprite, animation, start - toggle animation of any sprite
     * see exeQuestEvent for handling
     */
 
@@ -283,10 +285,13 @@ BasicGame.Game.prototype = {
         active: false,
         amulet: false,
         events: {
-          active: [{ say: "Where the hell is Brynn?" }],
+          active: [
+            { say: "Where the hell is Brynn?" },
+            { modAttr: { sprite: "altar", attr: "inputEnabled", value: true } }
+          ],
           amulet: [
-            { say: "I can feel the power!!" },
-            { modAttr: { key: "amulet", attr: "alpha", value: 1 } }
+            { playAnim: { sprite: "amulet", animation: "on", kill: false } },
+            { say: "I can feel the power!!" }
           ]
         }
       },
@@ -328,6 +333,7 @@ BasicGame.Game.prototype = {
     if (quest.step == 'active' || this.quests[quest.name]['active']) {
        if (!this.quests[quest.name][quest.step]) {
         this.quests[quest.name][quest.step] = true;
+        console.log('calling quest events');
 
         // queue quest related events to run > queue 
         var events = this.quests[quest.name].events[quest.step];
@@ -367,6 +373,7 @@ BasicGame.Game.prototype = {
     event.wait ? this.wait(event.wait):null;
     event.togAnim ? this.toggleAnimation(event.togAnim):null;
     event.modAttr ? this.alterAttribute(event.modAttr):null;
+    event.playAnim ? this.playAnimation(event.playAnim):null;
   },
   // - - -
   createSprites: function () {
@@ -421,7 +428,8 @@ BasicGame.Game.prototype = {
     if (action.click) {
       sprite.inputEnabled = true;
       sprite.events.onInputDown.add(function (data) {
-        
+        this.evalEvent(sprite.key);
+
         if (action.click.animation) {
           
           sprite.alpha = 1;
@@ -472,7 +480,7 @@ BasicGame.Game.prototype = {
 
   createStartRoom: function () {
 
-    var roomName = 'room14';
+    var roomName = 'room01';
     this.currentRoom = this.roomsJSON[roomName]
     this.room.loadTexture(roomName);
     this.createDoors();
@@ -488,10 +496,29 @@ BasicGame.Game.prototype = {
     this.gui = this.add.image( 0, 0, 'gui');
     this.gui.scale.setTo(0.5);
 
-    this.amulet = this.add.sprite( 690, 476, 'amulet');
+    this.createAmulet();
+
+    // this.amulet = this.add.sprite( 690, 476, 'amulet');
+    // this.amulet.inputEnabled = true;
+    // this.amulet.scale.setTo(3);
+    // this.amulet.alpha = 1;
+
+    // this.amulet.animations.play('on', null, true, false);
+  },
+
+  createAmulet: function () {
+
+    this.amulet = this.add.sprite( 670, 456, 'amulet');
     this.amulet.inputEnabled = true;
     this.amulet.scale.setTo(3);
     this.amulet.alpha = 0;
+
+    this.amulet.animations.add('on', [
+      "amulet-1", "amulet-2", "amulet-3", "amulet-4", "amulet-5", "amulet-6", 
+      "amulet-7", "amulet-8", "amulet-9", "amulet-10", "amulet-11", "amulet-12", 
+      "amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18", 
+      "amulet-19", "amulet-20", "amulet-21", "amulet-22", "amulet-23"],
+      8, true, false);
   },
 
   createInventory: function () {
@@ -817,7 +844,7 @@ BasicGame.Game.prototype = {
     // much more powerful function to modify sprites, images
     // can find objects within groups
     // this.world.set(child, key, value);
-    var key = data.key;
+    var key = data.sprite;
     var attr = data.attr;
     var value = data.value;
 
@@ -831,7 +858,7 @@ BasicGame.Game.prototype = {
 
           if (this.world.children[i].children[j].key == key) {
             // hit
-            console.log(this.world.children[i].children[j]);
+            // console.log(this.world.children[i].children[j]);
             this.world.children[i].children[j][attr] = value;
             return true; 
           } 
@@ -840,10 +867,58 @@ BasicGame.Game.prototype = {
       } else if (this.world.children[i].name != "group") {
         if (this.world.children[i].key == key) {
           // hit
-           console.log(this.world.children[i]);
+           // console.log(this.world.children[i]);
            this.world.children[i][attr] = value; 
            return true;
          }
+      }
+    }
+  },
+
+  playAnimation: function (data) {
+    // console.log('play animation');
+    // play any current sprite animation
+    var key = data.sprite;
+    var animName = data.animation;
+    var kill = data.kill;
+    var sprite;
+    var anim;
+
+    var i = this.world.children.length;
+    while (i--) 
+    {
+      if (this.world.children[i].name == "group" && this.world.children[i].children.length) {
+        
+        var j = this.world.children[i].children.length;
+        while (j--) {
+
+          if (this.world.children[i].children[j].key == key) {
+            // hit
+            sprite = this.world.children[i].children[j];
+            sprite.alpha = 1;
+            // console.log(sprite);
+
+            anim = sprite.animations.play(animName, null, false, kill);
+            anim.onComplete.add(function () {
+              this.evalEvent(animName);
+            }, this);
+            return true; 
+          } 
+          
+        }
+      } else if (this.world.children[i].name != "group") {
+        if (this.world.children[i].key == key) {
+          // hit
+          sprite = this.world.children[i];
+          sprite.alpha = 1;
+          // console.log(sprite);
+
+          anim = sprite.animations.play(animName, null, false, kill);
+          anim.onComplete.add(function () {
+            this.evalEvent(animName);
+          }, this);
+         return true;
+        }
       }
     }
   },

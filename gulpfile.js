@@ -47,12 +47,14 @@ gulp.task('json', function() {
     .pipe(gulp.dest('builds/production/js/json'));
 });
 
-gulp.task('production', ['scripts', 'assets', 'json']);
-
-gulp.task('deploy', function() {
+gulp.task('ghpage', function() {
   return gulp.src('builds/production/**/*')
     .pipe(ghPages());
 });
+
+gulp.task('deploy', ['scripts', 'assets', 'json', 'ghpage']);
+
+
 
 
 

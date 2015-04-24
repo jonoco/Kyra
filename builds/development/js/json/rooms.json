@@ -8,7 +8,9 @@
 			{ "name": "saw", "x": 670, "y": 290 }
 		],
 		"sprites": [
-			{ "name": "lamp", "x": 660, "y": 150 }
+			{ "name": "lamp", "x": 660, "y": 150 },
+			{ "name": "bed", "x": 20, "y": 334 },
+			{ "name": "coal_hanger", "x": 200, "y": 24 }
 		],
 		"grid": "js/json/room01.json",
 		"path": "assets/screens/room01.png",
@@ -174,7 +176,7 @@
 		"text": "Outside Brandon's home",
 		"music": "forest",
 		"items": [],
-		"sprites": [],
+		"sprites": [{ "name": "treehouse", "x": 488, "y": 76 }],
 		"grid": "js/json/room07.json",
 		"path": "assets/screens/room07.png",
 		"doors": { 
@@ -183,7 +185,7 @@
 				"x": 520, "y": 80,
 				"height": 200, "width": 120,
 				"entry": {"x": 590, "y": 290},
-				"offPoint": {"x": 570, "y": 230},
+				"offPoint": {"x": 550, "y": 200},
 				"animation": false 
 			},
 			"room02": { 
@@ -191,7 +193,7 @@
 				"x": 520, "y": 330,
 				"height": 100, "width": 200,
 				"entry": {"x": 620, "y": 340},
-				"offPoint": {"x": 630, "y": 500},
+				"offPoint": {"x": 630, "y": 400},
 				"animation": false 
 			}  
 		}
@@ -201,7 +203,10 @@
 		"text": "Dark forest",
 		"music": "forest",
 		"items": [{ "name": "peridot", "x": 300, "y": 280}],
-		"sprites": [],
+		"sprites": [
+			{ "name": "birch2", "x": 296, "y": 26 },
+			{ "name": "redwood1", "x": 500, "y": 44 }
+		],
 		"grid": "js/json/room08.json",
 		"path": "assets/screens/room08.png",
 		"doors": { 

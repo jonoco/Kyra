@@ -107,7 +107,7 @@
 		"png": "/assets/sprites/altar.png",
 		"json": "/assets/sprites/altar.json",
 		"action": {
-			"click": { "animation": "altar" }
+			"click": { "text": "What a lovely table" }
 			},
 		"animated": true,
 		"animations": {
@@ -132,6 +132,22 @@
 		"animated": false,
 		"animations": null
 	},
+	"birch2": {
+		"name": "birch2",
+		"png": "/assets/sprites/birch2.png",
+		"json": null,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
+	"redwood1": {
+		"name": "redwood1",
+		"png": "/assets/sprites/redwood1.png",
+		"json": null,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
 	"stone2": {
 		"name": "stone2",
 		"png": "/assets/sprites/stone2.png",
@@ -140,13 +156,49 @@
 		"animated": false,
 		"animations": null
 	},
-	"amulet": {
-		"name": "amulet",
-		"png": "/assets/sprites/amulet.png",
+	"bed": {
+		"name": "bed",
+		"png": "/assets/sprites/bed.png",
 		"json": null,
 		"action": null,
 		"animated": false,
 		"animations": null
+	},
+	"coal_hanger": {
+		"name": "coal_hanger",
+		"png": "/assets/sprites/coal_hanger.png",
+		"json": null,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
+	"treehouse": {
+		"name": "treehouse",
+		"png": "/assets/sprites/treehouse.png",
+		"json": null,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
+	"amulet": {
+		"name": "amulet",
+		"png": "/assets/sprites/amulet.png",
+		"json": "/assets/sprites/amulet.json",
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+				"frames": [
+					"amulet-1", "amulet-2", "amulet-3", "amulet-4", "amulet-5", "amulet-6", 
+					"amulet-7", "amulet-8", "amulet-9", "amulet-10", "amulet-11", "amulet-12", 
+					"amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18", 
+					"amulet-19", "amulet-20", "amulet-21", "amulet-22", "amulet-23"],
+				"speed": 7,
+				"loop": false,
+				"start": false
+			}
+		}
 	},
 	"willow": {
 		"name": "willow",

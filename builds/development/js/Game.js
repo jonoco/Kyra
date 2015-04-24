@@ -1019,10 +1019,11 @@ BasicGame.Game.prototype = {
   tweenIn: function (door) {
     
     var entryPoint = door.entry;
+    var dist = this.physics.arcade.distanceBetween(this.player.position, entryPoint)/this.tileSize;
     console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
     
     this.tween = this.add.tween(this.player);
-    this.tween.to(entryPoint, 440); //todo adjust tween speed
+    this.tween.to(entryPoint, dist*this.speed); //todo adjust tween speed
     this.tween.onComplete.add(function () {
       
       console.log('tween in finished');
@@ -1034,11 +1035,11 @@ BasicGame.Game.prototype = {
   tweenOut: function () {
     
     var offPoint = this.currentRoom.doors[this.door].offPoint;
-
+    var dist = this.physics.arcade.distanceBetween(this.player.position, offPoint)/this.tileSize;
     //console.log('tweening out to:' + myDoor.offPoint.x +' '+ myDoor.offPoint.y);
-
+    
     this.between = this.game.add.tween(this.player)
-    this.between.to(offPoint, 440); //todo adjust betweening speed
+    this.between.to(offPoint, dist*this.speed); //todo adjust betweening speed
     
     this.between.onComplete.addOnce(function () {
       //check for exit animations

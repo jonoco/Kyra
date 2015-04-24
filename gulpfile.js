@@ -1,6 +1,10 @@
 var gulp = require('gulp'),
   gutil = require('gulp-util'),
-  webserver = require('gulp-webserver');
+  webserver = require('gulp-webserver'),
+  concat = require('gulp-concat'),
+  uglify = require('gulp-uglify'),
+  rename = require('gulp-rename'),
+  jsonminify = require('gulp-jsonminify');
 
 gulp.task('js', function() {
   gulp.src('builds/development/js/**/*')
@@ -25,3 +29,22 @@ gulp.task('webserver', function() {
 });
 
 gulp.task('default', ['watch', 'html', 'js', 'webserver']);
+
+gulp.task('scripts', function() {
+    return gulp.src('builds/development/js/*.js')
+      .pipe(concat('all.min.js'))
+      .pipe(gulp.dest('builds/production/js'));
+});
+
+gulp.task('assets', function() {
+  return gulp.src('builds/development/assets/**')
+    .pipe(gulp.dest('builds/production/assets/'));
+});
+
+gulp.task('json', function() {
+  return gulp.src('builds/development/js/json/*.json')
+    .pipe(gulp.dest('builds/production/js/json'));
+});
+
+gulp.task('production', ['scripts', 'assets', 'json']);
+

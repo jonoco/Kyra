@@ -258,9 +258,11 @@ BasicGame.Game.prototype = {
    /*
     * current available event commands:
     * say, wait, turn, togAnim, modAttr, playAnim 
+    *
     * modAttr: sprite, attr, value - modify attribute of any current sprite or image
     * playAnim: sprite, animation, kill - play animation of current sprites
     * togAnim: sprite, animation, start - toggle animation of any sprite
+    *
     * see exeQuestEvent for handling
     */
 
@@ -315,6 +317,9 @@ BasicGame.Game.prototype = {
 
     // eventTriggers links events to quests
     // if a room is an event, it's triggered upon entering
+    // TODO: add condition param
+    // { name: "quest", step: "step", condition: "step" }
+
     this.eventTriggers = {
       tear: { name: "willow", step: "treehealed" },
       room03: { name: "willow", step: "active" },
@@ -329,7 +334,7 @@ BasicGame.Game.prototype = {
     // then executes event chain for new status
     //console.log('update quest');
     
-    // only update if activating quest or quest activated
+    // only update if activating quest or quest activated 
     if (quest.step == 'active' || this.quests[quest.name]['active']) {
        if (!this.quests[quest.name][quest.step]) {
         this.quests[quest.name][quest.step] = true;
@@ -383,19 +388,18 @@ BasicGame.Game.prototype = {
     for (var i = 0 ; i < roomSprites.length ; i++ ) {
       var spriteProperty = this.spritesJSON[roomSprites[i].name];
       var newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name );
-      newSprite.scale.setTo(3); // all source assets scaled by 3
+      
+      if (spriteProperty.scale) {
 
-      //console.log(sprite);
-
-      if (spriteProperty.animated) {
-        // sprite has animations
-        this.createSpriteAnimation(newSprite, spriteProperty);
+        newSprite.scale.setTo(spriteProperty.scale); 
+      } else {
+        // all source assets scaled by 3  
+        newSprite.scale.setTo(3); 
       }
 
-      if (spriteProperty.action) {
-        // sprite has action related events
-        this.createSpriteAction(newSprite, spriteProperty); 
-      }
+      spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;
+      
+      spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null; 
 
     }
   },
@@ -414,6 +418,7 @@ BasicGame.Game.prototype = {
         animations[anim].loop,
         false);
 
+      // unless sprite is set to start automatically, hide it
       if (animations[anim].start) {
         sprite.animations.play(animations[anim].name);
       } else {
@@ -480,7 +485,7 @@ BasicGame.Game.prototype = {
 
   createStartRoom: function () {
 
-    var roomName = 'room01';
+    var roomName = 'room03';
     this.currentRoom = this.roomsJSON[roomName]
     this.room.loadTexture(roomName);
     this.createDoors();
@@ -898,10 +903,15 @@ BasicGame.Game.prototype = {
             sprite.alpha = 1;
             // console.log(sprite);
 
-            anim = sprite.animations.play(animName, null, false, kill);
-            anim.onComplete.add(function () {
-              this.evalEvent(animName);
-            }, this);
+            sprite.animations.play(animName, null, false, kill)
+              .onComplete.add(function () {
+                this.evalEvent(animName);
+              }, this);
+
+            // anim = sprite.animations.play(animName, null, false, kill);
+            // anim.onComplete.add(function () {
+            //   this.evalEvent(animName);
+            // }, this);
             return true; 
           } 
           
@@ -992,7 +1002,7 @@ BasicGame.Game.prototype = {
     
     this.enableInput(false);
 
-    // offtweening
+    // use exit animation if present
     if (myDoor.animation.exit) {
 
       this.exitRoomAnimation();
@@ -1052,6 +1062,7 @@ BasicGame.Game.prototype = {
     this.world.add(exitSprite);
 
     exitSprite.alpha = 1;
+    exitSprite.bringToTop();
     anim = exitSprite.animations.play('on', null, false, true);
     anim.onComplete.add(function (data) {
      
@@ -1065,7 +1076,7 @@ BasicGame.Game.prototype = {
     
     var myDoor = this.currentRoom.doors[this.previousRoom.name];
     var spriteName;
-    var sprite;
+    var enterSprite;
     var anim;
     
     this.player.alpha = 0;
@@ -1076,12 +1087,13 @@ BasicGame.Game.prototype = {
     for (var i = 0 ; i < this.spritesGroup.length ; i++) {
       if (this.spritesGroup.children[i].key == spriteName) {
         //console.log('exit sprite found: ' + spriteName);
-        sprite = this.spritesGroup.children[i];      
+        enterSprite = this.spritesGroup.children[i];      
       }
     }
 
-    sprite.alpha = 1;
-    anim = sprite.animations.play('on', null, false, true);
+    enterSprite.alpha = 1;
+    enterSprite.bringToTop();
+    anim = enterSprite.animations.play('on', null, false, true);
     anim.onComplete.add(function (data) {
       this.evalEvent('on');
       // after animation end signal, change room

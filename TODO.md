@@ -29,6 +29,7 @@
 - **ADDED:** use original Kyrandia font
 - **ADDED:** add door animations
 - **ADDED:** host production build of the game
+- add better condition checking to quest events
 
 ###Bugs
 - **FIXED:** tapping on player causes him to disappear

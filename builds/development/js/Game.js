@@ -323,7 +323,7 @@ BasicGame.Game.prototype = {
     this.eventTriggers = {
       tear: { name: "willow", step: "treehealed" },
       room03: { name: "willow", step: "active" },
-      room06: { name: "brynn", step: "active" },
+      room06: { name: "brynn", step: "active", conditions: { active: false } },
       room19: { name: "bridge", step: "active" },
       altar: { name: "brynn", step: "amulet" }
     };
@@ -333,26 +333,34 @@ BasicGame.Game.prototype = {
     // update quest status 
     // then executes event chain for new status
     //console.log('update quest');
-    
-    // only update if activating quest or quest activated 
-    if (quest.step == 'active' || this.quests[quest.name]['active']) {
-       if (!this.quests[quest.name][quest.step]) {
-        this.quests[quest.name][quest.step] = true;
-        console.log('calling quest events');
+    var conditionsMet = true;
+    var stepComplete = this.quests[quest.name][quest.step];
 
-        // queue quest related events to run > queue 
-        var events = this.quests[quest.name].events[quest.step];
-        for (var i = 0 ; i < events.length ; i++) { 
-          this.questQueue.unshift(events[i]); 
-        }
-      }  
+    for (condition in quest.conditions) {
+      if (this.quests[quest.name][condition] != quest.conditions[condition]) {
+        conditionsMet = false;
+      }
+    }
+
+    // only update if activating quest or quest activated 
+    if ( (quest.step == 'active' || this.quests[quest.name]['active']) 
+        && !stepComplete && conditionsMet ) {
+       
+      stepComplete = true;
+      console.log('calling quest events');
+
+      // queue quest related events to run > queue 
+      var events = this.quests[quest.name].events[quest.step];
+      for (var i = 0 ; i < events.length ; i++) { 
+        this.questQueue.unshift(events[i]); 
+      }    
     }
   },
 
   evalEvent: function (event) {
-    // evaluate whether event is linked to quest event
     console.log(event + ' has triggered');
 
+    // check whether event is linked to quest event
     if (this.eventTriggers[event]) {
       console.log('there is a quest linked to this event');
       this.updateQuest(this.eventTriggers[event]);

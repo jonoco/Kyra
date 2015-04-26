@@ -22,6 +22,29 @@
 			}
 		}	
 	},
+		"brynn enter": {
+			"name": "brynn enter",
+			"png": "/assets/sprites/brynn_enter.png",
+			"json": "/assets/sprites/brynn_enter.json",
+			"scale": 0.7,
+			"action": null,
+			"animated": true,
+			"animations": {
+			"enter": {
+				"name": "enter",
+			 	"frames": [
+			 		"enter-1", "enter-2", "enter-3", "enter-4", "enter-5",
+			 	 	"enter-6", "enter-7", "enter-8", "enter-9", "enter-10",
+			 	  "enter-11", "enter-12", "enter-13", "enter-14", "enter-15",
+			 	  "enter-16", "enter-17", "enter-18", "enter-19", "enter-20",
+			 	  "enter-21", "enter-22", "enter-23", "enter-24", "enter-25",
+			 	  "enter-26", "enter-27", "enter-28", "enter-29", "enter-30"],
+			 	"speed": 5,
+			 	"loop": true,
+			 	"start": true 
+			}
+		}
+	},
 	"lamp": {
 		"name": "lamp",
 		"png": "/assets/sprites/lamp.png",
@@ -148,6 +171,15 @@
 		"animated": false,
 		"animations": null
 	},
+	"oak1": {
+		"name": "oak1",
+		"png": "/assets/sprites/oak1.png",
+		"json": null,
+		"scale": 0.5,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},	
 	"stone2": {
 		"name": "stone2",
 		"png": "/assets/sprites/stone2.png",
@@ -220,6 +252,48 @@
 			}
 		}
 	},
+	"tree down": {
+		"name": "tree down",
+		"png": "/assets/sprites/tree_down.png",
+		"json": "/assets/sprites/tree_down.json",
+		"scale": 0.5,
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ 
+			 		"tree-down-1", "tree-down-2", "tree-down-3", "tree-down-4", "tree-down-5",
+			 	 	"tree-down-6", "tree-down-7", "tree-down-8", "tree-down-9", "tree-down-10",
+			 	  "tree-down-11", "tree-down-12", "tree-down-13", "tree-down-14", "tree-down-15",
+			 	   "tree-down-16", "tree-down-17", "tree-down-18", "tree-down-19", "tree-down-20", "tree-down-21"],
+			 	"speed": 7,
+			 	"loop": false,
+			 	"start": false 
+			}
+		}
+	},
+	"tree up": {
+		"name": "tree up",
+		"png": "/assets/sprites/tree_up.png",
+		"json": "/assets/sprites/tree_up.json",
+		"scale": 0.5,
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ 
+			 		"tree-up-1", "tree-up-2", "tree-up-3", "tree-up-4", "tree-up-5",
+			 	 	"tree-up-6", "tree-up-7", "tree-up-8", "tree-up-9", "tree-up-10",
+			 	  "tree-up-11", "tree-up-12", "tree-up-13", "tree-up-14", "tree-up-15",
+			 	   "tree-up-16", "tree-up-17", "tree-up-18", "tree-up-19", "tree-up-20", "tree-up-21"],
+			 	"speed": 7,
+			 	"loop": false,
+			 	"start": false 
+			}
+		}
+	},
 	"branch up": {
 		"name": "branch up",
 		"png": "/assets/sprites/branch_up.png",
@@ -234,7 +308,7 @@
 			 	 	"branch-6", "branch-7", "branch-8", "branch-9", "branch-10",
 			 	  "branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
 			 	   "branch-16", "branch-17", "branch-18", "branch-19", "branch-20", "branch-21"],
-			 	"speed": 5,
+			 	"speed": 7,
 			 	"loop": false,
 			 	"start": false 
 			}
@@ -254,7 +328,7 @@
 			 	 	"branch-6", "branch-7", "branch-8", "branch-9", "branch-10",
 			 	  "branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
 			 	   "branch-16", "branch-17", "branch-18", "branch-19", "branch-20"],
-			 	"speed": 5,
+			 	"speed": 7,
 			 	"loop": false,
 			 	"start": false 
 			}

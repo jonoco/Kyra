@@ -1,17 +1,17 @@
 {
 	"forest": {
 		"name": "forest",
-		"path": "assets/music/Forest.m4a"
+		"path": "assets/music/Forest.ogg"
 		},
 
 	"temple": {
 		"name": "temple",
-		"path": "assets/music/Temple.m4a"
+		"path": "assets/music/Temple.ogg"
 		},
 
 	"cave": {
 		"name": "cave",
-		"path": "assets/music/Caves.m4a"
+		"path": "assets/music/Caves.ogg"
 	},
 
 	"pool": {

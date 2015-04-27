@@ -193,7 +193,7 @@ BasicGame.Game.prototype = {
     this.roomsJSON = this.cache.getJSON('rooms');
     this.spritesJSON = this.cache.getJSON('sprites');
     this.stage.backgroundColor = '#2d2d2d';
-    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.physics.startSystem(Phaser.Physics.ARCADE);
 
     this.createQuests();
     
@@ -259,9 +259,9 @@ BasicGame.Game.prototype = {
     * current available event commands:
     * say, wait, turn, togAnim, modAttr, playAnim 
     *
-    * modAttr: sprite, attr, value - modify attribute of any current sprite or image
-    * playAnim: sprite, animation, kill - play animation of current sprites
-    * togAnim: sprite, animation, start - toggle animation of any sprite
+    * modAttr: sprite, attr, value - modify attribute of any current sprite or image object
+    * playAnim: sprite, animation, kill - play animation of current sprite objects
+    * togAnim: sprite, animation, start - toggle animation state of any sprite meta
     *
     * see exeQuestEvent for handling
     */
@@ -317,7 +317,7 @@ BasicGame.Game.prototype = {
 
     // eventTriggers links events to quests
     // if a room is an event, it's triggered upon entering
-    // TODO: add condition param
+    // all <conditions> must be true for <step> to occur
     // { name: "quest", step: "step", condition: "step" }
 
     this.eventTriggers = {
@@ -335,6 +335,7 @@ BasicGame.Game.prototype = {
     //console.log('update quest');
     var conditionsMet = true;
     var stepComplete = this.quests[quest.name][quest.step];
+    var active = ( quest.step == 'active' || this.quests[quest.name]['active'] );
 
     for (condition in quest.conditions) {
       if (this.quests[quest.name][condition] != quest.conditions[condition]) {
@@ -343,11 +344,10 @@ BasicGame.Game.prototype = {
     }
 
     // only update if activating quest or quest activated 
-    if ( (quest.step == 'active' || this.quests[quest.name]['active']) 
-        && !stepComplete && conditionsMet ) {
+    if ( active && !stepComplete && conditionsMet ) {
        
-      stepComplete = true;
-      console.log('calling quest events');
+      this.quests[quest.name][quest.step] = true;
+      // console.log('calling quest events');
 
       // queue quest related events to run > queue 
       var events = this.quests[quest.name].events[quest.step];
@@ -385,7 +385,7 @@ BasicGame.Game.prototype = {
     event.turn ? this.turnPlayer(event.turn):null;
     event.wait ? this.wait(event.wait):null;
     event.togAnim ? this.toggleAnimation(event.togAnim):null;
-    event.modAttr ? this.alterAttribute(event.modAttr):null;
+    event.modAttr ? this.modAttribute(event.modAttr):null;
     event.playAnim ? this.playAnimation(event.playAnim):null;
   },
   // - - -
@@ -493,7 +493,7 @@ BasicGame.Game.prototype = {
 
   createStartRoom: function () {
 
-    var roomName = 'room03';
+    var roomName = 'room02';
     this.currentRoom = this.roomsJSON[roomName]
     this.room.loadTexture(roomName);
     this.createDoors();
@@ -510,13 +510,6 @@ BasicGame.Game.prototype = {
     this.gui.scale.setTo(0.5);
 
     this.createAmulet();
-
-    // this.amulet = this.add.sprite( 690, 476, 'amulet');
-    // this.amulet.inputEnabled = true;
-    // this.amulet.scale.setTo(3);
-    // this.amulet.alpha = 1;
-
-    // this.amulet.animations.play('on', null, true, false);
   },
 
   createAmulet: function () {
@@ -545,13 +538,13 @@ BasicGame.Game.prototype = {
           height = this.slots[i].height,
           width = this.slots[i].width;
 
-      /* for inventory debug
-      var slotBackground = this.game.make.graphics();
-        slotBackground.beginFill(0xffffff, 0.5);
-        slotBackground.drawRect(x, y, width, height);
-        slotBackground.endFill();
-        this.slotsGroup.add(slotBackground);
-      */
+      // for inventory debug
+      // var slotBackground = this.game.make.graphics();
+      //   slotBackground.beginFill(0xffffff, 0.5);
+      //   slotBackground.drawRect(x, y, width, height);
+      //   slotBackground.endFill();
+      //   this.slotsGroup.add(slotBackground);
+      
 
       var slot = this.slotsGroup.create( x, y );
         slot.width = width;
@@ -788,14 +781,13 @@ BasicGame.Game.prototype = {
 
   say: function (string, key) {
     // include key for event evaluation
-    
+    var speechKey = key ? key:null;
+
     this.speech.revive(); 
     this.speech.x = this.player.x;
     this.speech.y = this.player.top-40;
     this.speech.text = string; 
     this.speech.fill = '#eeeeee';
-
-    var speechKey = key ? key:null;
     
     if (this.speech.right > 920) {
       this.speech.x -= this.speech.right - 920;
@@ -853,7 +845,7 @@ BasicGame.Game.prototype = {
     this.evalEvent(animation);
   },
 
-  alterAttribute: function (data) {
+  modAttribute: function (data) {
     // much more powerful function to modify sprites, images
     // can find objects within groups
     // this.world.set(child, key, value);
@@ -1048,7 +1040,7 @@ BasicGame.Game.prototype = {
   },
 
   exitRoomAnimation: function () {
-    console.log('door has animation');
+    // console.log('door has animation');
     var myDoor = this.currentRoom.doors[this.door];
     var spriteName;
     var exitSprite;
@@ -1242,16 +1234,14 @@ BasicGame.Game.prototype = {
       
       if (this.inBounds(item, slots[i])) {
         //console.log('removing item from: ' + slots[i].x + ' ' + slots[i].y);
-        this.inventory.remove(slots[i].item);
-        this.itemGroup.add(item);
-        this.clearSlot(slots[i]);
+        this.removeItemFromInventory(item, slots[i]);  
       }
     };
   },
 
   checkItemDest: function (item) {
     var placed = false;
-    //check for interactive sprites
+    //todo check for interactive sprites
 
     //check if room hit
     if (this.inBounds(item, this.room) && !placed) {
@@ -1262,15 +1252,14 @@ BasicGame.Game.prototype = {
     else if (this.inBounds(item, this.slotsGroup) && !placed) {
       this.slotsGroup.forEach(function (slot) {
         if (this.inBounds(item, slot)) {
-          this.moveToInventory(item, slot);
+          this.moveItemToInventory(item, slot);
           placed = true;
         } 
       }, this);
     }
     //otherwise: toss item onto the ground
     if (!placed) {
-      item.x = this.player.x;
-      item.y = this.player.y - 25;
+      this.tossItem(item);
     }
   },
 
@@ -1281,7 +1270,22 @@ BasicGame.Game.prototype = {
     slot.occupied = false;
   },
 
-  moveToInventory: function (item, slot) {
+  tossItem: function (item) {
+
+    item.x = this.player.x;
+    item.y = this.player.y - 25;
+  },
+
+  removeItemFromInventory: function (item, slot) {
+
+    this.currentRoom.items.push( {"name" : item.name} );
+
+    this.inventory.remove(slot.item);
+    this.itemGroup.add(item);
+    this.clearSlot(slot);
+  },
+
+  moveItemToInventory: function (item, slot) {
 
     // move item from itemGroup to inventory group
     // if slot occupied, move item to room floor, random pos
@@ -1298,6 +1302,14 @@ BasicGame.Game.prototype = {
     slot.item = item;
     slot.occupied = true;
 
+    var i = this.currentRoom.items.length;
+    while (i--) 
+    {
+      if (this.currentRoom.items[i].name == item.name) {
+        this.currentRoom.items.splice( i, 1 );
+      }
+    }
+
     this.itemGroup.remove(item);
     this.inventory.add(item);
   },
@@ -1309,8 +1321,6 @@ BasicGame.Game.prototype = {
     obj1.x = obj2.x + obj2.width/2 - obj1.width/2;
     obj1.y = obj2.y + obj2.height/2 - obj1.height/2;
   },
-
-  // - - -
 
   inBounds: function (obj1, obj2) {
   
@@ -1327,6 +1337,24 @@ BasicGame.Game.prototype = {
       return false;
     }
   },
+
+  saveItems: function () {
+    // iter each item in itemGroup, the local items
+    // save new position of each item to room.items
+
+    this.itemGroup.forEach(function(item) {
+      for (var i = 0; i < this.currentRoom.items.length ; i++) {
+        if (item.name == this.currentRoom.items[i].name) {
+          //console.log('saving ' + item.name + ' location');
+          this.currentRoom.items[i].x = item.x;
+          this.currentRoom.items[i].y = item.y;
+          break;  
+        }
+      }
+    }, this);
+  },
+
+  // - - -
 
   enableInput: function (bool) {
     
@@ -1356,22 +1384,6 @@ BasicGame.Game.prototype = {
   changeRoomText: function (string) {
     
     this.text.text = string;
-  },
-
-  saveItems: function () {
-    // iter each item in itemGroup, the local items
-    // save new position of each item to room.items
-
-    this.itemGroup.forEach(function(item) {
-      for (var i = 0; i < this.currentRoom.items.length ; i++) {
-        if (item.name == this.currentRoom.items[i].name) {
-          //console.log('saving ' + item.name + ' location');
-          this.currentRoom.items[i].x = item.x;
-          this.currentRoom.items[i].y = item.y;
-          break;  
-        }
-      }
-    }, this);
   },
 
   importGrid: function () {

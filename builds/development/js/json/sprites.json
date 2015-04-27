@@ -72,8 +72,10 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ "river-1", "river-2", "river-3", "river-4", "river-5", "river-6",
-			 		"river-7", "river-8", "river-9", "river-10", "river-11", "river-12"],
+			 	"frames": [ 
+			 		"river-1", "river-2", "river-3",
+			 	 	"river-3", "river-3", "river-3", "river-3", "river-3", "river-3", "river-3", 
+			 		"river-4", "river-5", "river-6", "river-7", "river-8", "river-9", "river-10", "river-11", "river-12"],
 			 	"speed": 5,
 			 	"loop": true,
 			 	"start": true 

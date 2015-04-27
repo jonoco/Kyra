@@ -23,7 +23,7 @@
 
 ####5. Grid
 ##### The grid holds all pathing information. It is the interface between the player and the walkable locations array.
-- the grid is processed via the Pathfinding.js
+- the grid is processed via the Pathfinding.js library
 - each room's grid is created by the Kyra Mapper utility
 
 ####6. Inventory
@@ -34,7 +34,15 @@
 - the item is then transferred from the room's itemGroup, and the inventory's inventory group
 - if an item already exists at the slot hit, it is placed on the ground, and the new item takes its slot; both items have their groups swapped
 
-####7. Doors
+####7. Items
+##### Items refer to all interactive, collectable sprites
+-	all room items are created during the createItems() routine during every room change
+- permanent item meta changes are stored in the roomsJSON object, usually accessed via this.currentRoom.items
+-	for items to be properly handled, they must either be: inventory, or room items
+	1. inventory; belonging to the inventory group and assigned a slot from the slotsGroup
+	2. room; belonging to the itemsGroup, and item meta data stored in <room>.items
+
+####8. Doors
 ##### Doors are the interface between rooms, and contain all transition information.
 - each door consists of shape parameters, as well as entry and offPoint, and animation information
 - entry refers to the point the player will move to when clicking onto a door, and the point the player will move to on entering a room through that door
@@ -44,7 +52,7 @@
 	- door animations are loaded with all other room sprites
 	- door animations are accomplished by assigning the door.animation property a enter and/or exit sprite
 
-####8. Quests
+####9. Quests
 ##### Quests track events that occur during play, such as completing tasks or visiting people, and control progress through the game
 -	quests are controlled by two objects, the quests and eventTriggers objects
 -	the quests object tracks quest conditions, and holds events triggered on completion of certain steps of the quest

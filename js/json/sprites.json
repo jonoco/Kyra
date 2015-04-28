@@ -1,8 +1,8 @@
 {
 	"_brandon": {
 		"name": "_brandon",
-		"png": "/assets/sprites/brandon.png",
-		"json": "/assets/sprites/brandon.json",
+		"png": "Kyra/assets/sprites/brandon.png",
+		"json": "Kyra/assets/sprites/brandon.json",
 		"action": {
 			"click": { "text": "I'm getting tired" }
 			},
@@ -24,8 +24,8 @@
 	},
 		"brynn enter": {
 			"name": "brynn enter",
-			"png": "/assets/sprites/brynn_enter.png",
-			"json": "/assets/sprites/brynn_enter.json",
+			"png": "Kyra/assets/sprites/brynn_enter.png",
+			"json": "Kyra/assets/sprites/brynn_enter.json",
 			"scale": 0.7,
 			"action": null,
 			"animated": true,
@@ -47,8 +47,8 @@
 	},
 	"lamp": {
 		"name": "lamp",
-		"png": "/assets/sprites/lamp.png",
-		"json": "/assets/sprites/lamp.json",
+		"png": "Kyra/assets/sprites/lamp.png",
+		"json": "Kyra/assets/sprites/lamp.json",
 		"action": {
 			"click": { "text": "look at that damn lamp!" }
 			},
@@ -65,8 +65,8 @@
 	},
 	"river": {
 		"name": "river",
-		"png": "/assets/sprites/river.png",
-		"json": "/assets/sprites/river.json",
+		"png": "Kyra/assets/sprites/river.png",
+		"json": "Kyra/assets/sprites/river.json",
 		"action": null,
 		"animated": true,
 		"animations": {
@@ -84,7 +84,7 @@
 	},
 	"temple entrance": {
 		"name": "temple entrance",
-		"png": "/assets/sprites/temple_entrance.png",
+		"png": "Kyra/assets/sprites/temple_entrance.png",
 		"json": null,
 		"action": null,
 		"animated": false,
@@ -92,7 +92,7 @@
 	},
 	"stone1": {
 		"name": "stone1",
-		"png": "/assets/sprites/stone1.png",
+		"png": "Kyra/assets/sprites/stone1.png",
 		"json": null,
 		"action": null,
 		"animated": false,
@@ -100,7 +100,7 @@
 	},
 	"willow branch": {
 		"name": "willow branch",
-		"png": "/assets/sprites/willowbranchs.png",
+		"png": "Kyra/assets/sprites/willowbranchs.png",
 		"json": null,
 		"action": null,
 		"animated": false,
@@ -108,8 +108,8 @@
 	},
 	"herman sawing": {
 		"name": "herman sawing",
-		"png": "/assets/sprites/herman_sawing.png",
-		"json": "/assets/sprites/herman_sawing.json",
+		"png": "Kyra/assets/sprites/herman_sawing.png",
+		"json": "Kyra/assets/sprites/herman_sawing.json",
 		"action": {
 			"click": { "text": "I better not bother him now" }
 			},
@@ -129,8 +129,8 @@
 	},
 	"altar": {
 		"name": "altar",
-		"png": "/assets/sprites/altar.png",
-		"json": "/assets/sprites/altar.json",
+		"png": "Kyra/assets/sprites/altar.png",
+		"json": "Kyra/assets/sprites/altar.json",
 		"action": {
 			"click": { "text": "What a lovely table" }
 			},
@@ -151,7 +151,7 @@
 	},
 	"birch1": {
 		"name": "birch1",
-		"png": "/assets/sprites/birch1.png",
+		"png": "Kyra/assets/sprites/birch1.png",
 		"json": null,
 		"action": null,
 		"animated": false,
@@ -159,7 +159,7 @@
 	},
 	"birch2": {
 		"name": "birch2",
-		"png": "/assets/sprites/birch2.png",
+		"png": "Kyra/assets/sprites/birch2.png",
 		"json": null,
 		"action": null,
 		"animated": false,
@@ -167,7 +167,7 @@
 	},
 	"redwood1": {
 		"name": "redwood1",
-		"png": "/assets/sprites/redwood1.png",
+		"png": "Kyra/assets/sprites/redwood1.png",
 		"json": null,
 		"action": null,
 		"animated": false,
@@ -175,7 +175,7 @@
 	},
 	"oak1": {
 		"name": "oak1",
-		"png": "/assets/sprites/oak1.png",
+		"png": "Kyra/assets/sprites/oak1.png",
 		"json": null,
 		"scale": 0.5,
 		"action": null,
@@ -184,7 +184,7 @@
 	},	
 	"stone2": {
 		"name": "stone2",
-		"png": "/assets/sprites/stone2.png",
+		"png": "Kyra/assets/sprites/stone2.png",
 		"json": null,
 		"action": null,
 		"animated": false,
@@ -192,7 +192,7 @@
 	},
 	"bed": {
 		"name": "bed",
-		"png": "/assets/sprites/bed.png",
+		"png": "Kyra/assets/sprites/bed.png",
 		"json": null,
 		"action": null,
 		"animated": false,
@@ -200,7 +200,7 @@
 	},
 	"coal_hanger": {
 		"name": "coal_hanger",
-		"png": "/assets/sprites/coal_hanger.png",
+		"png": "Kyra/assets/sprites/coal_hanger.png",
 		"json": null,
 		"action": null,
 		"animated": false,
@@ -208,7 +208,7 @@
 	},
 	"treehouse": {
 		"name": "treehouse",
-		"png": "/assets/sprites/treehouse.png",
+		"png": "Kyra/assets/sprites/treehouse.png",
 		"json": null,
 		"action": null,
 		"animated": false,
@@ -216,8 +216,8 @@
 	},
 	"amulet": {
 		"name": "amulet",
-		"png": "/assets/sprites/amulet.png",
-		"json": "/assets/sprites/amulet.json",
+		"png": "Kyra/assets/sprites/amulet.png",
+		"json": "Kyra/assets/sprites/amulet.json",
 		"action": null,
 		"animated": true,
 		"animations": {
@@ -236,8 +236,8 @@
 	},
 	"willow": {
 		"name": "willow",
-		"png": "/assets/sprites/willow.png",
-		"json": "/assets/sprites/willow.json",
+		"png": "Kyra/assets/sprites/willow.png",
+		"json": "Kyra/assets/sprites/willow.json",
 		"action": true,
 		"animated": true,
 		"animations": {
@@ -255,7 +255,7 @@
 	},
 	"pool": {
 		"name": "pool",
-		"png": "/assets/sprites/pool.png",
+		"png": "Kyra/assets/sprites/pool.png",
 		"scale": 0.5,
 		"json": null,
 		"action": { "click": true },
@@ -263,8 +263,8 @@
 	},
 	"drop1": {
 		"name": "drop1",
-		"png": "/assets/sprites/drop.png",
-		"json": "/assets/sprites/drop.json",
+		"png": "Kyra/assets/sprites/drop.png",
+		"json": "Kyra/assets/sprites/drop.json",
 		"scale": 0.5,
 		"action": null,
 		"animated": true,
@@ -282,8 +282,8 @@
 	},
 	"drop2": {
 		"name": "drop2",
-		"png": "/assets/sprites/drop.png",
-		"json": "/assets/sprites/drop.json",
+		"png": "Kyra/assets/sprites/drop.png",
+		"json": "Kyra/assets/sprites/drop.json",
 		"scale": 0.5,
 		"action": null,
 		"animated": true,
@@ -302,8 +302,8 @@
 	},
 	"drop3": {
 		"name": "drop3",
-		"png": "/assets/sprites/drop.png",
-		"json": "/assets/sprites/drop.json",
+		"png": "Kyra/assets/sprites/drop.png",
+		"json": "Kyra/assets/sprites/drop.json",
 		"scale": 0.5,
 		"action": null,
 		"animated": true,
@@ -322,8 +322,8 @@
 	},
 	"drop4": {
 		"name": "drop4",
-		"png": "/assets/sprites/drop.png",
-		"json": "/assets/sprites/drop.json",
+		"png": "Kyra/assets/sprites/drop.png",
+		"json": "Kyra/assets/sprites/drop.json",
 		"scale": 0.5,
 		"action": null,
 		"animated": true,
@@ -342,8 +342,8 @@
 	},
 	"drop5": {
 		"name": "drop5",
-		"png": "/assets/sprites/drop.png",
-		"json": "/assets/sprites/drop.json",
+		"png": "Kyra/assets/sprites/drop.png",
+		"json": "Kyra/assets/sprites/drop.json",
 		"scale": 0.5,
 		"action": null,
 		"animated": true,
@@ -362,8 +362,8 @@
 	},
 	"catch": {
 		"name": "catch",
-		"png": "/assets/sprites/catch.png",
-		"json": "/assets/sprites/catch.json",
+		"png": "Kyra/assets/sprites/catch.png",
+		"json": "Kyra/assets/sprites/catch.json",
 		"action": null,
 		"animated": true,
 		"animations": {
@@ -382,8 +382,8 @@
 	},
 	"tree down": {
 		"name": "tree down",
-		"png": "/assets/sprites/tree_down.png",
-		"json": "/assets/sprites/tree_down.json",
+		"png": "Kyra/assets/sprites/tree_down.png",
+		"json": "Kyra/assets/sprites/tree_down.json",
 		"scale": 0.5,
 		"action": null,
 		"animated": true,
@@ -403,8 +403,8 @@
 	},
 	"tree up": {
 		"name": "tree up",
-		"png": "/assets/sprites/tree_up.png",
-		"json": "/assets/sprites/tree_up.json",
+		"png": "Kyra/assets/sprites/tree_up.png",
+		"json": "Kyra/assets/sprites/tree_up.json",
 		"scale": 0.5,
 		"action": null,
 		"animated": true,
@@ -424,8 +424,8 @@
 	},
 	"branch up": {
 		"name": "branch up",
-		"png": "/assets/sprites/branch_up.png",
-		"json": "/assets/sprites/branch_up.json",
+		"png": "Kyra/assets/sprites/branch_up.png",
+		"json": "Kyra/assets/sprites/branch_up.json",
 		"action": null,
 		"animated": true,
 		"animations": {
@@ -444,8 +444,8 @@
 	},
 	"branch down": {
 		"name": "branch down",
-		"png": "/assets/sprites/branch_down.png",
-		"json": "/assets/sprites/branch_down.json",
+		"png": "Kyra/assets/sprites/branch_down.png",
+		"json": "Kyra/assets/sprites/branch_down.json",
 		"action": null,
 		"animated": true,
 		"animations": {

@@ -72,9 +72,9 @@
 		"name": "room03",
 		"text": "A dying tree",
 		"music": "forest",
-		"items": [],
+		"items": [ {"name": "tear", "x": 300, "y": 300} ],
 		"sprites": [
-			{ "name": "willow", "x": 424, "y": 210 },
+			{ "name": "willow", "x": 424, "y": 208 },
 			{ "name": "willow branch", "x": 80, "y": 50 }
 		],
 		"grid": "js/json/room03.json",
@@ -243,7 +243,16 @@
 		"text": "Pool of Sorrow",
 		"music": "pool",
 		"items": [],
-		"sprites": [{ "name": "stone1", "x": 558, "y": 282 }],
+		"sprites": [
+			{ "name": "stone1", "x": 558, "y": 282 },
+			{ "name": "catch", "x": 502, "y": 24 },
+			{ "name": "drop1", "x": 210 , "y": -10 },
+			{ "name": "drop2", "x": 430 , "y": -40 },
+			{ "name": "drop3", "x": 340 , "y": -20 },
+			{ "name": "drop4", "x": 260 , "y": 0 },
+			{ "name": "drop5", "x": 370 , "y": 0 },
+			{ "name": "pool", "x": 220 , "y": 0 }
+		],
 		"grid": "js/json/room09.json",
 		"path": "assets/screens/room09.png",
 		"doors": { 

@@ -40,8 +40,8 @@
 			 	  "enter-21", "enter-22", "enter-23", "enter-24", "enter-25",
 			 	  "enter-26", "enter-27", "enter-28", "enter-29", "enter-30"],
 			 	"speed": 5,
-			 	"loop": true,
-			 	"start": true 
+			 	"loop": false,
+			 	"start": false 
 			}
 		}
 	},
@@ -238,16 +238,142 @@
 		"name": "willow",
 		"png": "/assets/sprites/willow.png",
 		"json": "/assets/sprites/willow.json",
-		"action": {
-			"click": { "animation":"tear" }
-			},
+		"action": true,
 		"animated": true,
 		"animations": {
-			"tear": {
-				"name": "tear",
-			 	"frames": [ "willow-1", "willow-2", "willow-3", "willow-4", "willow-5",
+			"on": {
+				"name": "on",
+			 	"frames": [ 
+			 		"willow-1", "willow-2", "willow-3", "willow-4", "willow-5",
 			 	 	"willow-6", "willow-7", "willow-8", "willow-9", "willow-10",
 			 	  "willow-11", "willow-12", "willow-13", "willow-14", "willow-15"],
+			 	"speed": 5,
+			 	"loop": true,
+			 	"start": false 
+			}
+		}
+	},
+	"pool": {
+		"name": "pool",
+		"png": "/assets/sprites/pool.png",
+		"scale": 0.5,
+		"json": null,
+		"action": { "click": true },
+		"animated": false
+	},
+	"drop1": {
+		"name": "drop1",
+		"png": "/assets/sprites/drop.png",
+		"json": "/assets/sprites/drop.json",
+		"scale": 0.5,
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ 
+			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
+			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
+			 	"speed": 8,
+			 	"loop": true,
+			 	"start": true 
+			}
+		}
+	},
+	"drop2": {
+		"name": "drop2",
+		"png": "/assets/sprites/drop.png",
+		"json": "/assets/sprites/drop.json",
+		"scale": 0.5,
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ 
+			 		"blank", "blank",
+			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
+			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
+			 	"speed": 8,
+			 	"loop": true,
+			 	"start": true 
+			}
+		}
+	},
+	"drop3": {
+		"name": "drop3",
+		"png": "/assets/sprites/drop.png",
+		"json": "/assets/sprites/drop.json",
+		"scale": 0.5,
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ 
+			 		"blank", "blank", "blank", "blank",
+			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
+			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
+			 	"speed": 8,
+			 	"loop": true,
+			 	"start": true 
+			}
+		}
+	},
+	"drop4": {
+		"name": "drop4",
+		"png": "/assets/sprites/drop.png",
+		"json": "/assets/sprites/drop.json",
+		"scale": 0.5,
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ 
+			 		"blank", "blank", "blank", "blank", "blank", "blank",
+			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
+			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
+			 	"speed": 8,
+			 	"loop": true,
+			 	"start": true 
+			}
+		}
+	},
+	"drop5": {
+		"name": "drop5",
+		"png": "/assets/sprites/drop.png",
+		"json": "/assets/sprites/drop.json",
+		"scale": 0.5,
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ 
+			 		"blank", "blank", "blank", "blank", "blank", "blank", "blank", "blank", 
+			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
+			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
+			 	"speed": 8,
+			 	"loop": true,
+			 	"start": true 
+			}
+		}
+	},
+	"catch": {
+		"name": "catch",
+		"png": "/assets/sprites/catch.png",
+		"json": "/assets/sprites/catch.json",
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ 
+			 		"tear-1", "tear-2", "tear-3", "tear-4", "tear-5", "tear-6",
+			 	 	"tear-7", "tear-8", "tear-9", "tear-10", "tear-11", "tear-12",
+			 	  "tear-13", "tear-14", "tear-15", "tear-16", "tear-17", "tear-18",
+			 	  "tear-19", "tear-20", "tear-21", "tear-22", "tear-23" ],
 			 	"speed": 5,
 			 	"loop": false,
 			 	"start": false 
@@ -269,7 +395,7 @@
 			 	 	"tree-down-6", "tree-down-7", "tree-down-8", "tree-down-9", "tree-down-10",
 			 	  "tree-down-11", "tree-down-12", "tree-down-13", "tree-down-14", "tree-down-15",
 			 	   "tree-down-16", "tree-down-17", "tree-down-18", "tree-down-19", "tree-down-20", "tree-down-21"],
-			 	"speed": 7,
+			 	"speed": 8,
 			 	"loop": false,
 			 	"start": false 
 			}
@@ -290,7 +416,7 @@
 			 	 	"tree-up-6", "tree-up-7", "tree-up-8", "tree-up-9", "tree-up-10",
 			 	  "tree-up-11", "tree-up-12", "tree-up-13", "tree-up-14", "tree-up-15",
 			 	   "tree-up-16", "tree-up-17", "tree-up-18", "tree-up-19", "tree-up-20", "tree-up-21"],
-			 	"speed": 7,
+			 	"speed": 8,
 			 	"loop": false,
 			 	"start": false 
 			}
@@ -310,7 +436,7 @@
 			 	 	"branch-6", "branch-7", "branch-8", "branch-9", "branch-10",
 			 	  "branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
 			 	   "branch-16", "branch-17", "branch-18", "branch-19", "branch-20", "branch-21"],
-			 	"speed": 7,
+			 	"speed": 8,
 			 	"loop": false,
 			 	"start": false 
 			}
@@ -330,7 +456,7 @@
 			 	 	"branch-6", "branch-7", "branch-8", "branch-9", "branch-10",
 			 	  "branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
 			 	   "branch-16", "branch-17", "branch-18", "branch-19", "branch-20"],
-			 	"speed": 7,
+			 	"speed": 8,
 			 	"loop": false,
 			 	"start": false 
 			}

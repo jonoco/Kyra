@@ -33,7 +33,7 @@ gulp.task('default', ['watch', 'html', 'js', 'webserver']);
 
 gulp.task('scripts', function() {
     return gulp.src('builds/development/js/*.js')
-      .pipe(concat('all.min.js'))
+      .pipe(concat('all.js'))
       .pipe(gulp.dest('builds/production/js'));
 });
 

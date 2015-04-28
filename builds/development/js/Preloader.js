@@ -26,6 +26,7 @@ BasicGame.Preloader.prototype = {
 		this.load.image('titlepage', 'assets/img/title.png');
 		this.load.image('gui', 'assets/img/gui.png');
 		this.load.image('pathing', 'assets/tiles/pathing.png');
+		this.load.image('room03-alt', 'assets/screens/room03-alt.png');
 		
 		this.load.json('rooms', 'js/json/rooms.json');
 		this.load.json('music', 'js/json/music.json');

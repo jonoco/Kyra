@@ -526,7 +526,7 @@ BasicGame.Game.prototype = {
 
   createStartRoom: function () {
 
-    var roomName = 'room03';
+    var roomName = 'room01';
     this.currentRoom = this.roomsJSON[roomName]
     this.room.loadTexture(roomName);
     this.createDoors();

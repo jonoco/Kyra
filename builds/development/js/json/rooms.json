@@ -72,7 +72,7 @@
 		"name": "room03",
 		"text": "A dying tree",
 		"music": "forest",
-		"items": [ {"name": "tear", "x": 300, "y": 300} ],
+		"items": [],
 		"sprites": [
 			{ "name": "willow", "x": 424, "y": 208 },
 			{ "name": "willow branch", "x": 80, "y": 50 }

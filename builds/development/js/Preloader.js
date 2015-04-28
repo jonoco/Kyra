@@ -47,6 +47,7 @@ BasicGame.Preloader.prototype = {
 			}
 
 			if (progress == 100) {
+				console.log('preload complete');
 				this.ready = true;
 			}
 

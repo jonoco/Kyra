@@ -238,7 +238,7 @@
 		"name": "willow",
 		"png": "assets/sprites/willow.png",
 		"json": "assets/sprites/willow.json",
-		"action": true,
+		"action": { "click": { "text": "An old willow tree" } },
 		"animated": true,
 		"animations": {
 			"on": {
@@ -249,6 +249,26 @@
 			 	  "willow-11", "willow-12", "willow-13", "willow-14", "willow-15"],
 			 	"speed": 5,
 			 	"loop": true,
+			 	"start": false 
+			}
+		}
+	},
+	"brandon wow": {
+		"name": "brandon wow",
+		"png": "assets/sprites/brandon_wow.png",
+		"json": "assets/sprites/brandon_wow.json",
+		"action": false,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ 
+			 		"wow-1", "wow-2", "wow-3", "wow-4", "wow-5",
+			 	 	"wow-6", "wow-7", "wow-8", "wow-9", "wow-10",
+			 	  "wow-11", "wow-12", "wow-13", "wow-14", "wow-15",
+			 	  "wow-16", "wow-17", "wow-18", "wow-19", "wow-20", "wow-21", "wow-22"],
+			 	"speed": 6,
+			 	"loop": false,
 			 	"start": false 
 			}
 		}

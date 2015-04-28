@@ -17,8 +17,8 @@
 		"doors": { 
 			"room07": { 
 				"name": "room07",
-			  "x": 450, "y": 390,
-			  "height": 20, "width": 340,
+			  "x": 450, "y": 370,
+			  "height": 80, "width": 340,
 				"entry": {"x": 520, "y": 380},
 				"offPoint": {"x": 510, "y": 500},
 				"animation": false
@@ -30,7 +30,7 @@
 		"text": "Below Brandon's home",
 		"music": "forest",
 		"items": [
-			{ "name": "sapphire", "x": 400, "y": 300 }
+			{ "name": "sapphire", "x": 420, "y": 320 }
 		],
 		"sprites": [
 			{ "name": "branch up", "x": 694, "y": 24 },
@@ -70,12 +70,17 @@
 	},
 	"room03": {
 		"name": "room03",
+		"alt": false,
 		"text": "A dying tree",
+		"altText": "A lovely tree",
 		"music": "forest",
 		"items": [],
 		"sprites": [
 			{ "name": "willow", "x": 424, "y": 208 },
 			{ "name": "willow branch", "x": 80, "y": 50 }
+		],
+		"altSprites": [ 
+			{ "name": "brandon wow", "x": 288, "y": 200 } 
 		],
 		"grid": "js/json/room03.json",
 		"path": "assets/screens/room03.png",
@@ -212,7 +217,7 @@
 		"name": "room08",
 		"text": "Dark forest",
 		"music": "forest",
-		"items": [{ "name": "peridot", "x": 300, "y": 280}],
+		"items": [{ "name": "peridot", "x": 320, "y": 310}],
 		"sprites": [
 			{ "name": "birch2", "x": 296, "y": 26 },
 			{ "name": "redwood1", "x": 500, "y": 44 }

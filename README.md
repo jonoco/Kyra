@@ -12,6 +12,15 @@ This project also uses the original Roland MT-32 soundtrack, rather than the com
 
 ###Version changes
 
+####v0.1.5
+- item handling system updated
+- quest event system updated
+	- quest conditionals added to allow more dynamic control over events
+	- more event types added
+- more assets added
+- music changed to Roland MT-32 score
+- item dragging event handling added
+
 ####v0.1.4
 -	door animations in and functioning
 	- door animations handled by labeling one of the room's sprites as enter or exit animation

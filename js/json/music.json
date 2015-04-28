@@ -1,21 +1,21 @@
 {
 	"forest": {
 		"name": "forest",
-		"path": "Kyra/assets/music/Forest.ogg"
+		"path": "assets/music/Forest.ogg"
 		},
 
 	"temple": {
 		"name": "temple",
-		"path": "Kyra/assets/music/Temple.ogg"
+		"path": "assets/music/Temple.ogg"
 		},
 
 	"cave": {
 		"name": "cave",
-		"path": "Kyra/assets/music/Caves.ogg"
+		"path": "assets/music/Caves.ogg"
 	},
 
 	"pool": {
 		"name": "pool",
-		"path": "Kyra/assets/music/Pool of Sorrow.m4a"
+		"path": "assets/music/Pool of Sorrow.m4a"
 	}
 }

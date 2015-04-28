@@ -12,8 +12,8 @@
 			{ "name": "bed", "x": 20, "y": 334 },
 			{ "name": "coal_hanger", "x": 200, "y": 24 }
 		],
-		"grid": "Kyra/js/json/room01.json",
-		"path": "Kyra/assets/screens/room01.png",
+		"grid": "js/json/room01.json",
+		"path": "assets/screens/room01.png",
 		"doors": { 
 			"room07": { 
 				"name": "room07",
@@ -36,8 +36,8 @@
 			{ "name": "branch up", "x": 694, "y": 24 },
 			{ "name": "branch down", "x": 694, "y": 24 }
 		],
-		"grid": "Kyra/js/json/room02.json",
-		"path": "Kyra/assets/screens/room02.png",
+		"grid": "js/json/room02.json",
+		"path": "assets/screens/room02.png",
 		"doors": { 
 			"room07": { 
 				"name": "room07",
@@ -77,8 +77,8 @@
 			{ "name": "willow", "x": 424, "y": 208 },
 			{ "name": "willow branch", "x": 80, "y": 50 }
 		],
-		"grid": "Kyra/js/json/room03.json",
-		"path": "Kyra/assets/screens/room03.png",
+		"grid": "js/json/room03.json",
+		"path": "assets/screens/room03.png",
 		"doors": { 
 			"room04": { 
 				"name": "room04",
@@ -107,8 +107,8 @@
 			{ "name": "river", "x": 23, "y": 220 },
 			{ "name": "oak1", "x": 422, "y": 26 }
 		],
-		"grid": "Kyra/js/json/room04.json",
-		"path": "Kyra/assets/screens/room04.png",
+		"grid": "js/json/room04.json",
+		"path": "assets/screens/room04.png",
 		"doors": { 
 			"room03": { 
 				"name": "room03", 
@@ -134,8 +134,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [{ "name": "temple entrance", "x": 410, "y": 120 }],
-		"grid": "Kyra/js/json/room05.json",
-		"path": "Kyra/assets/screens/room05.png",
+		"grid": "js/json/room05.json",
+		"path": "assets/screens/room05.png",
 		"doors": { 
 			"room04": { 
 				"name": "room04", 
@@ -161,8 +161,8 @@
 		"music": "temple",
 		"items": [],
 		"sprites": [{ "name": "brynn enter", "x": 24, "y": 160 }],
-		"grid": "Kyra/js/json/room06.json",
-		"path": "Kyra/assets/screens/room06-1.png",
+		"grid": "js/json/room06.json",
+		"path": "assets/screens/room06-1.png",
 		"doors": {
 			"room05": { 
 				"name": "room05", 
@@ -184,8 +184,8 @@
 			{ "name": "tree down", "x": 570, "y": 172 },
 			{ "name": "treehouse", "x": 488, "y": 76 }
 		],
-		"grid": "Kyra/js/json/room07.json",
-		"path": "Kyra/assets/screens/room07.png",
+		"grid": "js/json/room07.json",
+		"path": "assets/screens/room07.png",
 		"doors": { 
 			"room01": { 
 				"name": "room01", 
@@ -217,8 +217,8 @@
 			{ "name": "birch2", "x": 296, "y": 26 },
 			{ "name": "redwood1", "x": 500, "y": 44 }
 		],
-		"grid": "Kyra/js/json/room08.json",
-		"path": "Kyra/assets/screens/room08.png",
+		"grid": "js/json/room08.json",
+		"path": "assets/screens/room08.png",
 		"doors": { 
 			"room02": { 
 				"name": "room02", 
@@ -253,8 +253,8 @@
 			{ "name": "drop5", "x": 370 , "y": 0 },
 			{ "name": "pool", "x": 220 , "y": 0 }
 		],
-		"grid": "Kyra/js/json/room09.json",
-		"path": "Kyra/assets/screens/room09.png",
+		"grid": "js/json/room09.json",
+		"path": "assets/screens/room09.png",
 		"doors": { 
 			"room08": { 
 				"name": "room08", 
@@ -280,8 +280,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [],
-		"grid": "Kyra/js/json/room11.json",
-		"path": "Kyra/assets/screens/room11.png",
+		"grid": "js/json/room11.json",
+		"path": "assets/screens/room11.png",
 		"doors":  {
 			"room09": { 
 				"name": "room09", 
@@ -315,8 +315,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [],
-		"grid": "Kyra/js/json/room12.json",
-		"path": "Kyra/assets/screens/room12.png",
+		"grid": "js/json/room12.json",
+		"path": "assets/screens/room12.png",
 		"doors": {
 			"room11": { 
 				"name": "room11", 
@@ -350,8 +350,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [],
-		"grid": "Kyra/js/json/room13.json",
-		"path": "Kyra/assets/screens/room13.png",
+		"grid": "js/json/room13.json",
+		"path": "assets/screens/room13.png",
 		"doors": {
 			"room12": { 
 				"name": "room12", 
@@ -373,8 +373,8 @@
 		  { "name": "stone2", "x": 20, "y": 90 },
 		  { "name": "altar", "x": 370, "y": 90 }
 		],
-		"grid": "Kyra/js/json/room14.json",
-		"path": "Kyra/assets/screens/room14-2.png",
+		"grid": "js/json/room14.json",
+		"path": "assets/screens/room14-2.png",
 		"doors": { 
 			"room12": { 
 				"name": "room12", 
@@ -400,8 +400,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [],
-		"grid": "Kyra/js/json/room16.json",
-		"path": "Kyra/assets/screens/room16.png",
+		"grid": "js/json/room16.json",
+		"path": "assets/screens/room16.png",
 		"doors": { 
 			"room14": { 
 				"name": "room14", 
@@ -419,8 +419,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [{ "name": "herman sawing", "x": 170, "y": 200 }],
-		"grid": "Kyra/js/json/room17.json",
-		"path": "Kyra/assets/screens/room17.png",
+		"grid": "js/json/room17.json",
+		"path": "assets/screens/room17.png",
 		"doors": { 
 			"room11": { 
 				"name": "room11", 
@@ -446,8 +446,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [],
-		"grid": "Kyra/js/json/room18.json",
-		"path": "Kyra/assets/screens/room18.png",
+		"grid": "js/json/room18.json",
+		"path": "assets/screens/room18.png",
 		"doors": {
 			"room17": { 
 				"name": "room17", 
@@ -473,8 +473,8 @@
 		"music": "cave",
 		"items": [],
 		"sprites": [],
-		"grid": "Kyra/js/json/room19.json",
-		"path": "Kyra/assets/screens/room19.png",
+		"grid": "js/json/room19.json",
+		"path": "assets/screens/room19.png",
 		"doors": {
 			"room18": { 
 				"name": "room18", 

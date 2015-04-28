@@ -74,7 +74,7 @@
 		"text": "A dying tree",
 		"altText": "A lovely tree",
 		"music": "forest",
-		"items": [ {"name": "tear", "x": 300, "y": 355 } ],
+		"items": [],
 		"sprites": [
 			{ "name": "willow", "x": 424, "y": 208 },
 			{ "name": "willow branch", "x": 80, "y": 50 }

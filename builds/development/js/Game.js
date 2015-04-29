@@ -53,8 +53,9 @@ BasicGame.Game = function (game) {
   this.between = null;
   this.speed = 40; // lower is faster tweening
   this.direction = null;
-  this.speech;
-  this.animation;
+  this.speech = null;
+  this.animation = null;
+  this.talkingSprite = null;
 
   // inventory variables
   this.slots = [ 
@@ -251,6 +252,8 @@ BasicGame.Game.prototype = {
     * current available event commands:
     * say, wait, turn, togAnim, modAttr, playAnim, addItem, removeItem, move, signal, changeBackground 
     *
+    * say: [string, sprite, color] - create speech text for any current sprite by cache key
+    *   also results in playing 'talk' animation of sprite, if exists 
     * modAttr: [sprite, attr, value] - modify attribute of any current sprite or image object
     * playAnim: [sprite, animation, kill] - play animation of current sprite objects
     * togAnim: [sprite, animation, start] - toggle animation state of any sprite meta
@@ -272,7 +275,8 @@ BasicGame.Game.prototype = {
           active: [ 
             { say: "Even the willow tree is dying" }, 
             { wait: 100 },
-            { say: "What's going on around here?!" }
+            { say: "What's going on around here?!" },
+            { say: "I'm trying to sleep, stop shouting jackass", sprite: "willow", color:"#ffff00" }
           ],
           gotTear: [ 
             { say: "I bet I could catch a tear drop" },
@@ -399,7 +403,7 @@ BasicGame.Game.prototype = {
   exeQuestEvent: function (event) {
     // evaluate events related to quest state
 
-    event.say ? this.say(event.say, 'event'):null;
+    event.say ? this.say(event.say, event.sprite, event.color):null;
     event.turn ? this.turnPlayer(event.turn):null;
     event.wait ? this.wait(event.wait):null;
     event.togAnim ? this.toggleAnimation(event.togAnim):null;
@@ -517,7 +521,7 @@ BasicGame.Game.prototype = {
 
   createStartRoom: function () {
 
-    var roomName = 'room03';
+    var roomName = 'room01';
     this.currentRoom = this.roomsJSON[roomName]
     this.room.loadTexture(roomName);
     this.createDoors();
@@ -785,10 +789,18 @@ BasicGame.Game.prototype = {
 
     } else if (this.speech.alive) {
 
-      this.player.animations.play('talk');
+      if (this.speech.name == 'player') {
+        this.player.animations.play('talk');
+      } else {
+        this.talkingSprite = this.getSprite(this.speech.name);
+        this.talkingSprite.animations.play('talk');
+        this.player.animations.stop();
+      }
 
     } else {  
       //stop
+      this.talkingSprite ? this.talkingSprite.animations.stop():null;
+
       if (this.direction == 'left' || this.direction == 'up') {
         this.player.animations.stop();
         this.player.frameName = 'stand-left';
@@ -801,15 +813,17 @@ BasicGame.Game.prototype = {
 
   // - - - quest event functions
 
-  say: function (string, key) {
+  say: function (string, key, color) {
     // include key for event evaluation
-    var speechKey = key ? key:null;
+    var sprite = key ? this.getSprite(key): this.player;
+    var textColor = color ? color: '#eeeeee';
 
     this.speech.revive(); 
-    this.speech.x = this.player.x;
-    this.speech.y = this.player.top-40;
+    this.speech.x = sprite.x;
+    this.speech.y = sprite.top-40;
     this.speech.text = string; 
-    this.speech.fill = '#eeeeee';
+    this.speech.fill = textColor;
+    this.speech.name = sprite.key;
     
     if (this.speech.right > 920) {
       this.speech.x -= this.speech.right - 920;
@@ -820,8 +834,8 @@ BasicGame.Game.prototype = {
     }
 
     this.speech.events.onKilled.addOnce(function (data) {
-      //console.log(speechKey);
-      this.evalEvent(speechKey);
+
+      this.evalEvent(sprite.key);
     }, this);
 
     var length = string.split(' ').length; 
@@ -1534,5 +1548,34 @@ BasicGame.Game.prototype = {
     }
 
     return clone;
+  }, 
+
+  getSprite: function (key) {
+    // get current sprite object using cache key
+
+    var i = this.world.children.length;
+    while (i--) 
+    {
+      if (this.world.children[i].name == "group") {
+        
+        var j = this.world.children[i].children.length;
+        while (j--) {
+
+          if (this.world.children[i].children[j].key == key) {
+            // hit
+            // console.log(this.world.children[i].children[j]);
+            return this.world.children[i].children[j];
+          } 
+          
+        }
+      } else if (this.world.children[i].name != "group") {
+        if (this.world.children[i].key == key) {
+          // hit
+           // console.log(this.world.children[i]);
+           return this.world.children[i];
+         }
+      }
+    }
   }
+
 };

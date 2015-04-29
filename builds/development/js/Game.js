@@ -23,7 +23,7 @@ BasicGame.Game = function (game) {
   //  your own game called "world" or you'll over-write the world reference.
 
   // game debugging
-  this.debug = false;
+  this.debug = true;
 
   //utility variables
   this.timer;
@@ -170,11 +170,12 @@ BasicGame.Game = function (game) {
   this.door; // door name
   this.doors;
   this.doorGroup;
+  this.blockGroup;
   this.music;
   this.text;
   this.currentMusic;
   this.openDoor = null; // checks if last click was on a door > reset on move complete
-
+  
 };
 
 BasicGame.Game.prototype = {
@@ -200,6 +201,7 @@ BasicGame.Game.prototype = {
     this.doorGroup = this.game.add.group();
     this.doorDebug = this.game.add.group();
     this.createPlayer();
+    this.blockGroup = this.add.group();
 
     this.createStartRoom();
   },
@@ -400,6 +402,13 @@ BasicGame.Game.prototype = {
     event ? this.exeQuestEvent(event): null;
   },
 
+
+  evalBlock: function (block) {
+    var event = this.blockEvents[block];
+
+    this.exeQuestEvent(event);
+  },
+
   exeQuestEvent: function (event) {
     // evaluate events related to quest state
 
@@ -421,10 +430,12 @@ BasicGame.Game.prototype = {
   createSprites: function () {
     
     var roomSprites = this.currentRoom.sprites;
+    var newSprite;
+    var spriteProperty;
     
     for (var i = 0 ; i < roomSprites.length ; i++ ) {
-      var spriteProperty = this.spritesJSON[roomSprites[i].name];
-      var newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name );
+      spriteProperty = this.spritesJSON[roomSprites[i].name];
+      newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name );
       
       if (spriteProperty.scale) {
 
@@ -437,6 +448,38 @@ BasicGame.Game.prototype = {
       spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;
       spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null; 
 
+    }
+  },
+
+  createBlocks: function () {
+    this.blockEvents = {
+      kallak: { say:"Lookin good old man" },
+      bed: { say:"This bed was made from \n the finest horses in Kyrandia" },
+      window: { say:"The forest really does look dying" },
+      books: { say:"How To Seduce A Harpy, by Ono Badidia" }
+    };
+    
+    var blank;
+    var blocks = this.currentRoom.blocks;
+    
+    var i = blocks.length;
+    while (i--) {
+      blank = this.blockGroup.create( blocks[i].x, blocks[i].y);
+      blank.height = blocks[i].height;
+      blank.width = blocks[i].width;
+      blank.name = blocks[i].name;
+      blank.inputEnabled = true;
+      blank.events.onInputDown.add(function (data) { 
+        this.evalBlock(data.name);
+      }, this);
+
+      if (this.debug) {
+        var blockBg = this.game.make.graphics();
+        blockBg.beginFill(0x00ffff, 0.5);
+        blockBg.drawRect(blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height);
+        blockBg.endFill();
+        this.blockGroup.add(blockBg);
+      }
     }
   },
 
@@ -529,6 +572,7 @@ BasicGame.Game.prototype = {
     this.createSprites();
     this.importGrid();
     this.checkMusic();
+    this.createBlocks();
     this.changeRoomText(this.currentRoom.text);
   },
 
@@ -727,7 +771,7 @@ BasicGame.Game.prototype = {
 
       if (this.debug) {
         var doorBg = this.game.make.graphics();
-        doorBg.beginFill(0xff0000, 0.3);
+        doorBg.beginFill(0x00ee00, 0.3);
         doorBg.drawRect(x, y, width, height);
         doorBg.endFill();
 
@@ -925,7 +969,6 @@ BasicGame.Game.prototype = {
     var animName = data.animation;
     var kill = data.kill;
     var sprite;
-    var anim;
 
     var i = this.world.children.length;
     while (i--) 
@@ -936,37 +979,29 @@ BasicGame.Game.prototype = {
         while (j--) {
 
           if (this.world.children[i].children[j].key == key) {
-            // hit
             sprite = this.world.children[i].children[j];
-            sprite.alpha = 1;
-
-            // console.log(sprite);
+            this.showSprite(sprite, true);
 
             sprite.events.onAnimationComplete.addOnce(function () {
+              kill ? null:this.showSprite(sprite, false);
               this.evalEvent(animName);
             }, this);
             sprite.animations.play(animName, null, false, kill);
-
-            // anim = sprite.animations.play(animName, null, false, kill);
-            // anim.onComplete.add(function () {
-            //   this.evalEvent(animName);
-            // }, this);
-            return true; 
+            return; 
           } 
           
         }
       } else if (this.world.children[i].name != "group") {
         if (this.world.children[i].key == key) {
-          // hit
           sprite = this.world.children[i];
-          sprite.alpha = 1;
-          // console.log(sprite);
+          this.showSprite(sprite, true);
 
-          anim = sprite.animations.play(animName, null, false, kill);
-          anim.onComplete.add(function () {
+          sprite.events.onAnimationComplete.addOnce(function () {
+            kill ? null:this.showSprite(sprite, false);
             this.evalEvent(animName);
           }, this);
-         return true;
+          sprite.animations.play(animName, null, false, kill);
+         return;
         }
       }
     }
@@ -1576,6 +1611,11 @@ BasicGame.Game.prototype = {
          }
       }
     }
+  },
+
+  showSprite: function (sprite, bool) {
+    var alpha = bool ? 1:0;
+    sprite.alpha = alpha;
   }
 
 };

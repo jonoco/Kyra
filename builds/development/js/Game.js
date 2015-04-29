@@ -28,10 +28,10 @@ BasicGame.Game = function (game) {
   //utility variables
   this.timer;
 
-  // quest variables
+  // event variables
   this.quests;
   this.eventTriggers;
-  this.questQueue = [];
+  this.eventQueue = [];
 
   // tilemap variables
   this.tileSize = 8;
@@ -227,7 +227,7 @@ BasicGame.Game.prototype = {
       this.physics.arcade.overlap(this.player, this.doorGroup, this.peekInDoor, null, this);
     } 
 
-    if (this.questQueue.length) {
+    if (this.eventQueue.length) {
       this.enableInput(false);
     } else {
       this.enableInput(true);
@@ -264,7 +264,7 @@ BasicGame.Game.prototype = {
     * signal: [string] - directly call evalEvent to trigger another quest event
     * changeBackground: [true] - change current room's texture to alternate
     *
-    * see exeQuestEvent for handling
+    * see exeEvent for handling
     */
 
     this.quests = {
@@ -373,9 +373,7 @@ BasicGame.Game.prototype = {
       this.quests[quest.name][quest.step] = true;
       
       var events = this.quests[quest.name].events[quest.step];
-      for (var i = 0 ; i < events.length ; i++) { 
-        this.questQueue.unshift(events[i]); 
-      }    
+      this.queueEvents(events); 
     }
   },
 
@@ -388,41 +386,50 @@ BasicGame.Game.prototype = {
       this.updateQuest(this.eventTriggers[event]);
     }
 
-    // pop next item in questQueue
-    if (event != null && this.questQueue.length) {
-      this.popQuestQueue();
+    // pop next item in eventQueue
+    if (event != null && this.eventQueue.length) {
+      this.popEventQueue();
     }
 
   },
 
-  popQuestQueue: function () {
+  queueEvents: function (events) {
+    
+    var i = events.length;
+    while (i--) {
+      this.eventQueue.unshift(events[i]); 
+    } 
+  },
+ 
+  popEventQueue: function () {
     //console.log('popping quest queue');
 
-    var event = this.questQueue.pop();
-    event ? this.exeQuestEvent(event): null;
+    var event = this.eventQueue.pop();
+    event ? this.exeEvent(event): null;
   },
-
 
   evalBlock: function (block) {
-    var event = this.blockEvents[block];
 
-    this.exeQuestEvent(event);
+    var events = this.blockEvents[block];
+    this.queueEvents(events);
+
+    this.popEventQueue();
+    //this.exeEvent(event);
   },
 
-  exeQuestEvent: function (event) {
-    // evaluate events related to quest state
+  exeEvent: function (event) {
 
-    event.say ? this.say(event.say, event.sprite, event.color):null;
-    event.turn ? this.turnPlayer(event.turn):null;
-    event.wait ? this.wait(event.wait):null;
-    event.togAnim ? this.toggleAnimation(event.togAnim):null;
-    event.modAttr ? this.modAttribute(event.modAttr):null;
-    event.playAnim ? this.playAnimation(event.playAnim):null;
-    event.addItem ? this.addItem(event.addItem):null;
-    event.removeItem ? this.removeItem(event.removeItem):null;
-    event.move ? this.move(event.move):null;
-    event.signal ? this.evalEvent(event.signal):null;
-    event.changeBackground ? this.changeBackground(event.changeBackground):null;
+    event.say ? this.say(event.say, event.sprite, event.color) : null;
+    event.turn ? this.turnPlayer(event.turn) : null;
+    event.wait ? this.wait(event.wait) : null;
+    event.togAnim ? this.toggleAnimation(event.togAnim) : null;
+    event.modAttr ? this.modAttribute(event.modAttr) : null;
+    event.playAnim ? this.playAnimation(event.playAnim) : null;
+    event.addItem ? this.addItem(event.addItem) : null;
+    event.removeItem ? this.removeItem(event.removeItem) : null;
+    event.move ? this.move(event.move) : null;
+    event.signal ? this.evalEvent(event.signal) : null;
+    event.changeBackground ? this.changeBackground(event.changeBackground) : null;
   },
 
   // - - - create chain
@@ -453,10 +460,10 @@ BasicGame.Game.prototype = {
 
   createBlocks: function () {
     this.blockEvents = {
-      kallak: { say:"Lookin good old man" },
-      bed: { say:"This bed was made from \n the finest horses in Kyrandia" },
-      window: { say:"The forest really does look dying" },
-      books: { say:"How To Seduce A Harpy, by Ono Badidia" }
+      kallak: [{ say:"Lookin good old man" }],
+      bed: [{ say:"This bed was made from \n the finest horses in Kyrandia" }],
+      window: [{ say:"The forest really does look dying" }],
+      books: [{ say:"How To Seduce A Harpy, by Ono Badidia" }]
     };
     
     var blank;

@@ -23,7 +23,7 @@ BasicGame.Game = function (game) {
   //  your own game called "world" or you'll over-write the world reference.
 
   // game debugging
-  this.debug = true;
+  this.debug = false;
 
   //utility variables
   this.timer;
@@ -32,6 +32,24 @@ BasicGame.Game = function (game) {
   this.quests;
   this.eventTriggers;
   this.eventQueue = [];
+  this.blockEvents = {
+    kallak: [
+      { say:"Lookin good old man" }, 
+      { say:"Very stoney" }, 
+      { say:"Like Rocky Balboa" } ],
+    bed: [
+      { say:"This bed was made from \n the finest horses in Kyrandia" }, 
+      { say:"Like Rocky Balboa" }],
+    window: [
+      { say:"The forest really is dying" },
+      { say: "Like Rocky Balboa" }],
+    books: [
+      { say:"How To Seduce A Harpy, by Ono Badidia" }],
+    cauldron: [
+      { addItem: {item: "apple", x: 110, y: 260} },
+      { say: "My apple!" },
+      { killBlock: 'cauldron' }]
+  };
 
   // tilemap variables
   this.tileSize = 8;
@@ -252,11 +270,13 @@ BasicGame.Game.prototype = {
   createQuests: function () {
    /*
     * current available event commands:
-    * say, wait, turn, togAnim, modAttr, playAnim, addItem, removeItem, move, signal, changeBackground 
+    * say, wait, turn, togAnim, modAttr, modMeta, playAnim, addItem,
+    *  removeItem, move, signal, changeBackground, killSprite, killBlock 
     *
     * say: [string, sprite, color] - create speech text for any current sprite by cache key
     *   also results in playing 'talk' animation of sprite, if exists 
     * modAttr: [sprite, attr, value] - modify attribute of any current sprite or image object
+    * modMeta: [sprite, attr, val] - change sprite meta data
     * playAnim: [sprite, animation, kill] - play animation of current sprite objects
     * togAnim: [sprite, animation, start] - toggle animation state of any sprite meta
     * addItem: [item, x, y] - add new item to current room
@@ -319,9 +339,11 @@ BasicGame.Game.prototype = {
       },
 
       bridge: {
-        active: false,
+        active: true,
+        cave: false,
+        saw: false,
         events: {
-          active: [
+          cave: [
             { say: "What happened to the friggn' bridge!?" },
             { say: "Herman you goob, where are you??" },
             { togAnim: {
@@ -329,7 +351,13 @@ BasicGame.Game.prototype = {
                 animation: "saw",
                 start: true
               }
-            }
+            }],
+          saw: [
+            { say: "This is mah saw" },
+            { killSprite: "saw_holder" },
+            { modAttr: { sprite: "saw_holder", attr: "alpha", value: 0 } },
+            { modAttr: { sprite: "saw_holder_empty", attr: "alpha", value: 1 } },
+            { addItem: {item: "saw", x: 750, y: 340} }
           ]
         }
       }
@@ -345,8 +373,9 @@ BasicGame.Game.prototype = {
       room03: { name: "willow", step: "active", conditions: { active: false } },
       "willow-tear": { name: "willow", step: "treeHealed", conditions: { gotTear: true } },
       room06: { name: "brynn", step: "active", conditions: { active: false } },
-      room19: { name: "bridge", step: "active" },
-      altar: { name: "brynn", step: "amulet" }
+      altar: { name: "brynn", step: "amulet" },
+      room19: { name: "bridge", step: "cave" },
+      "saw_holder": { name: "bridge", step: "saw", conditions: { active: true } }
     };
   },
 
@@ -390,7 +419,6 @@ BasicGame.Game.prototype = {
     if (event != null && this.eventQueue.length) {
       this.popEventQueue();
     }
-
   },
 
   queueEvents: function (events) {
@@ -410,11 +438,11 @@ BasicGame.Game.prototype = {
 
   evalBlock: function (block) {
 
-    var events = this.blockEvents[block];
-    this.queueEvents(events);
+    var events = this.blockEvents[block].slice();
+    events.reverse();
 
+    this.queueEvents(events);
     this.popEventQueue();
-    //this.exeEvent(event);
   },
 
   exeEvent: function (event) {
@@ -430,6 +458,9 @@ BasicGame.Game.prototype = {
     event.move ? this.move(event.move) : null;
     event.signal ? this.evalEvent(event.signal) : null;
     event.changeBackground ? this.changeBackground(event.changeBackground) : null;
+    event.killBlock ? this.killBlock(event.killBlock) : null;
+    event.killSprite ? this.killSprite(event.killSprite) : null;
+    event.modMeta ? this.modMeta(event.modMeta) : null;
   },
 
   // - - - create chain
@@ -452,20 +483,38 @@ BasicGame.Game.prototype = {
         newSprite.scale.setTo(3); 
       }
 
+      if (spriteProperty.invisible) {
+        this.showSprite(newSprite, false);
+      }
+
       spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;
       spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null; 
 
     }
   },
 
+  killBlock: function (block) {
+
+    var blocks = this.blockGroup.children;
+    var blocksMeta = this.currentRoom.blocks;
+
+    var i = blocks.length;
+    while (i--) {
+      if (blocks[i].name == block) {
+        this.blockGroup.remove(blocks[i], true);
+      }
+    }
+
+    var j = blocksMeta.length;
+    while (j--) {
+      if (blocksMeta[j].name == block) {
+        blocksMeta.splice( j, 1 );
+      }
+    }
+  },
+
   createBlocks: function () {
-    this.blockEvents = {
-      kallak: [{ say:"Lookin good old man" }],
-      bed: [{ say:"This bed was made from \n the finest horses in Kyrandia" }],
-      window: [{ say:"The forest really does look dying" }],
-      books: [{ say:"How To Seduce A Harpy, by Ono Badidia" }]
-    };
-    
+
     var blank;
     var blocks = this.currentRoom.blocks;
     
@@ -932,6 +981,17 @@ BasicGame.Game.prototype = {
     this.evalEvent(animation);
   },
 
+  modMeta: function (data) {
+
+    var sprite = data.sprite;
+    var attr = data.attr;
+    var val = data.val;
+
+    this.spritesJSON[sprite].attr = val;
+
+    this.evalEvent(sprite);
+  },
+
   modAttribute: function (data) {
     // much more powerful function to modify sprites, images
     // can find objects within groups
@@ -1069,6 +1129,28 @@ BasicGame.Game.prototype = {
     // console.log(this.roomsJSON[myRoom]);
 
     this.evalEvent('changeBackground');
+  },
+
+  killSprite: function (sprite) {
+
+    var sprites = this.spritesGroup.children;
+    var spritesMeta = this.currentRoom.sprites;
+
+    var i = sprites.length;
+    while (i--) {
+      if (sprites[i].name == sprite) {
+        this.spritesGroup.remove(sprites[i], true);
+      }
+    }
+
+    var j = spritesMeta.length;
+    while (j--) {
+      if (spritesMeta[j].name == sprite) {
+        spritesMeta.splice( j, 1 );
+      }
+    }
+
+    this.evalEvent(sprite);
   },
 
   // - - - movement functions
@@ -1338,6 +1420,7 @@ BasicGame.Game.prototype = {
     this.createDoors();
     this.createItems();
     this.createSprites();
+    this.createBlocks();
 
     // return player sprite to spriteGroup
     this.world.remove(this.player);
@@ -1354,6 +1437,7 @@ BasicGame.Game.prototype = {
     this.spritesGroup.remove(this.player);
     this.world.addAt(this.player, 1);
 
+    this.blockGroup.removeAll(true);
     this.doorGroup.removeAll(true);
     this.doorDebug.removeAll(true);
     this.itemGroup.removeAll(true);
@@ -1583,12 +1667,13 @@ BasicGame.Game.prototype = {
   },
 
   clone: function (object) {
+
     var clone = {};
-    
+  
     for (value in object) {
       clone[value] = object[value];
-    }
-
+    }    
+    
     return clone;
   }, 
 

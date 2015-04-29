@@ -4,19 +4,21 @@
 		"text": "Brandon's home",
 		"music": null,
 		"items": [
-			{ "name": "apple", "x": 690, "y": 220 },
-			{ "name": "saw", "x": 670, "y": 290 }
+			{ "name": "garnet", "x": 690, "y": 220 }
 		],
 		"sprites": [
 			{ "name": "lamp", "x": 660, "y": 150 },
 			{ "name": "bed", "x": 20, "y": 334 },
-			{ "name": "coal_hanger", "x": 200, "y": 24 }
+			{ "name": "coal_hanger", "x": 200, "y": 24 },
+			{ "name": "saw_holder_empty", "x": 746, "y": 264 },
+			{ "name": "saw_holder", "x": 746, "y": 264 }
 		],
 		"blocks": [ 
 			{ "name": "kallak", "x": 529, "y": 194, "height": 140, "width": 100 },
 			{ "name": "bed", "x": 20, "y": 370, "height": 40, "width": 380 },
 			{ "name": "window", "x": 100, "y": 140, "height": 90, "width": 50 },
-			{ "name": "books", "x": 730, "y": 180, "height": 30, "width": 70 }
+			{ "name": "books", "x": 730, "y": 180, "height": 30, "width": 70 },
+			{ "name": "cauldron", "x": 75, "y": 290, "height": 50, "width": 100 }
 		],
 		"grid": "js/json/room01.json",
 		"path": "assets/screens/room01.png",

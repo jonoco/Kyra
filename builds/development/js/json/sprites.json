@@ -183,6 +183,23 @@
 		"animated": false,
 		"animations": null
 	},
+	"saw_holder": {
+		"name": "saw_holder",
+		"png": "assets/sprites/saw_holder1.png",
+		"json": null,
+		"action": { "click": true },
+		"animated": false,
+		"animations": null
+	},
+	"saw_holder_empty": {
+		"name": "saw_holder_empty",
+		"png": "assets/sprites/saw_holder2.png",
+		"json": null,
+		"invisible": true,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
 	"treehouse": {
 		"name": "treehouse",
 		"png": "assets/sprites/treehouse.png",

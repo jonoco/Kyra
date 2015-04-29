@@ -39,4 +39,6 @@
 -	**FIXED:** door animations causing room preupdate error
 	-	Uncaught TypeError: Cannot read property 'preUpdate' of undefined
 - **FIXED:** quests are not triggering
+-	clicking door during door animation causing error
+	- Uncaught TypeError: Cannot read property 'parent' of undefined
 

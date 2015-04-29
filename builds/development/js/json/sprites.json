@@ -22,29 +22,6 @@
 			}
 		}	
 	},
-		"brynn enter": {
-			"name": "brynn enter",
-			"png": "assets/sprites/brynn_enter.png",
-			"json": "assets/sprites/brynn_enter.json",
-			"scale": 0.7,
-			"action": null,
-			"animated": true,
-			"animations": {
-			"enter": {
-				"name": "enter",
-			 	"frames": [
-			 		"enter-1", "enter-2", "enter-3", "enter-4", "enter-5",
-			 	 	"enter-6", "enter-7", "enter-8", "enter-9", "enter-10",
-			 	  "enter-11", "enter-12", "enter-13", "enter-14", "enter-15",
-			 	  "enter-16", "enter-17", "enter-18", "enter-19", "enter-20",
-			 	  "enter-21", "enter-22", "enter-23", "enter-24", "enter-25",
-			 	  "enter-26", "enter-27", "enter-28", "enter-29", "enter-30"],
-			 	"speed": 5,
-			 	"loop": false,
-			 	"start": false 
-			}
-		}
-	},
 	"lamp": {
 		"name": "lamp",
 		"png": "assets/sprites/lamp.png",

@@ -12,6 +12,12 @@
 			{ "name": "bed", "x": 20, "y": 334 },
 			{ "name": "coal_hanger", "x": 200, "y": 24 }
 		],
+		"blocks": [ 
+			{ "name": "kallak", "x": 529, "y": 194, "height": 140, "width": 100 },
+			{ "name": "bed", "x": 20, "y": 370, "height": 40, "width": 380 },
+			{ "name": "window", "x": 100, "y": 140, "height": 90, "width": 50 },
+			{ "name": "books", "x": 730, "y": 180, "height": 30, "width": 70 }
+		],
 		"grid": "js/json/room01.json",
 		"path": "assets/screens/room01.png",
 		"doors": { 
@@ -36,6 +42,7 @@
 			{ "name": "branch up", "x": 694, "y": 24 },
 			{ "name": "branch down", "x": 694, "y": 24 }
 		],
+		"blocks": [],
 		"grid": "js/json/room02.json",
 		"path": "assets/screens/room02.png",
 		"doors": { 
@@ -82,6 +89,7 @@
 		"altSprites": [ 
 			{ "name": "brandon wow", "x": 288, "y": 200 } 
 		],
+		"blocks": [],
 		"grid": "js/json/room03.json",
 		"path": "assets/screens/room03.png",
 		"doors": { 
@@ -107,11 +115,12 @@
 		"name": "room04",
 		"text": "A southern cliff",
 		"music": "forest",
-		"items": [],
+		"items": [ {"name": "prismarine", "x":450, "y": 200 }],
 		"sprites": [
 			{ "name": "river", "x": 23, "y": 220 },
 			{ "name": "oak1", "x": 422, "y": 26 }
 		],
+		"blocks": [],
 		"grid": "js/json/room04.json",
 		"path": "assets/screens/room04.png",
 		"doors": { 
@@ -139,6 +148,7 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [{ "name": "temple entrance", "x": 410, "y": 120 }],
+		"blocks": [],
 		"grid": "js/json/room05.json",
 		"path": "assets/screens/room05.png",
 		"doors": { 
@@ -165,7 +175,8 @@
 		"text": "Inside the Temple",
 		"music": "temple",
 		"items": [],
-		"sprites": [{ "name": "brynn enter", "x": 24, "y": 160 }],
+		"sprites": [],
+		"blocks": [],
 		"grid": "js/json/room06.json",
 		"path": "assets/screens/room06-1.png",
 		"doors": {
@@ -189,6 +200,7 @@
 			{ "name": "tree down", "x": 570, "y": 172 },
 			{ "name": "treehouse", "x": 488, "y": 76 }
 		],
+		"blocks": [],
 		"grid": "js/json/room07.json",
 		"path": "assets/screens/room07.png",
 		"doors": { 
@@ -222,6 +234,7 @@
 			{ "name": "birch2", "x": 296, "y": 26 },
 			{ "name": "redwood1", "x": 500, "y": 44 }
 		],
+		"blocks": [],
 		"grid": "js/json/room08.json",
 		"path": "assets/screens/room08.png",
 		"doors": { 
@@ -258,6 +271,7 @@
 			{ "name": "drop5", "x": 370 , "y": 0 },
 			{ "name": "pool", "x": 220 , "y": 0 }
 		],
+		"blocks": [],
 		"grid": "js/json/room09.json",
 		"path": "assets/screens/room09.png",
 		"doors": { 
@@ -285,6 +299,7 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [],
+		"blocks": [],
 		"grid": "js/json/room11.json",
 		"path": "assets/screens/room11.png",
 		"doors":  {
@@ -320,6 +335,7 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [],
+		"blocks": [],
 		"grid": "js/json/room12.json",
 		"path": "assets/screens/room12.png",
 		"doors": {
@@ -355,6 +371,7 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [],
+		"blocks": [],
 		"grid": "js/json/room13.json",
 		"path": "assets/screens/room13.png",
 		"doors": {
@@ -378,6 +395,7 @@
 		  { "name": "stone2", "x": 20, "y": 90 },
 		  { "name": "altar", "x": 370, "y": 90 }
 		],
+		"blocks": [],
 		"grid": "js/json/room14.json",
 		"path": "assets/screens/room14-2.png",
 		"doors": { 
@@ -405,6 +423,7 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [],
+		"blocks": [],
 		"grid": "js/json/room16.json",
 		"path": "assets/screens/room16.png",
 		"doors": { 
@@ -424,6 +443,7 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [{ "name": "herman sawing", "x": 170, "y": 200 }],
+		"blocks": [],
 		"grid": "js/json/room17.json",
 		"path": "assets/screens/room17.png",
 		"doors": { 
@@ -451,6 +471,7 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [],
+		"blocks": [],
 		"grid": "js/json/room18.json",
 		"path": "assets/screens/room18.png",
 		"doors": {
@@ -478,6 +499,7 @@
 		"music": "cave",
 		"items": [],
 		"sprites": [],
+		"blocks": [],
 		"grid": "js/json/room19.json",
 		"path": "assets/screens/room19.png",
 		"doors": {

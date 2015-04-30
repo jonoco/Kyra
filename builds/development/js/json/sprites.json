@@ -104,6 +104,98 @@
 			}
 		}
 	},
+	"herman": {
+		"name": "herman",
+		"png": "assets/sprites/herman.png",
+		"json": "assets/sprites/herman.json",
+		"action": null,
+		"animated": true,
+		"animations": {
+			"stand talk 1": {
+		 		"name": "stand talk 1",
+		 		"frames": [ 
+		 			"stand-1", "stand-2", "stand-3", "stand-4", "stand-5" ],
+			 	"speed": 8,
+			 	"loop": true,
+			 	"start": false 
+			},
+			"stand talk 2": {
+		 		"name": "stand talk 2",
+		 		"frames": [ 
+		 			"stand-7", "stand-8", "stand-9", "stand-10", "stand-11", "stand-10", "stand-9", "stand-8" ],
+			 	"speed": 8,
+			 	"loop": true,
+			 	"start": false 
+			},
+			"stand talk 3": {
+		 		"name": "stand talk 3",
+		 		"frames": [ 
+		 			"stand-13", "stand-14", "stand-15", "stand-16" ],
+			 	"speed": 8,
+			 	"loop": true,
+			 	"start": false 
+			}, 
+		 	"hunch talk 1": {
+		 		"name": "hunch talk 1",
+		 		"frames": [ "hunch-1", "hunch-2", "hunch-3", "hunch-4", "hunch-5" ],
+			 	"speed": 8,
+			 	"loop": false,
+			 	"start": false 
+			},
+		 	"hunch talk 2": {
+		 		"name": "hunch talk 2",
+		 		"frames": [ "hunch-7", "hunch-8", "hunch-9", "hunch-10" ],
+			 	"speed": 8,
+			 	"loop": false,
+			 	"start": false 
+			},
+		 	"hunch talk 3": {
+		 		"name": "hunch talk 3",
+		 		"frames": [ "hunch-11", "hunch-12", "hunch-13", "hunch-14" ],
+			 	"speed": 8,
+			 	"loop": false,
+			 	"start": false 
+			},
+		 	"hunch talk 4": {
+		 		"name": "hunch talk 4",
+		 		"frames": [ "hunch-15", "hunch-16", "hunch-17", "hunch-18" ],
+			 	"speed": 8,
+			 	"loop": false,
+			 	"start": false 
+			},
+			"stand up": {
+		 		"name": "stand up",
+		 		"frames": [ 
+		 			"hunch-1", "hunch-5", "hunch-6", "hunch-7", "hunch-18" ,"hunch-19", "hunch-20" ],
+			 	"speed": 8,
+			 	"loop": false,
+			 	"start": false 
+			},
+			"hunch down": {
+		 		"name": "hunch down",
+		 		"frames": [ 
+		 			"hunch-20", "hunch-19", "hunch-18", "hunch-8" ],
+			 	"speed": 8,
+			 	"loop": false,
+			 	"start": false 
+			},
+			"stand hand to head": {
+				"name": "stand hand to head",
+				"frames": [ "stand-6", "stand-7" ],
+			 	"speed": 8,
+			 	"loop": false,
+			 	"start": false 
+			},
+			"walk": {
+				"name": "walk",
+			 	"frames": [ "walk-1", "walk-2", "walk-3", "walk-4", "walk-5", "walk-6", "walk-7", "walk-8" ],
+			 	"speed": 8,
+			 	"loop": true,
+			 	"start": false 
+			}
+		},
+		"startFrame": "hunch-1"
+	},
 	"altar": {
 		"name": "altar",
 		"png": "assets/sprites/altar.png",
@@ -187,6 +279,7 @@
 		"name": "saw_holder",
 		"png": "assets/sprites/saw_holder1.png",
 		"json": null,
+		"invisible": false,
 		"action": { "click": true },
 		"animated": false,
 		"animations": null
@@ -232,7 +325,7 @@
 		"name": "willow",
 		"png": "assets/sprites/willow.png",
 		"json": "assets/sprites/willow.json",
-		"action": { "click": { "text": "An old willow tree" } },
+		"action": { "click": { "text": "This willow tree is withering" } },
 		"animated": true,
 		"animations": {
 			"on": {
@@ -241,7 +334,7 @@
 			 		"willow-1", "willow-2", "willow-3", "willow-4", "willow-5",
 			 	 	"willow-6", "willow-7", "willow-8", "willow-9", "willow-10",
 			 	  "willow-11", "willow-12", "willow-13", "willow-14", "willow-15"],
-			 	"speed": 5,
+			 	"speed": 8,
 			 	"loop": true,
 			 	"start": false 
 			}
@@ -261,7 +354,7 @@
 			 	 	"wow-6", "wow-7", "wow-8", "wow-9", "wow-10",
 			 	  "wow-11", "wow-12", "wow-13", "wow-14", "wow-15",
 			 	  "wow-16", "wow-17", "wow-18", "wow-19", "wow-20", "wow-21", "wow-22"],
-			 	"speed": 6,
+			 	"speed": 10,
 			 	"loop": false,
 			 	"start": false 
 			}

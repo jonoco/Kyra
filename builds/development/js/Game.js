@@ -24,7 +24,7 @@ BasicGame.Game = function (game) {
 
   // game debugging
   this.debug = false;
-  this.startRoom = 'room03';
+  this.startRoom = 'room18';
 
   //utility variables
   this.timer;
@@ -54,7 +54,8 @@ BasicGame.Game = function (game) {
       { say: "These flowers smell wonderful" },
       { say: "Like Rocky Balboa" }],
     treehouseSymbol: [
-      { say: "That's grandfather's mark as a magic user" }]
+      { say: "That's grandfather's mark as a magic user" },
+      { say: "so those damn kids will stay away" }]
   };
 
   // tilemap variables
@@ -296,9 +297,9 @@ BasicGame.Game.prototype = {
 // { playAnim: { sprite: "brandon wow", animation: "on", kill: true } },
     this.quests = {
       willow: {
-        active: true,
+        active: false,
         complete: false,
-        gotTear: true,
+        gotTear: false,
         treeHealed: false,
         events : {
           active: [ 
@@ -325,7 +326,7 @@ BasicGame.Game.prototype = {
             { wait: 300 },
             { modAttr: { sprite: "player", attr: "alpha", value: 0 } },
             { sayAnim: { sprite: "brandon wow", animation: "on", kill: false, say: "wow!" } },
-            { wait: 1400 },
+            { wait: 1500 },
             { modAttr: { sprite: "player", attr: "alpha", value: 1 } },
           ]
         }
@@ -350,13 +351,25 @@ BasicGame.Game.prototype = {
         active: true,
         cave: false,
         saw: false,
+        giveSaw: false,
         events: {
           cave: [
-            { say: "What happened to the friggn' bridge!?" },
-            { say: "Herman you goob, where are you??" },
-            { togAnim: { sprite: "herman sawing", animation: "saw", start: true } }],
+            { modAttr: { sprite: "herman", attr: "alpha", value: 1 } },
+            { playAnim: { sprite: "herman", animation: "stand up", kill: false } },
+            { sayAnim: { 
+                sprite: "herman", 
+                animation: "stand talk 1", 
+                kill: false, 
+                say: "It's not my fault", 
+                color: "herman" } 
+              },
+            { playAnim: { sprite: "herman", animation: "hunch down", kill: false } }
+          ],
+          giveSaw: [
+            { togAnim: { sprite: "herman sawing", animation: "saw", start: true } }
+          ],
           saw: [
-            { say: "This is mah saw" },
+            { say: "Grandfather's saw" },
             { killSprite: "saw_holder" },
             { modMeta: { sprite: "saw_holder_empty", attr: "invisible", value: false } },
             { modAttr: { sprite: "saw_holder", attr: "alpha", value: 0 } },
@@ -478,7 +491,7 @@ BasicGame.Game.prototype = {
     
     for (var i = 0 ; i < roomSprites.length ; i++ ) {
       spriteProperty = this.spritesJSON[roomSprites[i].name];
-      newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name );
+      newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name);
       
       if (spriteProperty.scale) {
 
@@ -494,7 +507,7 @@ BasicGame.Game.prototype = {
 
       spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;
       spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null; 
-
+      spriteProperty.startFrame ? this.setFrame(newSprite, spriteProperty.startFrame):null;
     }
   },
 
@@ -542,6 +555,12 @@ BasicGame.Game.prototype = {
         this.blockGroup.add(blockBg);
       }
     }
+  },
+
+  setFrame: function (sprite, frame) {
+    console.log('setting frame: ', frame);
+    sprite.frameName = frame;
+    sprite.alpha = 1;
   },
 
   createSpriteAnimation: function (sprite, property) {
@@ -892,9 +911,15 @@ BasicGame.Game.prototype = {
   // - - - quest event functions
 
   say: function (string, key, color) {
+    this.colorAtlas = {
+      "herman" : "#ffcc99",
+      "player" : "#eeeeee"
+    };
+
+
     // include key for event evaluation
     var sprite = key ? this.getSprite(key): this.player;
-    var textColor = color ? color: '#eeeeee';
+    var textColor = color ? color: "player";
 
     // console.log(key);
     // console.log(sprite);
@@ -904,7 +929,9 @@ BasicGame.Game.prototype = {
     this.speech.x = sprite.x;
     this.speech.y = sprite.top-40;
     this.speech.text = string; 
-    this.speech.fill = textColor;
+    this.speech.stroke = '#000000';
+    this.speech.strokeThickness = 6;
+    this.speech.fill = this.colorAtlas[textColor];
     this.speech.name = sprite.key;
     
     if (this.speech.right > 920) {
@@ -1012,48 +1039,23 @@ BasicGame.Game.prototype = {
   },
 
   playAnimation: function (data) {
-    // console.log('play animation');
-    // play any current sprite animation
+    
     var key = data.sprite;
     var animName = data.animation;
-    var kill = data.kill;
+    var kill = data.kill ? data.kill:false;
+    var hide = data.hide ? data.hide:false;
     var sprite;
+    var loop = this.spritesJSON[key].animations[animName].loop;
 
-    var i = this.world.children.length;
-    while (i--) 
-    {
-      if (this.world.children[i].name == "group" && this.world.children[i].children.length) {
-        
-        var j = this.world.children[i].children.length;
-        while (j--) {
+    sprite = this.getSprite(key);
+    this.showSprite(sprite, true);
 
-          if (this.world.children[i].children[j].key == key) {
-            sprite = this.world.children[i].children[j];
-            this.showSprite(sprite, true);
+    sprite.events.onAnimationComplete.addOnce(function () {
+      hide ? this.showSprite(sprite, false):null;
+      this.evalEvent(animName);
+    }, this);
 
-            sprite.events.onAnimationComplete.addOnce(function () {
-              kill ? null:this.showSprite(sprite, false);
-              this.evalEvent(animName);
-            }, this);
-            sprite.animations.play(animName, null, false, kill);
-            return; 
-          } 
-          
-        }
-      } else if (this.world.children[i].name != "group") {
-        if (this.world.children[i].key == key) {
-          sprite = this.world.children[i];
-          this.showSprite(sprite, true);
-
-          sprite.events.onAnimationComplete.addOnce(function () {
-            kill ? null:this.showSprite(sprite, false);
-            this.evalEvent(animName);
-          }, this);
-          sprite.animations.play(animName, null, false, kill);
-         return;
-        }
-      }
-    }
+    sprite.animations.play(animName, null, loop, kill);
   },
 
   sayAnim: function (data) {
@@ -1062,59 +1064,22 @@ BasicGame.Game.prototype = {
 
     var key = data.sprite;
     var animName = data.animation;
-    var kill = data.kill;
+    var kill = data.kill ? data.kill: false;
+    var hide = data.hide ? data.hide: false;
     var text = data.say;
     var color = data.color;
     var sprite;
+    var loop = this.spritesJSON[key].animations[animName].loop;
 
     sprite = this.getSprite(key);
     this.showSprite(sprite, true);
     this.say(text, key, color);
 
     sprite.events.onAnimationComplete.addOnce(function () {
-      kill ? null:this.showSprite(sprite, false);
-      //this.evalEvent(animName);
+      hide ? this.showSprite(sprite, false):null;
     }, this);
-    sprite.animations.play(animName, null, false, kill);
 
-    // var i = this.world.children.length;
-    // while (i--) 
-    // {
-    //   if (this.world.children[i].name == "group" && this.world.children[i].children.length) {
-        
-    //     var j = this.world.children[i].children.length;
-    //     while (j--) {
-
-    //       if (this.world.children[i].children[j].key == key) {
-    //         sprite = this.world.children[i].children[j];
-    //         this.showSprite(sprite, true);
-    //         this.say(text, key, color);
-
-    //         sprite.events.onAnimationComplete.addOnce(function () {
-    //           kill ? null:this.showSprite(sprite, false);
-    //           //this.evalEvent(animName);
-    //         }, this);
-    //         sprite.animations.play(animName, null, false, kill);
-    //         return; 
-    //       } 
-          
-    //     }
-    //   } else if (this.world.children[i].name != "group") {
-    //     if (this.world.children[i].key == key) {
-    //       sprite = this.world.children[i];
-    //       this.showSprite(sprite, true);
-    //       this.say(text, key, color);
-
-    //       sprite.events.onAnimationComplete.addOnce(function () {
-    //         kill ? null:this.showSprite(sprite, false);
-    //         //this.evalEvent(animName);
-    //       }, this);
-    //       sprite.animations.play(animName, null, false, kill);
-    //      return;
-    //     }
-    //   }
-    // }
-
+    sprite.animations.play(animName, null, loop, kill);
   },
 
   addItem: function (data) {
@@ -1754,6 +1719,7 @@ BasicGame.Game.prototype = {
   },
 
   showSprite: function (sprite, bool) {
+    console.log('show sprite? ' + sprite.key + ':' + bool);
     var alpha = bool ? 1:0;
     sprite.alpha = alpha;
   }

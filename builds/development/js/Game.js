@@ -23,7 +23,8 @@ BasicGame.Game = function (game) {
   //  your own game called "world" or you'll over-write the world reference.
 
   // game debugging
-  this.debug = false;
+  this.debug = true;
+  this.startRoom = 'room07';
 
   //utility variables
   this.timer;
@@ -48,7 +49,12 @@ BasicGame.Game = function (game) {
     cauldron: [
       { addItem: {item: "apple", x: 110, y: 260} },
       { say: "My apple!" },
-      { killBlock: 'cauldron' }]
+      { killBlock: 'cauldron' }],
+    flowerbox: [
+      { say: "These flowers smell wonderful" },
+      { say: "Like Rocky Balboa" }],
+    treehouseSymbol: [
+      { say: "That's grandfather's mark as a magic user" }]
   };
 
   // tilemap variables
@@ -276,7 +282,7 @@ BasicGame.Game.prototype = {
     * say: [string, sprite, color] - create speech text for any current sprite by cache key
     *   also results in playing 'talk' animation of sprite, if exists 
     * modAttr: [sprite, attr, value] - modify attribute of any current sprite or image object
-    * modMeta: [sprite, attr, val] - change sprite meta data
+    * modMeta: [sprite, attr, value] - change sprite meta data
     * playAnim: [sprite, animation, kill] - play animation of current sprite objects
     * togAnim: [sprite, animation, start] - toggle animation state of any sprite meta
     * addItem: [item, x, y] - add new item to current room
@@ -346,15 +352,11 @@ BasicGame.Game.prototype = {
           cave: [
             { say: "What happened to the friggn' bridge!?" },
             { say: "Herman you goob, where are you??" },
-            { togAnim: {
-                sprite: "herman sawing",
-                animation: "saw",
-                start: true
-              }
-            }],
+            { togAnim: { sprite: "herman sawing", animation: "saw", start: true } }],
           saw: [
             { say: "This is mah saw" },
             { killSprite: "saw_holder" },
+            { modMeta: { sprite: "saw_holder_empty", attr: "invisible", value: false } },
             { modAttr: { sprite: "saw_holder", attr: "alpha", value: 0 } },
             { modAttr: { sprite: "saw_holder_empty", attr: "alpha", value: 1 } },
             { addItem: {item: "saw", x: 750, y: 340} }
@@ -425,7 +427,7 @@ BasicGame.Game.prototype = {
     
     var i = events.length;
     while (i--) {
-      this.eventQueue.unshift(events[i]); 
+      this.eventQueue.push(events[i]); 
     } 
   },
  
@@ -439,7 +441,7 @@ BasicGame.Game.prototype = {
   evalBlock: function (block) {
 
     var events = this.blockEvents[block].slice();
-    events.reverse();
+    // events.reverse();
 
     this.queueEvents(events);
     this.popEventQueue();
@@ -620,15 +622,14 @@ BasicGame.Game.prototype = {
 
   createStartRoom: function () {
 
-    var roomName = 'room01';
-    this.currentRoom = this.roomsJSON[roomName]
-    this.room.loadTexture(roomName);
+    this.currentRoom = this.roomsJSON[this.startRoom];
+    this.room.loadTexture(this.startRoom);
     this.createDoors();
+    this.createBlocks();
     this.createItems();
     this.createSprites();
     this.importGrid();
-    this.checkMusic();
-    this.createBlocks();
+    this.checkMusic();  
     this.changeRoomText(this.currentRoom.text);
   },
 
@@ -695,32 +696,6 @@ BasicGame.Game.prototype = {
 
     for (var i = 0 ; i < this.items.length ;i++) {
       this.spawnItem(this.items[i]);
-
-      // //console.log(items[i]);
-      // var item = this.game.make.image(this.items[i].x, this.items[i].y, 'items');
-      // item.name = this.items[i].name;
-      // frame = this.itemAtlas[item.name];
-      // item.frame = frame;
-      // item.scale.setTo(1.5);
-      // //item.bringToTop();
-      // item.inputEnabled = true;
-      // item.input.enableDrag(true, true);
-
-      // // check if item was in inventory, if so, remove from slot
-      // item.events.onDragStart.add(function (data) {
-      //   //console.log(data);
-      //   this.changeRoomText(item.name + ' picked up');
-      //   this.checkItemOrigin(data);
-      // }, this);
-
-      // // then check drop location
-      // item.events.onDragStop.add(function (data) {
-      //   //console.log(data);
-      //   this.changeRoomText(item.name + ' placed');
-      //   this.checkItemDest(data);
-      // }, this);
-
-      // this.itemGroup.add(item);
     }
   },
 
@@ -985,9 +960,9 @@ BasicGame.Game.prototype = {
 
     var sprite = data.sprite;
     var attr = data.attr;
-    var val = data.val;
+    var val = data.value;
 
-    this.spritesJSON[sprite].attr = val;
+    this.spritesJSON[sprite][attr] = val;
 
     this.evalEvent(sprite);
   },
@@ -1418,9 +1393,9 @@ BasicGame.Game.prototype = {
     this.checkMusic();
     this.importGrid();
     this.createDoors();
+    this.createBlocks();
     this.createItems();
     this.createSprites();
-    this.createBlocks();
 
     // return player sprite to spriteGroup
     this.world.remove(this.player);
@@ -1477,6 +1452,15 @@ BasicGame.Game.prototype = {
         if (this.inBounds(item, sprite) && sprite.inputEnabled) {
           console.log(sprite.key + '-' + item.name);
           this.evalEvent(sprite.key + '-' + item.name);
+          this.tossItem(item);
+        } 
+      }, this);
+
+      this.blockGroup.forEach(function (block) {
+        if (this.inBounds(item, block) && block.inputEnabled) {
+          console.log(block.name + '-' + item.name);
+          this.evalEvent(block.name + '-' + item.name);
+          this.tossItem(item);
         } 
       }, this);
 

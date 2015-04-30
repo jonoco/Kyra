@@ -83,7 +83,7 @@
 		"text": "A dying tree",
 		"altText": "A lovely tree",
 		"music": "forest",
-		"items": [],
+		"items": [{ "name":"tear", "x": 400, "y": 300 }],
 		"sprites": [
 			{ "name": "willow", "x": 424, "y": 208 },
 			{ "name": "willow branch", "x": 80, "y": 50 }
@@ -202,7 +202,10 @@
 			{ "name": "tree down", "x": 570, "y": 172 },
 			{ "name": "treehouse", "x": 488, "y": 76 }
 		],
-		"blocks": [],
+		"blocks": [
+			{ "name": "flowerbox", "x": 300, "y": 250, "height": 50, "width": 150 },
+			{ "name": "treehouseSymbol", "x": 285, "y": 90, "height": 80, "width": 90 }
+		],
 		"grid": "js/json/room07.json",
 		"path": "assets/screens/room07.png",
 		"doors": { 

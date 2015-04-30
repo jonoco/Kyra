@@ -83,7 +83,7 @@
 		"text": "A dying tree",
 		"altText": "A lovely tree",
 		"music": "forest",
-		"items": [{ "name":"tear", "x": 400, "y": 300 }],
+		"items": [],
 		"sprites": [
 			{ "name": "willow", "x": 424, "y": 208 },
 			{ "name": "willow branch", "x": 80, "y": 50 }
@@ -503,7 +503,7 @@
 		"text": "A rickety bridge",
 		"music": "cave",
 		"items": [],
-		"sprites": [],
+		"sprites": [{ "name": "herman", "x": 610, "y": 148 }],
 		"blocks": [],
 		"grid": "js/json/room19.json",
 		"path": "assets/screens/room19.png",

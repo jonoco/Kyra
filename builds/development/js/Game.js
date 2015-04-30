@@ -23,8 +23,8 @@ BasicGame.Game = function (game) {
   //  your own game called "world" or you'll over-write the world reference.
 
   // game debugging
-  this.debug = true;
-  this.startRoom = 'room07';
+  this.debug = false;
+  this.startRoom = 'room03';
 
   //utility variables
   this.timer;
@@ -35,17 +35,17 @@ BasicGame.Game = function (game) {
   this.eventQueue = [];
   this.blockEvents = {
     kallak: [
-      { say:"Lookin good old man" }, 
-      { say:"Very stoney" }, 
-      { say:"Like Rocky Balboa" } ],
+      { say: "Lookin good old man" }, 
+      { say: "Very stoney" }, 
+      { say: "Like Rocky Balboa" } ],
     bed: [
-      { say:"This bed was made from \n the finest horses in Kyrandia" }, 
-      { say:"Like Rocky Balboa" }],
+      { say: "This bed was made from \n the finest horses in Kyrandia" }, 
+      { say: "Like Rocky Balboa" }],
     window: [
-      { say:"The forest really is dying" },
+      { say: "The forest really is dying" },
       { say: "Like Rocky Balboa" }],
     books: [
-      { say:"How To Seduce A Harpy, by Ono Badidia" }],
+      { say: "How To Seduce A Harpy, by Ono Badidia" }],
     cauldron: [
       { addItem: {item: "apple", x: 110, y: 260} },
       { say: "My apple!" },
@@ -277,7 +277,7 @@ BasicGame.Game.prototype = {
    /*
     * current available event commands:
     * say, wait, turn, togAnim, modAttr, modMeta, playAnim, addItem,
-    *  removeItem, move, signal, changeBackground, killSprite, killBlock 
+    *  removeItem, move, signal, changeBackground, killSprite, killBlock, sayAnim 
     *
     * say: [string, sprite, color] - create speech text for any current sprite by cache key
     *   also results in playing 'talk' animation of sprite, if exists 
@@ -289,15 +289,16 @@ BasicGame.Game.prototype = {
     * removeItem: [item] - removes one instance of item from current room
     * signal: [string] - directly call evalEvent to trigger another quest event
     * changeBackground: [true] - change current room's texture to alternate
+    * sayAnim: [sprite, animation, kill, say, color] - play animation with text
     *
     * see exeEvent for handling
     */
-
+// { playAnim: { sprite: "brandon wow", animation: "on", kill: true } },
     this.quests = {
       willow: {
-        active: false,
+        active: true,
         complete: false,
-        gotTear: false,
+        gotTear: true,
         treeHealed: false,
         events : {
           active: [ 
@@ -316,15 +317,16 @@ BasicGame.Game.prototype = {
             { say: "Now i can heal the willow tree!" } 
           ],
           treeHealed: [ 
-            { say: "I think this tear drop should fit" },
-            { move: { x: 384, y: 344 } },
             { removeItem: "tear" },
+            { move: { x: 384, y: 344 } },
+            { say: "I think this tear drop should fit" },
             { playAnim: { sprite: "willow", animation: "on", kill: false } },
             { changeBackground: true },
+            { wait: 300 },
             { modAttr: { sprite: "player", attr: "alpha", value: 0 } },
-            { playAnim: { sprite: "brandon wow", animation: "on", kill: true } },
+            { sayAnim: { sprite: "brandon wow", animation: "on", kill: false, say: "wow!" } },
+            { wait: 1400 },
             { modAttr: { sprite: "player", attr: "alpha", value: 1 } },
-            { say: "wow!" }
           ]
         }
       },
@@ -463,6 +465,7 @@ BasicGame.Game.prototype = {
     event.killBlock ? this.killBlock(event.killBlock) : null;
     event.killSprite ? this.killSprite(event.killSprite) : null;
     event.modMeta ? this.modMeta(event.modMeta) : null;
+    event.sayAnim ? this.sayAnim(event.sayAnim) : null;
   },
 
   // - - - create chain
@@ -867,8 +870,8 @@ BasicGame.Game.prototype = {
       if (this.speech.name == 'player') {
         this.player.animations.play('talk');
       } else {
-        this.talkingSprite = this.getSprite(this.speech.name);
-        this.talkingSprite.animations.play('talk');
+        // this.talkingSprite = this.getSprite(this.speech.name);
+        // this.talkingSprite.animations.play('talk');
         this.player.animations.stop();
       }
 
@@ -892,6 +895,10 @@ BasicGame.Game.prototype = {
     // include key for event evaluation
     var sprite = key ? this.getSprite(key): this.player;
     var textColor = color ? color: '#eeeeee';
+
+    // console.log(key);
+    // console.log(sprite);
+    // console.log(this.speech);
 
     this.speech.revive(); 
     this.speech.x = sprite.x;
@@ -1047,6 +1054,67 @@ BasicGame.Game.prototype = {
         }
       }
     }
+  },
+
+  sayAnim: function (data) {
+
+    // event called by call to this.say()
+
+    var key = data.sprite;
+    var animName = data.animation;
+    var kill = data.kill;
+    var text = data.say;
+    var color = data.color;
+    var sprite;
+
+    sprite = this.getSprite(key);
+    this.showSprite(sprite, true);
+    this.say(text, key, color);
+
+    sprite.events.onAnimationComplete.addOnce(function () {
+      kill ? null:this.showSprite(sprite, false);
+      //this.evalEvent(animName);
+    }, this);
+    sprite.animations.play(animName, null, false, kill);
+
+    // var i = this.world.children.length;
+    // while (i--) 
+    // {
+    //   if (this.world.children[i].name == "group" && this.world.children[i].children.length) {
+        
+    //     var j = this.world.children[i].children.length;
+    //     while (j--) {
+
+    //       if (this.world.children[i].children[j].key == key) {
+    //         sprite = this.world.children[i].children[j];
+    //         this.showSprite(sprite, true);
+    //         this.say(text, key, color);
+
+    //         sprite.events.onAnimationComplete.addOnce(function () {
+    //           kill ? null:this.showSprite(sprite, false);
+    //           //this.evalEvent(animName);
+    //         }, this);
+    //         sprite.animations.play(animName, null, false, kill);
+    //         return; 
+    //       } 
+          
+    //     }
+    //   } else if (this.world.children[i].name != "group") {
+    //     if (this.world.children[i].key == key) {
+    //       sprite = this.world.children[i];
+    //       this.showSprite(sprite, true);
+    //       this.say(text, key, color);
+
+    //       sprite.events.onAnimationComplete.addOnce(function () {
+    //         kill ? null:this.showSprite(sprite, false);
+    //         //this.evalEvent(animName);
+    //       }, this);
+    //       sprite.animations.play(animName, null, false, kill);
+    //      return;
+    //     }
+    //   }
+    // }
+
   },
 
   addItem: function (data) {
@@ -1663,7 +1731,6 @@ BasicGame.Game.prototype = {
 
   getSprite: function (key) {
     // get current sprite object using cache key
-
     var i = this.world.children.length;
     while (i--) 
     {
@@ -1673,18 +1740,15 @@ BasicGame.Game.prototype = {
         while (j--) {
 
           if (this.world.children[i].children[j].key == key) {
-            // hit
-            // console.log(this.world.children[i].children[j]);
+            
             return this.world.children[i].children[j];
-          } 
-          
+          }  
         }
       } else if (this.world.children[i].name != "group") {
         if (this.world.children[i].key == key) {
-          // hit
-           // console.log(this.world.children[i]);
-           return this.world.children[i];
-         }
+          
+          return this.world.children[i];
+        }
       }
     }
   },

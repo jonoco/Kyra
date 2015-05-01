@@ -24,7 +24,7 @@ BasicGame.Game = function (game) {
 
   // game debugging
   this.debug = false;
-  this.startRoom = 'room18';
+  this.startRoom = 'room12';
 
   //utility variables
   this.timer;
@@ -291,7 +291,7 @@ BasicGame.Game.prototype = {
     * signal: [string] - directly call evalEvent to trigger another quest event
     * changeBackground: [true] - change current room's texture to alternate
     * sayAnim: [sprite, animation, kill, say, color] - play animation with text
-    * moveSprite [sprite, path]
+    * moveSprite [sprite, path] - tween sprites
     *
     * see exeEvent for handling
     */
@@ -306,8 +306,7 @@ BasicGame.Game.prototype = {
           active: [ 
             { say: "Even the willow tree is dying" }, 
             { wait: 100 },
-            { say: "What's going on around here?!" },
-            { say: "I'm trying to sleep, stop shouting jackass", sprite: "willow", color:"#ffff00" }
+            { say: "What's going on around here?!" }
           ],
           gotTear: [ 
             { say: "I bet I could catch a tear drop" },
@@ -514,6 +513,11 @@ BasicGame.Game.prototype = {
 
       if (spriteProperty.invisible) {
         this.showSprite(newSprite, false);
+      }
+
+      if (spriteProperty.reverse) {
+        newSprite.anchor.x = 0.5;
+        newSprite.scale.x *= -1;
       }
 
       spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;

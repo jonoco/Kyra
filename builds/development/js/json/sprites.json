@@ -241,6 +241,23 @@
 		"animated": false,
 		"animations": null
 	},
+	"birch3": {
+		"name": "birch3",
+		"png": "assets/sprites/birch3.png",
+		"json": null,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
+	"birch3-r": {
+		"name": "birch3-r",
+		"png": "assets/sprites/birch3.png",
+		"json": null,
+		"reverse": true,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
 	"redwood1": {
 		"name": "redwood1",
 		"png": "assets/sprites/redwood1.png",
@@ -261,6 +278,15 @@
 	"oak2": {
 		"name": "oak2",
 		"png": "assets/sprites/oak2.png",
+		"json": null,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
+	"oak2-r": {
+		"name": "oak2-r",
+		"png": "assets/sprites/oak2.png",
+		"reverse": true,
 		"json": null,
 		"action": null,
 		"animated": false,

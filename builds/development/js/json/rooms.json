@@ -303,7 +303,10 @@
 		"text": "Dark forest",
 		"music": "forest",
 		"items": [],
-		"sprites": [{ "name": "oak2", "x": 0, "y": 0 }],
+		"sprites": [
+			{ "name": "oak2", "x": 20, "y": 24 },
+			{ "name": "birch3", "x": 630, "y": 24 }
+		],
 		"blocks": [],
 		"grid": "js/json/room11.json",
 		"path": "assets/screens/room11.png",
@@ -339,7 +342,10 @@
 		"text": "Dark forest",
 		"music": "forest",
 		"items": [],
-		"sprites": [],
+		"sprites": [
+			{ "name": "birch3-r", "x": 626, "y": 24 },
+			{ "name": "oak2-r", "x": 200, "y": 24 }
+		],
 		"blocks": [],
 		"grid": "js/json/room12.json",
 		"path": "assets/screens/room12.png",

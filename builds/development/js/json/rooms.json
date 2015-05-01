@@ -303,7 +303,7 @@
 		"text": "Dark forest",
 		"music": "forest",
 		"items": [],
-		"sprites": [],
+		"sprites": [{ "name": "oak2", "x": 0, "y": 0 }],
 		"blocks": [],
 		"grid": "js/json/room11.json",
 		"path": "assets/screens/room11.png",

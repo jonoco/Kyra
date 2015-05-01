@@ -108,7 +108,7 @@
 		"name": "herman",
 		"png": "assets/sprites/herman.png",
 		"json": "assets/sprites/herman.json",
-		"action": null,
+		"action": { "click": true },
 		"animated": true,
 		"animations": {
 			"stand talk 1": {
@@ -186,6 +186,13 @@
 			 	"loop": false,
 			 	"start": false 
 			},
+			"stand idle": {
+				"name": "stand idle",
+				"frames": [ "stand-16" ],
+			 	"speed": 1,
+			 	"loop": false,
+			 	"start": false 
+			},
 			"walk": {
 				"name": "walk",
 			 	"frames": [ "walk-1", "walk-2", "walk-3", "walk-4", "walk-5", "walk-6", "walk-7", "walk-8" ],
@@ -251,6 +258,14 @@
 		"animated": false,
 		"animations": null
 	},	
+	"oak2": {
+		"name": "oak2",
+		"png": "assets/sprites/oak2.png",
+		"json": null,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
 	"stone2": {
 		"name": "stone2",
 		"png": "assets/sprites/stone2.png",

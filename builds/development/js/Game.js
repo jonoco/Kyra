@@ -291,6 +291,7 @@ BasicGame.Game.prototype = {
     * signal: [string] - directly call evalEvent to trigger another quest event
     * changeBackground: [true] - change current room's texture to alternate
     * sayAnim: [sprite, animation, kill, say, color] - play animation with text
+    * moveSprite [sprite, path]
     *
     * see exeEvent for handling
     */
@@ -321,11 +322,11 @@ BasicGame.Game.prototype = {
             { removeItem: "tear" },
             { move: { x: 384, y: 344 } },
             { say: "I think this tear drop should fit" },
-            { playAnim: { sprite: "willow", animation: "on", kill: false } },
+            { playAnim: { sprite: "willow", animation: "on" } },
             { changeBackground: true },
             { wait: 300 },
             { modAttr: { sprite: "player", attr: "alpha", value: 0 } },
-            { sayAnim: { sprite: "brandon wow", animation: "on", kill: false, say: "wow!" } },
+            { sayAnim: { sprite: "brandon wow", animation: "on", kill: true, say: "wow!" } },
             { wait: 1500 },
             { modAttr: { sprite: "player", attr: "alpha", value: 1 } },
           ]
@@ -341,7 +342,7 @@ BasicGame.Game.prototype = {
             { modAttr: { sprite: "altar", attr: "inputEnabled", value: true } }
           ],
           amulet: [
-            { playAnim: { sprite: "amulet", animation: "on", kill: false } },
+            { playAnim: { sprite: "amulet", animation: "on" } },
             { say: "I can feel the power!!" }
           ]
         }
@@ -355,17 +356,25 @@ BasicGame.Game.prototype = {
         events: {
           cave: [
             { modAttr: { sprite: "herman", attr: "alpha", value: 1 } },
-            { playAnim: { sprite: "herman", animation: "stand up", kill: false } },
-            { sayAnim: { 
-                sprite: "herman", 
-                animation: "stand talk 1", 
-                kill: false, 
-                say: "It's not my fault", 
-                color: "herman" } 
-              },
-            { playAnim: { sprite: "herman", animation: "hunch down", kill: false } }
+            { playAnim: { sprite: "herman", animation: "stand up" } },
+            { sayAnim: { sprite: "herman", animation: "stand talk 1", say: "It's not my fault", color: "herman" } },
+            { playAnim: { sprite: "herman", animation: "hunch down" } }
           ],
           giveSaw: [
+            { removeItem: "saw" },
+            { move: { x: 770, y: 280 }},
+            { playAnim: { sprite: "herman", animation: "stand up" } },
+            { sayAnim: { sprite: "herman", animation: "stand talk 3", say: "That's a pretty old saw", color: "herman" } },
+            { playAnim: { sprite: "herman", animation: "stand idle" } },
+            { say: "Oh, this is just a stiff old sock" },
+            { say: "But it could probably cut down a tree now" },
+            { wait: 1200 },
+            { sayAnim: { sprite: "herman", animation: "stand talk 3", say: "Uh, yeah ...", color: "herman" } },
+            { sayAnim: { sprite: "herman", animation: "stand talk 1", say: "Well, I'll go cut down some trees then", color: "herman" } },
+            { moveSprite: { sprite: "herman", path: [[730/8,240/8], [950/8, 240/8]], animation: "walk" } },
+            { turn: "right" },
+            { wait: 900 },
+            { say: "I hope he doesn't cut his leg off" },
             { togAnim: { sprite: "herman sawing", animation: "saw", start: true } }
           ],
           saw: [
@@ -392,7 +401,8 @@ BasicGame.Game.prototype = {
       room06: { name: "brynn", step: "active", conditions: { active: false } },
       altar: { name: "brynn", step: "amulet" },
       room19: { name: "bridge", step: "cave" },
-      "saw_holder": { name: "bridge", step: "saw", conditions: { active: true } }
+      "saw_holder": { name: "bridge", step: "saw" },
+      "herman-saw": { name: "bridge", step: "giveSaw" },
     };
   },
 
@@ -479,6 +489,7 @@ BasicGame.Game.prototype = {
     event.killSprite ? this.killSprite(event.killSprite) : null;
     event.modMeta ? this.modMeta(event.modMeta) : null;
     event.sayAnim ? this.sayAnim(event.sayAnim) : null;
+    event.moveSprite ? this.tweenSprite(event.moveSprite) : null;
   },
 
   // - - - create chain
@@ -916,7 +927,6 @@ BasicGame.Game.prototype = {
       "player" : "#eeeeee"
     };
 
-
     // include key for event evaluation
     var sprite = key ? this.getSprite(key): this.player;
     var textColor = color ? color: "player";
@@ -930,7 +940,7 @@ BasicGame.Game.prototype = {
     this.speech.y = sprite.top-40;
     this.speech.text = string; 
     this.speech.stroke = '#000000';
-    this.speech.strokeThickness = 6;
+    this.speech.strokeThickness = 5;
     this.speech.fill = this.colorAtlas[textColor];
     this.speech.name = sprite.key;
     
@@ -1042,8 +1052,8 @@ BasicGame.Game.prototype = {
     
     var key = data.sprite;
     var animName = data.animation;
-    var kill = data.kill ? data.kill:false;
-    var hide = data.hide ? data.hide:false;
+    var kill = data.kill || false;
+    var hide = data.hide || false;
     var sprite;
     var loop = this.spritesJSON[key].animations[animName].loop;
 
@@ -1377,6 +1387,42 @@ BasicGame.Game.prototype = {
     var timer = this.time.create();
     timer.add(500, this.closeDoor);
     timer.start();
+  },
+
+  tweenSprite: function (data) {
+
+    this.playAnimation(data);
+
+    var path = data.path;
+    var key = data.sprite;
+    var sprite = this.getSprite(key);
+
+    this.tween = this.add.tween(sprite);
+    this.tween.onComplete.addOnce(this.tweenComplete, this); 
+
+    var prevX = sprite.position.x/this.tileSize;
+    var prevY = sprite.position.y/this.tileSize;
+    var x;
+    var y;
+    var dist;
+
+    for ( var i = 0; i < path.length ; i++ ) {
+      x = path[i][0];
+      y = path[i][1];
+      dist = this.physics.arcade.distanceBetween({x: x, y: y}, {x: prevX, y: prevY});
+
+      if (i == path.length - 1) {
+        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
+      } else if (x == prevX || y == prevY && i%3) {
+        // pass
+      }  else {
+        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
+        prevX = x;
+        prevY = y;
+      }
+    }
+    
+    this.tween.start();
   },
 
   tweenPath: function (path) {

@@ -488,7 +488,7 @@
 		"name": "room18",
 		"text": "A cavernous entrance",
 		"music": "forest",
-		"items": [{ "name": "saw", "x": 300, "y": 350 }],
+		"items": [],
 		"sprites": [{ "name": "cave entrance", "x": 22, "y": 24 }],
 		"blocks": [],
 		"grid": "js/json/room18.json",

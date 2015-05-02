@@ -425,6 +425,13 @@
 		"action": { "click": true },
 		"animated": false
 	},
+	"cave entrance": {
+		"name": "cave entrance",
+		"png": "assets/sprites/cave_entrance.png",
+		"json": null,
+		"action": null,
+		"animated": false
+	},
 	"drop1": {
 		"name": "drop1",
 		"png": "assets/sprites/drop.png",

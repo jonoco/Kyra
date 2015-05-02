@@ -409,7 +409,7 @@
 			{ "name": "birch1", "x": 688, "y": 24 },
 		  { "name": "stone2", "x": 20, "y": 90 },
 		  { "name": "glow", "x": 370, "y": 90 },
-		  { "name": "altar", "x": 370, "y": 90 }
+		  { "name": "altar", "x": 384, "y": 100 }
 		],
 		"blocks": [],
 		"grid": "js/json/room14.json",

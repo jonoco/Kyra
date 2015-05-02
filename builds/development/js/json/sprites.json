@@ -237,6 +237,7 @@
 	"altar": {
 		"name": "altar",
 		"png": "assets/sprites/altar.png",
+		"scale": 0.5,
 		"invisible": true,
 		"action": null,
 		"animated": false

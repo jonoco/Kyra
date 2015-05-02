@@ -404,7 +404,7 @@ BasicGame.Game.prototype = {
             { wait: 1200 },
             { sayAnim: { sprite: "herman", animation: "stand talk 3", say: "Uh, yeah ...", color: "herman" } },
             { sayAnim: { sprite: "herman", animation: "stand talk 1", say: "Well, I'll go cut down some trees then", color: "herman" } },
-            { moveSprite: { sprite: "herman", path: [[730/8,240/8], [950/8, 240/8]], animation: "walk" } },
+            { moveSprite: { sprite: "herman", path: [[730/8,220/8], [950/8, 220/8]], animation: "walk" } },
             { turn: "right" },
             { wait: 900 },
             { say: "I hope he doesn't cut his leg off" },

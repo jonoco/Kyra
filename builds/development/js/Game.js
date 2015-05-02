@@ -24,7 +24,7 @@ BasicGame.Game = function (game) {
 
   // game debugging
   this.debug = false;
-  this.startRoom = 'room12';
+  this.startRoom = 'room03';
 
   //utility variables
   this.timer;
@@ -62,8 +62,8 @@ BasicGame.Game = function (game) {
   this.tileSize = 8;
   this.tileX = 120;
   this.tileY = 75;
-  this.map = null;
-  this.layer = null;
+  this.map;
+  this.layer;
 
   // grid variables
   this.grid;
@@ -71,16 +71,16 @@ BasicGame.Game = function (game) {
   this.path;
 
   // sprite variabels
-  this.spritesJSON = null;
-  this.spritesGroup = null;
-  this.player = null;
-  this.tween = null;
-  this.between = null;
+  this.spritesJSON;
+  this.spritesGroup;
+  this.player;
+  this.tween;
+  this.between;
   this.speed = 40; // lower is faster tweening
-  this.direction = null;
-  this.speech = null;
-  this.animation = null;
-  this.talkingSprite = null;
+  this.direction;
+  this.speech;
+  this.animation;
+  this.talkingSprite;
 
   // inventory variables
   this.slots = [ 
@@ -199,7 +199,7 @@ BasicGame.Game = function (game) {
   this.music;
   this.text;
   this.currentMusic;
-  this.openDoor = null; // checks if last click was on a door > reset on move complete
+  this.openDoor; // checks if last click was on a door > reset on move complete
   
 };
 
@@ -278,7 +278,7 @@ BasicGame.Game.prototype = {
    /*
     * current available event commands:
     * say, wait, turn, togAnim, modAttr, modMeta, playAnim, addItem,
-    *  removeItem, move, signal, changeBackground, killSprite, killBlock, sayAnim 
+    *  removeItem, move, signal, altRoom, killSprite, killBlock, sayAnim 
     *
     * say: [string, sprite, color] - create speech text for any current sprite by cache key
     *   also results in playing 'talk' animation of sprite, if exists 
@@ -289,13 +289,14 @@ BasicGame.Game.prototype = {
     * addItem: [item, x, y] - add new item to current room
     * removeItem: [item] - removes one instance of item from current room
     * signal: [string] - directly call evalEvent to trigger another quest event
-    * changeBackground: [true] - change current room's texture to alternate
+    * altRoom: [true] - change current room's texture to alternate
     * sayAnim: [sprite, animation, kill, say, color] - play animation with text
     * moveSprite [sprite, path] - tween sprites
+    * modRoomMeta [room, attr, door, value]
     *
     * see exeEvent for handling
     */
-// { playAnim: { sprite: "brandon wow", animation: "on", kill: true } },
+    
     this.quests = {
       willow: {
         active: false,
@@ -322,7 +323,7 @@ BasicGame.Game.prototype = {
             { move: { x: 384, y: 344 } },
             { say: "I think this tear drop should fit" },
             { playAnim: { sprite: "willow", animation: "on" } },
-            { changeBackground: true },
+            { altRoom: "room03" },
             { wait: 300 },
             { modAttr: { sprite: "player", attr: "alpha", value: 0 } },
             { sayAnim: { sprite: "brandon wow", animation: "on", kill: true, say: "wow!" } },
@@ -337,7 +338,11 @@ BasicGame.Game.prototype = {
         amulet: false,
         events: {
           active: [
-            { say: "Where the hell is Brynn?" },
+            { wait: 4000 },
+            { modAttr: { sprite: "brynn enter", attr: "alpha", value: 0 } },
+            { sayAnim: { sprite: "brynn", animation: "talk", say: "Welcome, Brandon", color: "brynn" } },
+            { wait: 300 },
+            { playAnim: { sprite: "brynn", animation: "idle" } },
             { modAttr: { sprite: "altar", attr: "inputEnabled", value: true } }
           ],
           amulet: [
@@ -352,6 +357,7 @@ BasicGame.Game.prototype = {
         cave: false,
         saw: false,
         giveSaw: false,
+        fixed: false,
         events: {
           cave: [
             { modAttr: { sprite: "herman", attr: "alpha", value: 1 } },
@@ -383,6 +389,13 @@ BasicGame.Game.prototype = {
             { modAttr: { sprite: "saw_holder", attr: "alpha", value: 0 } },
             { modAttr: { sprite: "saw_holder_empty", attr: "alpha", value: 1 } },
             { addItem: {item: "saw", x: 750, y: 340} }
+          ],
+          fixed: [
+            { say: "I wonder if the bridge is fixed..." },
+            { altRoom: "room19" },
+            { modMeta: { sprite: "cut tree", attr: "invisible", value: false } },
+            { modMeta: { sprite: "herman sawing", attr: "invisible", value: true } },
+            { modAttr: { sprite: "herman sawing", attr: "inputEnabled", value: false } }
           ]
         }
       }
@@ -402,6 +415,7 @@ BasicGame.Game.prototype = {
       room19: { name: "bridge", step: "cave" },
       "saw_holder": { name: "bridge", step: "saw" },
       "herman-saw": { name: "bridge", step: "giveSaw" },
+      room11: { name: "bridge", step: "fixed", conditions: { giveSaw: true } }
     };
   },
 
@@ -414,6 +428,7 @@ BasicGame.Game.prototype = {
     var active = ( quest.step == 'active' || this.quests[quest.name]['active'] );
 
     for (condition in quest.conditions) {
+
       if (this.quests[quest.name][condition] != quest.conditions[condition]) {
         conditionsMet = false;
       }
@@ -483,12 +498,13 @@ BasicGame.Game.prototype = {
     event.removeItem ? this.removeItem(event.removeItem) : null;
     event.move ? this.move(event.move) : null;
     event.signal ? this.evalEvent(event.signal) : null;
-    event.changeBackground ? this.changeBackground(event.changeBackground) : null;
+    event.altRoom ? this.altRoom(event.altRoom) : null;
     event.killBlock ? this.killBlock(event.killBlock) : null;
     event.killSprite ? this.killSprite(event.killSprite) : null;
     event.modMeta ? this.modMeta(event.modMeta) : null;
     event.sayAnim ? this.sayAnim(event.sayAnim) : null;
     event.moveSprite ? this.tweenSprite(event.moveSprite) : null;
+    event.modRoomMeta ? this.modRoomMeta(event.modRoomMeta) : null;
   },
 
   // - - - create chain
@@ -832,8 +848,16 @@ BasicGame.Game.prototype = {
         newDoor.width = width;
         newDoor.name = this.doors[door].name;
         newDoor.inputEnabled = true;
-        newDoor.input.useHandCursor = true;
+        // newDoor.input.useHandCursor = true;
         this.physics.arcade.enable(newDoor);
+
+        // door cursor
+        newDoor.events.onInputOver.add(function () {
+          this.game.canvas.style.cursor = "move";
+        }, this);
+        newDoor.events.onInputOut.add(function () {
+          this.game.canvas.style.cursor = "default";
+        }, this);
 
         newDoor.events.onInputDown.add(this.moveToDoor, this);
 
@@ -928,7 +952,8 @@ BasicGame.Game.prototype = {
   say: function (string, key, color) {
     this.colorAtlas = {
       "herman" : "#ffcc99",
-      "player" : "#eeeeee"
+      "player" : "#eeeeee",
+      "brynn" : "#ff9999"
     };
 
     // include key for event evaluation
@@ -1013,6 +1038,21 @@ BasicGame.Game.prototype = {
     this.spritesJSON[sprite][attr] = val;
 
     this.evalEvent(sprite);
+  },
+
+  modRoomMeta: function (data) {
+    var room = data.room;
+    var attr = data.attr;
+    var value = data.value;
+    var door = data.door || null;
+
+    if (door) {
+      this.roomsJSON[room][attr][door] = value;      
+    } else {
+      this.roomsJSON[room][attr] = value;  
+    }
+
+    this.evalEvent(room+attr);
   },
 
   modAttribute: function (data) {
@@ -1129,28 +1169,36 @@ BasicGame.Game.prototype = {
     this.evalEvent('remove-' + data);
   },
 
-  changeBackground: function () {
-    var myRoom = this.currentRoom.name;
-    var newTexture = this.currentRoom.name + '-alt';
-    var newPath = this.roomsJSON[myRoom].path.replace(myRoom, newTexture);
-    var newText = this.roomsJSON[myRoom].altText;
-
-    this.room.loadTexture(newTexture);
-    this.changeRoomText(newText);
-    this.roomsJSON[myRoom].alt = true;
-    this.roomsJSON[myRoom].sprites = this.roomsJSON[myRoom].altSprites;
-
-    this.spritesGroup.remove(this.player);
-    this.world.addAt(this.player, 1);
-    this.spritesGroup.removeAll(true);
+  altRoom: function (room) {
     
-    this.createSprites();
-    this.world.remove(this.player);
-    this.spritesGroup.add(this.player);
+    var newTexture = room + '-alt';
+    var newText = this.roomsJSON[room].altText;
+    var newSprites = this.roomsJSON[room].altSprites;
 
+    this.roomsJSON[room].alt = true;
+
+    if (newSprites) {
+      this.roomsJSON[room].sprites = this.roomsJSON[room].altSprites;  
+    }
+
+    if (newText) {
+      this.roomsJSON[room].text = this.roomsJSON[room].altText;
+    }
+
+    if (this.currentRoom.name == room) {
+      this.room.loadTexture(newTexture);
+      this.changeRoomText(newText);
+      this.spritesGroup.remove(this.player);
+      this.world.addAt(this.player, 1);
+      this.spritesGroup.removeAll(true);
+      
+      this.createSprites();
+      this.world.remove(this.player);
+      this.spritesGroup.add(this.player);
+    }
     // console.log(this.roomsJSON[myRoom]);
 
-    this.evalEvent('changeBackground');
+    this.evalEvent('altRoom');
   },
 
   killSprite: function (sprite) {
@@ -1347,13 +1395,13 @@ BasicGame.Game.prototype = {
     
     var entryPoint = door.entry;
     var dist = this.physics.arcade.distanceBetween(this.player.position, entryPoint)/this.tileSize;
-    console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
+    // console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
     
     this.tween = this.add.tween(this.player);
     this.tween.to(entryPoint, dist*this.speed); //todo adjust tween speed
     this.tween.onComplete.addOnce(function () {
       
-      console.log('tween in finished');
+      // console.log('tween in finished');
       this.openRoom();
     }, this);
     this.tween.start();
@@ -1503,6 +1551,7 @@ BasicGame.Game.prototype = {
   },
 
   openRoom: function () {
+    // console.log(this.currentRoom);
 
     this.evalEvent(this.currentRoom.name);
     this.enableInput(true);
@@ -1716,7 +1765,7 @@ BasicGame.Game.prototype = {
 
   importGrid: function () {
     
-    var roomJson = this.currentRoom.name + '_json';
+    var roomJson = this.currentRoom.name + '_json';    
     var gridJson = this.cache.getJSON(roomJson);
     this.grid.nodes = gridJson;
 

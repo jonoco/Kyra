@@ -177,7 +177,11 @@
 		"text": "Inside the Temple",
 		"music": "temple",
 		"items": [],
-		"sprites": [],
+		"sprites": [
+			{ "name": "temple fire", "x": 392, "y": 130 },
+			{ "name": "brynn enter", "x": 22, "y": 180 },
+			{ "name": "brynn", "x": 110, "y": 180 }
+		],
 		"blocks": [],
 		"grid": "js/json/room06.json",
 		"path": "assets/screens/room06-1.png",
@@ -404,6 +408,7 @@
 		"sprites": [
 			{ "name": "birch1", "x": 688, "y": 24 },
 		  { "name": "stone2", "x": 20, "y": 90 },
+		  { "name": "glow", "x": 370, "y": 90 },
 		  { "name": "altar", "x": 370, "y": 90 }
 		],
 		"blocks": [],
@@ -453,7 +458,10 @@
 		"text": "A rocky outcropping",
 		"music": "forest",
 		"items": [],
-		"sprites": [{ "name": "herman sawing", "x": 170, "y": 200 }],
+		"sprites": [
+			{ "name": "herman sawing", "x": 170, "y": 200 },
+			{ "name": "cut tree", "x": 26, "y": 24 }
+		],
 		"blocks": [],
 		"grid": "js/json/room17.json",
 		"path": "assets/screens/room17.png",
@@ -480,7 +488,7 @@
 		"name": "room18",
 		"text": "A cavernous entrance",
 		"music": "forest",
-		"items": [],
+		"items": [{ "name": "saw", "x": 300, "y": 350 }],
 		"sprites": [],
 		"blocks": [],
 		"grid": "js/json/room18.json",
@@ -506,10 +514,12 @@
 	},
 	"room19": {
 		"name": "room19",
+		"alt": false,
 		"text": "A rickety bridge",
 		"music": "cave",
 		"items": [],
 		"sprites": [{ "name": "herman", "x": 610, "y": 148 }],
+		"altSprites": [],
 		"blocks": [],
 		"grid": "js/json/room19.json",
 		"path": "assets/screens/room19.png",
@@ -523,5 +533,9 @@
 				"animation": false 
 			}
 		}
+	},
+	"room19-alt": {
+		"name": "room19-alt",
+		"path": "assets/screens/room19-alt.png"
 	}
 }

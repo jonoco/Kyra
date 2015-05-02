@@ -83,10 +83,19 @@
 		"animated": false,
 		"animations": null
 	},
+	"cut tree": {
+		"name": "cut tree",
+		"png": "assets/sprites/cut_tree.png",
+		"scale": 0.5,
+		"invisible": true,
+		"action": null,
+		"animated": false
+	},
 	"herman sawing": {
 		"name": "herman sawing",
 		"png": "assets/sprites/herman_sawing.png",
 		"json": "assets/sprites/herman_sawing.json",
+		"invisible": false,
 		"action": {
 			"click": { "text": "I better not bother him now" }
 			},
@@ -203,10 +212,10 @@
 		},
 		"startFrame": "hunch-1"
 	},
-	"altar": {
-		"name": "altar",
-		"png": "assets/sprites/altar.png",
-		"json": "assets/sprites/altar.json",
+	"glow": {
+		"name": "glow",
+		"png": "assets/sprites/glow.png",
+		"json": "assets/sprites/glow.json",
 		"action": {
 			"click": { "text": "What a lovely table" }
 			},
@@ -224,6 +233,13 @@
 			 	"start": false 
 			}
 		}
+	},
+	"altar": {
+		"name": "altar",
+		"png": "assets/sprites/altar.png",
+		"invisible": true,
+		"action": null,
+		"animated": false
 	},
 	"birch1": {
 		"name": "birch1",
@@ -605,6 +621,73 @@
 			 	  "branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
 			 	   "branch-16", "branch-17", "branch-18", "branch-19", "branch-20"],
 			 	"speed": 8,
+			 	"loop": false,
+			 	"start": false 
+			}
+		}
+	},
+	"temple fire": {
+		"name": "temple fire",
+		"png": "assets/sprites/temple_fire.png",
+		"json": "assets/sprites/temple_fire.json",
+		"scale": 0.5,
+		"action": null,
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+			 	"frames": [ "temple_fire-1", "temple_fire-2", "temple_fire-3" ],
+			 	"speed": 5,
+			 	"loop": true,
+			 	"start": true 
+			}
+		}
+	},
+	"brynn enter": {
+		"name": "brynn enter",
+		"png": "assets/sprites/brynn_enter.png",
+		"json": "assets/sprites/brynn_enter.json",
+		"scale": 0.5,
+		"action": null,
+		"animated": true,
+		"animations": {
+			"enter": {
+				"name": "enter",
+			 	"frames": [ 
+			 		"brynn_enter-1", "brynn_enter-1", "brynn_enter-1", "brynn_enter-1", 
+			 		"brynn_enter-2", "brynn_enter-3", "brynn_enter-4", "brynn_enter-5",
+			 	 	"brynn_enter-6", "brynn_enter-7", "brynn_enter-8", "brynn_enter-9", "brynn_enter-10",
+			 	  "brynn_enter-11", "brynn_enter-12", "brynn_enter-13", "brynn_enter-14", "brynn_enter-15",
+			 	  "brynn_enter-16", "brynn_enter-17", "brynn_enter-18", "brynn_enter-19", "brynn_enter-20",
+			 	  "brynn_enter-21", "brynn_enter-22", "brynn_enter-23", "brynn_enter-24", "brynn_enter-25",
+			 	  "brynn_enter-26", "brynn_enter-27"],
+			 	"speed": 7,
+			 	"loop": false,
+			 	"start": true 
+			}
+		}
+	},
+	"brynn": {
+		"name": "brynn",
+		"png": "assets/sprites/brynn.png",
+		"json": "assets/sprites/brynn.json",
+		"scale": 0.5,
+		"action": null,
+		"animated": true,
+		"animations": {
+			"talk": {
+				"name": "talk",
+			 	"frames": [ 
+			 		"talk-1", "talk-2", "talk-3", "talk-4", "talk-5",
+			 	 	"talk-6", "talk-7", "talk-8", "talk-9", "talk-10", "talk-11"],
+			 	"speed": 8,
+			 	"loop": true,
+			 	"start": false 
+			},
+			"idle": {
+				"name": "idle",
+			 	"frames": [ "talk-1" ],
+			 	"speed": 1,
 			 	"loop": false,
 			 	"start": false 
 			}

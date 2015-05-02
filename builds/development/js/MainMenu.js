@@ -15,11 +15,18 @@ BasicGame.MainMenu.prototype = {
 		//	Here all we're doing is playing some music and adding a picture and button
 		//	Naturally I expect you to do something significantly better :)
 
-		this.music = this.add.audio('titleMusic');
-		this.music.play();
+		this.background = this.add.sprite(0, 0, 'preloaderBackground');
+		this.background.scale.setTo(3);
 
-		this.background = this.add.sprite(0, 0, 'titlepage');
-		this.background.scale.setTo(2.5);
+		this.message = this.add.text();
+		this.message.x = 400;
+    this.message.y = 420;
+    this.message.font = 'kyrandia';
+    this.message.fontSize = 30;
+    this.message.fill = '#eeeeee';
+    this.message.stroke = '#000000';
+    this.message.strokeThickness = 3;
+    this.message.text = "Tap to play";
 
 		this.input.onTap.add(this.startGame, this);
 
@@ -32,9 +39,6 @@ BasicGame.MainMenu.prototype = {
 	},
 
 	startGame: function (pointer) {
-
-		//	Ok, the Play Button has been clicked or touched, so let's stop the music (otherwise it'll carry on playing)
-		this.music.stop();
 
 		//	And start the actual game
 		this.state.start('Game');

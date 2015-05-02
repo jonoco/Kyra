@@ -15,7 +15,7 @@ BasicGame.Preloader.prototype = {
 		//	These are the assets we loaded in Boot.js
 		//	A nice sparkly background and a loading progress bar
 		this.background = this.add.sprite(0, 0, 'preloaderBackground');
-		this.background.scale.setTo(2.5);
+		this.background.scale.setTo(3);
 
 		//	Here we load the rest of the assets our game needs.
 		//	As this is just a Project Template I've not provided these assets, swap them for your own.
@@ -27,7 +27,9 @@ BasicGame.Preloader.prototype = {
 		this.load.image('gui', 'assets/img/gui.png');
 		this.load.image('pathing', 'assets/tiles/pathing.png');
 		this.load.image('room03-alt', 'assets/screens/room03-alt.png');
-		
+		this.load.image('room19-alt', 'assets/screens/room19-alt.png');
+		this.load.image('end', 'assets/img/malcolm_blob.png');
+
 		this.load.json('rooms', 'js/json/rooms.json');
 		this.load.json('music', 'js/json/music.json');
 		this.load.json('sprites', 'js/json/sprites.json');
@@ -87,7 +89,7 @@ BasicGame.Preloader.prototype = {
 		var sprites = this.cache.getJSON('sprites');
 
 		for (sprite in sprites) {
-			
+
 			if (sprites[sprite].json) {
 
 				//console.log('sprite has json');
@@ -108,7 +110,7 @@ BasicGame.Preloader.prototype = {
 
 		for (room in rooms) {
 			this.load.image(rooms[room].name, rooms[room].path);
-			this.loadGrid(room, rooms);
+			rooms[room].grid ? this.loadGrid(room, rooms):null;
 		}
 
 	},

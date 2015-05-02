@@ -24,7 +24,7 @@ BasicGame.Game = function (game) {
 
   // game debugging
   this.debug = false;
-  this.startRoom = 'room03';
+  this.startRoom = 'room18';
 
   //utility variables
   this.timer;
@@ -81,6 +81,11 @@ BasicGame.Game = function (game) {
   this.speech;
   this.animation;
   this.talkingSprite;
+  this.colorAtlas = {
+      "herman" : "#ffcc99",
+      "player" : "#eeeeee",
+      "brynn" : "#ff9999"
+    };
 
   // inventory variables
   this.slots = [ 
@@ -265,13 +270,34 @@ BasicGame.Game.prototype = {
     this.changePlayerAnimation();
   },
 
-  quitGame: function (pointer) {
+  quitGame: function () {
 
     //  Here you should destroy anything you no longer need.
     //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
 
-    //  Then let's go back to the main menu.
-    this.state.start('MainMenu');
+    var blockBg = this.make.graphics();
+        blockBg.beginFill(0x000000, 1);
+        blockBg.drawRect(0, 0, this.game.width, this.game.height);
+        blockBg.endFill();
+        blockBg.alpha = 0;
+    this.world.add(blockBg);
+
+    var endMessage = this.add.image( 0, 0, 'end');
+        endMessage.scale.setTo(3);
+        endMessage.alpha = 0;
+        endMessage.inputEnabled = true;
+
+    var fade = this.game.add.tween(blockBg);
+        fade.to({ alpha: 1 }, 2000);
+        fade.start();
+
+    var message = this.game.add.tween(endMessage);
+        message.to({ alpha: 1 }, 2000);
+        message.start();
+
+    endMessage.events.onInputDown.add(function () {
+      this.state.start('MainMenu');  
+    }, this);
   },
   // - - - event chain functions
   createQuests: function () {
@@ -358,6 +384,7 @@ BasicGame.Game.prototype = {
         saw: false,
         giveSaw: false,
         fixed: false,
+        complete: false,
         events: {
           cave: [
             { modAttr: { sprite: "herman", attr: "alpha", value: 1 } },
@@ -396,6 +423,13 @@ BasicGame.Game.prototype = {
             { modMeta: { sprite: "cut tree", attr: "invisible", value: false } },
             { modMeta: { sprite: "herman sawing", attr: "invisible", value: true } },
             { modAttr: { sprite: "herman sawing", attr: "inputEnabled", value: false } }
+          ],
+          complete: [
+            { say: "The bridge is repaired!" },
+            { move: { x: 760, y: 300 }},
+            { say: "But where did Herman go? ..." },
+            { wait: 1000 },
+            { quit: true }
           ]
         }
       }
@@ -407,15 +441,17 @@ BasicGame.Game.prototype = {
     // { name: "quest", step: "step", condition: "step" }
 
     this.eventTriggers = {
-      pool: { name: "willow", step: "gotTear", conditions: { active: true } },
-      room03: { name: "willow", step: "active", conditions: { active: false } },
-      "willow-tear": { name: "willow", step: "treeHealed", conditions: { gotTear: true } },
-      room06: { name: "brynn", step: "active", conditions: { active: false } },
-      altar: { name: "brynn", step: "amulet" },
-      room19: { name: "bridge", step: "cave" },
-      "saw_holder": { name: "bridge", step: "saw" },
-      "herman-saw": { name: "bridge", step: "giveSaw" },
-      room11: { name: "bridge", step: "fixed", conditions: { giveSaw: true } }
+      pool: [{ name: "willow", step: "gotTear", conditions: { active: true } }],
+      room03: [{ name: "willow", step: "active", conditions: { active: false } }],
+      "willow-tear": [{ name: "willow", step: "treeHealed", conditions: { gotTear: true } }],
+      room06: [{ name: "brynn", step: "active", conditions: { active: false } }],
+      altar: [{ name: "brynn", step: "amulet" }],
+      room19: [
+        { name: "bridge", step: "cave", conditions: { active: true }},
+        { name: "bridge", step: "complete", conditions: { fixed: true }}],
+      "saw_holder": [{ name: "bridge", step: "saw" }],
+      "herman-saw": [{ name: "bridge", step: "giveSaw" }],
+      room11: [{ name: "bridge", step: "fixed", conditions: { giveSaw: true } }]
     };
   },
 
@@ -453,7 +489,10 @@ BasicGame.Game.prototype = {
     // check whether event is linked to quest event
     if (this.eventTriggers[event]) {
       console.log('there is a quest linked to this event');
-      this.updateQuest(this.eventTriggers[event]);
+      var i = this.eventTriggers[event].length;
+      while (i--) {
+        this.updateQuest(this.eventTriggers[event][i]);  
+      }
     }
 
     // pop next item in eventQueue
@@ -505,6 +544,7 @@ BasicGame.Game.prototype = {
     event.sayAnim ? this.sayAnim(event.sayAnim) : null;
     event.moveSprite ? this.tweenSprite(event.moveSprite) : null;
     event.modRoomMeta ? this.modRoomMeta(event.modRoomMeta) : null;
+    event.quit ? this.quitGame() : null;
   },
 
   // - - - create chain
@@ -950,12 +990,7 @@ BasicGame.Game.prototype = {
   // - - - quest event functions
 
   say: function (string, key, color) {
-    this.colorAtlas = {
-      "herman" : "#ffcc99",
-      "player" : "#eeeeee",
-      "brynn" : "#ff9999"
-    };
-
+    
     // include key for event evaluation
     var sprite = key ? this.getSprite(key): this.player;
     var textColor = color ? color: "player";

@@ -12,6 +12,17 @@ This project also uses the original Roland MT-32 soundtrack, rather than the com
 
 ###Version changes
 
+####v0.2.0
+- second project milestone reached
+	- completing the bridge quest acts as game end point
+-	heal the willow quest added
+- repair the bridge quest finished
+- more event types added
+- more assets added
+- updated animation handling
+- end game point added
+	- after repairing the bridge and entering the cave again, the game will kick the player back out to the menu
+
 ####v0.1.5
 - item handling system updated
 - quest event system updated

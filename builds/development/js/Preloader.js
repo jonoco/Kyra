@@ -17,6 +17,16 @@ BasicGame.Preloader.prototype = {
 		this.background = this.add.sprite(0, 0, 'preloaderBackground');
 		this.background.scale.setTo(3);
 
+		this.message = this.add.text();
+		this.message.x = 300;
+    this.message.y = 420;
+    this.message.font = 'kyrandia';
+    this.message.fontSize = 30;
+    this.message.fill = '#eeeeee';
+    this.message.stroke = '#000000';
+    this.message.strokeThickness = 3;
+    this.message.text = "loading ...";
+
 		//	Here we load the rest of the assets our game needs.
 		//	As this is just a Project Template I've not provided these assets, swap them for your own.
 		
@@ -38,8 +48,10 @@ BasicGame.Preloader.prototype = {
 	
 		this.load.onFileComplete.add(function(progress, key) {
 			
+			this.message.text = 'loading ' + key;
+
 			if (key == 'rooms') {
-				
+
 				this.loadRoomData();
 			} else if (key == 'music') {
 				

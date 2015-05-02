@@ -39,7 +39,8 @@ BasicGame.Game = function (game) {
       { say: "Very stoney" }, 
       { say: "Like Rocky Balboa" } ],
     bed: [
-      { say: "This bed was made from \n the finest horses in Kyrandia" }, 
+      { say: "This bed was made from" }, 
+      { say: "the finest horses in Kyrandia" }, 
       { say: "Like Rocky Balboa" }],
     window: [
       { say: "The forest really is dying" },
@@ -296,6 +297,7 @@ BasicGame.Game.prototype = {
         message.start();
 
     endMessage.events.onInputDown.add(function () {
+      this.cache.destroy();
       this.state.start('MainMenu');  
     }, this);
   },
@@ -373,7 +375,7 @@ BasicGame.Game.prototype = {
           ],
           amulet: [
             { playAnim: { sprite: "amulet", animation: "on" } },
-            { modAttr: { sprite: "altar", attr: "alha", value: 1 } }
+            { modAttr: { sprite: "altar", attr: "alha", value: 1 } },
             { say: "I can feel the power!!" }
           ]
         }
@@ -452,7 +454,7 @@ BasicGame.Game.prototype = {
         { name: "bridge", step: "complete", conditions: { fixed: true }}],
       "saw_holder": [{ name: "bridge", step: "saw" }],
       "herman-saw": [{ name: "bridge", step: "giveSaw" }],
-      room11: [{ name: "bridge", step: "fixed", conditions: { giveSaw: true } }]
+      room02: [{ name: "bridge", step: "fixed", conditions: { giveSaw: true } }]
     };
   },
 
@@ -520,7 +522,6 @@ BasicGame.Game.prototype = {
   evalBlock: function (block) {
 
     var events = this.blockEvents[block].slice();
-    // events.reverse();
 
     this.queueEvents(events);
     this.popEventQueue();

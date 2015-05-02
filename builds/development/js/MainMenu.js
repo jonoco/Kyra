@@ -41,7 +41,7 @@ BasicGame.MainMenu.prototype = {
 	startGame: function (pointer) {
 
 		//	And start the actual game
-		this.state.start('Game');
+		this.state.start('Boot');
 
 	}
 

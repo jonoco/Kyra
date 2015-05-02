@@ -24,7 +24,7 @@ BasicGame.Game = function (game) {
 
   // game debugging
   this.debug = false;
-  this.startRoom = 'room18';
+  this.startRoom = 'room01';
 
   //utility variables
   this.timer;
@@ -373,6 +373,7 @@ BasicGame.Game.prototype = {
           ],
           amulet: [
             { playAnim: { sprite: "amulet", animation: "on" } },
+            { modAttr: { sprite: "altar", attr: "alha", value: 1 } }
             { say: "I can feel the power!!" }
           ]
         }

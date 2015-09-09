@@ -24,7 +24,7 @@
 ####5. Grid
 ##### The grid holds all pathing information. It is the interface between the player and the walkable locations array.
 - the grid is processed via the Pathfinding.js library
-- each room's grid is created by the Kyra Mapper utility
+- each room's grid is created by the [Kyra Mapper utility](https://github.com/jonoco/Kyra-Mapper)
 
 ####6. Inventory
 ##### The inventory refers to the inventory group and slotsGroup

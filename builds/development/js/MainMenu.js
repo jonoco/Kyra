@@ -41,8 +41,6 @@ BasicGame.MainMenu.prototype = {
 	startGame: function (pointer) {
 
 		//	And start the actual game
-		this.state.start('Boot');
-
+		this.state.start('Preloader');
 	}
-
 };

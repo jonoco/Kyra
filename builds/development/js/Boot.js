@@ -16,16 +16,11 @@ BasicGame.Boot.prototype = {
 
     if (this.game.device.desktop)
     {
-        //  If you have any desktop specific settings, they can go in here
-        //this.scale.pageAlignHorizontally = true;
 			this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;	
-			this.scale.setMinMax(400, 250, 960, 600);
-				
+			this.scale.setMinMax(400, 250, 1920, 1080);		
     }
     else
     {
-        //  Same goes for mobile settings.
-        //  In this case we're saying "scale the game, no lower than 480x260 and no higher than 1024x768"
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.scale.setMinMax(400, 250, 960, 600);
         this.scale.forceLandscape = true;
@@ -45,8 +40,7 @@ BasicGame.Boot.prototype = {
 
     //  By this point the preloader assets have loaded to the cache, we've set the game settings
     //  So now let's start the real preloader going
-    this.state.start('Preloader');
+    this.state.start('MainMenu');
 
   }
-
 };

@@ -350,7 +350,7 @@ BasicGame.Game.prototype = {
             { removeItem: "tear" },
             { move: { x: 384, y: 344 } },
             { say: "I think this tear drop should fit" },
-            { playAnim: { sprite: "willow", animation: "on" } },
+            { playAnim: { sprite: "willow", animation: "on", hide: false } },
             { altRoom: "room03" },
             { wait: 300 },
             { modAttr: { sprite: "player", attr: "alpha", value: 0 } },
@@ -895,7 +895,7 @@ BasicGame.Game.prototype = {
 
         // door cursor
         newDoor.events.onInputOver.add(function () {
-          this.game.canvas.style.cursor = "move";
+          this.game.canvas.style.cursor = "pointer";
         }, this);
         newDoor.events.onInputOut.add(function () {
           this.game.canvas.style.cursor = "default";

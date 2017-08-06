@@ -18,6 +18,9 @@
 		  font-family: kyrandia;
 		  src: url(assets/fonts/kyrandia.ttf) format("truetype");
 		}
+		#gameContainer {
+			max-height: 100vh;
+		}
 	</style>
 </head>
 <body>
@@ -27,7 +30,6 @@
 <script type="text/javascript">
 
 window.onload = function() {
-
 	var game = new Phaser.Game(960, 600, Phaser.AUTO, 'gameContainer');
 
 	//	Add the States your game has.

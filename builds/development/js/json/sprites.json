@@ -393,7 +393,7 @@
 			 	 	"willow-6", "willow-7", "willow-8", "willow-9", "willow-10",
 			 	  "willow-11", "willow-12", "willow-13", "willow-14", "willow-15"],
 			 	"speed": 8,
-			 	"loop": true,
+			 	"loop": false,
 			 	"start": false 
 			}
 		}

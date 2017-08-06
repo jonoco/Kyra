@@ -1,6 +1,6 @@
-#Todo
+# Todo
 
-###To be implemented
+### To be implemented
 - **ADDED:** area 1 rooms json data, up to the river cave
 - **ADDED:** grids for area 1 rooms
 - random item placement generator
@@ -32,7 +32,7 @@
 - add better condition checking to quest events
 - add 'active' property to sprites to allow or prevent creating them
 
-###Bugs
+### Bugs
 - **FIXED:** tapping on player causes him to disappear
 - **FIXED:** inventory no longer reacts to items
 - **FIXED:** player starting in wrong location after room change
@@ -42,4 +42,5 @@
 - **FIXED:** quests are not triggering
 -	clicking door during door animation causing error
 	- Uncaught TypeError: Cannot read property 'parent' of undefined
+- **FIXED:** willow tree animation is not triggering next event
 

@@ -9,7 +9,8 @@
   "author": "Joshua Cox",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack",
+    "dev": "webpack --env.dev",
+    "debug": "webpack --env.dev --env.debug",
     "deploy": "webpack --config webpack.production.config.js",
     "cordova": "webpack --config webpack.cordova.config.js",
     "test": "eslint './src/**/*.js'"

@@ -1,0 +1,196 @@
+{"frames": [
+
+{
+	"filename": "amulet-23",
+	"frame": {"x":2,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-22",
+	"frame": {"x":84,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-21",
+	"frame": {"x":166,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-20",
+	"frame": {"x":248,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-19",
+	"frame": {"x":330,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-18",
+	"frame": {"x":412,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-17",
+	"frame": {"x":494,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-16",
+	"frame": {"x":576,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-15",
+	"frame": {"x":658,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-14",
+	"frame": {"x":740,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-13",
+	"frame": {"x":822,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-12",
+	"frame": {"x":904,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-11",
+	"frame": {"x":986,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-10",
+	"frame": {"x":1068,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-9",
+	"frame": {"x":1150,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-8",
+	"frame": {"x":1232,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-7",
+	"frame": {"x":1314,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-6",
+	"frame": {"x":1396,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-5",
+	"frame": {"x":1478,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-4",
+	"frame": {"x":1560,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-3",
+	"frame": {"x":1642,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-2",
+	"frame": {"x":1724,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+},
+{
+	"filename": "amulet-1",
+	"frame": {"x":1806,"y":2,"w":80,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":48},
+	"sourceSize": {"w":80,"h":48}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "amulet.png",
+	"format": "RGBA8888",
+	"size": {"w":1888,"h":52},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:711fc4cc17b1b883ed06a4f498dfb690:421ce241989cf91bc4cddd2ff305ad5c:d5fc81090dcc1acdecee6fb3edc66d7b$"
+}
+}

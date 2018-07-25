@@ -1,0 +1,84 @@
+{"frames": [
+
+{
+	"filename": "fly-1",
+	"frame": {"x":354,"y":2,"w":72,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":30},
+	"sourceSize": {"w":72,"h":30}
+},
+{
+	"filename": "fly-2",
+	"frame": {"x":202,"y":2,"w":74,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":74,"h":30},
+	"sourceSize": {"w":74,"h":30}
+},
+{
+	"filename": "sit-1",
+	"frame": {"x":2,"y":2,"w":46,"h":51},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":51},
+	"sourceSize": {"w":46,"h":51}
+},
+{
+	"filename": "sit-2",
+	"frame": {"x":50,"y":2,"w":44,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":44,"h":50},
+	"sourceSize": {"w":44,"h":50}
+},
+{
+	"filename": "fly-3",
+	"frame": {"x":278,"y":2,"w":74,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":74,"h":30},
+	"sourceSize": {"w":74,"h":30}
+},
+{
+	"filename": "sit-3",
+	"frame": {"x":156,"y":2,"w":44,"h":42},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":44,"h":42},
+	"sourceSize": {"w":44,"h":42}
+},
+{
+	"filename": "sit-fly",
+	"frame": {"x":96,"y":2,"w":58,"h":44},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":58,"h":44},
+	"sourceSize": {"w":58,"h":44}
+},
+{
+	"filename": "tail-1",
+	"frame": {"x":156,"y":46,"w":56,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":6},
+	"sourceSize": {"w":56,"h":6}
+},
+{
+	"filename": "tail-2",
+	"frame": {"x":202,"y":34,"w":56,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":6},
+	"sourceSize": {"w":56,"h":6}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "fairy.png",
+	"format": "RGBA8888",
+	"size": {"w":428,"h":55},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:7e7debe51b682612f2345d9faf702351:4f0ab90e28ef3667d891eab377e30162:f30cbba2f5db7260871a5426cffc03ac$"
+}
+}

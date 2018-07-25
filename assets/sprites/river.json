@@ -1,0 +1,108 @@
+{"frames": [
+
+{
+	"filename": "river-1",
+	"frame": {"x":2,"y":2,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-10",
+	"frame": {"x":2,"y":67,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-11",
+	"frame": {"x":2,"y":132,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-12",
+	"frame": {"x":2,"y":197,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-2",
+	"frame": {"x":2,"y":262,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-3",
+	"frame": {"x":2,"y":327,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-4",
+	"frame": {"x":2,"y":392,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-5",
+	"frame": {"x":2,"y":457,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-6",
+	"frame": {"x":2,"y":522,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-7",
+	"frame": {"x":2,"y":587,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-8",
+	"frame": {"x":2,"y":652,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+},
+{
+	"filename": "river-9",
+	"frame": {"x":2,"y":717,"w":23,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":63},
+	"sourceSize": {"w":23,"h":63}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "river.png",
+	"format": "RGBA8888",
+	"size": {"w":27,"h":782},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:8dd8f5ddeb1a890a04202e8813df8150:4ffb89e78d30c6db333f27d09adf5a33:c554c0a48e3c9d697a395f94c9ddcb28$"
+}
+}

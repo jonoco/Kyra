@@ -1,0 +1,21 @@
+{
+	"forest": {
+		"name": "forest",
+		"path": "assets/music/Forest.ogg"
+		},
+
+	"temple": {
+		"name": "temple",
+		"path": "assets/music/Temple.ogg"
+		},
+
+	"cave": {
+		"name": "cave",
+		"path": "assets/music/Caves.ogg"
+	},
+
+	"pool": {
+		"name": "pool",
+		"path": "assets/music/Pool of Sorrow.m4a"
+	}
+}

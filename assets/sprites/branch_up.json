@@ -1,0 +1,180 @@
+{"frames": [
+
+{
+	"filename": "branch-21",
+	"frame": {"x":2,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-20",
+	"frame": {"x":76,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-19",
+	"frame": {"x":150,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-18",
+	"frame": {"x":224,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-17",
+	"frame": {"x":298,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-16",
+	"frame": {"x":372,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-15",
+	"frame": {"x":446,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-14",
+	"frame": {"x":520,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-13",
+	"frame": {"x":594,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-12",
+	"frame": {"x":668,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-11",
+	"frame": {"x":742,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-10",
+	"frame": {"x":816,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-9",
+	"frame": {"x":890,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-8",
+	"frame": {"x":964,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-7",
+	"frame": {"x":1038,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-6",
+	"frame": {"x":1112,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-5",
+	"frame": {"x":1186,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-4",
+	"frame": {"x":1260,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-3",
+	"frame": {"x":1334,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-2",
+	"frame": {"x":1408,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+},
+{
+	"filename": "branch-1",
+	"frame": {"x":1482,"y":2,"w":72,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":120},
+	"sourceSize": {"w":72,"h":120}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "branch.png",
+	"format": "RGBA8888",
+	"size": {"w":1556,"h":124},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:890837264378deef1df7e54673c1da31:addde95ce0881f800ec95a745668e310:cb30020ee9761e45065556c8bec77d34$"
+}
+}

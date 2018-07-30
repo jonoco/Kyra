@@ -1,7 +1,8 @@
-/* globals __DEV__ */
-import Phaser from 'phaser'
-import Mushroom from '../sprites/Mushroom'
-import lang from '../lang'
+/* globals __DEV__ __DEBUG__ */
+import Phaser from 'phaser';
+import PF from 'pathfinding';
+import Mushroom from '../sprites/Mushroom';
+import lang from '../lang';
 
 export default class extends Phaser.State {
   init() { 

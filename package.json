@@ -43,6 +43,7 @@
     "cordova-ios": "^4.5.4",
     "cordova-plugin-whitelist": "^1.3.3",
     "idiom.js": "^1.0.0",
+    "pathfinding": "0.4.18",
     "phaser-ce": "^2.10.0",
     "webfontloader": "^1.6.28"
   },

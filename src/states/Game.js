@@ -1,218 +1,200 @@
+/* globals __DEV__ __DEBUG__ */
+import Phaser from 'phaser';
+import PF from 'pathfinding';
+import Mushroom from '../sprites/Mushroom';
+import lang from '../lang';
 
-BasicGame.Game = function (game) {
+export default class extends Phaser.State {
+  init() { 
+    // game debugging
+    this.startRoom = 'room01';
 
-  this.game;      //  a reference to the currently running game (Phaser.Game)
-  this.add;       //  used to add sprites, text, groups, etc (Phaser.GameObjectFactory)
-  this.camera;    //  a reference to the game camera (Phaser.Camera)
-  this.cache;     //  the game cache (Phaser.Cache)
-  this.input;     //  the global input manager. (Phaser.Input)
-  this.load;      //  for preloading assets (Phaser.Loader)
-  this.math;      //  lots of useful common math operations (Phaser.Math)
-  this.sound;     //  the sound manager (Phaser.SoundManager)
-  this.stage;     //  the game stage (Phaser.Stage)
-  this.time;      //  the clock (Phaser.Time)
-  this.tweens;    //  the tween manager (Phaser.TweenManager)
-  this.state;     //  the state manager (Phaser.StateManager)
-  this.world;     //  the game world (Phaser.World)
-  this.particles; //  the particle manager (Phaser.Particles)
-  this.physics;   //  the physics manager (Phaser.Physics)
-  this.rnd;       //  the repeatable random number generator (Phaser.RandomDataGenerator)
+    //utility variables
+    this.timer;
 
-  //  You can use any of these from any function within this State.
-  //  But do consider them as being 'reserved words', i.e. don't create a property for 
-  //  your own game called "world" or you'll over-write the world reference.
-
-  // game debugging
-  this.debug = false;
-  this.startRoom = 'room01';
-
-  //utility variables
-  this.timer;
-
-  // event variables
-  this.quests;
-  this.eventTriggers;
-  this.eventQueue = [];
-  this.blockEvents = {
-    kallak: [
-      { say: "Lookin good old man" }, 
-      { say: "Very stoney" }, 
-      { say: "Like Rocky Balboa" } ],
-    bed: [
-      { say: "This bed was made from" }, 
-      { say: "the finest horses in Kyrandia" }, 
-      { say: "Like Rocky Balboa" }],
-    window: [
-      { say: "The forest really is dying" },
-      { say: "Like Rocky Balboa" }],
-    books: [
-      { say: "How To Seduce A Harpy, by Ono Badidia" }],
-    cauldron: [
-      { addItem: {item: "apple", x: 110, y: 260} },
-      { say: "My apple!" },
-      { killBlock: 'cauldron' }],
-    flowerbox: [
-      { say: "These flowers smell wonderful" },
-      { say: "Like Rocky Balboa" }],
-    treehouseSymbol: [
-      { say: "That's grandfather's mark as a magic user" },
-      { say: "so those damn kids will stay away" }]
-  };
-
-  // tilemap variables
-  this.tileSize = 8;
-  this.tileX = 120;
-  this.tileY = 75;
-  this.map;
-  this.layer;
-
-  // grid variables
-  this.grid;
-  this.finder;
-  this.path;
-
-  // sprite variabels
-  this.spritesJSON;
-  this.spritesGroup;
-  this.player;
-  this.tween;
-  this.between;
-  this.speed = 40; // lower is faster tweening
-  this.direction;
-  this.speech;
-  this.animation;
-  this.talkingSprite;
-  this.colorAtlas = {
-      "herman" : "#ffcc99",
-      "player" : "#eeeeee",
-      "brynn" : "#ff9999"
+    // event variables
+    this.quests;
+    this.eventTriggers;
+    this.eventQueue = [];
+    this.blockEvents = {
+      kallak: [
+        { say: "Lookin good old man" }, 
+        { say: "Very stoney" }, 
+        { say: "Like Rocky Balboa" } ],
+      bed: [
+        { say: "This bed was made from" }, 
+        { say: "the finest horses in Kyrandia" }, 
+        { say: "Like Rocky Balboa" }],
+      window: [
+        { say: "The forest really is dying" },
+        { say: "Like Rocky Balboa" }],
+      books: [
+        { say: "How To Seduce A Harpy, by Ono Badidia" }],
+      cauldron: [
+        { addItem: {item: "apple", x: 110, y: 260} },
+        { say: "My apple!" },
+        { killBlock: 'cauldron' }],
+      flowerbox: [
+        { say: "These flowers smell wonderful" },
+        { say: "Like Rocky Balboa" }],
+      treehouseSymbol: [
+        { say: "That's grandfather's mark as a magic user" },
+        { say: "so those damn kids will stay away" }]
     };
 
-  // inventory variables
-  this.slots = [ 
-    {x:286, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
-    {x:346, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
-    {x:406, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
-    {x:466, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
-    {x:526, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
-    {x:286, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
-    {x:346, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
-    {x:406, y:545, height: 46, width: 44, name: null, item: null, occupied: false}, 
-    {x:466, y:545, height: 46, width: 44, name: null, item: null, occupied: false}, 
-    {x:526, y:545, height: 46, width: 44, name: null, item: null, occupied: false} 
-  ];
-  this.itemAtlas = {
-    garnet        : 0,
-    amythyst      : 1,
-    aquamarine    : 2,
-    diamond       : 3,
-    emerald       : 4,
-    opal          : 5,
-    ruby          : 6,
-    peridot       : 7,
-    sapphire      : 8,
-    prismarine    : 9,
-    topaz         : 10,
-    coal          : 11,
-    sunstone      : 12,
-    moonstone     : 13,
-    rainbowstone  : 14,
-    lodestone     : 15,
-    rose          : 16,
-    tulip         : 17,
-    orchid        : 18,
-    magic_rose    : 19,
-    horse         : 20,
-    silver_coin   : 21,
-    gold_coin     : 22,
-    ring          : 23,
-    chalice       : 24,
-    pinecone      : 25,
-    acorn         : 26,
-    walnut        : 27,
-    fireberry1    : 28,
-    fireberry2    : 29,
-    fireberry3    : 30,
-    fireberry4    : 31,
-    fireberry5    : 32,
-    fireberry6    : 33,
-    fish          : 34,
-    fishbone      : 35,
-    meat          : 36,
-    bone          : 37,
-    apple         : 38,
-    apple_core    : 39,
-    blueberry     : 40,
-    mushroom      : 41,
-    note          : 42,
-    marble        : 43,
-    saw           : 44,
-    figure        : 45,
-    feather       : 46,
-    item48        : 47,
-    shell         : 48,
-    clover        : 49,
-    star          : 50,
-    fountainorb   : 51,
-    tear          : 52,
-    mirror        : 53,
-    dish          : 54,
-    flute         : 55,
-    hourglass     : 56,
-    iron_key      : 57,
-    green_key     : 58,
-    blue_key      : 59,
-    red_potion    : 60,
-    red_flask     : 61,
-    blue_potion   : 62,
-    blue_flask    : 63,
-    yellow_potion : 64,
-    yellow_flask  : 65,
-    green_flask   : 66,
-    orange_flask  : 67,
-    purple_flask  : 68,
-    rainbow_flask : 69,
-    water_potion  : 70,
-    water_flask   : 71,
-    water_potion  : 72,
-    water_flask   : 73,
-    water_potion  : 74,
-    water_flask   : 75,
-    water_potion  : 76,
-    water_flask   : 77,
-    potion        : 78,
-    flask         : 79,
-    scroll        : 80
-  }; // TODO load atlas from item-atlas.json
-  this.inventory;
-  this.slotsGroup;
-  this.itemGroup;
+    // tilemap variables
+    this.tileSize = 8;
+    this.tileX = 120;
+    this.tileY = 75;
+    this.map;
+    this.layer;
 
-  // gui variables
-  this.gui;
-  this.amulet;
-  this.amuletGroup;
+    // grid variables
+    this.grid;
+    this.finder;
 
-  // room variables
-  this.room; // sprite of current room
-  this.roomsJSON;
-  this.currentRoom; // room meta from rooms.json
-  this.previousRoom; // room meta from rooms.json
-  this.door; // door name
-  this.doors;
-  this.doorGroup;
-  this.blockGroup;
-  this.music;
-  this.text;
-  this.currentMusic;
-  this.openDoor; // checks if last click was on a door > reset on move complete
-  
-};
+    // sprite variabels
+    this.spritesJSON;
+    this.spritesGroup;
+    this.player;
+    this.tween;
+    this.between;
+    this.speed = 40; // lower is faster tweening
+    this.direction;
+    this.speech;
+    this.animation;
+    this.talkingSprite;
+    this.colorAtlas = {
+        "herman" : "#ffcc99",
+        "player" : "#eeeeee",
+        "brynn" : "#ff9999"
+      };
 
-BasicGame.Game.prototype = {
+    // inventory variables
+    this.slots = [ 
+      {x:286, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
+      {x:346, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
+      {x:406, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
+      {x:466, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
+      {x:526, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
+      {x:286, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
+      {x:346, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
+      {x:406, y:545, height: 46, width: 44, name: null, item: null, occupied: false}, 
+      {x:466, y:545, height: 46, width: 44, name: null, item: null, occupied: false}, 
+      {x:526, y:545, height: 46, width: 44, name: null, item: null, occupied: false} 
+    ];
+    this.itemAtlas = {
+      garnet        : 0,
+      amythyst      : 1,
+      aquamarine    : 2,
+      diamond       : 3,
+      emerald       : 4,
+      opal          : 5,
+      ruby          : 6,
+      peridot       : 7,
+      sapphire      : 8,
+      prismarine    : 9,
+      topaz         : 10,
+      coal          : 11,
+      sunstone      : 12,
+      moonstone     : 13,
+      rainbowstone  : 14,
+      lodestone     : 15,
+      rose          : 16,
+      tulip         : 17,
+      orchid        : 18,
+      magic_rose    : 19,
+      horse         : 20,
+      silver_coin   : 21,
+      gold_coin     : 22,
+      ring          : 23,
+      chalice       : 24,
+      pinecone      : 25,
+      acorn         : 26,
+      walnut        : 27,
+      fireberry1    : 28,
+      fireberry2    : 29,
+      fireberry3    : 30,
+      fireberry4    : 31,
+      fireberry5    : 32,
+      fireberry6    : 33,
+      fish          : 34,
+      fishbone      : 35,
+      meat          : 36,
+      bone          : 37,
+      apple         : 38,
+      apple_core    : 39,
+      blueberry     : 40,
+      mushroom      : 41,
+      note          : 42,
+      marble        : 43,
+      saw           : 44,
+      figure        : 45,
+      feather       : 46,
+      item48        : 47,
+      shell         : 48,
+      clover        : 49,
+      star          : 50,
+      fountainorb   : 51,
+      tear          : 52,
+      mirror        : 53,
+      dish          : 54,
+      flute         : 55,
+      hourglass     : 56,
+      iron_key      : 57,
+      green_key     : 58,
+      blue_key      : 59,
+      red_potion    : 60,
+      red_flask     : 61,
+      blue_potion   : 62,
+      blue_flask    : 63,
+      yellow_potion : 64,
+      yellow_flask  : 65,
+      green_flask   : 66,
+      orange_flask  : 67,
+      purple_flask  : 68,
+      rainbow_flask : 69,
+      water_potion  : 70,
+      water_flask   : 71,
+      water_potion  : 72,
+      water_flask   : 73,
+      water_potion  : 74,
+      water_flask   : 75,
+      water_potion  : 76,
+      water_flask   : 77,
+      potion        : 78,
+      flask         : 79,
+      scroll        : 80
+    }; // TODO load atlas from item-atlas.json
+    this.inventory;
+    this.slotsGroup;
+    this.itemGroup;
 
-  create: function () {
+    // gui variables
+    this.gui;
+    this.amulet;
+    this.amuletGroup;
 
+    // room variables
+    this.room; // sprite of current room
+    this.roomsJSON;
+    this.currentRoom; // room meta from rooms.json
+    this.previousRoom; // room meta from rooms.json
+    this.door; // door name
+    this.doors;
+    this.doorGroup;
+    this.blockGroup;
+    this.music;
+    this.text;
+    this.currentMusic;
+    this.openDoor; // checks if last click was on a door > reset on move complete
+  }
+
+
+  preload() { }
+
+
+  create() {
     this.roomsJSON = this.cache.getJSON('rooms');
     this.spritesJSON = this.cache.getJSON('sprites');
     this.stage.backgroundColor = '#2d2d2d';
@@ -235,11 +217,11 @@ BasicGame.Game.prototype = {
     this.blockGroup = this.add.group();
 
     this.createStartRoom();
-  },
+  }
 
-  update: function () {
 
-    if (this.debug) {
+  update () {
+    if (__DEBUG__) {
       this.game.debug.text('Open door: ' + this.openDoor, 16, 475);
       this.game.debug.text('Player position: ' + this.player.x +', '+ this.player.y, 16, 500);
       this.game.debug.text('Pointer position: ' + this.game.input.position.x + ', ' + this.game.input.position.y, 16, 525);
@@ -254,7 +236,6 @@ BasicGame.Game.prototype = {
     }
 
     if (this.openDoor) {
-
       this.physics.arcade.overlap(this.player, this.doorGroup, this.peekInDoor, null, this);
     } 
 
@@ -263,19 +244,16 @@ BasicGame.Game.prototype = {
     } else {
       this.enableInput(true);
     }
-  },
+  }
 
-  render: function () {
-    
+
+  render() {
     this.changeSpriteIndex();
     this.changePlayerAnimation();
-  },
+  }
 
-  quitGame: function () {
 
-    //  Here you should destroy anything you no longer need.
-    //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
-
+  quitGame () {
     var blockBg = this.make.graphics();
         blockBg.beginFill(0x000000, 1);
         blockBg.drawRect(0, 0, this.game.width, this.game.height);
@@ -300,9 +278,11 @@ BasicGame.Game.prototype = {
       this.cache.destroy();
       this.state.start('MainMenu');  
     }, this);
-  },
-  // - - - event chain functions
-  createQuests: function () {
+  }
+
+
+  // Create quest scaffold and quest events
+  createQuests () {
    /*
     * current available event commands:
     * say, wait, turn, togAnim, modAttr, modMeta, playAnim, addItem,
@@ -340,7 +320,7 @@ BasicGame.Game.prototype = {
           gotTear: [ 
             { say: "I bet I could catch a tear drop" },
             { wait: 1300 },
-            { say: "I'll take that bet me!" },
+            { say: "I'll take that bet!" },
             { move: { x: 612, y: 264 } },
             { playAnim: { sprite: "catch", animation: "on", kill: true } },
             { addItem: {item: "tear", x: 570, y: 290} },
@@ -456,42 +436,40 @@ BasicGame.Game.prototype = {
       "herman-saw": [{ name: "bridge", step: "giveSaw" }],
       room02: [{ name: "bridge", step: "fixed", conditions: { giveSaw: true } }]
     };
-  },
+  }
 
-  updateQuest: function (quest) {
-    // update quest status 
-    // then executes event chain for new status
 
+  // Update quest status and execute event chain
+  updateQuest (quest) {
     var conditionsMet = true;
     var stepComplete = this.quests[quest.name][quest.step];
     var active = ( quest.step == 'active' || this.quests[quest.name]['active'] );
 
-    for (condition in quest.conditions) {
+    for (var condition in quest.conditions) {
 
       if (this.quests[quest.name][condition] != quest.conditions[condition]) {
         conditionsMet = false;
       }
     }
-    // console.log('active: ', active);
-    // console.log('conditionsMet: ', conditionsMet);
-    // console.log('stepComplete: ', stepComplete);
-
+    
     // only update if activating quest or quest activated 
     if ( active && !stepComplete && conditionsMet ) {
-      console.log('all conditions met');
+      if (__DEBUG__) console.log('all conditions met for quest ' + quest.name);
       this.quests[quest.name][quest.step] = true;
       
       var events = this.quests[quest.name].events[quest.step];
       this.queueEvents(events); 
     }
-  },
+  }
 
-  evalEvent: function (event) {
-    console.log(event + ' has triggered');
+
+  // Evaulate an event
+  evalEvent (event) {
+    if (__DEBUG__) console.log(event + ' has triggered');
 
     // check whether event is linked to quest event
     if (this.eventTriggers[event]) {
-      console.log('there is a quest linked to this event');
+      if (__DEBUG__) console.log('there is a quest linked to this event');
       var i = this.eventTriggers[event].length;
       while (i--) {
         this.updateQuest(this.eventTriggers[event][i]);  
@@ -502,57 +480,94 @@ BasicGame.Game.prototype = {
     if (event != null && this.eventQueue.length) {
       this.popEventQueue();
     }
-  },
+  }
 
-  queueEvents: function (events) {
-    
+
+  // Add an event array to the event queue 
+  queueEvents (events) {
     var i = events.length;
     while (i--) {
       this.eventQueue.push(events[i]); 
     } 
-  },
- 
-  popEventQueue: function () {
-    //console.log('popping quest queue');
+  }
 
+
+  // Pop next event from the event queue and execute it
+  popEventQueue () {
     var event = this.eventQueue.pop();
     event ? this.exeEvent(event): null;
-  },
+  }
 
-  evalBlock: function (block) {
 
+  // Evaluate a block, executing any related events
+  evalBlock (block) {
     var events = this.blockEvents[block].slice();
 
     this.queueEvents(events);
     this.popEventQueue();
-  },
+  }
 
-  exeEvent: function (event) {
 
-    event.say ? this.say(event.say, event.sprite, event.color) : null;
-    event.turn ? this.turnPlayer(event.turn) : null;
-    event.wait ? this.wait(event.wait) : null;
-    event.togAnim ? this.toggleAnimation(event.togAnim) : null;
-    event.modAttr ? this.modAttribute(event.modAttr) : null;
-    event.playAnim ? this.playAnimation(event.playAnim) : null;
-    event.addItem ? this.addItem(event.addItem) : null;
-    event.removeItem ? this.removeItem(event.removeItem) : null;
-    event.move ? this.move(event.move) : null;
-    event.signal ? this.evalEvent(event.signal) : null;
-    event.altRoom ? this.altRoom(event.altRoom) : null;
-    event.killBlock ? this.killBlock(event.killBlock) : null;
-    event.killSprite ? this.killSprite(event.killSprite) : null;
-    event.modMeta ? this.modMeta(event.modMeta) : null;
-    event.sayAnim ? this.sayAnim(event.sayAnim) : null;
-    event.moveSprite ? this.tweenSprite(event.moveSprite) : null;
+  // Determine event type then execute it
+  exeEvent (event) {
+    event.say         ? this.say(event.say, event.sprite, event.color) : null;
+    event.turn        ? this.turnPlayer(event.turn) : null;
+    event.wait        ? this.wait(event.wait) : null;
+    event.togAnim     ? this.toggleAnimation(event.togAnim) : null;
+    event.modAttr     ? this.modAttribute(event.modAttr) : null;
+    event.playAnim    ? this.playAnimation(event.playAnim) : null;
+    event.addItem     ? this.addItem(event.addItem) : null;
+    event.removeItem  ? this.removeItem(event.removeItem) : null;
+    event.move        ? this.move(event.move) : null;
+    event.signal      ? this.evalEvent(event.signal) : null;
+    event.altRoom     ? this.altRoom(event.altRoom) : null;
+    event.killBlock   ? this.killBlock(event.killBlock) : null;
+    event.killSprite  ? this.killSprite(event.killSprite) : null;
+    event.modMeta     ? this.modMeta(event.modMeta) : null;
+    event.sayAnim     ? this.sayAnim(event.sayAnim) : null;
+    event.moveSprite  ? this.tweenSprite(event.moveSprite) : null;
     event.modRoomMeta ? this.modRoomMeta(event.modRoomMeta) : null;
-    event.quit ? this.quitGame() : null;
-  },
+    event.quit        ? this.quitGame() : null;
+  }
 
-  // - - - create chain
 
-  createSprites: function () {
-    
+  // Events
+  
+
+  // Remove block, e.g. after executing one-time block
+  killBlock (block) {
+    var blocks = this.blockGroup.children;
+    var blocksMeta = this.currentRoom.blocks;
+
+    var i = blocks.length;
+    while (i--) {
+      if (blocks[i].name == block) {
+        this.blockGroup.remove(blocks[i], true);
+      }
+    }
+
+    var j = blocksMeta.length;
+    while (j--) {
+      if (blocksMeta[j].name == block) {
+        blocksMeta.splice( j, 1 );
+      }
+    }
+  }
+
+
+  // Change sprite frame
+  setFrame (sprite, frame) {
+    if (__DEBUG__) console.log('setting frame: ', frame);
+    sprite.frameName = frame;
+    sprite.alpha = 1;
+  }
+
+
+  // Creation chain
+
+
+  // Create sprites for the current room
+  createSprites () {
     var roomSprites = this.currentRoom.sprites;
     var newSprite;
     var spriteProperty;
@@ -582,30 +597,12 @@ BasicGame.Game.prototype = {
       spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null; 
       spriteProperty.startFrame ? this.setFrame(newSprite, spriteProperty.startFrame):null;
     }
-  },
+  }
 
-  killBlock: function (block) {
 
-    var blocks = this.blockGroup.children;
-    var blocksMeta = this.currentRoom.blocks;
 
-    var i = blocks.length;
-    while (i--) {
-      if (blocks[i].name == block) {
-        this.blockGroup.remove(blocks[i], true);
-      }
-    }
-
-    var j = blocksMeta.length;
-    while (j--) {
-      if (blocksMeta[j].name == block) {
-        blocksMeta.splice( j, 1 );
-      }
-    }
-  },
-
-  createBlocks: function () {
-
+  // Create room blocks
+  createBlocks () {
     var blank;
     var blocks = this.currentRoom.blocks;
     
@@ -620,7 +617,7 @@ BasicGame.Game.prototype = {
         this.evalBlock(data.name);
       }, this);
 
-      if (this.debug) {
+      if (__DEBUG__) {
         var blockBg = this.game.make.graphics();
         blockBg.beginFill(0x00ffff, 0.5);
         blockBg.drawRect(blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height);
@@ -628,21 +625,14 @@ BasicGame.Game.prototype = {
         this.blockGroup.add(blockBg);
       }
     }
-  },
+  }
 
-  setFrame: function (sprite, frame) {
-    console.log('setting frame: ', frame);
-    sprite.frameName = frame;
-    sprite.alpha = 1;
-  },
 
-  createSpriteAnimation: function (sprite, property) {
+  // Compile a sprite's animations
+  createSpriteAnimation (sprite, property) {
     var animations = property.animations;
         
-    //console.log(animations);
-    for (anim in animations) {
-      //console.log(animations[anim]);
-
+    for (const [anim, _] of Object.entries(animations)) {
       sprite.animations.add(
         animations[anim].name,
         animations[anim].frames,
@@ -657,9 +647,11 @@ BasicGame.Game.prototype = {
         sprite.alpha = 0;
       }
     }
-  },
+  }
 
-  createSpriteAction: function (sprite, property) {
+
+  // Add actions to sprite
+  createSpriteAction (sprite, property) {
     var action = property.action;
 
     sprite.inputEnabled = true;
@@ -672,7 +664,7 @@ BasicGame.Game.prototype = {
           sprite.alpha = 1;
           this.animation = sprite.animations.play(action.click.animation, null, false, true);
           this.animation.onComplete.add(function (data) {
-            //console.log('animation complete');
+            if (__DEBUG__) console.log('animation complete');
             this.evalEvent(action.click.animation);
           }, this);
         }// if has animation on click
@@ -690,17 +682,19 @@ BasicGame.Game.prototype = {
       // sprite should have array of drag-actionable items to compare to
 
     }// if has drag action
-  },
+  }
 
-  createRoom: function () {
 
+  // Create room
+  createRoom () {
     this.room = this.game.add.image( 23, 24 );
     this.room.scale.setTo(0.5);
     this.room.inputEnabled = true;
-  },
+  }
 
-  createText: function () {
-    
+
+  // Create text
+  createText () {
     this.speech = this.add.text();
     this.speech.font = 'kyrandia';
     this.speech.fontSize = 20;
@@ -713,10 +707,11 @@ BasicGame.Game.prototype = {
     this.text.x = 25;
     this.text.y = 430;
     this.text.fill = '#bbbbbb';
-  },
+  }
 
-  createStartRoom: function () {
 
+  // Create initial room
+  createStartRoom () {
     this.currentRoom = this.roomsJSON[this.startRoom];
     this.room.loadTexture(this.startRoom);
     this.createDoors();
@@ -726,18 +721,21 @@ BasicGame.Game.prototype = {
     this.importGrid();
     this.checkMusic();  
     this.changeRoomText(this.currentRoom.text);
-  },
+  }
 
-  createGui: function () {
+
+  // Create GUI
+  createGui () {
 
     this.gui = this.add.image( 0, 0, 'gui');
     this.gui.scale.setTo(0.5);
 
     this.createAmulet();
-  },
+  }
 
-  createAmulet: function () {
 
+  // Create amulet and animations
+  createAmulet () {
     this.amulet = this.add.sprite( 670, 456, 'amulet');
     this.amulet.inputEnabled = true;
     this.amulet.scale.setTo(3);
@@ -749,10 +747,11 @@ BasicGame.Game.prototype = {
       "amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18", 
       "amulet-19", "amulet-20", "amulet-21", "amulet-22", "amulet-23"],
       8, true, false);
-  },
+  }
 
-  createInventory: function () {
 
+  // Create inventory
+  createInventory () {
     this.slotsGroup = this.game.add.group(); // group for slot objects
     this.inventory = this.game.add.group(); // group for items held in slots
 
@@ -777,9 +776,11 @@ BasicGame.Game.prototype = {
         slot.item = null;
         slot.occupied = false;
     }
-  },
+  }
 
-  createItems: function () {
+
+  // Create items
+  createItems () {
     /*
       iter each item in room.items
       check item sprite sheet frame from itemAtlas
@@ -792,9 +793,11 @@ BasicGame.Game.prototype = {
     for (var i = 0 ; i < this.items.length ;i++) {
       this.spawnItem(this.items[i]);
     }
-  },
+  }
 
-  createPlayer: function () {
+
+  // Create player
+  createPlayer () {
 
     this.player = this.game.add.sprite(318, 338, 'player', 'stand-right');
     this.player.name = 'player';
@@ -828,29 +831,30 @@ BasicGame.Game.prototype = {
     this.player.scale.setTo(3);
     this.player.anchor = {x:0.5, y:0.9};
     this.physics.arcade.enableBody(this.player);
-    //this.player.body.setSize(100, 30);
 
     this.spritesGroup.add(this.player);
-  },
+  }
 
-  createGrid: function () {
 
+  // Create grid
+  createGrid () {
     this.grid = new PF.Grid(this.tileX, this.tileY);
     this.finder = new PF.AStarFinder({
       allowDiagonal: true,
       dontCrossCorners: true
     });
 
-    if (this.debug) {
+    if (__DEBUG__) {
       this.map.addTilesetImage('pathing');
     }
-  },
+  }
 
-  createInputs: function () {
-    
+
+  // Create input events
+  createInputs () {
     //this.input.onTap.add(function () {}, this);
     this.amulet.events.onInputDown.add(function (pointer) {
-      console.log('amulet hit');
+      if (__DEBUG__) console.log('amulet hit');
     }, this);
 
     this.room.events.onInputDown.add(function (pointer) {
@@ -863,21 +867,24 @@ BasicGame.Game.prototype = {
       this.stopMoving();
       this.move(this.game.input.position);
     }, this);
-  },
+  }
 
-  createMap: function () {
+
+  // Create pathfinding map
+  createMap () {
 
     this.map = this.game.add.tilemap();
     this.map.tileWidth = this.tileSize;
     this.map.tileHeight = this.tileSize;
 
     this.layer = this.map.create('layer', this.tileX, this.tileY, this.tileSize, this.tileSize);
-  },
+  }
 
-  createDoors: function () {
 
+  // Create doors
+  createDoors () {
     this.doors = this.currentRoom.doors;
-    for (door in this.doors) {
+    for (const [door, _] of Object.entries(this.doors)) {
 
       var x = this.doors[door].x,
           y = this.doors[door].y,
@@ -903,7 +910,7 @@ BasicGame.Game.prototype = {
 
         newDoor.events.onInputDown.add(this.moveToDoor, this);
 
-      if (this.debug) {
+      if (__DEBUG__) {
         var doorBg = this.game.make.graphics();
         doorBg.beginFill(0x00ee00, 0.3);
         doorBg.drawRect(x, y, width, height);
@@ -912,34 +919,33 @@ BasicGame.Game.prototype = {
         this.doorDebug.add(doorBg);  
       }
     } 
-  },
+  }
 
-  // - - - update chain
 
-  changeSpriteIndex: function () {
+  // Update chain
+
+
+  // Move sprites in front or behind player
+  changeSpriteIndex () {
     // move sprites behind/in front of player
     for (var i = 0 ; i < this.spritesGroup.length ; i++) {
       var sprite = this.spritesGroup.children[i];
-      //console.log(sprite);
+      
       if (sprite.name == 'player') {
         //pass  
-        //console.log('sprite is player');
-
       } else if (this.player.bottom < sprite.bottom) {
         // sprite is in front of player
-        //console.log('sprite is in front of player');
         sprite.bringToTop();
-
-
       } else {
         // sprite is behind player
-        //console.log('sprite is behind player');
         sprite.sendToBack();
       }  
     }
-  },
+  }
 
-  changePlayerAnimation: function () {
+
+  // Change player animation based on movement vector
+  changePlayerAnimation () {
 
     if (Math.abs(this.player.deltaY) > Math.abs(this.player.deltaX)) {
       // change to up//down texture
@@ -987,19 +993,18 @@ BasicGame.Game.prototype = {
         this.player.frameName = 'stand-right';
       }
     }      
-  },
+  }
 
-  // - - - quest event functions
 
-  say: function (string, key, color) {
+  // Quest event functions
+
+
+  // Sprite talking
+  say (string, key, color) {
     
     // include key for event evaluation
     var sprite = key ? this.getSprite(key): this.player;
     var textColor = color ? color: "player";
-
-    // console.log(key);
-    // console.log(sprite);
-    // console.log(this.speech);
 
     this.speech.revive(); 
     this.speech.x = sprite.x;
@@ -1029,10 +1034,12 @@ BasicGame.Game.prototype = {
       this.speech.kill();
     },this);
     timer.start();
-  },
+  }
 
-  turnPlayer: function (direction) {
-    console.log('turning ' + direction);
+
+  // Change player sprite frame
+  turnPlayer (direction) {
+    if (__DEBUG__) console.log('turning ' + direction);
 
     if (direction == 'left') {
       this.player.frameName = 'stand-left';  
@@ -1041,10 +1048,13 @@ BasicGame.Game.prototype = {
     }
     
     this.evalEvent(direction);
-  },
+  }
 
-  wait: function (time) {
-    //console.log('wait called for ' + time + ' ms');
+
+  // Delay events
+  wait (time) {
+    if (__DEBUG__) console.log('wait called for ' + time + ' ms');
+
     var timer;
     timer ? timer.destroy():null;
 
@@ -1053,10 +1063,11 @@ BasicGame.Game.prototype = {
       this.evalEvent(time);  
     }, this)
     timer.start();
-  },
+  }
 
-  toggleAnimation: function (data) {
-    
+
+  // Change sprite animation
+  toggleAnimation (data) {
     var sprite = data.sprite;
     var animation = data.animation;
     var toggle = data.start;
@@ -1064,10 +1075,11 @@ BasicGame.Game.prototype = {
     this.spritesJSON[sprite].animations[animation].start = toggle;
 
     this.evalEvent(animation);
-  },
+  }
 
-  modMeta: function (data) {
 
+  // Modify a sprite's meta information
+  modMeta (data) {
     var sprite = data.sprite;
     var attr = data.attr;
     var val = data.value;
@@ -1075,9 +1087,11 @@ BasicGame.Game.prototype = {
     this.spritesJSON[sprite][attr] = val;
 
     this.evalEvent(sprite);
-  },
+  }
 
-  modRoomMeta: function (data) {
+
+  // Modify a room's meta information
+  modRoomMeta (data) {
     var room = data.room;
     var attr = data.attr;
     var value = data.value;
@@ -1090,9 +1104,11 @@ BasicGame.Game.prototype = {
     }
 
     this.evalEvent(room+attr);
-  },
+  }
 
-  modAttribute: function (data) {
+
+  // Modify an object's meta information
+  modAttribute (data) {
     // much more powerful function to modify sprites, images
     // can find objects within groups
     // this.world.set(child, key, value);
@@ -1109,8 +1125,7 @@ BasicGame.Game.prototype = {
         while (j--) {
 
           if (this.world.children[i].children[j].key == key) {
-            // hit
-            // console.log(this.world.children[i].children[j]);
+            // found object
             this.world.children[i].children[j][attr] = value;
             this.evalEvent('mod-' + key);
             return true; 
@@ -1119,18 +1134,18 @@ BasicGame.Game.prototype = {
         }
       } else if (this.world.children[i].name != "group") {
         if (this.world.children[i].key == key) {
-          // hit
-           // console.log(this.world.children[i]);
-           this.world.children[i][attr] = value; 
-           this.evalEvent('mod-' + key);
-           return true;
+          // found object
+          this.world.children[i][attr] = value; 
+          this.evalEvent('mod-' + key);
+          return true;
          }
       }
     }
-  },
+  }
 
-  playAnimation: function (data) {
-    
+
+  // Play sprite animation
+  playAnimation (data) {
     var key = data.sprite;
     var animName = data.animation;
     var kill = data.kill || false;
@@ -1147,10 +1162,11 @@ BasicGame.Game.prototype = {
     }, this);
 
     sprite.animations.play(animName, null, loop, kill);
-  },
+  }
 
-  sayAnim: function (data) {
 
+  // Play animation with simultaneous speech
+  sayAnim (data) {
     // event called by call to this.say()
 
     var key = data.sprite;
@@ -1171,18 +1187,22 @@ BasicGame.Game.prototype = {
     }, this);
 
     sprite.animations.play(animName, null, loop, kill);
-  },
+  }
 
-  addItem: function (data) {
+
+  // Add an item to the room
+  addItem (data) {
     var item = { name: data.item, x: data.x, y: data.y };
     this.currentRoom.items.push(item);
     this.spawnItem(item);
 
     this.evalEvent(data.item);
-  },
+  }
 
-  removeItem: function (data) {
-    console.log('removing: ', data);
+
+  // Remove an item from the room
+  removeItem (data) {
+    if (__DEBUG__) console.log('removing: ', data);
     var itemName = data;
     var removeItem;
 
@@ -1204,9 +1224,11 @@ BasicGame.Game.prototype = {
     this.itemGroup.remove(removeItem);
 
     this.evalEvent('remove-' + data);
-  },
+  }
 
-  altRoom: function (room) {
+
+  // Change room to alternate version
+  altRoom (room) {
     
     var newTexture = room + '-alt';
     var newText = this.roomsJSON[room].altText;
@@ -1233,13 +1255,14 @@ BasicGame.Game.prototype = {
       this.world.remove(this.player);
       this.spritesGroup.add(this.player);
     }
-    // console.log(this.roomsJSON[myRoom]);
+    if (__DEBUG__) console.log('altering ' + this.roomsJSON[myRoom]);
 
     this.evalEvent('altRoom');
-  },
+  }
 
-  killSprite: function (sprite) {
 
+  // Remove sprite
+  killSprite (sprite) {
     var sprites = this.spritesGroup.children;
     var spritesMeta = this.currentRoom.sprites;
 
@@ -1258,53 +1281,65 @@ BasicGame.Game.prototype = {
     }
 
     this.evalEvent(sprite);
-  },
+  }
 
-  // - - - movement functions
 
-  moveToDoor: function (door) {
+  // Movement functions
+
+
+  // Move with intent to change rooms
+  moveToDoor (door) {
     var myDoor = this.currentRoom.doors[door.name];
 
     this.stopMoving();
     this.openDoor = myDoor.name;
     this.move(myDoor.entry);
-  },
+  }
 
-  move: function (position) {
 
+  // Move player
+  move (position) {
     this.findWay(position);
-  },
+  }
 
-  stopMoving: function () {
-      
+
+  // Stop player
+  stopMoving () {
     if (this.tween) {
       this.tween.stop(true);
       this.tweens.remove(this.tween);
     } 
-  },
+  }
 
-  findWay: function (position) {
+
+  // Find route in pathfinding grid
+  findWay (position) {
 
     var startX = this.layer.getTileX(this.player.position.x);
     var startY = this.layer.getTileY(this.player.position.y);
     var endX = this.layer.getTileX(position.x);
     var endY = this.layer.getTileY(position.y);
-
-    // console.log(startX +','+ startY + ' to ' + endX +','+ endY);
-    //console.log(Math.floor(position.x), Math.floor(position.y));
+    
+    if (__DEBUG__) console.log("moving " + startX +','+ startY + " to " + endX +','+ endY);  
 
     if (startX != endX || startY != endY) {
 
       var grid = this.grid.clone();
-      this.path = this.finder.findPath(startX, startY, endX, endY, grid);
-      var newPath = PF.Util.smoothenPath(this.grid, this.path);
+      var path = this.finder.findPath(startX, startY, endX, endY, grid);
       
-      this.tweenPath(newPath);
-      this.path = null;
-    }
-  },
+      // Check if walkable path found
+      if (path.length == 0) {
+        return;
+      }
 
-  peekInDoor: function (player, door) {
+      var newPath = PF.Util.smoothenPath(this.grid, path);
+      this.tweenPath(newPath);
+    }
+  }
+
+
+  // Check if door will allow travel
+  peekInDoor (player, door) {
 
     if (door.name == this.openDoor) {
       this.openDoor = false;
@@ -1312,17 +1347,17 @@ BasicGame.Game.prototype = {
     
       this.exitRoom(); 
     }
-  },
+  }
 
-  closeDoor: function () {
-    //console.log('closing door');
-    
+
+  // Close door
+  closeDoor () {
     this.openDoor = null;
-  },
+  }
 
-  exitRoom: function () {
-    //console.log('exiting room');
 
+  // Transfer out of current rooms via current selected door
+  exitRoom () {
     var myDoor = this.currentRoom.doors[this.door];
     this.previousRoom = this.roomsJSON[this.currentRoom.name];
     
@@ -1338,21 +1373,18 @@ BasicGame.Game.prototype = {
       this.tweenOut();
       
     }
-  },
+  }
 
-  enterRoom: function () {
-    //console.log('entering room');
+
+  // Transfer into room by currently selected door
+  enterRoom () {
     var myDoor = this.currentRoom.doors[this.previousRoom.name];
 
     // check for enter animation
     if (myDoor.animation.enter) {
-      
-      console.log('door has animation');
       this.enterRoomAnimation();
-      
     } else {
        //move player into position for ontweening
-      
       var startPoint = this.clone(myDoor.offPoint);
       
       this.player.alpha = 1;
@@ -1360,10 +1392,11 @@ BasicGame.Game.prototype = {
       this.tweenIn(myDoor);   
       
     }
-  },
+  }
 
-  exitRoomAnimation: function () {
-    // console.log('door has animation');
+
+  // Run exiting animation
+  exitRoomAnimation () {
     var myDoor = this.currentRoom.doors[this.door];
     var spriteName;
     var exitSprite;
@@ -1371,12 +1404,11 @@ BasicGame.Game.prototype = {
     
     this.player.alpha = 0;
     
-    // find and play sprite from the room's this.spritesGroup
-    exitSpriteName = myDoor.animation.exit;
+    // find and play the entrance sprite from the room's this.spritesGroup
+    var exitSpriteName = myDoor.animation.exit;
 
     for (var i = 0 ; i < this.spritesGroup.length ; i++) {
       if (this.spritesGroup.children[i].key == exitSpriteName) {
-        //console.log('exit sprite found: ' + exitSpriteName);
         exitSprite = this.spritesGroup.children[i];      
       }
     }
@@ -1393,10 +1425,11 @@ BasicGame.Game.prototype = {
       this.loadRoom();
 
     }, this);
-  },
+  }
 
-  enterRoomAnimation: function () {
-    
+
+  // Run entering animation
+  enterRoomAnimation () {
     var myDoor = this.currentRoom.doors[this.previousRoom.name];
     var spriteName;
     var enterSprite;
@@ -1406,12 +1439,11 @@ BasicGame.Game.prototype = {
     
     this.player.alpha = 0;
     
-    // find and play sprite from the room's this.spritesGroup
+    // find and play the exiting sprite from the room's this.spritesGroup
     spriteName = myDoor.animation.enter;
 
     for (var i = 0 ; i < this.spritesGroup.length ; i++) {
       if (this.spritesGroup.children[i].key == spriteName) {
-        //console.log('exit sprite found: ' + spriteName);
         enterSprite = this.spritesGroup.children[i];      
       }
     }
@@ -1426,29 +1458,35 @@ BasicGame.Game.prototype = {
       this.player.alpha = 1;
       this.openRoom();
     }, this);
-  },
+  }
 
-  tweenIn: function (door) {
+
+  // Move player into room
+  tweenIn (door) {
     
     var entryPoint = door.entry;
     var dist = this.physics.arcade.distanceBetween(this.player.position, entryPoint)/this.tileSize;
-    // console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
+    
+    if (__DEBUG__) console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
     
     this.tween = this.add.tween(this.player);
     this.tween.to(entryPoint, dist*this.speed); //todo adjust tween speed
     this.tween.onComplete.addOnce(function () {
       
-      // console.log('tween in finished');
+      if (__DEBUG__) console.log('tween in finished');
+
       this.openRoom();
     }, this);
     this.tween.start();
-  },
+  }
 
-  tweenOut: function () {
+
+  // Move player out of room
+  tweenOut () {
     
     var offPoint = this.currentRoom.doors[this.door].offPoint;
     var dist = this.physics.arcade.distanceBetween(this.player.position, offPoint)/this.tileSize;
-    //console.log('tweening out to:' + myDoor.offPoint.x +' '+ myDoor.offPoint.y);
+    if (__DEBUG__) console.log('tweening out to:' + offPoint.x +' '+ offPoint.y);
     
     this.between = this.game.add.tween(this.player)
     this.between.to(offPoint, dist*this.speed); //todo adjust betweening speed
@@ -1456,29 +1494,36 @@ BasicGame.Game.prototype = {
     this.between.onComplete.addOnce(function () {
       //check for exit animations
 
-      //console.log('tween out finished');
+      if (__DEBUG__) console.log('tween out finished');
       this.loadRoom();
 
     }, this); 
 
     if (this.tween.isRunning) {
-      //console.log('chaining tween');
+      if (__DEBUG__) console.log('chaining tween');
       this.tween.chain(this.between); 
     } else {
-      //console.log('running between alone');
+      if (__DEBUG__) console.log('running between alone');
       this.between.start();
     }
-  },
+  }
 
-  tweenComplete: function () {
+
+  // Signal player tweening complete
+  tweenComplete () {
     this.evalEvent('moved');
 
-    var timer = this.time.create();
-    timer.add(500, this.closeDoor);
-    timer.start();
-  },
+    // Close any open doors
+    // TODO
+    // closeDoor timer callback losing lexical scope, causing bug
+    //var timer = this.time.create();
+    //timer.add(500, this.closeDoor);
+    //timer.start();
+  }
 
-  tweenSprite: function (data) {
+
+  // Move a sprite
+  tweenSprite (data) {
 
     this.playAnimation(data);
 
@@ -1512,9 +1557,11 @@ BasicGame.Game.prototype = {
     }
     
     this.tween.start();
-  },
+  }
 
-  tweenPath: function (path) {
+
+  // Move player along path
+  tweenPath (path) {
     
     this.tween = this.add.tween(this.player);
     this.tween.onComplete.addOnce(this.tweenComplete, this); 
@@ -1539,17 +1586,18 @@ BasicGame.Game.prototype = {
     }
     
     this.tween.start();
-  },
+  }
 
-  loadRoom: function () {
-    
-    console.log('load room');
+
+  // Prepare a room for entrance
+  loadRoom() {
     var nextRoom = this.roomsJSON[this.door];
+    if (__DEBUG__) console.log('loading room ' + nextRoom.name);
 
     this.closeRoom();
 
     // ready next room
-    //console.log('ready next room');
+    
     if (nextRoom.alt) {
       this.room.loadTexture(nextRoom.name + '-alt');
     } else {
@@ -1570,10 +1618,12 @@ BasicGame.Game.prototype = {
     this.spritesGroup.add(this.player);
 
     this.enterRoom();
-  },
+  }
 
-  closeRoom: function () {
-    console.log('closing room');
+
+  // Prepare to leave current room
+  closeRoom () {
+    if (__DEBUG__) console.log('closing room ' + this.currentRoom.name);
     this.saveItems(); // save room state
 
     // save player sprite
@@ -1585,41 +1635,49 @@ BasicGame.Game.prototype = {
     this.doorDebug.removeAll(true);
     this.itemGroup.removeAll(true);
     this.spritesGroup.removeAll(true);
-  },
+  }
 
-  openRoom: function () {
-    // console.log(this.currentRoom);
+
+  // Enable input on room after entering
+  openRoom () {
+    if (__DEBUG__) console.log('opening room ' + this.currentRoom.name);
 
     this.evalEvent(this.currentRoom.name);
     this.enableInput(true);
-  },
+  }
 
-  // - - - item and inventory functions
 
-  checkItemOrigin: function (item) {
+  // Item and inventory functions
+
+  
+  // Clear inventory space if inven. item removed
+  checkItemOrigin (item) {
     
     // if item is from inventory : clear its slot
     var slots = this.slotsGroup.children;  
     for (var i = 0 ; i < slots.length ; i++) {
       
       if (this.inBounds(item, slots[i])) {
-        //console.log('removing item from: ' + slots[i].x + ' ' + slots[i].y);
+        if (__DEBUG__) console.log('removing item from: ' + slots[i].x + ' ' + slots[i].y);
         this.removeItemFromInventory(item, slots[i]);  
       }
     };
-  },
+  }
 
-  checkItemDest: function (item) {
+
+  // Handle dropping an item
+  checkItemDest (item) {
     var placed = false;
     
 
-    //check if room hit
+    // Check if item hit room
     if (this.inBounds(item, this.room) && !placed) {
-      //console.log('room hit');
-      // check for sprites hits > event call them
+      if (__DEBUG__) console.log('item hit room');
+      
+      // check for sprites hits -> event call them
       this.spritesGroup.forEach(function (sprite) {
         if (this.inBounds(item, sprite) && sprite.inputEnabled) {
-          console.log(sprite.key + '-' + item.name);
+          if (__DEBUG__) console.log(sprite.key + '-' + item.name);
           this.evalEvent(sprite.key + '-' + item.name);
           this.tossItem(item);
         } 
@@ -1627,7 +1685,7 @@ BasicGame.Game.prototype = {
 
       this.blockGroup.forEach(function (block) {
         if (this.inBounds(item, block) && block.inputEnabled) {
-          console.log(block.name + '-' + item.name);
+          if (__DEBUG__) console.log(block.name + '-' + item.name);
           this.evalEvent(block.name + '-' + item.name);
           this.tossItem(item);
         } 
@@ -1648,26 +1706,29 @@ BasicGame.Game.prototype = {
     if (!placed) {
       this.tossItem(item);
     }
-  },
+  }
 
-  clearSlot: function (slot) {
 
+  // Clear inventory slot
+  clearSlot (slot) {
     slot.name = null;
     //slot.item = null;
     slot.occupied = false;
-  },
+  }
 
-  tossItem: function (item) {
 
+  // Toss item into the room
+  tossItem (item) {
     item.x = this.player.x;
     item.y = this.player.y - 25;
-  },
+  }
 
-  spawnItem: function (itemData) {
-    
+
+  // Spawn item into room
+  spawnItem (itemData) {
     var item = this.game.make.image(itemData.x, itemData.y, 'items');
     item.name = itemData.name;
-    frame = this.itemAtlas[item.name];
+    var frame = this.itemAtlas[item.name];
     item.frame = frame;
     item.scale.setTo(1.5);
     item.inputEnabled = true;
@@ -1675,31 +1736,35 @@ BasicGame.Game.prototype = {
 
     // check if item was in inventory, if so, remove from slot
     item.events.onDragStart.add(function (data) {
-      //console.log(data);
+      if (__DEBUG__) console.log(item.name + ' picked up');
       this.changeRoomText(item.name + ' picked up');
       this.checkItemOrigin(data);
     }, this);
 
     // then check drop location
     item.events.onDragStop.add(function (data) {
-      //console.log(data);
+      if (__DEBUG__) console.log(item.name + ' placed');
       this.changeRoomText(item.name + ' placed');
       this.checkItemDest(data);
     }, this);
 
     this.itemGroup.add(item);
-  },
+  }
 
-  removeItemFromInventory: function (item, slot) {
+
+  // Move item from inventory to room
+  removeItemFromInventory (item, slot) {
 
     this.currentRoom.items.push( {"name" : item.name} );
 
     this.inventory.remove(slot.item);
     this.itemGroup.add(item);
     this.clearSlot(slot);
-  },
+  }
 
-  moveItemToInventory: function (item, slot) {
+
+  // Move item from room to inventory
+  moveItemToInventory (item, slot) {
 
     // move item from itemGroup to inventory group
     // if slot occupied, move item to room floor, random pos
@@ -1726,21 +1791,18 @@ BasicGame.Game.prototype = {
 
     this.itemGroup.remove(item);
     this.inventory.add(item);
-  },
+  }
 
-  moveToCenter: function (obj1, obj2) {
 
-    // centers obj1 onto obj2
-
+  // Centers obj1 onto obj2 
+  moveToCenter (obj1, obj2) {
     obj1.x = obj2.x + obj2.width/2 - obj1.width/2;
     obj1.y = obj2.y + obj2.height/2 - obj1.height/2;
-  },
+  }
 
-  inBounds: function (obj1, obj2) {
-  
-    // sprite bounds comparison
-    // checks if obj1 is in the bounds of obj2 
 
+  // Sprite bounds comparison; checks if obj1 is in the bounds of obj2  
+  inBounds (obj1, obj2) {
     var obj = obj1.getBounds();
     var bound = obj2.getBounds();
 
@@ -1750,33 +1812,35 @@ BasicGame.Game.prototype = {
     } else {
       return false;
     }
-  },
+  }
 
-  saveItems: function () {
+
+  // Save room's item information
+  saveItems () {
     // iter each item in itemGroup, the local items
     // save new position of each item to room.items
 
     this.itemGroup.forEach(function(item) {
       for (var i = 0; i < this.currentRoom.items.length ; i++) {
         if (item.name == this.currentRoom.items[i].name) {
-          //console.log('saving ' + item.name + ' location');
+          if (__DEBUG__) console.log('saving ' + item.name + ' location');
           this.currentRoom.items[i].x = item.x;
           this.currentRoom.items[i].y = item.y;
           break;  
         }
       }
     }, this);
-  },
+  }
 
-  // - - -
 
-  enableInput: function (bool) {
-    
+  // Toggle player input
+  enableInput (bool) { 
     this.input.enabled = bool;
-  },
+  }
 
-  checkMusic: function () {
 
+  // Check if music needs to be updated
+  checkMusic() {
     if (this.currentMusic != this.currentRoom.music) {
       
       this.music ? this.music.fadeOut(): null;
@@ -1784,7 +1848,7 @@ BasicGame.Game.prototype = {
 
       if (this.currentMusic != null) {
         
-        //console.log('playing music: '+this.currentMusic);
+        if (__DEBUG__) console.log('playing music: '+this.currentMusic);
         this.music = this.game.sound.add(this.currentMusic, 1, true);
         this.music.onDecoded.add(function() {
           //this.music.play(); 
@@ -1793,21 +1857,32 @@ BasicGame.Game.prototype = {
         
       }
     } 
-  },
+  }
 
-  changeRoomText: function (string) {
-    
+
+  // Change room GUI text
+  changeRoomText (string) {
     this.text.text = string;
-  },
+  }
 
-  importGrid: function () {
+
+  // Change pathing grid
+  importGrid() {
     
     var roomJson = this.currentRoom.name + '_json';    
     var gridJson = this.cache.getJSON(roomJson);
     this.grid.nodes = gridJson;
 
-    if (this.debug) {
+    if (__DEBUG__) {
+      
+      // Clear old debug tiles
+      for (var x = 0; x < this.tileX; x++) {
+        for (var y = 0; y < this.tileY; y++) {
+          this.map.removeTile(x, y, this.layer);
+        }
+      }
 
+      // Make debug tiles
       for (var i = 0; i < gridJson.length ; i++) {
         for ( var j = 0 ; j < gridJson[i].length ; j++ ) {
           if (!gridJson[i][j].walkable) {
@@ -1817,21 +1892,24 @@ BasicGame.Game.prototype = {
         }
       }
     }
-  },
+  }
 
-  clone: function (object) {
+
+  // Create a clone of an object
+  clone (object) {
 
     var clone = {};
   
-    for (value in object) {
+    for (const [value, _] of Object.entries(object)) {
       clone[value] = object[value];
     }    
     
     return clone;
-  }, 
+  }
 
-  getSprite: function (key) {
-    // get current sprite object using cache key
+
+  // Retrieve sprite by key from the cache
+  getSprite (key) {
     var i = this.world.children.length;
     while (i--) 
     {
@@ -1852,12 +1930,13 @@ BasicGame.Game.prototype = {
         }
       }
     }
-  },
+  }
 
-  showSprite: function (sprite, bool) {
-    console.log('show sprite? ' + sprite.key + ':' + bool);
+
+  // Toggle a sprite's alpha
+  showSprite (sprite, bool) {
+    if (__DEBUG__) console.log('show sprite? ' + sprite.key + ':' + bool);
     var alpha = bool ? 1:0;
     sprite.alpha = alpha;
   }
-
-};
+}

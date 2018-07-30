@@ -1,4 +1,5 @@
 node_modules
 *.log
-builds/production
+dist
+build
 .publish

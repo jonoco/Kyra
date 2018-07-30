@@ -454,7 +454,7 @@ export default class extends Phaser.State {
     
     // only update if activating quest or quest activated 
     if ( active && !stepComplete && conditionsMet ) {
-      if (__DEBUG__) console.log('all conditions met for quest');
+      if (__DEBUG__) console.log('all conditions met for quest ' + quest.name);
       this.quests[quest.name][quest.step] = true;
       
       var events = this.quests[quest.name].events[quest.step];

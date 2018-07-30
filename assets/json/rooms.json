@@ -20,7 +20,7 @@
 			{ "name": "books", "x": 730, "y": 180, "height": 30, "width": 70 },
 			{ "name": "cauldron", "x": 75, "y": 290, "height": 50, "width": 100 }
 		],
-		"grid": "js/json/room01.json",
+		"grid": "assets/json/room01.json",
 		"path": "assets/screens/room01.png",
 		"doors": { 
 			"room07": { 
@@ -45,7 +45,7 @@
 			{ "name": "branch down", "x": 694, "y": 24 }
 		],
 		"blocks": [],
-		"grid": "js/json/room02.json",
+		"grid": "assets/json/room02.json",
 		"path": "assets/screens/room02.png",
 		"doors": { 
 			"room07": { 
@@ -92,7 +92,7 @@
 			{ "name": "brandon wow", "x": 288, "y": 200 } 
 		],
 		"blocks": [],
-		"grid": "js/json/room03.json",
+		"grid": "assets/json/room03.json",
 		"path": "assets/screens/room03.png",
 		"doors": { 
 			"room04": { 
@@ -123,7 +123,7 @@
 			{ "name": "oak1", "x": 422, "y": 26 }
 		],
 		"blocks": [],
-		"grid": "js/json/room04.json",
+		"grid": "assets/json/room04.json",
 		"path": "assets/screens/room04.png",
 		"doors": { 
 			"room03": { 
@@ -151,7 +151,7 @@
 		"items": [],
 		"sprites": [{ "name": "temple entrance", "x": 410, "y": 120 }],
 		"blocks": [],
-		"grid": "js/json/room05.json",
+		"grid": "assets/json/room05.json",
 		"path": "assets/screens/room05.png",
 		"doors": { 
 			"room04": { 
@@ -183,7 +183,7 @@
 			{ "name": "brynn", "x": 110, "y": 180 }
 		],
 		"blocks": [],
-		"grid": "js/json/room06.json",
+		"grid": "assets/json/room06.json",
 		"path": "assets/screens/room06-1.png",
 		"doors": {
 			"room05": { 
@@ -210,7 +210,7 @@
 			{ "name": "flowerbox", "x": 300, "y": 250, "height": 50, "width": 150 },
 			{ "name": "treehouseSymbol", "x": 285, "y": 90, "height": 80, "width": 90 }
 		],
-		"grid": "js/json/room07.json",
+		"grid": "assets/json/room07.json",
 		"path": "assets/screens/room07.png",
 		"doors": { 
 			"room01": { 
@@ -244,7 +244,7 @@
 			{ "name": "redwood1", "x": 500, "y": 44 }
 		],
 		"blocks": [],
-		"grid": "js/json/room08.json",
+		"grid": "assets/json/room08.json",
 		"path": "assets/screens/room08.png",
 		"doors": { 
 			"room02": { 
@@ -281,7 +281,7 @@
 			{ "name": "pool", "x": 220 , "y": 0 }
 		],
 		"blocks": [],
-		"grid": "js/json/room09.json",
+		"grid": "assets/json/room09.json",
 		"path": "assets/screens/room09.png",
 		"doors": { 
 			"room08": { 
@@ -312,7 +312,7 @@
 			{ "name": "birch3", "x": 630, "y": 24 }
 		],
 		"blocks": [],
-		"grid": "js/json/room11.json",
+		"grid": "assets/json/room11.json",
 		"path": "assets/screens/room11.png",
 		"doors":  {
 			"room09": { 
@@ -351,7 +351,7 @@
 			{ "name": "oak2-r", "x": 200, "y": 24 }
 		],
 		"blocks": [],
-		"grid": "js/json/room12.json",
+		"grid": "assets/json/room12.json",
 		"path": "assets/screens/room12.png",
 		"doors": {
 			"room11": { 
@@ -387,7 +387,7 @@
 		"items": [],
 		"sprites": [],
 		"blocks": [],
-		"grid": "js/json/room13.json",
+		"grid": "assets/json/room13.json",
 		"path": "assets/screens/room13.png",
 		"doors": {
 			"room12": { 
@@ -412,7 +412,7 @@
 		  { "name": "altar", "x": 384, "y": 100 }
 		],
 		"blocks": [],
-		"grid": "js/json/room14.json",
+		"grid": "assets/json/room14.json",
 		"path": "assets/screens/room14-2.png",
 		"doors": { 
 			"room12": { 
@@ -440,7 +440,7 @@
 		"items": [{ "name": "amythyst", "x": 400, "y": 350 }],
 		"sprites": [],
 		"blocks": [],
-		"grid": "js/json/room16.json",
+		"grid": "assets/json/room16.json",
 		"path": "assets/screens/room16.png",
 		"doors": { 
 			"room14": { 
@@ -463,7 +463,7 @@
 			{ "name": "cut tree", "x": 26, "y": 24 }
 		],
 		"blocks": [],
-		"grid": "js/json/room17.json",
+		"grid": "assets/json/room17.json",
 		"path": "assets/screens/room17.png",
 		"doors": { 
 			"room11": { 
@@ -491,7 +491,7 @@
 		"items": [],
 		"sprites": [{ "name": "cave entrance", "x": 22, "y": 24 }],
 		"blocks": [],
-		"grid": "js/json/room18.json",
+		"grid": "assets/json/room18.json",
 		"path": "assets/screens/room18.png",
 		"doors": {
 			"room17": { 
@@ -521,7 +521,7 @@
 		"sprites": [{ "name": "herman", "x": 610, "y": 148 }],
 		"altSprites": [],
 		"blocks": [],
-		"grid": "js/json/room19.json",
+		"grid": "assets/json/room19.json",
 		"path": "assets/screens/room19.png",
 		"doors": {
 			"room18": { 

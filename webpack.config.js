@@ -12,10 +12,10 @@ var p2 = path.join(phaserModule, 'build/custom/p2.js')
 
 module.exports = env => {
 
-  if (env) {
-    console.log('env.dev: ' + env.dev);
-    console.log('env.debug: ' + env.debug);  
-  }
+  env = env || {};
+
+  console.log('env.dev: ' + env.dev);
+  console.log('env.debug: ' + env.debug);    
 
   return {
     entry: {

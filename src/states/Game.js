@@ -1,4 +1,4 @@
-/* globals __DEV__ __DEBUG__ */
+/* globals  __DEBUG__ */
 import Phaser from 'phaser';
 import PF from 'pathfinding';
 import Mushroom from '../sprites/Mushroom';

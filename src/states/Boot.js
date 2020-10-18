@@ -22,22 +22,22 @@ export default class extends Phaser.State {
       })
     }
 
-    this.kyrandiaFont = this.add.text();
-    this.kyrandiaFont.font = 'kyrandia';
+    this.kyrandiaFont = this.add.text()
+    this.kyrandiaFont.font = 'kyrandia'
 
-    let text = this.add.text(this.world.centerX, this.world.centerY, 'loading fonts', { font: '16px Arial', fill: '#dddddd', align: 'center' })
+    let text = this.add.text(
+      this.world.centerX,
+      this.world.centerY,
+      'loading fonts',
+      { font: '16px Arial', fill: '#dddddd', align: 'center' }
+    )
     text.anchor.setTo(0.5, 0.5)
 
     this.load.image('preloaderBackground', 'assets/img/title.png');
   }
 
   render() {
-    if (config.webfonts.length && this.fontsReady) {
-      this.state.start('Preloader')
-    }
-    if (!config.webfonts.length) {
-      this.state.start('Preloader')
-    }
+    this.state.start('Preloader')
   }
 
   fontsLoaded() {

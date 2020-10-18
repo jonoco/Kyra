@@ -3,9 +3,14 @@ import Phaser from 'phaser';
 import PF from 'pathfinding';
 import Mushroom from '../sprites/Mushroom';
 import lang from '../lang';
+import events from '../events'
+import Quests from '../quests'
+import itemAtlas from '../items'
 
 export default class extends Phaser.State {
-  init() { 
+  init() {
+    this.Quests = new Quests()
+
     // game debugging
     this.startRoom = 'room01';
 
@@ -16,31 +21,7 @@ export default class extends Phaser.State {
     this.quests;
     this.eventTriggers;
     this.eventQueue = [];
-    this.blockEvents = {
-      kallak: [
-        { say: "Lookin good old man" }, 
-        { say: "Very stoney" }, 
-        { say: "Like Rocky Balboa" } ],
-      bed: [
-        { say: "This bed was made from" }, 
-        { say: "the finest horses in Kyrandia" }, 
-        { say: "Like Rocky Balboa" }],
-      window: [
-        { say: "The forest really is dying" },
-        { say: "Like Rocky Balboa" }],
-      books: [
-        { say: "How To Seduce A Harpy, by Ono Badidia" }],
-      cauldron: [
-        { addItem: {item: "apple", x: 110, y: 260} },
-        { say: "My apple!" },
-        { killBlock: 'cauldron' }],
-      flowerbox: [
-        { say: "These flowers smell wonderful" },
-        { say: "Like Rocky Balboa" }],
-      treehouseSymbol: [
-        { say: "That's grandfather's mark as a magic user" },
-        { say: "so those damn kids will stay away" }]
-    };
+    this.blockEvents = events
 
     // tilemap variables
     this.tileSize = 8;
@@ -71,7 +52,7 @@ export default class extends Phaser.State {
       };
 
     // inventory variables
-    this.slots = [ 
+    this.slots = [
       {x:286, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
       {x:346, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
       {x:406, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
@@ -79,93 +60,11 @@ export default class extends Phaser.State {
       {x:526, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
       {x:286, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
       {x:346, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
-      {x:406, y:545, height: 46, width: 44, name: null, item: null, occupied: false}, 
-      {x:466, y:545, height: 46, width: 44, name: null, item: null, occupied: false}, 
-      {x:526, y:545, height: 46, width: 44, name: null, item: null, occupied: false} 
+      {x:406, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
+      {x:466, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
+      {x:526, y:545, height: 46, width: 44, name: null, item: null, occupied: false}
     ];
-    this.itemAtlas = {
-      garnet        : 0,
-      amythyst      : 1,
-      aquamarine    : 2,
-      diamond       : 3,
-      emerald       : 4,
-      opal          : 5,
-      ruby          : 6,
-      peridot       : 7,
-      sapphire      : 8,
-      prismarine    : 9,
-      topaz         : 10,
-      coal          : 11,
-      sunstone      : 12,
-      moonstone     : 13,
-      rainbowstone  : 14,
-      lodestone     : 15,
-      rose          : 16,
-      tulip         : 17,
-      orchid        : 18,
-      magic_rose    : 19,
-      horse         : 20,
-      silver_coin   : 21,
-      gold_coin     : 22,
-      ring          : 23,
-      chalice       : 24,
-      pinecone      : 25,
-      acorn         : 26,
-      walnut        : 27,
-      fireberry1    : 28,
-      fireberry2    : 29,
-      fireberry3    : 30,
-      fireberry4    : 31,
-      fireberry5    : 32,
-      fireberry6    : 33,
-      fish          : 34,
-      fishbone      : 35,
-      meat          : 36,
-      bone          : 37,
-      apple         : 38,
-      apple_core    : 39,
-      blueberry     : 40,
-      mushroom      : 41,
-      note          : 42,
-      marble        : 43,
-      saw           : 44,
-      figure        : 45,
-      feather       : 46,
-      item48        : 47,
-      shell         : 48,
-      clover        : 49,
-      star          : 50,
-      fountainorb   : 51,
-      tear          : 52,
-      mirror        : 53,
-      dish          : 54,
-      flute         : 55,
-      hourglass     : 56,
-      iron_key      : 57,
-      green_key     : 58,
-      blue_key      : 59,
-      red_potion    : 60,
-      red_flask     : 61,
-      blue_potion   : 62,
-      blue_flask    : 63,
-      yellow_potion : 64,
-      yellow_flask  : 65,
-      green_flask   : 66,
-      orange_flask  : 67,
-      purple_flask  : 68,
-      rainbow_flask : 69,
-      water_potion  : 70,
-      water_flask   : 71,
-      water_potion  : 72,
-      water_flask   : 73,
-      water_potion  : 74,
-      water_flask   : 75,
-      water_potion  : 76,
-      water_flask   : 77,
-      potion        : 78,
-      flask         : 79,
-      scroll        : 80
-    }; // TODO load atlas from item-atlas.json
+    this.itemAtlas = itemAtlas
     this.inventory;
     this.slotsGroup;
     this.itemGroup;
@@ -200,8 +99,9 @@ export default class extends Phaser.State {
     this.stage.backgroundColor = '#2d2d2d';
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.createQuests();
-    
+    this.quests = this.Quests.quests
+    this.eventTriggers = this.Quests.triggers
+
     this.createRoom();
     this.spritesGroup = this.game.add.group();
     this.createGui();
@@ -237,7 +137,7 @@ export default class extends Phaser.State {
 
     if (this.openDoor) {
       this.physics.arcade.overlap(this.player, this.doorGroup, this.peekInDoor, null, this);
-    } 
+    }
 
     if (this.eventQueue.length) {
       this.enableInput(false);
@@ -276,190 +176,8 @@ export default class extends Phaser.State {
 
     endMessage.events.onInputDown.add(function () {
       this.cache.destroy();
-      this.state.start('MainMenu');  
+      this.state.start('MainMenu');
     }, this);
-  }
-
-
-  // Create quest scaffold and quest events
-  createQuests () {
-   /*
-    * current available event commands:
-    * say, wait, turn, togAnim, modAttr, modMeta, playAnim, addItem,
-    *  removeItem, move, signal, altRoom, killSprite, killBlock, sayAnim 
-    *
-    * say: [string, sprite, color] - create speech text for any current sprite by cache key
-    *   also results in playing 'talk' animation of sprite, if exists 
-    * modAttr: [sprite, attr, value] - modify attribute of any current sprite or image object
-    * modMeta: [sprite, attr, value] - change sprite meta data
-    * playAnim: [sprite, animation, kill] - play animation of current sprite objects
-    * togAnim: [sprite, animation, start] - toggle animation state of any sprite meta
-    * addItem: [item, x, y] - add new item to current room
-    * removeItem: [item] - removes one instance of item from current room
-    * signal: [string] - directly call evalEvent to trigger another quest event
-    * altRoom: [true] - change current room's texture to alternate
-    * sayAnim: [sprite, animation, kill, say, color] - play animation with text
-    * moveSprite [sprite, path] - tween sprites
-    * modRoomMeta [room, attr, door, value]
-    *
-    * see exeEvent for handling
-    */
-    
-    this.quests = {
-      willow: {
-        active: false,
-        complete: false,
-        gotTear: false,
-        treeHealed: false,
-        events : {
-          active: [ 
-            { say: "Even the willow tree is dying" }, 
-            { wait: 100 },
-            { say: "What's going on around here?!" }
-          ],
-          gotTear: [ 
-            { say: "I bet I could catch a tear drop" },
-            { wait: 1300 },
-            { say: "I'll take that bet!" },
-            { move: { x: 612, y: 264 } },
-            { playAnim: { sprite: "catch", animation: "on", kill: true } },
-            { addItem: {item: "tear", x: 570, y: 290} },
-            { say: "Now i can heal the willow tree!" } 
-          ],
-          treeHealed: [ 
-            { removeItem: "tear" },
-            { move: { x: 384, y: 344 } },
-            { say: "I think this tear drop should fit" },
-            { playAnim: { sprite: "willow", animation: "on", hide: false } },
-            { altRoom: "room03" },
-            { wait: 300 },
-            { modAttr: { sprite: "player", attr: "alpha", value: 0 } },
-            { sayAnim: { sprite: "brandon wow", animation: "on", kill: true, say: "wow!" } },
-            { wait: 1500 },
-            { modAttr: { sprite: "player", attr: "alpha", value: 1 } },
-          ]
-        }
-      },
-
-      brynn: {
-        active: false,
-        amulet: false,
-        events: {
-          active: [
-            { wait: 4000 },
-            { modAttr: { sprite: "brynn enter", attr: "alpha", value: 0 } },
-            { sayAnim: { sprite: "brynn", animation: "talk", say: "Welcome, Brandon", color: "brynn" } },
-            { wait: 300 },
-            { playAnim: { sprite: "brynn", animation: "idle" } },
-            { modAttr: { sprite: "altar", attr: "inputEnabled", value: true } }
-          ],
-          amulet: [
-            { playAnim: { sprite: "amulet", animation: "on" } },
-            { modAttr: { sprite: "altar", attr: "alha", value: 1 } },
-            { say: "I can feel the power!!" }
-          ]
-        }
-      },
-
-      bridge: {
-        active: true,
-        cave: false,
-        saw: false,
-        giveSaw: false,
-        fixed: false,
-        complete: false,
-        events: {
-          cave: [
-            { modAttr: { sprite: "herman", attr: "alpha", value: 1 } },
-            { playAnim: { sprite: "herman", animation: "stand up" } },
-            { sayAnim: { sprite: "herman", animation: "stand talk 1", say: "It's not my fault", color: "herman" } },
-            { playAnim: { sprite: "herman", animation: "hunch down" } }
-          ],
-          giveSaw: [
-            { removeItem: "saw" },
-            { move: { x: 770, y: 280 }},
-            { playAnim: { sprite: "herman", animation: "stand up" } },
-            { sayAnim: { sprite: "herman", animation: "stand talk 3", say: "That's a pretty old saw", color: "herman" } },
-            { playAnim: { sprite: "herman", animation: "stand idle" } },
-            { say: "Oh, this is just a stiff old sock" },
-            { say: "But it could probably cut down a tree now" },
-            { wait: 1200 },
-            { sayAnim: { sprite: "herman", animation: "stand talk 3", say: "Uh, yeah ...", color: "herman" } },
-            { sayAnim: { sprite: "herman", animation: "stand talk 1", say: "Well, I'll go cut down some trees then", color: "herman" } },
-            { moveSprite: { sprite: "herman", path: [[730/8,220/8], [950/8, 220/8]], animation: "walk" } },
-            { turn: "right" },
-            { wait: 900 },
-            { say: "I hope he doesn't cut his leg off" },
-            { togAnim: { sprite: "herman sawing", animation: "saw", start: true } }
-          ],
-          saw: [
-            { say: "Grandfather's saw" },
-            { killSprite: "saw_holder" },
-            { modMeta: { sprite: "saw_holder_empty", attr: "invisible", value: false } },
-            { modAttr: { sprite: "saw_holder", attr: "alpha", value: 0 } },
-            { modAttr: { sprite: "saw_holder_empty", attr: "alpha", value: 1 } },
-            { addItem: {item: "saw", x: 750, y: 340} }
-          ],
-          fixed: [
-            { say: "I wonder if the bridge is fixed..." },
-            { altRoom: "room19" },
-            { modMeta: { sprite: "cut tree", attr: "invisible", value: false } },
-            { modMeta: { sprite: "herman sawing", attr: "invisible", value: true } },
-            { modAttr: { sprite: "herman sawing", attr: "inputEnabled", value: false } }
-          ],
-          complete: [
-            { say: "The bridge is repaired!" },
-            { move: { x: 760, y: 300 }},
-            { say: "But where did Herman go? ..." },
-            { wait: 1000 },
-            { quit: true }
-          ]
-        }
-      }
-    };
-
-    // eventTriggers links events to quests
-    // if a room is an event, it's triggered upon entering
-    // all <conditions> must be true for <step> to occur
-    // { name: "quest", step: "step", condition: "step" }
-
-    this.eventTriggers = {
-      pool: [{ name: "willow", step: "gotTear", conditions: { active: true } }],
-      room03: [{ name: "willow", step: "active", conditions: { active: false } }],
-      "willow-tear": [{ name: "willow", step: "treeHealed", conditions: { gotTear: true } }],
-      room06: [{ name: "brynn", step: "active", conditions: { active: false } }],
-      altar: [{ name: "brynn", step: "amulet" }],
-      room19: [
-        { name: "bridge", step: "cave", conditions: { active: true }},
-        { name: "bridge", step: "complete", conditions: { fixed: true }}],
-      "saw_holder": [{ name: "bridge", step: "saw" }],
-      "herman-saw": [{ name: "bridge", step: "giveSaw" }],
-      room02: [{ name: "bridge", step: "fixed", conditions: { giveSaw: true } }]
-    };
-  }
-
-
-  // Update quest status and execute event chain
-  updateQuest (quest) {
-    var conditionsMet = true;
-    var stepComplete = this.quests[quest.name][quest.step];
-    var active = ( quest.step == 'active' || this.quests[quest.name]['active'] );
-
-    for (var condition in quest.conditions) {
-
-      if (this.quests[quest.name][condition] != quest.conditions[condition]) {
-        conditionsMet = false;
-      }
-    }
-    
-    // only update if activating quest or quest activated 
-    if ( active && !stepComplete && conditionsMet ) {
-      if (__DEBUG__) console.log('all conditions met for quest ' + quest.name);
-      this.quests[quest.name][quest.step] = true;
-      
-      var events = this.quests[quest.name].events[quest.step];
-      this.queueEvents(events); 
-    }
   }
 
 
@@ -472,7 +190,8 @@ export default class extends Phaser.State {
       if (__DEBUG__) console.log('there is a quest linked to this event');
       var i = this.eventTriggers[event].length;
       while (i--) {
-        this.updateQuest(this.eventTriggers[event][i]);  
+        const events = Quests.updateQuest(this.eventTriggers[event][i]);
+        this.queueEvents(events);
       }
     }
 
@@ -483,12 +202,12 @@ export default class extends Phaser.State {
   }
 
 
-  // Add an event array to the event queue 
+  // Add an event array to the event queue
   queueEvents (events) {
     var i = events.length;
     while (i--) {
-      this.eventQueue.push(events[i]); 
-    } 
+      this.eventQueue.push(events[i]);
+    }
   }
 
 
@@ -532,7 +251,7 @@ export default class extends Phaser.State {
 
 
   // Events
-  
+
 
   // Remove block, e.g. after executing one-time block
   killBlock (block) {
@@ -571,17 +290,17 @@ export default class extends Phaser.State {
     var roomSprites = this.currentRoom.sprites;
     var newSprite;
     var spriteProperty;
-    
+
     for (var i = 0 ; i < roomSprites.length ; i++ ) {
       spriteProperty = this.spritesJSON[roomSprites[i].name];
       newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name);
-      
+
       if (spriteProperty.scale) {
 
-        newSprite.scale.setTo(spriteProperty.scale); 
+        newSprite.scale.setTo(spriteProperty.scale);
       } else {
-        // all source assets scaled by 3  
-        newSprite.scale.setTo(3); 
+        // all source assets scaled by 3
+        newSprite.scale.setTo(3);
       }
 
       if (spriteProperty.invisible) {
@@ -594,7 +313,7 @@ export default class extends Phaser.State {
       }
 
       spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;
-      spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null; 
+      spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null;
       spriteProperty.startFrame ? this.setFrame(newSprite, spriteProperty.startFrame):null;
     }
   }
@@ -605,7 +324,7 @@ export default class extends Phaser.State {
   createBlocks () {
     var blank;
     var blocks = this.currentRoom.blocks;
-    
+
     var i = blocks.length;
     while (i--) {
       blank = this.blockGroup.create( blocks[i].x, blocks[i].y);
@@ -613,7 +332,7 @@ export default class extends Phaser.State {
       blank.width = blocks[i].width;
       blank.name = blocks[i].name;
       blank.inputEnabled = true;
-      blank.events.onInputDown.add(function (data) { 
+      blank.events.onInputDown.add(function (data) {
         this.evalBlock(data.name);
       }, this);
 
@@ -631,7 +350,7 @@ export default class extends Phaser.State {
   // Compile a sprite's animations
   createSpriteAnimation (sprite, property) {
     var animations = property.animations;
-        
+
     for (const [anim, _] of Object.entries(animations)) {
       sprite.animations.add(
         animations[anim].name,
@@ -655,12 +374,12 @@ export default class extends Phaser.State {
     var action = property.action;
 
     sprite.inputEnabled = true;
-    if (action.click) {  
+    if (action.click) {
       sprite.events.onInputDown.add(function (data) {
         this.evalEvent(sprite.key);
 
         if (action.click.animation) {
-          
+
           sprite.alpha = 1;
           this.animation = sprite.animations.play(action.click.animation, null, false, true);
           this.animation.onComplete.add(function (data) {
@@ -673,7 +392,7 @@ export default class extends Phaser.State {
           //say something
           this.say(action.click.text);
         }// if has text on click
-        
+
       }, this);
     }// if has click action
 
@@ -701,7 +420,7 @@ export default class extends Phaser.State {
     this.speech.stroke = '#000000';
     this.speech.strokeThickness = 2;
     this.speech.kill();
-    
+
     this.text = this.add.text();
     this.text.font = 'kyrandia';
     this.text.x = 25;
@@ -719,7 +438,7 @@ export default class extends Phaser.State {
     this.createItems();
     this.createSprites();
     this.importGrid();
-    this.checkMusic();  
+    this.checkMusic();
     this.changeRoomText(this.currentRoom.text);
   }
 
@@ -742,9 +461,9 @@ export default class extends Phaser.State {
     this.amulet.alpha = 0;
 
     this.amulet.animations.add('on', [
-      "amulet-1", "amulet-2", "amulet-3", "amulet-4", "amulet-5", "amulet-6", 
-      "amulet-7", "amulet-8", "amulet-9", "amulet-10", "amulet-11", "amulet-12", 
-      "amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18", 
+      "amulet-1", "amulet-2", "amulet-3", "amulet-4", "amulet-5", "amulet-6",
+      "amulet-7", "amulet-8", "amulet-9", "amulet-10", "amulet-11", "amulet-12",
+      "amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18",
       "amulet-19", "amulet-20", "amulet-21", "amulet-22", "amulet-23"],
       8, true, false);
   }
@@ -767,7 +486,7 @@ export default class extends Phaser.State {
       //   slotBackground.drawRect(x, y, width, height);
       //   slotBackground.endFill();
       //   this.slotsGroup.add(slotBackground);
-      
+
 
       var slot = this.slotsGroup.create( x, y );
         slot.width = width;
@@ -787,7 +506,7 @@ export default class extends Phaser.State {
       make each item draggable
       save inventory items in separate inventory object
     */
-    
+
     this.items = this.currentRoom.items;
 
     for (var i = 0 ; i < this.items.length ;i++) {
@@ -806,26 +525,26 @@ export default class extends Phaser.State {
       'right-1','right-2','right-3','right-4',
       'right-5','right-6','right-7', 'right-8'
     ], 10, true, false);
-    
+
     this.player.animations.add('walk-left', [
       'left-1','left-2','left-3','left-4',
       'left-5','left-6','left-7', 'left-7'
     ], 10, true, false);
-    
+
     this.player.animations.add('walk-up', [
       'up-1','up-2','up-3','up-4',
       'up-5','up-6'
     ], 10, true, false);
-    
+
     this.player.animations.add('walk-down', [
       'down-1','down-2','down-3','down-4',
       'down-5','down-6'
     ], 9, true, false);
 
     this.player.animations.add('talk', [
-      'talk-1', 'talk-2', 'talk-3', 'talk-4', 
-      'talk-5', 'talk-6', 'talk-7', 'talk-8', 
-      'talk-9', 'talk-10', 'talk-11', 'talk-12', 
+      'talk-1', 'talk-2', 'talk-3', 'talk-4',
+      'talk-5', 'talk-6', 'talk-7', 'talk-8',
+      'talk-9', 'talk-10', 'talk-11', 'talk-12',
     ], 8, true, false);
 
     this.player.scale.setTo(3);
@@ -916,9 +635,9 @@ export default class extends Phaser.State {
         doorBg.drawRect(x, y, width, height);
         doorBg.endFill();
 
-        this.doorDebug.add(doorBg);  
+        this.doorDebug.add(doorBg);
       }
-    } 
+    }
   }
 
 
@@ -930,16 +649,16 @@ export default class extends Phaser.State {
     // move sprites behind/in front of player
     for (var i = 0 ; i < this.spritesGroup.length ; i++) {
       var sprite = this.spritesGroup.children[i];
-      
+
       if (sprite.name == 'player') {
-        //pass  
+        //pass
       } else if (this.player.bottom < sprite.bottom) {
         // sprite is in front of player
         sprite.bringToTop();
       } else {
         // sprite is behind player
         sprite.sendToBack();
-      }  
+      }
     }
   }
 
@@ -949,7 +668,7 @@ export default class extends Phaser.State {
 
     if (Math.abs(this.player.deltaY) > Math.abs(this.player.deltaX)) {
       // change to up//down texture
-      
+
       if (this.player.deltaY > 0) {
 
         this.player.animations.play('walk-down');
@@ -957,7 +676,7 @@ export default class extends Phaser.State {
 
       } else if ( this.player.deltaY < 0) {
 
-        this.player.animations.play('walk-up');        
+        this.player.animations.play('walk-up');
         this.direction = 'up';
       }
 
@@ -981,7 +700,7 @@ export default class extends Phaser.State {
         this.player.animations.stop();
       }
 
-    } else {  
+    } else {
       //stop
       this.talkingSprite ? this.talkingSprite.animations.stop():null;
 
@@ -992,7 +711,7 @@ export default class extends Phaser.State {
         this.player.animations.stop();
         this.player.frameName = 'stand-right';
       }
-    }      
+    }
   }
 
 
@@ -1001,20 +720,20 @@ export default class extends Phaser.State {
 
   // Sprite talking
   say (string, key, color) {
-    
+
     // include key for event evaluation
     var sprite = key ? this.getSprite(key): this.player;
     var textColor = color ? color: "player";
 
-    this.speech.revive(); 
+    this.speech.revive();
     this.speech.x = sprite.x;
     this.speech.y = sprite.top-40;
-    this.speech.text = string; 
+    this.speech.text = string;
     this.speech.stroke = '#000000';
     this.speech.strokeThickness = 5;
     this.speech.fill = this.colorAtlas[textColor];
     this.speech.name = sprite.key;
-    
+
     if (this.speech.right > 920) {
       this.speech.x -= this.speech.right - 920;
     }
@@ -1028,7 +747,7 @@ export default class extends Phaser.State {
       this.evalEvent(sprite.key);
     }, this);
 
-    var length = string.split(' ').length; 
+    var length = string.split(' ').length;
     var timer = this.time.create();
     timer.add(length*400, function () {
       this.speech.kill();
@@ -1042,11 +761,11 @@ export default class extends Phaser.State {
     if (__DEBUG__) console.log('turning ' + direction);
 
     if (direction == 'left') {
-      this.player.frameName = 'stand-left';  
+      this.player.frameName = 'stand-left';
     } else if (direction == 'right') {
-      this.player.frameName = 'stand-right';  
+      this.player.frameName = 'stand-right';
     }
-    
+
     this.evalEvent(direction);
   }
 
@@ -1060,7 +779,7 @@ export default class extends Phaser.State {
 
     timer = this.time.create()
     timer.add(time, function () {
-      this.evalEvent(time);  
+      this.evalEvent(time);
     }, this)
     timer.start();
   }
@@ -1098,9 +817,9 @@ export default class extends Phaser.State {
     var door = data.door || null;
 
     if (door) {
-      this.roomsJSON[room][attr][door] = value;      
+      this.roomsJSON[room][attr][door] = value;
     } else {
-      this.roomsJSON[room][attr] = value;  
+      this.roomsJSON[room][attr] = value;
     }
 
     this.evalEvent(room+attr);
@@ -1117,10 +836,10 @@ export default class extends Phaser.State {
     var value = data.value;
 
     var i = this.world.children.length;
-    while (i--) 
+    while (i--)
     {
       if (this.world.children[i].name == "group" && this.world.children[i].children.length) {
-        
+
         var j = this.world.children[i].children.length;
         while (j--) {
 
@@ -1128,14 +847,14 @@ export default class extends Phaser.State {
             // found object
             this.world.children[i].children[j][attr] = value;
             this.evalEvent('mod-' + key);
-            return true; 
-          } 
-          
+            return true;
+          }
+
         }
       } else if (this.world.children[i].name != "group") {
         if (this.world.children[i].key == key) {
           // found object
-          this.world.children[i][attr] = value; 
+          this.world.children[i][attr] = value;
           this.evalEvent('mod-' + key);
           return true;
          }
@@ -1214,7 +933,7 @@ export default class extends Phaser.State {
 
 
     var i = this.currentRoom.items.length;
-    while (i--) 
+    while (i--)
     {
       if (this.currentRoom.items[i].name == itemName) {
         this.currentRoom.items.splice( i, 1 );
@@ -1229,7 +948,7 @@ export default class extends Phaser.State {
 
   // Change room to alternate version
   altRoom (room) {
-    
+
     var newTexture = room + '-alt';
     var newText = this.roomsJSON[room].altText;
     var newSprites = this.roomsJSON[room].altSprites;
@@ -1237,7 +956,7 @@ export default class extends Phaser.State {
     this.roomsJSON[room].alt = true;
 
     if (newSprites) {
-      this.roomsJSON[room].sprites = this.roomsJSON[room].altSprites;  
+      this.roomsJSON[room].sprites = this.roomsJSON[room].altSprites;
     }
 
     if (newText) {
@@ -1250,7 +969,7 @@ export default class extends Phaser.State {
       this.spritesGroup.remove(this.player);
       this.world.addAt(this.player, 1);
       this.spritesGroup.removeAll(true);
-      
+
       this.createSprites();
       this.world.remove(this.player);
       this.spritesGroup.add(this.player);
@@ -1308,7 +1027,7 @@ export default class extends Phaser.State {
     if (this.tween) {
       this.tween.stop(true);
       this.tweens.remove(this.tween);
-    } 
+    }
   }
 
 
@@ -1319,14 +1038,14 @@ export default class extends Phaser.State {
     var startY = this.layer.getTileY(this.player.position.y);
     var endX = this.layer.getTileX(position.x);
     var endY = this.layer.getTileY(position.y);
-    
-    if (__DEBUG__) console.log("moving " + startX +','+ startY + " to " + endX +','+ endY);  
+
+    if (__DEBUG__) console.log("moving " + startX +','+ startY + " to " + endX +','+ endY);
 
     if (startX != endX || startY != endY) {
 
       var grid = this.grid.clone();
       var path = this.finder.findPath(startX, startY, endX, endY, grid);
-      
+
       // Check if walkable path found
       if (path.length == 0) {
         return;
@@ -1344,8 +1063,8 @@ export default class extends Phaser.State {
     if (door.name == this.openDoor) {
       this.openDoor = false;
       this.door = door.name;
-    
-      this.exitRoom(); 
+
+      this.exitRoom();
     }
   }
 
@@ -1360,7 +1079,7 @@ export default class extends Phaser.State {
   exitRoom () {
     var myDoor = this.currentRoom.doors[this.door];
     this.previousRoom = this.roomsJSON[this.currentRoom.name];
-    
+
     this.enableInput(false);
 
     // use exit animation if present
@@ -1369,9 +1088,9 @@ export default class extends Phaser.State {
       this.exitRoomAnimation();
 
     } else if (myDoor.offPoint) {
-      
+
       this.tweenOut();
-      
+
     }
   }
 
@@ -1386,11 +1105,11 @@ export default class extends Phaser.State {
     } else {
        //move player into position for ontweening
       var startPoint = this.clone(myDoor.offPoint);
-      
+
       this.player.alpha = 1;
       this.player.position = startPoint;
-      this.tweenIn(myDoor);   
-      
+      this.tweenIn(myDoor);
+
     }
   }
 
@@ -1401,15 +1120,15 @@ export default class extends Phaser.State {
     var spriteName;
     var exitSprite;
     var anim;
-    
+
     this.player.alpha = 0;
-    
+
     // find and play the entrance sprite from the room's this.spritesGroup
     var exitSpriteName = myDoor.animation.exit;
 
     for (var i = 0 ; i < this.spritesGroup.length ; i++) {
       if (this.spritesGroup.children[i].key == exitSpriteName) {
-        exitSprite = this.spritesGroup.children[i];      
+        exitSprite = this.spritesGroup.children[i];
       }
     }
     // remove exit sprite from spritesGroup to prevent preupdate error
@@ -1420,7 +1139,7 @@ export default class extends Phaser.State {
     exitSprite.bringToTop();
     anim = exitSprite.animations.play('on', null, false, true);
     anim.onComplete.add(function (data) {
-     
+
       this.evalEvent('on');
       this.loadRoom();
 
@@ -1436,15 +1155,15 @@ export default class extends Phaser.State {
     var anim;
 
     var startPoint = this.clone(myDoor.entry);
-    
+
     this.player.alpha = 0;
-    
+
     // find and play the exiting sprite from the room's this.spritesGroup
     spriteName = myDoor.animation.enter;
 
     for (var i = 0 ; i < this.spritesGroup.length ; i++) {
       if (this.spritesGroup.children[i].key == spriteName) {
-        enterSprite = this.spritesGroup.children[i];      
+        enterSprite = this.spritesGroup.children[i];
       }
     }
 
@@ -1463,16 +1182,16 @@ export default class extends Phaser.State {
 
   // Move player into room
   tweenIn (door) {
-    
+
     var entryPoint = door.entry;
     var dist = this.physics.arcade.distanceBetween(this.player.position, entryPoint)/this.tileSize;
-    
+
     if (__DEBUG__) console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
-    
+
     this.tween = this.add.tween(this.player);
     this.tween.to(entryPoint, dist*this.speed); //todo adjust tween speed
     this.tween.onComplete.addOnce(function () {
-      
+
       if (__DEBUG__) console.log('tween in finished');
 
       this.openRoom();
@@ -1483,25 +1202,25 @@ export default class extends Phaser.State {
 
   // Move player out of room
   tweenOut () {
-    
+
     var offPoint = this.currentRoom.doors[this.door].offPoint;
     var dist = this.physics.arcade.distanceBetween(this.player.position, offPoint)/this.tileSize;
     if (__DEBUG__) console.log('tweening out to:' + offPoint.x +' '+ offPoint.y);
-    
+
     this.between = this.game.add.tween(this.player)
     this.between.to(offPoint, dist*this.speed); //todo adjust betweening speed
-    
+
     this.between.onComplete.addOnce(function () {
       //check for exit animations
 
       if (__DEBUG__) console.log('tween out finished');
       this.loadRoom();
 
-    }, this); 
+    }, this);
 
     if (this.tween.isRunning) {
       if (__DEBUG__) console.log('chaining tween');
-      this.tween.chain(this.between); 
+      this.tween.chain(this.between);
     } else {
       if (__DEBUG__) console.log('running between alone');
       this.between.start();
@@ -1532,7 +1251,7 @@ export default class extends Phaser.State {
     var sprite = this.getSprite(key);
 
     this.tween = this.add.tween(sprite);
-    this.tween.onComplete.addOnce(this.tweenComplete, this); 
+    this.tween.onComplete.addOnce(this.tweenComplete, this);
 
     var prevX = sprite.position.x/this.tileSize;
     var prevY = sprite.position.y/this.tileSize;
@@ -1546,26 +1265,26 @@ export default class extends Phaser.State {
       dist = this.physics.arcade.distanceBetween({x: x, y: y}, {x: prevX, y: prevY});
 
       if (i == path.length - 1) {
-        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
+        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);
       } else if (x == prevX || y == prevY && i%3) {
         // pass
       }  else {
-        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
+        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);
         prevX = x;
         prevY = y;
       }
     }
-    
+
     this.tween.start();
   }
 
 
   // Move player along path
   tweenPath (path) {
-    
+
     this.tween = this.add.tween(this.player);
-    this.tween.onComplete.addOnce(this.tweenComplete, this); 
-    
+    this.tween.onComplete.addOnce(this.tweenComplete, this);
+
     var prevX = this.player.position.x/this.tileSize;
     var prevY = this.player.position.y/this.tileSize;
 
@@ -1575,16 +1294,16 @@ export default class extends Phaser.State {
       var dist = this.physics.arcade.distanceBetween({x: x, y: y}, {x: prevX, y: prevY});
 
       if (i == path.length - 1) {
-        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
+        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);
       } else if (x == prevX || y == prevY && i%3) {
         // pass
       }  else {
-        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);    
+        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);
         prevX = x;
         prevY = y;
       }
     }
-    
+
     this.tween.start();
   }
 
@@ -1597,7 +1316,7 @@ export default class extends Phaser.State {
     this.closeRoom();
 
     // ready next room
-    
+
     if (nextRoom.alt) {
       this.room.loadTexture(nextRoom.name + '-alt');
     } else {
@@ -1649,17 +1368,17 @@ export default class extends Phaser.State {
 
   // Item and inventory functions
 
-  
+
   // Clear inventory space if inven. item removed
   checkItemOrigin (item) {
-    
+
     // if item is from inventory : clear its slot
-    var slots = this.slotsGroup.children;  
+    var slots = this.slotsGroup.children;
     for (var i = 0 ; i < slots.length ; i++) {
-      
+
       if (this.inBounds(item, slots[i])) {
         if (__DEBUG__) console.log('removing item from: ' + slots[i].x + ' ' + slots[i].y);
-        this.removeItemFromInventory(item, slots[i]);  
+        this.removeItemFromInventory(item, slots[i]);
       }
     };
   }
@@ -1668,19 +1387,19 @@ export default class extends Phaser.State {
   // Handle dropping an item
   checkItemDest (item) {
     var placed = false;
-    
+
 
     // Check if item hit room
     if (this.inBounds(item, this.room) && !placed) {
       if (__DEBUG__) console.log('item hit room');
-      
+
       // check for sprites hits -> event call them
       this.spritesGroup.forEach(function (sprite) {
         if (this.inBounds(item, sprite) && sprite.inputEnabled) {
           if (__DEBUG__) console.log(sprite.key + '-' + item.name);
           this.evalEvent(sprite.key + '-' + item.name);
           this.tossItem(item);
-        } 
+        }
       }, this);
 
       this.blockGroup.forEach(function (block) {
@@ -1688,7 +1407,7 @@ export default class extends Phaser.State {
           if (__DEBUG__) console.log(block.name + '-' + item.name);
           this.evalEvent(block.name + '-' + item.name);
           this.tossItem(item);
-        } 
+        }
       }, this);
 
       placed = true;
@@ -1699,7 +1418,7 @@ export default class extends Phaser.State {
         if (this.inBounds(item, slot)) {
           this.moveItemToInventory(item, slot);
           placed = true;
-        } 
+        }
       }, this);
     }
     //otherwise: toss item onto the ground
@@ -1770,19 +1489,19 @@ export default class extends Phaser.State {
     // if slot occupied, move item to room floor, random pos
     // and move from inventory group to itemGroup
 
-    if (slot.occupied) {  
+    if (slot.occupied) {
       slot.item.position = {x: (Math.random()*300 + 50), y: 300};
       this.inventory.remove(slot.item);
       this.itemGroup.add(slot.item);
     }
-    
+
     this.moveToCenter(item, slot);
     slot.name = item.name;
     slot.item = item;
     slot.occupied = true;
 
     var i = this.currentRoom.items.length;
-    while (i--) 
+    while (i--)
     {
       if (this.currentRoom.items[i].name == item.name) {
         this.currentRoom.items.splice( i, 1 );
@@ -1794,14 +1513,14 @@ export default class extends Phaser.State {
   }
 
 
-  // Centers obj1 onto obj2 
+  // Centers obj1 onto obj2
   moveToCenter (obj1, obj2) {
     obj1.x = obj2.x + obj2.width/2 - obj1.width/2;
     obj1.y = obj2.y + obj2.height/2 - obj1.height/2;
   }
 
 
-  // Sprite bounds comparison; checks if obj1 is in the bounds of obj2  
+  // Sprite bounds comparison; checks if obj1 is in the bounds of obj2
   inBounds (obj1, obj2) {
     var obj = obj1.getBounds();
     var bound = obj2.getBounds();
@@ -1826,7 +1545,7 @@ export default class extends Phaser.State {
           if (__DEBUG__) console.log('saving ' + item.name + ' location');
           this.currentRoom.items[i].x = item.x;
           this.currentRoom.items[i].y = item.y;
-          break;  
+          break;
         }
       }
     }, this);
@@ -1834,7 +1553,7 @@ export default class extends Phaser.State {
 
 
   // Toggle player input
-  enableInput (bool) { 
+  enableInput (bool) {
     this.input.enabled = bool;
   }
 
@@ -1842,21 +1561,21 @@ export default class extends Phaser.State {
   // Check if music needs to be updated
   checkMusic() {
     if (this.currentMusic != this.currentRoom.music) {
-      
+
       this.music ? this.music.fadeOut(): null;
       this.currentMusic = this.currentRoom.music;
 
       if (this.currentMusic != null) {
-        
+
         if (__DEBUG__) console.log('playing music: '+this.currentMusic);
         this.music = this.game.sound.add(this.currentMusic, 1, true);
         this.music.onDecoded.add(function() {
-          //this.music.play(); 
-          this.music.fadeIn(); 
+          //this.music.play();
+          this.music.fadeIn();
         }, this);
-        
+
       }
-    } 
+    }
   }
 
 
@@ -1868,13 +1587,13 @@ export default class extends Phaser.State {
 
   // Change pathing grid
   importGrid() {
-    
-    var roomJson = this.currentRoom.name + '_json';    
+
+    var roomJson = this.currentRoom.name + '_json';
     var gridJson = this.cache.getJSON(roomJson);
     this.grid.nodes = gridJson;
 
     if (__DEBUG__) {
-      
+
       // Clear old debug tiles
       for (var x = 0; x < this.tileX; x++) {
         for (var y = 0; y < this.tileY; y++) {
@@ -1899,11 +1618,11 @@ export default class extends Phaser.State {
   clone (object) {
 
     var clone = {};
-  
+
     for (const [value, _] of Object.entries(object)) {
       clone[value] = object[value];
-    }    
-    
+    }
+
     return clone;
   }
 
@@ -1911,21 +1630,21 @@ export default class extends Phaser.State {
   // Retrieve sprite by key from the cache
   getSprite (key) {
     var i = this.world.children.length;
-    while (i--) 
+    while (i--)
     {
       if (this.world.children[i].name == "group") {
-        
+
         var j = this.world.children[i].children.length;
         while (j--) {
 
           if (this.world.children[i].children[j].key == key) {
-            
+
             return this.world.children[i].children[j];
-          }  
+          }
         }
       } else if (this.world.children[i].name != "group") {
         if (this.world.children[i].key == key) {
-          
+
           return this.world.children[i];
         }
       }

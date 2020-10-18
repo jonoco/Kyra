@@ -12,7 +12,7 @@
 - scenes implemented are the ascent and descent to the treehouse, and meeting Brynn at the temple
 
 #### 3. Events
-##### Events refer to the behaviors that occur when clicking on, or draggin items onto, certain objects, e.g., clicking the branch next to brandon home, dragging a rose onto Brynn
+##### Events refer to the behaviors that occur when clicking on (or dragging items onto) certain objects, e.g., clicking the branch next to brandon home, dragging a rose onto Brynn
 - events are handled by the event chain system: evalEvent(), eventTriggers, questQueue
 - interesting events (animations finishing, room changes, quest status change) call evalEvent to report the event
 	-	evalEvent checks if this event is linked to a quest by check eventTriggers

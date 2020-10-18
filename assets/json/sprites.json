@@ -7,7 +7,7 @@
 			"click": { "text": "I'm getting tired" }
 			},
 		"animated": true,
-		"animations": { 
+		"animations": {
 			"walk-right": {
 				"frames": [ "right-1","right-2","right-3","right-4","right-5","right-6","right-7" ],
 				"speed": 8,
@@ -20,7 +20,7 @@
 				"loop": true,
 				"start": false
 			}
-		}	
+		}
 	},
 	"lamp": {
 		"name": "lamp",
@@ -36,7 +36,7 @@
 			 	"frames": [ "lamp-1", "lamp-2", "lamp-3"],
 			 	"speed": 5,
 			 	"loop": true,
-			 	"start": true 
+			 	"start": true
 			}
 		}
 	},
@@ -49,13 +49,13 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"river-1", "river-2", "river-3",
-			 	 	"river-3", "river-3", "river-3", "river-3", "river-3", "river-3", "river-3", 
+			 	 	"river-3", "river-3", "river-3", "river-3", "river-3", "river-3", "river-3",
 			 		"river-4", "river-5", "river-6", "river-7", "river-8", "river-9", "river-10", "river-11", "river-12"],
 			 	"speed": 5,
 			 	"loop": true,
-			 	"start": true 
+			 	"start": true
 			}
 		}
 	},
@@ -103,13 +103,13 @@
 		"animations": {
 			"saw": {
 				"name": "saw",
-			 	"frames": [ "saw-5", "saw-1", "saw-2", "saw-3", "saw-4", "saw-5", "saw-1", 
-			 		"saw-2", "saw-3", "saw-4", "saw-5", "saw-1", "saw-2", "saw-3", "saw-4", 
+			 	"frames": [ "saw-5", "saw-1", "saw-2", "saw-3", "saw-4", "saw-5", "saw-1",
+			 		"saw-2", "saw-3", "saw-4", "saw-5", "saw-1", "saw-2", "saw-3", "saw-4",
 			 		"saw-5", "saw-1", "saw-2", "saw-3", "saw-4", "saw-5",
 			 		"saw-6", "saw-7", "saw-8", "saw-7", "saw-6"],
 			 	"speed": 5,
 			 	"loop": true,
-			 	"start": false 
+			 	"start": false
 			}
 		}
 	},
@@ -122,92 +122,92 @@
 		"animations": {
 			"stand talk 1": {
 		 		"name": "stand talk 1",
-		 		"frames": [ 
+		 		"frames": [
 		 			"stand-1", "stand-2", "stand-3", "stand-4", "stand-5" ],
 			 	"speed": 8,
 			 	"loop": true,
-			 	"start": false 
+			 	"start": false
 			},
 			"stand talk 2": {
 		 		"name": "stand talk 2",
-		 		"frames": [ 
+		 		"frames": [
 		 			"stand-7", "stand-8", "stand-9", "stand-10", "stand-11", "stand-10", "stand-9", "stand-8" ],
 			 	"speed": 8,
 			 	"loop": true,
-			 	"start": false 
+			 	"start": false
 			},
 			"stand talk 3": {
 		 		"name": "stand talk 3",
-		 		"frames": [ 
+		 		"frames": [
 		 			"stand-13", "stand-14", "stand-15", "stand-16" ],
 			 	"speed": 8,
 			 	"loop": true,
-			 	"start": false 
-			}, 
+			 	"start": false
+			},
 		 	"hunch talk 1": {
 		 		"name": "hunch talk 1",
 		 		"frames": [ "hunch-1", "hunch-2", "hunch-3", "hunch-4", "hunch-5" ],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			},
 		 	"hunch talk 2": {
 		 		"name": "hunch talk 2",
 		 		"frames": [ "hunch-7", "hunch-8", "hunch-9", "hunch-10" ],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			},
 		 	"hunch talk 3": {
 		 		"name": "hunch talk 3",
 		 		"frames": [ "hunch-11", "hunch-12", "hunch-13", "hunch-14" ],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			},
 		 	"hunch talk 4": {
 		 		"name": "hunch talk 4",
 		 		"frames": [ "hunch-15", "hunch-16", "hunch-17", "hunch-18" ],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			},
 			"stand up": {
 		 		"name": "stand up",
-		 		"frames": [ 
+		 		"frames": [
 		 			"hunch-1", "hunch-5", "hunch-6", "hunch-7", "hunch-18" ,"hunch-19", "hunch-20" ],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			},
 			"hunch down": {
 		 		"name": "hunch down",
-		 		"frames": [ 
+		 		"frames": [
 		 			"hunch-20", "hunch-19", "hunch-18", "hunch-8" ],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			},
 			"stand hand to head": {
 				"name": "stand hand to head",
 				"frames": [ "stand-6", "stand-7" ],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			},
 			"stand idle": {
 				"name": "stand idle",
 				"frames": [ "stand-16" ],
 			 	"speed": 1,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			},
 			"walk": {
 				"name": "walk",
 			 	"frames": [ "walk-1", "walk-2", "walk-3", "walk-4", "walk-5", "walk-6", "walk-7", "walk-8" ],
 			 	"speed": 8,
 			 	"loop": true,
-			 	"start": false 
+			 	"start": false
 			}
 		},
 		"startFrame": "hunch-1"
@@ -223,14 +223,14 @@
 		"animations": {
 			"altar": {
 				"name": "altar",
-			 	"frames": [ 
+			 	"frames": [
 			 		"altar-1", "altar-2", "altar-3", "altar-4", "altar-5", "altar-6", "altar-5", "altar-4", "altar-3", "altar-2",
 			 		"altar-1", "altar-2", "altar-3", "altar-4", "altar-5", "altar-6", "altar-5", "altar-4", "altar-3", "altar-2",
 			 		"altar-1", "altar-2", "altar-3", "altar-4", "altar-5", "altar-6", "altar-5", "altar-4", "altar-3", "altar-2", "altar-1"
 			 	],
 			 	"speed": 10,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			}
 		}
 	},
@@ -246,7 +246,9 @@
 		"name": "birch1",
 		"png": "assets/sprites/birch1.png",
 		"json": null,
-		"action": null,
+		"action": {
+			"click": { "text": "I think I've seen that tree before" }
+			},
 		"animated": false,
 		"animations": null
 	},
@@ -291,7 +293,7 @@
 		"action": null,
 		"animated": false,
 		"animations": null
-	},	
+	},
 	"oak2": {
 		"name": "oak2",
 		"png": "assets/sprites/oak2.png",
@@ -369,9 +371,9 @@
 			"on": {
 				"name": "on",
 				"frames": [
-					"amulet-1", "amulet-2", "amulet-3", "amulet-4", "amulet-5", "amulet-6", 
-					"amulet-7", "amulet-8", "amulet-9", "amulet-10", "amulet-11", "amulet-12", 
-					"amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18", 
+					"amulet-1", "amulet-2", "amulet-3", "amulet-4", "amulet-5", "amulet-6",
+					"amulet-7", "amulet-8", "amulet-9", "amulet-10", "amulet-11", "amulet-12",
+					"amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18",
 					"amulet-19", "amulet-20", "amulet-21", "amulet-22", "amulet-23"],
 				"speed": 7,
 				"loop": false,
@@ -388,13 +390,13 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"willow-1", "willow-2", "willow-3", "willow-4", "willow-5",
 			 	 	"willow-6", "willow-7", "willow-8", "willow-9", "willow-10",
 			 	  "willow-11", "willow-12", "willow-13", "willow-14", "willow-15"],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			}
 		}
 	},
@@ -407,14 +409,14 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"wow-1", "wow-2", "wow-3", "wow-4", "wow-5",
 			 	 	"wow-6", "wow-7", "wow-8", "wow-9", "wow-10",
 			 	  "wow-11", "wow-12", "wow-13", "wow-14", "wow-15",
 			 	  "wow-16", "wow-17", "wow-18", "wow-19", "wow-20", "wow-21", "wow-22"],
 			 	"speed": 10,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			}
 		}
 	},
@@ -443,12 +445,12 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
 			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
 			 	"speed": 8,
 			 	"loop": true,
-			 	"start": true 
+			 	"start": true
 			}
 		}
 	},
@@ -462,13 +464,13 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"blank", "blank",
 			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
 			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
 			 	"speed": 8,
 			 	"loop": true,
-			 	"start": true 
+			 	"start": true
 			}
 		}
 	},
@@ -482,13 +484,13 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"blank", "blank", "blank", "blank",
 			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
 			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
 			 	"speed": 8,
 			 	"loop": true,
-			 	"start": true 
+			 	"start": true
 			}
 		}
 	},
@@ -502,13 +504,13 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"blank", "blank", "blank", "blank", "blank", "blank",
 			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
 			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
 			 	"speed": 8,
 			 	"loop": true,
-			 	"start": true 
+			 	"start": true
 			}
 		}
 	},
@@ -522,13 +524,13 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
-			 		"blank", "blank", "blank", "blank", "blank", "blank", "blank", "blank", 
+			 	"frames": [
+			 		"blank", "blank", "blank", "blank", "blank", "blank", "blank", "blank",
 			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
 			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
 			 	"speed": 8,
 			 	"loop": true,
-			 	"start": true 
+			 	"start": true
 			}
 		}
 	},
@@ -541,14 +543,14 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"tear-1", "tear-2", "tear-3", "tear-4", "tear-5", "tear-6",
 			 	 	"tear-7", "tear-8", "tear-9", "tear-10", "tear-11", "tear-12",
 			 	  "tear-13", "tear-14", "tear-15", "tear-16", "tear-17", "tear-18",
 			 	  "tear-19", "tear-20", "tear-21", "tear-22", "tear-23" ],
 			 	"speed": 5,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			}
 		}
 	},
@@ -562,14 +564,14 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"tree-down-1", "tree-down-2", "tree-down-3", "tree-down-4", "tree-down-5",
 			 	 	"tree-down-6", "tree-down-7", "tree-down-8", "tree-down-9", "tree-down-10",
 			 	  "tree-down-11", "tree-down-12", "tree-down-13", "tree-down-14", "tree-down-15",
 			 	   "tree-down-16", "tree-down-17", "tree-down-18", "tree-down-19", "tree-down-20", "tree-down-21"],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			}
 		}
 	},
@@ -583,14 +585,14 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"tree-up-1", "tree-up-2", "tree-up-3", "tree-up-4", "tree-up-5",
 			 	 	"tree-up-6", "tree-up-7", "tree-up-8", "tree-up-9", "tree-up-10",
 			 	  "tree-up-11", "tree-up-12", "tree-up-13", "tree-up-14", "tree-up-15",
 			 	   "tree-up-16", "tree-up-17", "tree-up-18", "tree-up-19", "tree-up-20", "tree-up-21"],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			}
 		}
 	},
@@ -603,14 +605,14 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"branch-1", "branch-2", "branch-3", "branch-4", "branch-5",
 			 	 	"branch-6", "branch-7", "branch-8", "branch-9", "branch-10",
 			 	  "branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
 			 	   "branch-16", "branch-17", "branch-18", "branch-19", "branch-20", "branch-21"],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			}
 		}
 	},
@@ -623,14 +625,14 @@
 		"animations": {
 			"on": {
 				"name": "on",
-			 	"frames": [ 
+			 	"frames": [
 			 		"branch-1", "branch-2", "branch-3", "branch-4", "branch-5",
 			 	 	"branch-6", "branch-7", "branch-8", "branch-9", "branch-10",
 			 	  "branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
 			 	   "branch-16", "branch-17", "branch-18", "branch-19", "branch-20"],
 			 	"speed": 8,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			}
 		}
 	},
@@ -647,7 +649,7 @@
 			 	"frames": [ "temple_fire-1", "temple_fire-2", "temple_fire-3" ],
 			 	"speed": 5,
 			 	"loop": true,
-			 	"start": true 
+			 	"start": true
 			}
 		}
 	},
@@ -661,8 +663,8 @@
 		"animations": {
 			"enter": {
 				"name": "enter",
-			 	"frames": [ 
-			 		"brynn_enter-1", "brynn_enter-1", "brynn_enter-1", "brynn_enter-1", 
+			 	"frames": [
+			 		"brynn_enter-1", "brynn_enter-1", "brynn_enter-1", "brynn_enter-1",
 			 		"brynn_enter-2", "brynn_enter-3", "brynn_enter-4", "brynn_enter-5",
 			 	 	"brynn_enter-6", "brynn_enter-7", "brynn_enter-8", "brynn_enter-9", "brynn_enter-10",
 			 	  "brynn_enter-11", "brynn_enter-12", "brynn_enter-13", "brynn_enter-14", "brynn_enter-15",
@@ -671,7 +673,7 @@
 			 	  "brynn_enter-26", "brynn_enter-27"],
 			 	"speed": 7,
 			 	"loop": false,
-			 	"start": true 
+			 	"start": true
 			}
 		}
 	},
@@ -685,19 +687,19 @@
 		"animations": {
 			"talk": {
 				"name": "talk",
-			 	"frames": [ 
+			 	"frames": [
 			 		"talk-1", "talk-2", "talk-3", "talk-4", "talk-5",
 			 	 	"talk-6", "talk-7", "talk-8", "talk-9", "talk-10", "talk-11"],
 			 	"speed": 8,
 			 	"loop": true,
-			 	"start": false 
+			 	"start": false
 			},
 			"idle": {
 				"name": "idle",
 			 	"frames": [ "talk-1" ],
 			 	"speed": 1,
 			 	"loop": false,
-			 	"start": false 
+			 	"start": false
 			}
 		}
 	}

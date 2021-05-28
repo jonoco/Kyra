@@ -246,9 +246,7 @@
 		"name": "birch1",
 		"png": "assets/sprites/birch1.png",
 		"json": null,
-		"action": {
-			"click": { "text": "I think I've seen that tree before" }
-			},
+		"action": null,
 		"animated": false,
 		"animations": null
 	},

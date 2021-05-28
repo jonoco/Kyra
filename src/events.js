@@ -1,4 +1,12 @@
 export default {
+  coal_hanger: [
+    { say: "I remember when I was born in that coal basket"},
+    { wait: 1000 },
+    { say: "Haha, not really though" },
+    { say: "I can't remember a thing" },
+    { wait: 500 },
+    { say: "Probably from inhaling coal dust as a baby" },
+  ],
   kallak: [
     { say: "Lookin good old man" },
     { say: "Very stoney" },

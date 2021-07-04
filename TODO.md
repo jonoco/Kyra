@@ -22,15 +22,16 @@
 - **ADDED:** fade music on music transition
 - **ADDED:** prevent items from being placed anywhere but inventory and walkable locations
 - make items bounce when you put them somewhere they shouldn't go, *cause why not!*
-- add sprite assets
-- add sprite placement and animation information
-- add quest json data
 - **ADDED:** add event queueing system
 - **ADDED:** use original Kyrandia font
 - **ADDED:** add door animations
 - **ADDED:** host production build of the game
 - add better condition checking to quest events
 - add 'active' property to sprites to allow or prevent creating them
+- switch assets to native resolution
+	+ [x] update screens
+	+ [x] update asset coordinates
+	+ [ ] update tween coordinates
 
 ### Bugs
 - **FIXED:** tapping on player causes him to disappear

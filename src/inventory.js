@@ -12,7 +12,15 @@ export default class Inventory {
       {x:466, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
       {x:526, y:545, height: 46, width: 44, name: null, item: null, occupied: false}
     ]
+  }
 
+
+  add(item) {
+    //
+  }
+
+
+  remove(item) {
 
   }
 }

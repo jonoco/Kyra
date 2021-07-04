@@ -13,7 +13,7 @@ export default class extends Phaser.State {
       this.game.world.centerY,
       'preloaderBackground'
     )
-    this.loaderBg.scale.setTo(3)
+    this.loaderBg.scale.setTo(window.game.scaleFactor)
 
     this.message = this.add.text()
     this.message.x = this.game.world.centerX

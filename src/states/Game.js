@@ -7,6 +7,7 @@ import events from '../events'
 import Quests from '../quests'
 import itemAtlas from '../items'
 
+
 export default class extends Phaser.State {
   init() {
     this.Quests = new Quests()
@@ -14,7 +15,7 @@ export default class extends Phaser.State {
     // game debugging
     this.startRoom = 'room01';
 
-    //utility variables
+    // utility variables
     this.timer;
 
     // event variables
@@ -24,7 +25,7 @@ export default class extends Phaser.State {
     this.blockEvents = events
 
     // tilemap variables
-    this.tileSize = 8;
+    this.tileSize = (320/120) * window.game.scaleFactor; // native width / tile width
     this.tileX = 120;
     this.tileY = 75;
     this.map;
@@ -34,7 +35,7 @@ export default class extends Phaser.State {
     this.grid;
     this.finder;
 
-    // sprite variabels
+    // sprite variables
     this.spritesJSON;
     this.spritesGroup;
     this.player;
@@ -122,8 +123,8 @@ export default class extends Phaser.State {
 
   update () {
     if (__DEBUG__) {
-      this.game.debug.text('Open door: ' + this.openDoor, 16, 475);
-      this.game.debug.text('Player position: ' + this.player.x +', '+ this.player.y, 16, 500);
+      this.game.debug.text('Open door: ' + this.openDoor, 5, 50);
+      this.game.debug.text('Player position: ' + this.player.x +', '+ this.player.y, 5, 175);
       this.game.debug.text('Pointer position: ' + this.game.input.position.x + ', ' + this.game.input.position.y, 16, 525);
       //this.game.debug.soundInfo(this.music, 286, 475);
       this.game.debug.text('Text z index: ' + this.text.z, 276, 450);
@@ -162,7 +163,7 @@ export default class extends Phaser.State {
     this.world.add(blockBg);
 
     var endMessage = this.add.image( 0, 0, 'end');
-        endMessage.scale.setTo(3);
+        endMessage.scale.setTo(window.game.scaleFactor);
         endMessage.alpha = 0;
         endMessage.inputEnabled = true;
 
@@ -294,13 +295,14 @@ export default class extends Phaser.State {
     for (var i = 0 ; i < roomSprites.length ; i++ ) {
       spriteProperty = this.spritesJSON[roomSprites[i].name];
       newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name);
+      newSprite.position.x *= window.game.scaleFactor
+      newSprite.position.y *= window.game.scaleFactor
 
       if (spriteProperty.scale) {
 
-        newSprite.scale.setTo(spriteProperty.scale);
+        newSprite.scale.setTo(spriteProperty.scale * window.game.scaleFactor);
       } else {
-        // all source assets scaled by 3
-        newSprite.scale.setTo(3);
+        newSprite.scale.setTo(window.game.scaleFactor);
       }
 
       if (spriteProperty.invisible) {
@@ -328,8 +330,10 @@ export default class extends Phaser.State {
     var i = blocks.length;
     while (i--) {
       blank = this.blockGroup.create( blocks[i].x, blocks[i].y);
-      blank.height = blocks[i].height;
-      blank.width = blocks[i].width;
+      blank.position.x *= window.game.scaleFactor
+      blank.position.y *= window.game.scaleFactor
+      blank.height = blocks[i].height * window.game.scaleFactor;
+      blank.width = blocks[i].width * window.game.scaleFactor;
       blank.name = blocks[i].name;
       blank.inputEnabled = true;
       blank.events.onInputDown.add(function (data) {
@@ -339,7 +343,11 @@ export default class extends Phaser.State {
       if (__DEBUG__) {
         var blockBg = this.game.make.graphics();
         blockBg.beginFill(0x00ffff, 0.5);
-        blockBg.drawRect(blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height);
+        blockBg.drawRect(
+            blocks[i].x * window.game.scaleFactor,
+            blocks[i].y * window.game.scaleFactor,
+            blocks[i].width * window.game.scaleFactor,
+            blocks[i].height * window.game.scaleFactor);
         blockBg.endFill();
         this.blockGroup.add(blockBg);
       }
@@ -406,8 +414,8 @@ export default class extends Phaser.State {
 
   // Create room
   createRoom () {
-    this.room = this.game.add.image( 23, 24 );
-    this.room.scale.setTo(0.5);
+    this.room = this.game.add.image( 8 * window.game.scaleFactor, 8 * window.game.scaleFactor );
+    this.room.scale.setTo(window.game.scaleFactor);
     this.room.inputEnabled = true;
   }
 
@@ -423,8 +431,8 @@ export default class extends Phaser.State {
 
     this.text = this.add.text();
     this.text.font = 'kyrandia';
-    this.text.x = 25;
-    this.text.y = 430;
+    this.text.x = 8 * window.game.scaleFactor;
+    this.text.y = 143 * window.game.scaleFactor;
     this.text.fill = '#bbbbbb';
   }
 
@@ -447,7 +455,7 @@ export default class extends Phaser.State {
   createGui () {
 
     this.gui = this.add.image( 0, 0, 'gui');
-    this.gui.scale.setTo(0.5);
+    this.gui.scale.setTo(window.game.scaleFactor);
 
     this.createAmulet();
   }
@@ -455,9 +463,9 @@ export default class extends Phaser.State {
 
   // Create amulet and animations
   createAmulet () {
-    this.amulet = this.add.sprite( 670, 456, 'amulet');
+    this.amulet = this.add.sprite( 224 * window.game.scaleFactor, 152 * window.game.scaleFactor, 'amulet');
     this.amulet.inputEnabled = true;
-    this.amulet.scale.setTo(3);
+    this.amulet.scale.setTo(window.game.scaleFactor);
     this.amulet.alpha = 0;
 
     this.amulet.animations.add('on', [
@@ -518,7 +526,7 @@ export default class extends Phaser.State {
   // Create player
   createPlayer () {
 
-    this.player = this.game.add.sprite(318, 338, 'player', 'stand-right');
+    this.player = this.game.add.sprite(106 * window.game.scaleFactor, 113 * window.game.scaleFactor, 'player', 'stand-right');
     this.player.name = 'player';
 
     this.player.animations.add('walk-right', [
@@ -547,7 +555,7 @@ export default class extends Phaser.State {
       'talk-9', 'talk-10', 'talk-11', 'talk-12',
     ], 8, true, false);
 
-    this.player.scale.setTo(3);
+    this.player.scale.setTo(window.game.scaleFactor);
     this.player.anchor = {x:0.5, y:0.9};
     this.physics.arcade.enableBody(this.player);
 
@@ -605,13 +613,13 @@ export default class extends Phaser.State {
     this.doors = this.currentRoom.doors;
     for (const [door, _] of Object.entries(this.doors)) {
 
-      var x = this.doors[door].x,
-          y = this.doors[door].y,
-          height = this.doors[door].height,
-          width = this.doors[door].width,
-          entry = this.doors[door].entry;
+      let x = this.doors[door].x * window.game.scaleFactor
+      let y = this.doors[door].y * window.game.scaleFactor
+      let height = this.doors[door].height * window.game.scaleFactor
+      let width = this.doors[door].width * window.game.scaleFactor
+      let entry = this.doors[door].entry
 
-      var newDoor = this.doorGroup.create( x, y );
+      let newDoor = this.doorGroup.create( x, y );
         newDoor.height = height;
         newDoor.width = width;
         newDoor.name = this.doors[door].name;
@@ -1445,13 +1453,15 @@ export default class extends Phaser.State {
 
   // Spawn item into room
   spawnItem (itemData) {
-    var item = this.game.make.image(itemData.x, itemData.y, 'items');
+    var item = this.game.make.image(itemData.x * window.game.scaleFactor, itemData.y * window.game.scaleFactor, 'items');
     item.name = itemData.name;
     var frame = this.itemAtlas[item.name];
     item.frame = frame;
-    item.scale.setTo(1.5);
+    item.scale.setTo(0.5 * window.game.scaleFactor);
     item.inputEnabled = true;
     item.input.enableDrag(true, true);
+
+    if (__DEBUG__) console.log(`spawn ${item.name} at x: ${item.position.x} y: ${item.position.y}`)
 
     // check if item was in inventory, if so, remove from slot
     item.events.onDragStart.add(function (data) {
@@ -1462,8 +1472,9 @@ export default class extends Phaser.State {
 
     // then check drop location
     item.events.onDragStop.add(function (data) {
-      if (__DEBUG__) console.log(item.name + ' placed');
-      this.changeRoomText(item.name + ' placed');
+      if (__DEBUG__)
+        console.log(`${item.name} placed at { ${item.position.x/window.game.scaleFactor}, ${item.position.y/window.game.scaleFactor} }`);
+      this.changeRoomText(`${item.name} placed`);
       this.checkItemDest(data);
     }, this);
 

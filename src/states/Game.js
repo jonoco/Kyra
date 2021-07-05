@@ -184,15 +184,17 @@ export default class extends Phaser.State {
 
   // Evaulate an event
   evalEvent (event) {
-    if (__DEBUG__) console.log(event + ' has triggered');
+    dlog(event + ' has triggered')
 
     // check whether event is linked to quest event
     if (this.eventTriggers[event]) {
-      if (__DEBUG__) console.log('there is a quest linked to this event');
-      var i = this.eventTriggers[event].length;
+      dlog('there is a quest linked to this event')
+      var i = this.eventTriggers[event].length
       while (i--) {
-        const events = Quests.updateQuest(this.eventTriggers[event][i]);
-        this.queueEvents(events);
+        const events = this.Quests.updateQuest(this.eventTriggers[event][i])
+        if (events) {
+          this.queueEvents(events)
+        }
       }
     }
 

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-
+import { log, dlog } from './utils'
 
 export default class Quests {
   constructor() {
@@ -22,7 +22,7 @@ export default class Quests {
 
     // only update if activating quest or quest activated
     if ( active && !stepComplete && conditionsMet ) {
-      if (__DEBUG__) console.log('all conditions met for quest ' + quest.name)
+      dlog(`all conditions met for quest [${quest.name}] at step [${quest.step}]`)
       this.quests[quest.name][quest.step] = true
 
       const events = this.quests[quest.name].events[quest.step]
@@ -69,14 +69,14 @@ const quests = {
         { say: "I bet I could catch a tear drop" },
         { wait: 1300 },
         { say: "I'll take that bet!" },
-        { move: { x: 612, y: 264 } },
+        { move: { x: 204, y: 88 } },
         { playAnim: { sprite: "catch", animation: "on", kill: true } },
-        { addItem: {item: "tear", x: 570, y: 290} },
+        { addItem: {item: "tear", x: 190, y: 97} },
         { say: "Now i can heal the willow tree!" }
       ],
       treeHealed: [
         { removeItem: "tear" },
-        { move: { x: 384, y: 344 } },
+        { move: { x: 128, y: 115 } },
         { say: "I think this tear drop should fit" },
         { playAnim: { sprite: "willow", animation: "on", hide: false } },
         { altRoom: "room03" },
@@ -123,7 +123,7 @@ const quests = {
       ],
       giveSaw: [
         { removeItem: "saw" },
-        { move: { x: 770, y: 280 }},
+        { move: { x: 256, y: 93 }},
         { playAnim: { sprite: "herman", animation: "stand up" } },
         { sayAnim: { sprite: "herman", animation: "stand talk 3", say: "That's a pretty old saw", color: "herman" } },
         { playAnim: { sprite: "herman", animation: "stand idle" } },
@@ -132,7 +132,7 @@ const quests = {
         { wait: 1200 },
         { sayAnim: { sprite: "herman", animation: "stand talk 3", say: "Uh, yeah ...", color: "herman" } },
         { sayAnim: { sprite: "herman", animation: "stand talk 1", say: "Well, I'll go cut down some trees then", color: "herman" } },
-        { moveSprite: { sprite: "herman", path: [[730/8,220/8], [950/8, 220/8]], animation: "walk" } },
+        { moveSprite: { sprite: "herman", path: [[30,9], [40, 9]], animation: "walk" } },
         { turn: "right" },
         { wait: 900 },
         { say: "I hope he doesn't cut his leg off" },
@@ -144,7 +144,7 @@ const quests = {
         { modMeta: { sprite: "saw_holder_empty", attr: "invisible", value: false } },
         { modAttr: { sprite: "saw_holder", attr: "alpha", value: 0 } },
         { modAttr: { sprite: "saw_holder_empty", attr: "alpha", value: 1 } },
-        { addItem: {item: "saw", x: 750, y: 340} }
+        { addItem: {item: "saw", x: 250, y: 113} }
       ],
       fixed: [
         { say: "I wonder if the bridge is fixed..." },
@@ -155,7 +155,7 @@ const quests = {
       ],
       complete: [
         { say: "The bridge is repaired!" },
-        { move: { x: 760, y: 300 }},
+        { move: { x: 253, y: 100 }},
         { say: "But where did Herman go? ..." },
         { wait: 1000 },
         { quit: true }

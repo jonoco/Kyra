@@ -929,28 +929,28 @@ export default class extends Phaser.State {
 
   // Remove an item from the room
   removeItem (data) {
-    if (__DEBUG__) console.log('removing: ', data);
-    var itemName = data;
-    var removeItem;
+    dlog(`removing ${data}`)
+    let itemName = data
+    let removeItem = null
 
     this.itemGroup.forEach(function (item) {
       if (itemName == item.name) {
-        removeItem = item;
+        removeItem = item
       }
-    }, this);
+    }, this)
 
 
-    var i = this.currentRoom.items.length;
+    let i = this.currentRoom.items.length
     while (i--)
     {
       if (this.currentRoom.items[i].name == itemName) {
-        this.currentRoom.items.splice( i, 1 );
+        this.currentRoom.items.splice( i, 1 )
       }
     }
 
-    this.itemGroup.remove(removeItem);
+    this.itemGroup.remove(removeItem)
 
-    this.evalEvent('remove-' + data);
+    this.evalEvent('remove-' + data)
   }
 
 
@@ -1380,7 +1380,7 @@ export default class extends Phaser.State {
 
   // Prepare to leave current room
   closeRoom () {
-    if (__DEBUG__) console.log('closing room ' + this.currentRoom.name);
+    dlog('closing room ' + this.currentRoom.name);
     this.saveItems(); // save room state
 
     // save player sprite
@@ -1491,19 +1491,18 @@ export default class extends Phaser.State {
     item.inputEnabled = true;
     item.input.enableDrag(true, true);
 
-    if (__DEBUG__) console.log(`spawn ${item.name} at x: ${item.position.x} y: ${item.position.y}`)
+    dlog(`spawn ${item.name} at x: ${item.position.x} y: ${item.position.y}`)
 
     // check if item was in inventory, if so, remove from slot
     item.events.onDragStart.add(function (data) {
-      if (__DEBUG__) console.log(item.name + ' picked up');
+      dlog(item.name + ' picked up');
       this.changeRoomText(item.name + ' picked up');
       this.checkItemOrigin(data);
     }, this);
 
     // then check drop location
     item.events.onDragStop.add(function (data) {
-      if (__DEBUG__)
-        console.log(`${item.name} placed at { ${item.position.x/window.game.scaleFactor}, ${item.position.y/window.game.scaleFactor} }`);
+      dlog(`${item.name} placed at { ${item.position.x/window.game.scaleFactor}, ${item.position.y/window.game.scaleFactor} }`);
       this.changeRoomText(`${item.name} placed`);
       this.checkItemDest(data);
     }, this);
@@ -1583,9 +1582,9 @@ export default class extends Phaser.State {
     this.itemGroup.forEach(function(item) {
       for (var i = 0; i < this.currentRoom.items.length ; i++) {
         if (item.name == this.currentRoom.items[i].name) {
-          if (__DEBUG__) console.log('saving ' + item.name + ' location');
-          this.currentRoom.items[i].x = item.x;
-          this.currentRoom.items[i].y = item.y;
+          dlog('saving ' + item.name + ' location');
+          this.currentRoom.items[i].x = item.x / window.game.scaleFactor
+          this.currentRoom.items[i].y = item.y / window.game.scaleFactor
           break;
         }
       }

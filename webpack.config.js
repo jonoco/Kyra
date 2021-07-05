@@ -18,6 +18,7 @@ module.exports = env => {
   console.log('env.debug: ' + env.debug);
 
   return {
+    mode: 'development',
     entry: {
       app: [
         path.resolve(__dirname, 'src/main.js')

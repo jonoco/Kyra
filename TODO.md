@@ -31,7 +31,7 @@
 - switch assets to native resolution
 	+ [x] update screens
 	+ [x] update asset coordinates
-	+ [ ] update tween coordinates
+	+ [x] update tween coordinates
 
 ### Bugs
 - **FIXED:** tapping on player causes him to disappear

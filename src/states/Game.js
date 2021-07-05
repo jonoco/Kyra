@@ -6,7 +6,7 @@ import lang from '../lang';
 import events from '../events'
 import Quests from '../quests'
 import itemAtlas from '../items'
-
+import { log, dlog } from '../utils'
 
 export default class extends Phaser.State {
   init() {
@@ -1016,22 +1016,31 @@ export default class extends Phaser.State {
 
   // Move with intent to change rooms
   moveToDoor (door) {
-    var myDoor = this.currentRoom.doors[door.name];
+    let myDoor = this.currentRoom.doors[door.name]
 
-    this.stopMoving();
-    this.openDoor = myDoor.name;
-    this.move(myDoor.entry);
+    dlog(`moving to door ${door.name} at { ${myDoor.entry.x}, ${myDoor.entry.y} }`)
+
+    this.stopMoving()
+    this.openDoor = myDoor.name
+    this.move({
+      x: myDoor.entry.x * window.game.scaleFactor,
+      y: myDoor.entry.y * window.game.scaleFactor
+    })
   }
 
 
   // Move player
   move (position) {
+    dlog(`move to { ${position.x}, ${position.y} }`)
+
     this.findWay(position);
   }
 
 
   // Stop player
   stopMoving () {
+    dlog('stop movement')
+
     if (this.tween) {
       this.tween.stop(true);
       this.tweens.remove(this.tween);
@@ -1042,20 +1051,26 @@ export default class extends Phaser.State {
   // Find route in pathfinding grid
   findWay (position) {
 
-    var startX = this.layer.getTileX(this.player.position.x);
-    var startY = this.layer.getTileY(this.player.position.y);
-    var endX = this.layer.getTileX(position.x);
-    var endY = this.layer.getTileY(position.y);
+    let startX = this.layer.getTileX(this.player.position.x);
+    let startY = this.layer.getTileY(this.player.position.y);
+    let endX = this.layer.getTileX(position.x);
+    let endY = this.layer.getTileY(position.y);
 
-    if (__DEBUG__) console.log("moving " + startX +','+ startY + " to " + endX +','+ endY);
+    dlog(`moving from tile { ${startX},${startY} } to { ${endX}, ${endY} }`);
+
+    if (endX > this.tileX || endX < 0 || endY > this.tileY || endY < 0) {
+      log(`cannot move to tile { ${endX}, ${endY} }`)
+      return
+    }
 
     if (startX != endX || startY != endY) {
 
-      var grid = this.grid.clone();
-      var path = this.finder.findPath(startX, startY, endX, endY, grid);
+      let grid = this.grid.clone();
+      let path = this.finder.findPath(startX, startY, endX, endY, grid);
 
       // Check if walkable path found
       if (path.length == 0) {
+        dlog(`no walkable path found`)
         return;
       }
 
@@ -1085,34 +1100,36 @@ export default class extends Phaser.State {
 
   // Transfer out of current rooms via current selected door
   exitRoom () {
-    var myDoor = this.currentRoom.doors[this.door];
+    let myDoor = this.currentRoom.doors[this.door];
     this.previousRoom = this.roomsJSON[this.currentRoom.name];
 
     this.enableInput(false);
 
     // use exit animation if present
     if (myDoor.animation.exit) {
-
       this.exitRoomAnimation();
-
     } else if (myDoor.offPoint) {
-
       this.tweenOut();
-
     }
   }
 
 
   // Transfer into room by currently selected door
   enterRoom () {
-    var myDoor = this.currentRoom.doors[this.previousRoom.name];
+    let myDoor = this.currentRoom.doors[this.previousRoom.name];
 
     // check for enter animation
     if (myDoor.animation.enter) {
       this.enterRoomAnimation();
     } else {
        //move player into position for ontweening
-      var startPoint = this.clone(myDoor.offPoint);
+      let startPoint = { ... myDoor.offPoint }
+
+      // scale starting point coords
+      startPoint.x *= window.game.scaleFactor
+      startPoint.y *= window.game.scaleFactor
+
+      dlog(`entering ${myDoor.name} at { ${startPoint.x}, ${startPoint.y} }`)
 
       this.player.alpha = 1;
       this.player.position = startPoint;
@@ -1162,7 +1179,11 @@ export default class extends Phaser.State {
     var enterSprite;
     var anim;
 
-    var startPoint = this.clone(myDoor.entry);
+    let startPoint = {...myDoor.entry}
+
+    // scale starting point coords
+    startPoint.x *= window.game.scaleFactor
+    startPoint.y *= window.game.scaleFactor
 
     this.player.alpha = 0;
 
@@ -1191,17 +1212,20 @@ export default class extends Phaser.State {
   // Move player into room
   tweenIn (door) {
 
-    var entryPoint = door.entry;
-    var dist = this.physics.arcade.distanceBetween(this.player.position, entryPoint)/this.tileSize;
+    let entryPoint = {...door.entry}
 
-    if (__DEBUG__) console.log('tweening in to:' + entryPoint.x +' '+ entryPoint.y);
+    // scale entry point coord
+    entryPoint.x *= window.game.scaleFactor
+    entryPoint.y *= window.game.scaleFactor
+
+    let dist = this.physics.arcade.distanceBetween(this.player.position, entryPoint)/this.tileSize;
+
+    dlog(`tweening in to { ${entryPoint.x}, ${entryPoint.y} }`);
 
     this.tween = this.add.tween(this.player);
     this.tween.to(entryPoint, dist*this.speed); //todo adjust tween speed
     this.tween.onComplete.addOnce(function () {
-
-      if (__DEBUG__) console.log('tween in finished');
-
+      dlog('tween in finished');
       this.openRoom();
     }, this);
     this.tween.start();
@@ -1211,9 +1235,15 @@ export default class extends Phaser.State {
   // Move player out of room
   tweenOut () {
 
-    var offPoint = this.currentRoom.doors[this.door].offPoint;
-    var dist = this.physics.arcade.distanceBetween(this.player.position, offPoint)/this.tileSize;
-    if (__DEBUG__) console.log('tweening out to:' + offPoint.x +' '+ offPoint.y);
+    let offPoint = {...this.currentRoom.doors[this.door].offPoint}
+
+    // scale off point coord
+    offPoint.x *= window.game.scaleFactor
+    offPoint.y *= window.game.scaleFactor
+
+    let dist = this.physics.arcade.distanceBetween(this.player.position, offPoint)/this.tileSize;
+
+    dlog(`tweening out to { ${offPoint.x}, ${offPoint.y} }`);
 
     this.between = this.game.add.tween(this.player)
     this.between.to(offPoint, dist*this.speed); //todo adjust betweening speed
@@ -1221,16 +1251,16 @@ export default class extends Phaser.State {
     this.between.onComplete.addOnce(function () {
       //check for exit animations
 
-      if (__DEBUG__) console.log('tween out finished');
+      dlog('tween out finished');
       this.loadRoom();
 
     }, this);
 
     if (this.tween.isRunning) {
-      if (__DEBUG__) console.log('chaining tween');
+      dlog('chaining tween');
       this.tween.chain(this.between);
     } else {
-      if (__DEBUG__) console.log('running between alone');
+      dlog('running single tween');
       this.between.start();
     }
   }

@@ -26,10 +26,10 @@
 		"doors": {
 			"room07": {
 				"name": "room07",
-			  "x": 150, "y": 131,
+			  "x": 150, "y": 126,
 			  "height": 9, "width": 88,
-				"entry": {"x": 58, "y": 42},
-				"offPoint": {"x": 57, "y": 56},
+				"entry": {"x": 210, "y": 126},
+				"offPoint": {"x": 210, "y": 176},
 				"animation": false
 			}
 		}

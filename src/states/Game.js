@@ -54,16 +54,16 @@ export default class extends Phaser.State {
 
     // inventory variables
     this.slots = [
-      {x:286, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
-      {x:346, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
-      {x:406, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
-      {x:466, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
-      {x:526, y:482, height: 46, width: 44, name: null, item: null, occupied: false},
-      {x:286, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
-      {x:346, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
-      {x:406, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
-      {x:466, y:545, height: 46, width: 44, name: null, item: null, occupied: false},
-      {x:526, y:545, height: 46, width: 44, name: null, item: null, occupied: false}
+      {x: 95, y: 160, height: 16, width: 16, name: null, item: null, occupied: false},
+      {x: 115, y: 160, height: 16, width: 16, name: null, item: null, occupied: false},
+      {x: 135, y: 160, height: 16, width: 16, name: null, item: null, occupied: false},
+      {x: 155, y: 160, height: 16, width: 16, name: null, item: null, occupied: false},
+      {x: 175, y: 160, height: 16, width: 16, name: null, item: null, occupied: false},
+      {x: 95, y: 182, height: 16, width: 16, name: null, item: null, occupied: false},
+      {x: 115, y: 182, height: 16, width: 16, name: null, item: null, occupied: false},
+      {x: 135, y: 182, height: 16, width: 16, name: null, item: null, occupied: false},
+      {x: 155, y: 182, height: 16, width: 16, name: null, item: null, occupied: false},
+      {x: 175, y: 182, height: 16, width: 16, name: null, item: null, occupied: false}
     ];
     this.itemAtlas = itemAtlas
     this.inventory;
@@ -485,25 +485,26 @@ export default class extends Phaser.State {
     this.inventory = this.game.add.group(); // group for items held in slots
 
     for (var i = 0; i < this.slots.length ; i++) {
-      var x = this.slots[i].x,
-          y = this.slots[i].y,
-          height = this.slots[i].height,
-          width = this.slots[i].width;
+      let x = this.slots[i].x * window.game.scaleFactor
+      let y = this.slots[i].y * window.game.scaleFactor
+      let height = this.slots[i].height * window.game.scaleFactor
+      let width = this.slots[i].width * window.game.scaleFactor
 
-      // for inventory size debugging
-      // var slotBackground = this.game.make.graphics();
-      //   slotBackground.beginFill(0xffffff, 0.5);
-      //   slotBackground.drawRect(x, y, width, height);
-      //   slotBackground.endFill();
-      //   this.slotsGroup.add(slotBackground);
-
+      if (__DEBUG__) {
+        // for inventory size debugging
+        let slotBackground = this.game.make.graphics();
+        slotBackground.beginFill(0xffffff, 0.5);
+        slotBackground.drawRect(x, y, width, height);
+        slotBackground.endFill();
+        this.slotsGroup.add(slotBackground);
+      }
 
       var slot = this.slotsGroup.create( x, y );
-        slot.width = width;
-        slot.height = height;
-        slot.name = null;
-        slot.item = null;
-        slot.occupied = false;
+      slot.width = width;
+      slot.height = height;
+      slot.name = null;
+      slot.item = null;
+      slot.occupied = false;
     }
   }
 
@@ -1532,26 +1533,29 @@ export default class extends Phaser.State {
     // and move from inventory group to itemGroup
 
     if (slot.occupied) {
-      slot.item.position = {x: (Math.random()*300 + 50), y: 300};
-      this.inventory.remove(slot.item);
-      this.itemGroup.add(slot.item);
+      slot.item.position = {
+        x: (Math.random()*100 + 50) * window.game.scaleFactor,
+        y: 100 * window.game.scaleFactor
+      }
+      this.inventory.remove(slot.item)
+      this.itemGroup.add(slot.item)
     }
 
-    this.moveToCenter(item, slot);
-    slot.name = item.name;
-    slot.item = item;
-    slot.occupied = true;
+    this.moveToCenter(item, slot)
+    slot.name = item.name
+    slot.item = item
+    slot.occupied = true
 
-    var i = this.currentRoom.items.length;
+    var i = this.currentRoom.items.length
     while (i--)
     {
       if (this.currentRoom.items[i].name == item.name) {
-        this.currentRoom.items.splice( i, 1 );
+        this.currentRoom.items.splice( i, 1 )
       }
     }
 
-    this.itemGroup.remove(item);
-    this.inventory.add(item);
+    this.itemGroup.remove(item)
+    this.inventory.add(item)
   }
 
 

@@ -27,7 +27,7 @@
 			"room07": {
 				"name": "room07",
 			  "x": 150, "y": 126,
-			  "height": 9, "width": 88,
+			  "height": 15, "width": 100,
 				"entry": {"x": 210, "y": 126},
 				"offPoint": {"x": 210, "y": 176},
 				"animation": false

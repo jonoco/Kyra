@@ -335,12 +335,20 @@
 	},
 	"saw_holder": {
 		"name": "saw_holder",
-		"png": "assets/sprites/saw_holder1.png",
-		"json": null,
+		"png": "assets/screens/home.png",
+		"json": "assets/sprites/saw_table.json",
 		"invisible": false,
 		"action": { "click": true },
-		"animated": false,
-		"animations": null
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+				"frames": ["saw"],
+				"speed": 1,
+				"loop": true,
+				"start": true
+			}
+		}
 	},
 	"saw_holder_empty": {
 		"name": "saw_holder_empty",
@@ -552,42 +560,44 @@
 			}
 		}
 	},
-	"tree down": {
-		"name": "tree down",
-		"png": "assets/sprites/tree_down.png",
-		"json": "assets/sprites/tree_down.json",
-		"scale": 0.5,
+	"lift down": {
+		"name": "lift down",
+		"png": "assets/sprites/liftdown.png",
+		"json": "assets/sprites/liftdown.json",
+		"scale": 1,
 		"action": null,
 		"animated": true,
 		"animations": {
 			"on": {
 				"name": "on",
 			 	"frames": [
-			 		"tree-down-1", "tree-down-2", "tree-down-3", "tree-down-4", "tree-down-5",
-			 	 	"tree-down-6", "tree-down-7", "tree-down-8", "tree-down-9", "tree-down-10",
-			 	  "tree-down-11", "tree-down-12", "tree-down-13", "tree-down-14", "tree-down-15",
-			 	   "tree-down-16", "tree-down-17", "tree-down-18", "tree-down-19", "tree-down-20", "tree-down-21"],
+			 		"sprite1", "sprite2", "sprite3", "sprite4", "sprite5", "sprite6", "sprite7", "sprite8",
+			 		"sprite9", "sprite10", "sprite11", "sprite12", "sprite13", "sprite14", "sprite15", "sprite16",
+			 		"sprite17", "sprite18", "sprite19", "sprite20", "sprite21", "sprite22", "sprite23", "sprite24",
+			 		"sprite25", "sprite26", "sprite27"
+			 	],
 			 	"speed": 8,
 			 	"loop": false,
 			 	"start": false
 			}
 		}
 	},
-	"tree up": {
-		"name": "tree up",
-		"png": "assets/sprites/tree_up.png",
-		"json": "assets/sprites/tree_up.json",
-		"scale": 0.5,
+	"lift up": {
+		"name": "lift up",
+		"png": "assets/sprites/liftup.png",
+		"json": "assets/sprites/liftup.json",
+		"scale": 1,
 		"action": null,
 		"animated": true,
 		"animations": {
 			"on": {
 				"name": "on",
 			 	"frames": [
-			 		"tree-up-1", "tree-up-2", "tree-up-3", "tree-up-4", "tree-up-5",
-			 	 	"tree-up-6", "tree-up-7", "tree-up-8", "tree-up-9", "tree-up-10",
-			 	  "tree-up-11", "tree-up-12", "tree-up-13", "tree-up-14", "tree-up-15",
-			 	   "tree-up-16", "tree-up-17", "tree-up-18", "tree-up-19", "tree-up-20", "tree-up-21"],
+			 		"sprite1", "sprite2", "sprite3", "sprite4", "sprite5", "sprite6", "sprite7", "sprite8",
+			 		"sprite9", "sprite10", "sprite11", "sprite12", "sprite13", "sprite14", "sprite15", "sprite16",
+			 		"sprite17", "sprite18", "sprite19", "sprite20", "sprite21", "sprite22", "sprite23", "sprite24",
+			 		"sprite25", "sprite26", "sprite27", "sprite28", "sprite29", "sprite30"
+			 	],
 			 	"speed": 8,
 			 	"loop": false,
 			 	"start": false

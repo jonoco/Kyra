@@ -1,7 +1,6 @@
 /* globals  __DEBUG__ */
 import Phaser from 'phaser';
 import PF from 'pathfinding';
-import Mushroom from '../sprites/Mushroom';
 import lang from '../lang';
 import events from '../events'
 import Quests from '../quests'
@@ -297,15 +296,17 @@ export default class extends Phaser.State {
     for (var i = 0 ; i < roomSprites.length ; i++ ) {
       spriteProperty = this.spritesJSON[roomSprites[i].name];
       newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name);
-      newSprite.position.x *= window.game.scaleFactor
-      newSprite.position.y *= window.game.scaleFactor
+      newSprite.position.x = Math.round(newSprite.position.x * window.game.scaleFactor)
+      newSprite.position.y = Math.round(newSprite.position.y * window.game.scaleFactor)
 
       if (spriteProperty.scale) {
-
         newSprite.scale.setTo(spriteProperty.scale * window.game.scaleFactor);
       } else {
         newSprite.scale.setTo(window.game.scaleFactor);
       }
+
+      newSprite.width = Math.round(newSprite.width)
+      newSprite.height = Math.round(newSprite.height)
 
       if (spriteProperty.invisible) {
         this.showSprite(newSprite, false);
@@ -316,12 +317,13 @@ export default class extends Phaser.State {
         newSprite.scale.x *= -1;
       }
 
+      dlog(`creating sprite ${roomSprites[i].name} at { ${newSprite.position.x}, ${newSprite.position.y} } with scale: ${newSprite.scale} h: ${newSprite.height} w: ${newSprite.width}`)
+
       spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;
       spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null;
       spriteProperty.startFrame ? this.setFrame(newSprite, spriteProperty.startFrame):null;
     }
   }
-
 
 
   // Create room blocks
@@ -416,7 +418,7 @@ export default class extends Phaser.State {
 
   // Create room
   createRoom () {
-    this.room = this.game.add.image( 8 * window.game.scaleFactor, 8 * window.game.scaleFactor );
+    this.room = this.game.add.image(window.game.scaleFactor, window.game.scaleFactor );
     this.room.scale.setTo(window.game.scaleFactor);
     this.room.inputEnabled = true;
   }
@@ -426,15 +428,15 @@ export default class extends Phaser.State {
   createText () {
     this.speech = this.add.text();
     this.speech.font = 'kyrandia';
-    this.speech.fontSize = 20;
+    this.speech.fontSize = 22;
     this.speech.stroke = '#000000';
-    this.speech.strokeThickness = 2;
+    this.speech.strokeThickness = 3;
     this.speech.kill();
 
     this.text = this.add.text();
     this.text.font = 'kyrandia';
     this.text.x = 8 * window.game.scaleFactor;
-    this.text.y = 143 * window.game.scaleFactor;
+    this.text.y = 145 * window.game.scaleFactor;
     this.text.fill = '#bbbbbb';
   }
 
@@ -733,24 +735,24 @@ export default class extends Phaser.State {
   say (string, key, color) {
 
     // include key for event evaluation
-    var sprite = key ? this.getSprite(key): this.player;
-    var textColor = color ? color: "player";
+    var sprite = key ? this.getSprite(key): this.player
+    var textColor = color ? color: "player"
 
-    this.speech.revive();
-    this.speech.x = sprite.x;
-    this.speech.y = sprite.top-40;
-    this.speech.text = string;
-    this.speech.stroke = '#000000';
-    this.speech.strokeThickness = 5;
-    this.speech.fill = this.colorAtlas[textColor];
-    this.speech.name = sprite.key;
+    this.speech.revive()
+    this.speech.x = sprite.x
+    this.speech.y = sprite.top - 40
+    this.speech.text = string
+    this.speech.stroke = '#000000'
+    this.speech.strokeThickness = 5
+    this.speech.fill = this.colorAtlas[textColor]
+    this.speech.name = sprite.key
 
-    if (this.speech.right > 920) {
-      this.speech.x -= this.speech.right - 920;
+    if (this.speech.right > 306 * window.game.scaleFactor) {
+      this.speech.x -= this.speech.right - (306 * window.game.scaleFactor)
     }
 
     if (this.speech.top < 40) {
-      this.speech.y = 40;
+      this.speech.y = 40
     }
 
     this.speech.events.onKilled.addOnce(function (data) {

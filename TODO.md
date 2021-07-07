@@ -32,6 +32,7 @@
 	+ [x] update screens
 	+ [x] update asset coordinates
 	+ [x] update tween coordinates
+	+ [ ] update animation scaling
 
 ### Bugs
 - [x] tapping on player causes him to disappear
@@ -45,4 +46,5 @@
 	- Uncaught TypeError: Cannot read property 'parent' of undefined
 - [x] willow tree animation is not triggering next event
 - [x] items coordinates scaled every time room is loaded
+
 

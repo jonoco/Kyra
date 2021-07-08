@@ -35,7 +35,7 @@ export default class extends Phaser.State {
     this.load.image('titlepage', 'assets/img/title.png')
     this.load.image('gui', 'assets/img/gui.png')
     this.load.image('pathing', 'assets/tiles/pathing.png')
-    this.load.image('room03-alt', 'assets/screens/room03-alt.png')
+    this.load.image('room03-alt', 'assets/screens/willow_healed.png')
     this.load.image('room19-alt', 'assets/screens/room19-alt.png')
     this.load.image('end', 'assets/img/malcolm_blob.png')
 

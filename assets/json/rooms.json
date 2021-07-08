@@ -47,7 +47,7 @@
 		],
 		"blocks": [],
 		"grid": "assets/json/room02.json",
-		"path": "assets/screens/room02.png",
+		"path": "assets/screens/trunk.png",
 		"doors": {
 			"room07": {
 				"name": "room07",
@@ -94,7 +94,7 @@
 		],
 		"blocks": [],
 		"grid": "assets/json/room03.json",
-		"path": "assets/screens/room03.png",
+		"path": "assets/screens/willow_sick.png",
 		"doors": {
 			"room04": {
 				"name": "room04",
@@ -114,6 +114,11 @@
 			}
 		}
 	},
+	"room03-alt":
+	{
+		"name": "room03-alt",
+		"path": "assets/screens/willow_healed.png"
+	},
 	"room04": {
 		"name": "room04",
 		"text": "A southern cliff",
@@ -125,7 +130,7 @@
 		],
 		"blocks": [],
 		"grid": "assets/json/room04.json",
-		"path": "assets/screens/room04.png",
+		"path": "assets/screens/zrock.png",
 		"doors": {
 			"room03": {
 				"name": "room03",
@@ -153,7 +158,7 @@
 		"sprites": [{ "name": "temple entrance", "x": 137, "y": 40 }],
 		"blocks": [],
 		"grid": "assets/json/room05.json",
-		"path": "assets/screens/room05.png",
+		"path": "assets/screens/healer_ext.png",
 		"doors": {
 			"room04": {
 				"name": "room04",
@@ -185,7 +190,7 @@
 		],
 		"blocks": [],
 		"grid": "assets/json/room06.json",
-		"path": "assets/screens/room06-1.png",
+		"path": "assets/screens/healer.png",
 		"doors": {
 			"room05": {
 				"name": "room05",
@@ -212,7 +217,7 @@
 			{ "name": "treehouseSymbol", "x": 95, "y": 30, "height": 27, "width": 30 }
 		],
 		"grid": "assets/json/room07.json",
-		"path": "assets/screens/room07.png",
+		"path": "assets/screens/home_ext.png",
 		"doors": {
 			"room01": {
 				"name": "room01",
@@ -246,7 +251,7 @@
 		],
 		"blocks": [],
 		"grid": "assets/json/room08.json",
-		"path": "assets/screens/room08.png",
+		"path": "assets/screens/forest_north.png",
 		"doors": {
 			"room02": {
 				"name": "room02",
@@ -283,7 +288,7 @@
 		],
 		"blocks": [],
 		"grid": "assets/json/room09.json",
-		"path": "assets/screens/room09.png",
+		"path": "assets/screens/sorrow.png",
 		"doors": {
 			"room08": {
 				"name": "room08",
@@ -314,7 +319,7 @@
 		],
 		"blocks": [],
 		"grid": "assets/json/room11.json",
-		"path": "assets/screens/room11.png",
+		"path": "assets/screens/forest_a.png",
 		"doors":  {
 			"room09": {
 				"name": "room09",
@@ -353,7 +358,7 @@
 		],
 		"blocks": [],
 		"grid": "assets/json/room12.json",
-		"path": "assets/screens/room12.png",
+		"path": "assets/screens/forest_east.png",
 		"doors": {
 			"room11": {
 				"name": "room11",
@@ -389,7 +394,7 @@
 		"sprites": [],
 		"blocks": [],
 		"grid": "assets/json/room13.json",
-		"path": "assets/screens/room13.png",
+		"path": "assets/screens/forest_corner_rock.png",
 		"doors": {
 			"room12": {
 				"name": "room12",
@@ -414,7 +419,7 @@
 		],
 		"blocks": [],
 		"grid": "assets/json/room14.json",
-		"path": "assets/screens/room14-2.png",
+		"path": "assets/screens/altar.png",
 		"doors": {
 			"room12": {
 				"name": "room12",
@@ -442,7 +447,7 @@
 		"sprites": [],
 		"blocks": [],
 		"grid": "assets/json/room16.json",
-		"path": "assets/screens/room16.png",
+		"path": "assets/screens/cliff_nw_b.png",
 		"doors": {
 			"room14": {
 				"name": "room14",
@@ -465,7 +470,7 @@
 		],
 		"blocks": [],
 		"grid": "assets/json/room17.json",
-		"path": "assets/screens/room17.png",
+		"path": "assets/screens/xedge.png",
 		"doors": {
 			"room11": {
 				"name": "room11",
@@ -493,7 +498,7 @@
 		"sprites": [{ "name": "cave entrance", "x": 7, "y": 8 }],
 		"blocks": [],
 		"grid": "assets/json/room18.json",
-		"path": "assets/screens/room18.png",
+		"path": "assets/screens/cave.png",
 		"doors": {
 			"room17": {
 				"name": "room17",
@@ -523,7 +528,7 @@
 		"altSprites": [],
 		"blocks": [],
 		"grid": "assets/json/room19.json",
-		"path": "assets/screens/room19.png",
+		"path": "assets/screens/bridge_broken.png",
 		"doors": {
 			"room18": {
 				"name": "room18",
@@ -537,6 +542,6 @@
 	},
 	"room19-alt": {
 		"name": "room19-alt",
-		"path": "assets/screens/room19-alt.png"
+		"path": "assets/screens/bridge_fixed.png"
 	}
 }

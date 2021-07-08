@@ -67,7 +67,7 @@ module.exports = env => {
       rules: [
         {
           test: /\.js$/,
-          exclude: /(node_modules)/,
+          //exclude: /(node_modules)/,
           use: {
             loader: 'babel-loader',
             options: {
@@ -82,6 +82,7 @@ module.exports = env => {
       ]
     },
     resolve: {
+      preferRelative: true,
       alias: {
         'phaser': phaser,
         'pixi': pixi,

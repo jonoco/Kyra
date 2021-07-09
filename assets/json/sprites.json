@@ -663,22 +663,21 @@
 	},
 	"brynn enter": {
 		"name": "brynn enter",
-		"png": "assets/sprites/brynn_enter.png",
+		"png": "assets/sprites/brynn_ente.png",
 		"json": "assets/sprites/brynn_enter.json",
-		"scale": 0.5,
+		"scale": 1,
 		"action": null,
 		"animated": true,
 		"animations": {
 			"enter": {
 				"name": "enter",
 			 	"frames": [
-			 		"brynn_enter-1", "brynn_enter-1", "brynn_enter-1", "brynn_enter-1",
-			 		"brynn_enter-2", "brynn_enter-3", "brynn_enter-4", "brynn_enter-5",
-			 	 	"brynn_enter-6", "brynn_enter-7", "brynn_enter-8", "brynn_enter-9", "brynn_enter-10",
-			 	  "brynn_enter-11", "brynn_enter-12", "brynn_enter-13", "brynn_enter-14", "brynn_enter-15",
-			 	  "brynn_enter-16", "brynn_enter-17", "brynn_enter-18", "brynn_enter-19", "brynn_enter-20",
-			 	  "brynn_enter-21", "brynn_enter-22", "brynn_enter-23", "brynn_enter-24", "brynn_enter-25",
-			 	  "brynn_enter-26", "brynn_enter-27"],
+			 		"sprite1", "sprite1", "sprite1", "sprite1","sprite2", "sprite3",
+					"sprite4", "sprite5","sprite6", "sprite7", "sprite8", "sprite9", 
+					"sprite10", "sprite11", "sprite12", "sprite13", "sprite14", "sprite15",
+			 	  	"sprite16", "sprite17", "sprite18", "sprite19", "sprite20", "sprite21", 
+				    "sprite22", "sprite23", "sprite24", "sprite25","sprite26", "sprite27"
+				],
 			 	"speed": 7,
 			 	"loop": false,
 			 	"start": true

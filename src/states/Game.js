@@ -1,4 +1,3 @@
-/* globals  __DEBUG__ */
 import Phaser from 'phaser';
 import PF from 'pathfinding';
 import lang from '../lang';
@@ -12,7 +11,7 @@ export default class extends Phaser.State {
     this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room01';
+    this.startRoom = 'room04';
 
     // utility variables
     this.timer;
@@ -113,10 +112,9 @@ export default class extends Phaser.State {
     this.createInventory();
     this.doorGroup = this.game.add.group();
     this.doorDebug = this.game.add.group();
-    this.createPlayer();
     this.blockGroup = this.add.group();
-
     this.createStartRoom();
+    this.createPlayer();
   }
 
 
@@ -278,7 +276,7 @@ export default class extends Phaser.State {
 
   // Change sprite frame
   setFrame (sprite, frame) {
-    if (__DEBUG__) console.log('setting frame: ', frame);
+    dlog('setting frame: ', frame);
     sprite.frameName = frame;
     sprite.alpha = 1;
   }
@@ -289,13 +287,16 @@ export default class extends Phaser.State {
 
   // Create sprites for the current room
   createSprites () {
-    var roomSprites = this.currentRoom.sprites;
-    var newSprite;
-    var spriteProperty;
+    const roomSprites = this.currentRoom.sprites;
 
-    for (var i = 0 ; i < roomSprites.length ; i++ ) {
-      spriteProperty = this.spritesJSON[roomSprites[i].name];
-      newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name);
+    for (let i = 0 ; i < roomSprites.length ; i++ ) {
+      let spriteProperty = this.spritesJSON[roomSprites[i].name];
+      
+      if (!spriteProperty) {
+        throw new Error(`Sprite for room [${this.currentRoom.name}] not found in cache: check if sprite [${roomSprites[i].name}] exists`)
+      }
+
+      let newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name);
       newSprite.position.x = Math.round(newSprite.position.x * window.game.scaleFactor)
       newSprite.position.y = Math.round(newSprite.position.y * window.game.scaleFactor)
 
@@ -531,7 +532,10 @@ export default class extends Phaser.State {
   // Create player
   createPlayer () {
 
-    this.player = this.game.add.sprite(106 * window.game.scaleFactor, 113 * window.game.scaleFactor, 'player', 'stand-right');
+    // Use the first door's entry as the starting position when spawning player
+    const startPosition = this.doors[Object.keys(this.doors)[0]].entry
+
+    this.player = this.game.add.sprite(startPosition.x * window.game.scaleFactor, startPosition.y * window.game.scaleFactor, 'player', 'stand-right');
     this.player.name = 'player';
 
     this.player.animations.add('walk-right', [
@@ -660,17 +664,30 @@ export default class extends Phaser.State {
   // Move sprites in front or behind player
   changeSpriteIndex () {
     // move sprites behind/in front of player
-    for (var i = 0 ; i < this.spritesGroup.length ; i++) {
-      var sprite = this.spritesGroup.children[i];
+    for (let i = 0 ; i < this.spritesGroup.length ; i++) {
+      let sprite = this.spritesGroup.children[i];
 
       if (sprite.name == 'player') {
         //pass
       } else if (this.player.bottom < sprite.bottom) {
         // sprite is in front of player
         sprite.bringToTop();
+
+       //dlog(`pull ${sprite.name} in front of player`)
       } else {
         // sprite is behind player
         sprite.sendToBack();
+
+        //dlog(`push ${sprite.name} behind player`)
+      }
+    }
+
+    for (let item of this.itemGroup.children) {
+      dlog(`item: ${item.bottom} player: ${this.player.bottom}`)
+      if (this.player.bottom < item.bottom) {
+        item.bringToTop()
+      } else {
+        item.sendToBack()
       }
     }
   }

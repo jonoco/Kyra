@@ -42,8 +42,8 @@
 			{ "name": "sapphire", "x": 140, "y": 107 }
 		],
 		"sprites": [
-			{ "name": "branch up", "x": 231, "y": 8 },
-			{ "name": "branch down", "x": 231, "y": 8 }
+			{ "name": "branch up", "x": 233, "y": 9 },
+			{ "name": "branch down", "x": 233, "y": 9 }
 		],
 		"blocks": [],
 		"grid": "assets/json/room02.json",
@@ -53,8 +53,8 @@
 				"name": "room07",
 				"x": 238, "y": 73,
 			 	"height": 40, "width": 30,
-			 	"entry": {"x": 260, "y": 110},
-			 	"offPoint": {"x": 260, "y": 110},
+			 	"entry": {"x": 280, "y": 112},
+			 	"offPoint": {"x": 280, "y": 110},
 			 	"animation": {
 			 		"exit": "branch up",
 			 		"enter": "branch down"
@@ -185,7 +185,7 @@
 		"items": [],
 		"sprites": [
 			{ "name": "temple fire", "x": 131, "y": 43 },
-			{ "name": "brynn enter", "x": 7, "y": 60 },
+			{ "name": "brynn enter", "x": 9, "y": 60 },
 			{ "name": "brynn", "x": 37, "y": 60 }
 		],
 		"blocks": [],
@@ -208,8 +208,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [
-			{ "name": "lift up", "x": 190, "y": 57 },
-			{ "name": "lift down", "x": 190, "y": 57 },
+			{ "name": "lift up", "x": 193, "y": 57 },
+			{ "name": "lift down", "x": 193, "y": 56 },
 			{ "name": "treehouse", "x": 163, "y": 25 }
 		],
 		"blocks": [
@@ -231,7 +231,7 @@
 				"name": "room02",
 				"x": 173, "y": 105,
 				"height": 33, "width": 67,
-				"entry": {"x": 207, "y": 107},
+				"entry": {"x": 210, "y": 107},
 				"offPoint": {"x": 210, "y": 133},
 				"animation": {
 					"enter": "lift up",

@@ -1,0 +1,407 @@
+{
+    "frames": [
+      {
+        "filename": "fire1",
+        "frame": {
+          "x": 8,
+          "y": 144,
+          "w": 16,
+          "h": 15
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 15
+        },
+        "sourceSize":
+        {
+            "w": 16,
+            "h": 15
+        }
+      },
+      {
+        "filename": "fire2",
+        "frame": {
+          "x": 24,
+          "y": 144,
+          "w": 16,
+          "h": 15
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 15
+        },
+        "sourceSize":
+        {
+            "w": 16,
+            "h": 15
+        }
+      },
+      {
+        "filename": "fire3",
+        "frame": {
+          "x": 41,
+          "y": 144,
+          "w": 16,
+          "h": 15
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 15
+        },
+        "sourceSize":
+        {
+            "w": 16,
+            "h": 15
+        }
+      },
+      {
+        "filename": "reflection1",
+        "frame": {
+          "x": 56,
+          "y": 144,
+          "w": 8,
+          "h": 15
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 8,
+            "h": 15
+        },
+        "sourceSize":
+        {
+            "w": 8,
+            "h": 15
+        }
+      },
+      {
+        "filename": "reflection2",
+        "frame": {
+          "x": 64,
+          "y": 144,
+          "w": 8,
+          "h": 15
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 8,
+            "h": 15
+        },
+        "sourceSize":
+        {
+            "w": 8,
+            "h": 15
+        }
+      },
+      {
+        "filename": "reflection3",
+        "frame": {
+          "x": 72,
+          "y": 144,
+          "w": 8,
+          "h": 15
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 8,
+            "h": 15
+        },
+        "sourceSize":
+        {
+            "w": 8,
+            "h": 15
+        }
+      },
+      {
+        "filename": "spell1",
+        "frame": {
+          "x": 80,
+          "y": 144,
+          "w": 24,
+          "h": 33
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 33
+        },
+        "sourceSize":
+        {
+            "w": 24,
+            "h": 33
+        }
+      },
+      {
+        "filename": "spell2",
+        "frame": {
+          "x": 105,
+          "y": 144,
+          "w": 24,
+          "h": 33
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 33
+        },
+        "sourceSize":
+        {
+            "w": 24,
+            "h": 33
+        }
+      },
+      {
+        "filename": "spell3",
+        "frame": {
+          "x": 128,
+          "y": 144,
+          "w": 24,
+          "h": 33
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 33
+        },
+        "sourceSize":
+        {
+            "w": 24,
+            "h": 33
+        }
+      },
+      {
+        "filename": "spell4",
+        "frame": {
+          "x": 152,
+          "y": 144,
+          "w": 24,
+          "h": 33
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 33
+        },
+        "sourceSize":
+        {
+            "w": 24,
+            "h": 33
+        }
+      },
+      {
+        "filename": "spell5",
+        "frame": {
+          "x": 176,
+          "y": 144,
+          "w": 24,
+          "h": 33
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 33
+        },
+        "sourceSize":
+        {
+            "w": 24,
+            "h": 33
+        }
+      },
+      {
+        "filename": "spell6",
+        "frame": {
+          "x": 200,
+          "y": 144,
+          "w": 24,
+          "h": 33
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 33
+        },
+        "sourceSize":
+        {
+            "w": 24,
+            "h": 33
+        }
+      },
+      {
+        "filename": "spell7",
+        "frame": {
+          "x": 224,
+          "y": 144,
+          "w": 24,
+          "h": 33
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 33
+        },
+        "sourceSize":
+        {
+            "w": 24,
+            "h": 33
+        }
+      },
+      {
+        "filename": "talk1",
+        "frame": {
+          "x": 249,
+          "y": 144,
+          "w": 15,
+          "h": 20
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 15,
+            "h": 20
+        },
+        "sourceSize":
+        {
+            "w": 15,
+            "h": 20
+        }
+      },
+      {
+        "filename": "talk2",
+        "frame": {
+          "x": 285,
+          "y": 144,
+          "w": 15,
+          "h": 20
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 15,
+            "h": 20
+        },
+        "sourceSize":
+        {
+            "w": 15,
+            "h": 20
+        }
+      },
+      {
+        "filename": "talk3",
+        "frame": {
+          "x": 249,
+          "y": 168,
+          "w": 15,
+          "h": 20
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 15,
+            "h": 20
+        },
+        "sourceSize":
+        {
+            "w": 15,
+            "h": 20
+        }
+      },
+      {
+        "filename": "talk4",
+        "frame": {
+          "x": 265,
+          "y": 168,
+          "w": 15,
+          "h": 20
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 15,
+            "h": 20
+        },
+        "sourceSize":
+        {
+            "w": 15,
+            "h": 20
+        }
+      }
+    ],
+    "meta":
+    {
+        "app": "https://www.leshylabs.com/apps/sstool/",
+        "version": "Leshy SpriteSheet Tool v0.8.4",
+        "image": "altar.png",
+        "size":
+        {
+            "w": 320,
+            "h": 200
+        },
+        "scale": 1
+    }
+}

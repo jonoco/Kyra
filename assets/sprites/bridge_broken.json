@@ -1,0 +1,499 @@
+{
+    "frames": [
+      {
+        "filename": "board1",
+        "frame": {
+          "x": 8,
+          "y": 136,
+          "w": 40,
+          "h": 32
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 32
+        },
+        "sourceSize":
+        {
+            "w": 40,
+            "h": 32
+        }
+      },
+      {
+        "filename": "board2",
+        "frame": {
+          "x": 49,
+          "y": 136,
+          "w": 40,
+          "h": 32
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 32
+        },
+        "sourceSize":
+        {
+            "w": 40,
+            "h": 32
+        }
+      },
+      {
+        "filename": "board3",
+        "frame": {
+          "x": 88,
+          "y": 136,
+          "w": 40,
+          "h": 32
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 32
+        },
+        "sourceSize":
+        {
+            "w": 40,
+            "h": 32
+        }
+      },
+      {
+        "filename": "pole1",
+        "frame": {
+          "x": 8,
+          "y": 169,
+          "w": 56,
+          "h": 24
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 56,
+            "h": 24
+        },
+        "sourceSize":
+        {
+            "w": 56,
+            "h": 24
+        }
+      },
+      {
+        "filename": "pole2",
+        "frame": {
+          "x": 65,
+          "y": 169,
+          "w": 56,
+          "h": 24
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 56,
+            "h": 24
+        },
+        "sourceSize":
+        {
+            "w": 56,
+            "h": 24
+        }
+      },
+      {
+        "filename": "pole3",
+        "frame": {
+          "x": 121,
+          "y": 169,
+          "w": 56,
+          "h": 24
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 56,
+            "h": 24
+        },
+        "sourceSize":
+        {
+            "w": 56,
+            "h": 24
+        }
+      },
+      {
+        "filename": "highwater1",
+        "frame": {
+          "x": 8,
+          "y": 192,
+          "w": 40,
+          "h": 8
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 8
+        },
+        "sourceSize":
+        {
+            "w": 40,
+            "h": 8
+        }
+      },
+      {
+        "filename": "highwater2",
+        "frame": {
+          "x": 49,
+          "y": 192,
+          "w": 40,
+          "h": 8
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 8
+        },
+        "sourceSize":
+        {
+            "w": 40,
+            "h": 8
+        }
+      },
+      {
+        "filename": "highwater3",
+        "frame": {
+          "x": 89,
+          "y": 192,
+          "w": 40,
+          "h": 8
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 8
+        },
+        "sourceSize":
+        {
+            "w": 40,
+            "h": 8
+        }
+      },
+      {
+        "filename": "lowwater1",
+        "frame": {
+          "x": 128,
+          "y": 136,
+          "w": 48,
+          "h": 24
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 48,
+            "h": 24
+        },
+        "sourceSize":
+        {
+            "w": 48,
+            "h": 24
+        }
+      },
+      {
+        "filename": "lowwater2",
+        "frame": {
+          "x": 177,
+          "y": 136,
+          "w": 48,
+          "h": 24
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 48,
+            "h": 24
+        },
+        "sourceSize":
+        {
+            "w": 48,
+            "h": 24
+        }
+      },
+      {
+        "filename": "lowwater3",
+        "frame": {
+          "x": 177,
+          "y": 160,
+          "w": 48,
+          "h": 24
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 48,
+            "h": 24
+        },
+        "sourceSize":
+        {
+            "w": 48,
+            "h": 24
+        }
+      },
+      {
+        "filename": "dangle1",
+        "frame": {
+          "x": 128,
+          "y": 160,
+          "w": 16,
+          "h": 8
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 8
+        },
+        "sourceSize":
+        {
+            "w": 16,
+            "h": 8
+        }
+      },
+      {
+        "filename": "dangle2",
+        "frame": {
+          "x": 145,
+          "y": 160,
+          "w": 16,
+          "h": 8
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 8
+        },
+        "sourceSize":
+        {
+            "w": 16,
+            "h": 8
+        }
+      },
+      {
+        "filename": "dangle3",
+        "frame": {
+          "x": 160,
+          "y": 160,
+          "w": 16,
+          "h": 8
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 8
+        },
+        "sourceSize":
+        {
+            "w": 16,
+            "h": 8
+        }
+      },
+      {
+        "filename": "rope1",
+        "frame": {
+          "x": 177,
+          "y": 184,
+          "w": 40,
+          "h": 16
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 16
+        },
+        "sourceSize":
+        {
+            "w": 40,
+            "h": 16
+        }
+      },
+      {
+        "filename": "rope2",
+        "frame": {
+          "x": 217,
+          "y": 184,
+          "w": 40,
+          "h": 16
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 16
+        },
+        "sourceSize":
+        {
+            "w": 40,
+            "h": 16
+        }
+      },
+      {
+        "filename": "rope3",
+        "frame": {
+          "x": 257,
+          "y": 184,
+          "w": 40,
+          "h": 16
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 16
+        },
+        "sourceSize":
+        {
+            "w": 40,
+            "h": 16
+        }
+      },
+      {
+        "filename": "rock1",
+        "frame": {
+          "x": 224,
+          "y": 137,
+          "w": 32,
+          "h": 48
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 32,
+            "h": 48
+        },
+        "sourceSize":
+        {
+            "w": 32,
+            "h": 48
+        }
+      },
+      {
+        "filename": "rock2",
+        "frame": {
+          "x": 256,
+          "y": 137,
+          "w": 32,
+          "h": 48
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 32,
+            "h": 48
+        },
+        "sourceSize":
+        {
+            "w": 32,
+            "h": 48
+        }
+      },
+      {
+        "filename": "rock3",
+        "frame": {
+          "x": 288,
+          "y": 137,
+          "w": 32,
+          "h": 48
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 32,
+            "h": 48
+        },
+        "sourceSize":
+        {
+            "w": 32,
+            "h": 48
+        }
+      }
+    ],
+    "meta":
+    {
+        "app": "https://www.leshylabs.com/apps/sstool/",
+        "version": "Leshy SpriteSheet Tool v0.8.4",
+        "image": "bridge_broken.png",
+        "size":
+        {
+            "w": 320,
+            "h": 200
+        },
+        "scale": 1
+    }
+}

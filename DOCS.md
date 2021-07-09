@@ -8,17 +8,17 @@
 - door events are only evaluated if openDoor is true, while openDoor is true when the last click was on a door
 
 #### 2. Scenes
-##### Scenes are the animated sequences occuring upon certain events, e.g. entering certain rooms for the first time, clicking on certain sprites
+##### Scenes are the animated sequences occuring upon certain events, e.g. entering certain rooms for the first time, clicking on certain sprites.
 - scenes implemented are the ascent and descent to the treehouse, and meeting Brynn at the temple
 
 #### 3. Events
-##### Events refer to the behaviors that occur when clicking on (or dragging items onto) certain objects, e.g., clicking the branch next to brandon home, dragging a rose onto Brynn
+##### Events refer to the behaviors that occur when clicking on (or dragging items onto) certain objects, e.g., clicking the branch next to brandon home, dragging a rose onto Brynn.
 - events are handled by the event chain system: evalEvent(), eventTriggers, questQueue
 - interesting events (animations finishing, room changes, quest status change) call evalEvent to report the event
 	-	evalEvent checks if this event is linked to a quest by check eventTriggers
 
 #### 4. Magic
-##### Magic are special player events which may trigger scenes in certain rooms
+##### Magic are special player events which may trigger scenes in certain rooms.
 - **magic is not planned to be implemented**
 
 #### 5. Grid
@@ -35,7 +35,7 @@
 - if an item already exists at the slot hit, it is placed on the ground, and the new item takes its slot; both items have their groups swapped
 
 #### 7. Items
-##### Items refer to all interactive, collectable sprites
+##### Items refer to all interactive, collectable sprites.
 -	all room items are created during the createItems() routine during every room change
 - permanent item meta changes are stored in the roomsJSON object, usually accessed via this.currentRoom.items
 -	for items to be properly handled, they must either be: inventory, or room items
@@ -53,11 +53,21 @@
 	- door animations are accomplished by assigning the door.animation property a enter and/or exit sprite
 
 #### 9. Quests
-##### Quests track events that occur during play, such as completing tasks or visiting people, and control progress through the game
+##### Quests track events that occur during play, such as completing tasks or visiting people, and control progress through the game.
 -	quests are controlled by two objects, the quests and eventTriggers objects
 -	the quests object tracks quest conditions, and holds events triggered on completion of certain steps of the quest
 - the eventTriggers object links various game events (such as animations, room changes, item collection) with steps in various quests
 	- this prevents the need to assign rooms, sprites, or items with quest related data, and allows these varying events to be consolidated into a single object for convenience and ease of scaling
 - multiple event executions are done using the questQueue, which execuates events in sequence
 
+#### 10. Sprites
+##### All images and animations are sprites, except for the GUI and background images.
+- almost all sprites are first defined in the sprites.json file, describing asset paths and animation frames
+- sprites with spritesheets or atlases are defined with their own json files in the sprites directory, then referenced in sprites.json
+- sprite atlases can be used by defining a sprite with its atlas in sprites.json, then designating the "startFrame" frame
 
+#### 11. Layers
+##### The UI is divided into five layers
+- from back to front: screen (background) | background sprites | midground sprites (player, items) | foreground sprites | gui
+- the depth of the player and items are arranged based on the relative position of the sprites; higher y-position sprites are pushed into the back
+- all sprites are placed into the background sprite layer by default, with other layers defined in their sprites.json entry

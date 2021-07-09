@@ -1,0 +1,154 @@
+{
+    "frames": [
+      {
+        "filename": "altar1",
+        "frame": {
+          "x": 8,
+          "y": 137,
+          "w": 38,
+          "h": 38
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 38,
+            "h": 38
+        },
+        "sourceSize":
+        {
+            "w": 38,
+            "h": 38
+        }
+      },
+      {
+        "filename": "altar2",
+        "frame": {
+          "x": 18,
+          "y": 137,
+          "w": 38,
+          "h": 38
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 38,
+            "h": 38
+        },
+        "sourceSize":
+        {
+            "w": 38,
+            "h": 38
+        }
+      },
+      {
+        "filename": "altar3",
+        "frame": {
+          "x": 28,
+          "y": 137,
+          "w": 38,
+          "h": 38
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 38,
+            "h": 38
+        },
+        "sourceSize":
+        {
+            "w": 38,
+            "h": 38
+        }
+      },
+      {
+        "filename": "altar4",
+        "frame": {
+          "x": 38,
+          "y": 137,
+          "w": 38,
+          "h": 38
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 38,
+            "h": 38
+        },
+        "sourceSize":
+        {
+            "w": 38,
+            "h": 38
+        }
+      },
+      {
+        "filename": "altar5",
+        "frame": {
+          "x": 48,
+          "y": 137,
+          "w": 38,
+          "h": 38
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 38,
+            "h": 38
+        },
+        "sourceSize":
+        {
+            "w": 38,
+            "h": 38
+        }
+      },
+      {
+        "filename": "altar6",
+        "frame": {
+          "x": 58,
+          "y": 137,
+          "w": 38,
+          "h": 48
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize":
+        {
+            "x": 0,
+            "y": 0,
+            "w": 38,
+            "h": 48
+        },
+        "sourceSize":
+        {
+            "w": 38,
+            "h": 48
+        }
+      }
+    ],
+    "meta":
+    {
+        "app": "https://www.leshylabs.com/apps/sstool/",
+        "version": "Leshy SpriteSheet Tool v0.8.4",
+        "image": "altar.png",
+        "size":
+        {
+            "w": 320,
+            "h": 200
+        },
+        "scale": 1
+    }
+}

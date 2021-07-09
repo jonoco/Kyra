@@ -134,7 +134,7 @@
 	"image": "drop.png",
 	"format": "RGBA8888",
 	"size": {"w":806,"h":2018},
-	"scale": "1",
+	"scale": "1p",
 	"smartupdate": "$TexturePacker:SmartUpdate:a67d14f5e555ebf0a968a896d63d5323:d78d78496ab227a249d5e9bd528cb940:8546935260301fb2caaaed75a72444b4$"
 }
 }

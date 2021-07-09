@@ -32,7 +32,8 @@
 	+ [x] update screens
 	+ [x] update asset coordinates
 	+ [x] update tween coordinates
-	+ [ ] update animation scaling
+	+ [ ] update animations
+	+ [ ] update sprite scaling
 
 ### Bugs
 - [x] tapping on player causes him to disappear

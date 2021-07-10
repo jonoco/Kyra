@@ -11,7 +11,8 @@ export default class extends Phaser.State {
     this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room04';
+    this.startRoom = 'room09';
+    this.debugOn = __DEBUG__ || false
 
     // utility variables
     this.timer;
@@ -34,8 +35,11 @@ export default class extends Phaser.State {
     this.finder;
 
     // sprite variables
+    this.bgSprites;
+    this.mgSprites;
+    this.fgSprites;
     this.spritesJSON;
-    this.spritesGroup;
+    //this.spritesGroup;
     this.player;
     this.tween;
     this.between;
@@ -82,6 +86,7 @@ export default class extends Phaser.State {
     this.doors;
     this.doorGroup;
     this.blockGroup;
+    this.debugGroup;
     this.music;
     this.text;
     this.currentMusic;
@@ -102,10 +107,16 @@ export default class extends Phaser.State {
     this.eventTriggers = this.Quests.triggers
 
     this.createRoom();
-    this.spritesGroup = this.game.add.group();
+
+    this.bgSprites = this.game.add.group();
+    this.mgSprites = this.game.add.group();
+    this.itemGroup = this.game.add.group();
+    this.fgSprites = this.game.add.group();
+    //this.spritesGroup = this.game.add.group();
+    
     this.createGui();
     this.createText();
-    this.itemGroup = this.game.add.group();
+    
     this.createMap();
     this.createGrid();
     this.createInputs();
@@ -113,26 +124,19 @@ export default class extends Phaser.State {
     this.doorGroup = this.game.add.group();
     this.doorDebug = this.game.add.group();
     this.blockGroup = this.add.group();
+    this.debugGroup = this.add.group();;
     this.createStartRoom();
     this.createPlayer();
+
+    this.input.keyboard.addKeys({ "a": Phaser.KeyCode.A, "b": Phaser.KeyCode.B })
+    let tildeKey = this.input.keyboard.addKey(Phaser.KeyCode.TILDE)
+    tildeKey.onDown.add(this.toggleDebug, this)
+
+    log()
   }
 
 
   update () {
-    if (__DEBUG__) {
-      this.game.debug.text('Open door: ' + this.openDoor, 5, 50);
-      this.game.debug.text('Player position: ' + this.player.x +', '+ this.player.y, 5, 175);
-      this.game.debug.text('Pointer position: ' + this.game.input.position.x + ', ' + this.game.input.position.y, 16, 525);
-      //this.game.debug.soundInfo(this.music, 286, 475);
-      this.game.debug.text('Text z index: ' + this.text.z, 276, 450);
-      this.game.debug.text('Player z index: ' + this.player.z, 276, 475);
-      this.game.debug.text('GUI z index: ' + this.gui.z, 276, 500);
-      this.game.debug.text('room z index: ' + this.room.z, 276, 525);
-      this.game.debug.text('itemGroup z index: ' + this.itemGroup.z, 276, 550);
-      this.game.debug.text('spritesGroup z index: ' + this.spritesGroup.z, 276, 575);
-      this.game.debug.text('slotsGroup z index: ' + this.slotsGroup.z, 276, 600);
-    }
-
     if (this.openDoor) {
       this.physics.arcade.overlap(this.player, this.doorGroup, this.peekInDoor, null, this);
     }
@@ -148,6 +152,60 @@ export default class extends Phaser.State {
   render() {
     this.changeSpriteIndex();
     this.changePlayerAnimation();
+    
+    if (this.debugOn) {
+      this.debugScreen()
+    }
+  }
+
+
+  debugScreen() {
+    let i = 1
+    i = this.addDebugText(`Room: ${this.currentRoom.name}`, i);
+    i = this.addDebugText(`Open door: ${this.openDoor}`, i);
+    i = this.addDebugText(`Player position: ${this.player.x}, ${this.player.y}`, i);
+    i = this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}`, i);
+    i = this.addDebugText(`Player z index: ${this.player.z}`, i);
+    i = this.addDebugText(`GUI z index: ${this.gui.z}`, i);
+    i = this.addDebugText(`room z index: ${this.room.z}`, i);
+    i = this.addDebugText(`bgSprites z index: ${this.bgSprites.z}`, i);
+    i = this.addDebugText(`mgSprites z index: ${this.mgSprites.z}`, i);
+    i = this.addDebugText(`fgSprites z index: ${this.fgSprites.z}`, i);
+
+    i = this.addDebugText(`background sprites:`, i);
+    this.bgSprites.forEach(spr => {
+      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} vis: ${spr.visible} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+    }, this)
+
+    i = this.addDebugText(`midground sprites:`, i);
+    this.mgSprites.forEach(spr => {
+      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} vis: ${spr.visible} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+    }, this)
+
+    i = this.addDebugText(`foreground sprites:`, i);
+    this.fgSprites.forEach(spr => {
+      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} vis: ${spr.visible} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+    }, this)
+  }
+
+
+  addDebugText(text, pos) {
+    this.game.debug.text(text, 5, pos * 25);
+
+    return pos + 1
+  }
+
+
+  toggleDebug() {
+    this.debugOn = !this.debugOn 
+    log(`toggling debug ${this.debugOn ? 'on': 'off'}`)
+    if (this.debugOn) {
+      this.debugGroup.visible = true
+      this.doorDebug.visible = true
+    } else {
+      this.debugGroup.visible = false
+      this.doorDebug.visible = false
+    }
   }
 
 
@@ -291,23 +349,35 @@ export default class extends Phaser.State {
 
     for (let i = 0 ; i < roomSprites.length ; i++ ) {
       let spriteProperty = this.spritesJSON[roomSprites[i].name];
-      
+     
       if (!spriteProperty) {
         throw new Error(`Sprite for room [${this.currentRoom.name}] not found in cache: check if sprite [${roomSprites[i].name}] exists`)
       }
 
-      let newSprite = this.spritesGroup.create( roomSprites[i].x, roomSprites[i].y, roomSprites[i].name);
-      newSprite.position.x = Math.round(newSprite.position.x * window.game.scaleFactor)
-      newSprite.position.y = Math.round(newSprite.position.y * window.game.scaleFactor)
+      let newSprite;
+      let layer = roomSprites[i].layer || 'background'
+
+      switch (layer) {
+        case 'background':
+          newSprite = this.bgSprites.create( roomSprites[i].x * window.game.scaleFactor, roomSprites[i].y * window.game.scaleFactor, roomSprites[i].name);
+          break
+        case 'midground':
+          newSprite = this.mgSprites.create( roomSprites[i].x * window.game.scaleFactor, roomSprites[i].y * window.game.scaleFactor, roomSprites[i].name);
+          break
+        case 'foreground':
+          newSprite = this.fgSprites.create( roomSprites[i].x * window.game.scaleFactor, roomSprites[i].y * window.game.scaleFactor, roomSprites[i].name);
+          break
+        default:
+          newSprite = this.bgSprites.create( roomSprites[i].x * window.game.scaleFactor, roomSprites[i].y * window.game.scaleFactor, roomSprites[i].name);
+      }
+      
+      newSprite.name = roomSprites[i].name
 
       if (spriteProperty.scale) {
         newSprite.scale.setTo(spriteProperty.scale * window.game.scaleFactor);
       } else {
         newSprite.scale.setTo(window.game.scaleFactor);
       }
-
-      newSprite.width = Math.round(newSprite.width)
-      newSprite.height = Math.round(newSprite.height)
 
       if (spriteProperty.invisible) {
         this.showSprite(newSprite, false);
@@ -318,7 +388,10 @@ export default class extends Phaser.State {
         newSprite.scale.x *= -1;
       }
 
-      dlog(`creating sprite ${roomSprites[i].name} at { ${newSprite.position.x}, ${newSprite.position.y} } with scale: ${newSprite.scale} h: ${newSprite.height} w: ${newSprite.width}`)
+      dlog(`creating sprite ${newSprite.name}
+      in layer ${layer} at { ${newSprite.position.x}, ${newSprite.position.y} } 
+      with scale: ${newSprite.scale} 
+      h: ${newSprite.height} w: ${newSprite.width}`)
 
       spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;
       spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null;
@@ -354,7 +427,7 @@ export default class extends Phaser.State {
             blocks[i].width * window.game.scaleFactor,
             blocks[i].height * window.game.scaleFactor);
         blockBg.endFill();
-        this.blockGroup.add(blockBg);
+        this.debugGroup.add(blockBg);
       }
     }
   }
@@ -396,7 +469,7 @@ export default class extends Phaser.State {
           sprite.alpha = 1;
           this.animation = sprite.animations.play(action.click.animation, null, false, true);
           this.animation.onComplete.add(function (data) {
-            if (__DEBUG__) console.log('animation complete');
+            dlog('animation complete');
             this.evalEvent(action.click.animation);
           }, this);
         }// if has animation on click
@@ -568,7 +641,7 @@ export default class extends Phaser.State {
     this.player.anchor = {x:0.5, y:0.9};
     this.physics.arcade.enableBody(this.player);
 
-    this.spritesGroup.add(this.player);
+    this.mgSprites.add(this.player);
   }
 
 
@@ -590,7 +663,7 @@ export default class extends Phaser.State {
   createInputs () {
     //this.input.onTap.add(function () {}, this);
     this.amulet.events.onInputDown.add(function (pointer) {
-      if (__DEBUG__) console.log('amulet hit');
+      dlog('amulet hit');
     }, this);
 
     this.room.events.onInputDown.add(function (pointer) {
@@ -664,8 +737,8 @@ export default class extends Phaser.State {
   // Move sprites in front or behind player
   changeSpriteIndex () {
     // move sprites behind/in front of player
-    for (let i = 0 ; i < this.spritesGroup.length ; i++) {
-      let sprite = this.spritesGroup.children[i];
+    for (let i = 0 ; i < this.mgSprites.length ; i++) {
+      let sprite = this.mgSprites.children[i];
 
       if (sprite.name == 'player') {
         //pass
@@ -788,7 +861,7 @@ export default class extends Phaser.State {
 
   // Change player sprite frame
   turnPlayer (direction) {
-    if (__DEBUG__) console.log('turning ' + direction);
+    dlog('turning ' + direction);
 
     if (direction == 'left') {
       this.player.frameName = 'stand-left';
@@ -802,7 +875,7 @@ export default class extends Phaser.State {
 
   // Delay events
   wait (time) {
-    if (__DEBUG__) console.log('wait called for ' + time + ' ms');
+    dlog('wait called for ' + time + ' ms');
 
     var timer;
     timer ? timer.destroy():null;
@@ -996,40 +1069,53 @@ export default class extends Phaser.State {
     if (this.currentRoom.name == room) {
       this.room.loadTexture(newTexture);
       this.changeRoomText(newText);
-      this.spritesGroup.remove(this.player);
+      this.mgSprites.remove(this.player);
       this.world.addAt(this.player, 1);
-      this.spritesGroup.removeAll(true);
+
+      this.bgSprites.removeAll(true)
+      this.mgSprites.removeAll(true)
+      this.fgSprites.removeAll(true)
 
       this.createSprites();
       this.world.remove(this.player);
-      this.spritesGroup.add(this.player);
+      this.mgSprites.add(this.player);
     }
-    if (__DEBUG__) console.log('altering ' + this.roomsJSON[myRoom]);
+    dlog('altering ' + this.roomsJSON[myRoom]);
 
     this.evalEvent('altRoom');
   }
 
 
-  // Remove sprite
-  killSprite (sprite) {
-    var sprites = this.spritesGroup.children;
-    var spritesMeta = this.currentRoom.sprites;
+  // Remove sprite by name
+  killSprite (spriteName) {
+    // var sprites = this.spritesGroup.children;
+    let spritesMeta = this.currentRoom.sprites;
 
-    var i = sprites.length;
-    while (i--) {
-      if (sprites[i].name == sprite) {
-        this.spritesGroup.remove(sprites[i], true);
-      }
-    }
+    this.bgSprites.forEach(child => { 
+      if (child.name == spriteName) { child.destroy() }
+    }, this)
+    this.mgSprites.forEach(child => { 
+      if (child.name == spriteName) { child.destroy() }
+    }, this)
+    this.fgSprites.forEach(child => { 
+      if (child.name == spriteName) { child.destroy() }
+    }, this)
 
-    var j = spritesMeta.length;
+    // var i = sprites.length;
+    // while (i--) {
+    //   if (sprites[i].name == spriteName) {
+    //     this.spritesGroup.remove(sprites[i], true);
+    //   }
+    // }
+
+    let j = spritesMeta.length;
     while (j--) {
-      if (spritesMeta[j].name == sprite) {
+      if (spritesMeta[j].name == spriteName) {
         spritesMeta.splice( j, 1 );
       }
     }
 
-    this.evalEvent(sprite);
+    this.evalEvent(spriteName);
   }
 
 
@@ -1165,21 +1251,31 @@ export default class extends Phaser.State {
   exitRoomAnimation () {
     var myDoor = this.currentRoom.doors[this.door];
     var spriteName;
-    var exitSprite;
     var anim;
 
     this.player.alpha = 0;
 
     // find and play the entrance sprite from the room's this.spritesGroup
-    var exitSpriteName = myDoor.animation.exit;
+    let exitSpriteName = myDoor.animation.exit;
+    let exitSprite;
 
-    for (var i = 0 ; i < this.spritesGroup.length ; i++) {
-      if (this.spritesGroup.children[i].key == exitSpriteName) {
-        exitSprite = this.spritesGroup.children[i];
-      }
-    }
+    // for (var i = 0 ; i < this.spritesGroup.length ; i++) {
+    //   if (this.spritesGroup.children[i].key == exitSpriteName) {
+    //     exitSprite = this.spritesGroup.children[i];
+    //   }
+    // }
+
+    this.bgSprites.forEach(child => { if (child.key == exitSpriteName) exitSprite = child }, this)
+    this.mgSprites.forEach(child => { if (child.key == exitSpriteName) exitSprite = child }, this)
+    this.fgSprites.forEach(child => { if (child.key == exitSpriteName) exitSprite = child }, this)
+
     // remove exit sprite from spritesGroup to prevent preupdate error
-    this.spritesGroup.remove(exitSprite);
+    this.bgSprites.remove(exitSprite)
+    this.mgSprites.remove(exitSprite)
+    this.fgSprites.remove(exitSprite)
+
+    //this.spritesGroup.remove(exitSprite);
+
     this.world.add(exitSprite);
 
     exitSprite.alpha = 1;
@@ -1197,8 +1293,6 @@ export default class extends Phaser.State {
   // Run entering animation
   enterRoomAnimation () {
     var myDoor = this.currentRoom.doors[this.previousRoom.name];
-    var spriteName;
-    var enterSprite;
     var anim;
 
     let startPoint = {...myDoor.entry}
@@ -1210,13 +1304,19 @@ export default class extends Phaser.State {
     this.player.alpha = 0;
 
     // find and play the exiting sprite from the room's this.spritesGroup
-    spriteName = myDoor.animation.enter;
+    enterSpriteName = myDoor.animation.enter;
+    let enterSprite;
 
-    for (var i = 0 ; i < this.spritesGroup.length ; i++) {
-      if (this.spritesGroup.children[i].key == spriteName) {
-        enterSprite = this.spritesGroup.children[i];
-      }
-    }
+    // for (var i = 0 ; i < this.spritesGroup.length ; i++) {
+    //   if (this.spritesGroup.children[i].key == spriteName) {
+    //     enterSprite = this.spritesGroup.children[i];
+    //   }
+    // }
+
+    this.bgSprites.forEach(child => { if (child.key == enterSpriteName) enterSprite = child }, this)
+    this.mgSprites.forEach(child => { if (child.key == enterSpriteName) enterSprite = child }, this)
+    this.fgSprites.forEach(child => { if (child.key == enterSpriteName) enterSprite = child }, this)
+
 
     enterSprite.alpha = 1;
     enterSprite.bringToTop();
@@ -1278,7 +1378,7 @@ export default class extends Phaser.State {
 
     }, this);
 
-    if (this.tween.isRunning) {
+    if (this.tween && this.tween.isRunning) {
       dlog('chaining tween');
       this.tween.chain(this.between);
     } else {
@@ -1371,7 +1471,7 @@ export default class extends Phaser.State {
   // Prepare a room for entrance
   loadRoom() {
     var nextRoom = this.roomsJSON[this.door];
-    if (__DEBUG__) console.log('loading room ' + nextRoom.name);
+    dlog('loading room ' + nextRoom.name);
 
     this.closeRoom();
 
@@ -1394,7 +1494,7 @@ export default class extends Phaser.State {
 
     // return player sprite to spriteGroup
     this.world.remove(this.player);
-    this.spritesGroup.add(this.player);
+    this.mgSprites.add(this.player);
 
     this.enterRoom();
   }
@@ -1406,20 +1506,23 @@ export default class extends Phaser.State {
     this.saveItems(); // save room state
 
     // save player sprite
-    this.spritesGroup.remove(this.player);
+    this.mgSprites.remove(this.player);
     this.world.addAt(this.player, 1);
 
-    this.blockGroup.removeAll(true);
-    this.doorGroup.removeAll(true);
-    this.doorDebug.removeAll(true);
-    this.itemGroup.removeAll(true);
-    this.spritesGroup.removeAll(true);
+    this.blockGroup.removeAll(true)
+    this.debugGroup.removeAll(true)
+    this.doorGroup.removeAll(true)
+    this.doorDebug.removeAll(true)
+    this.itemGroup.removeAll(true)
+    this.bgSprites.removeAll(true)
+    this.mgSprites.removeAll(true)
+    this.fgSprites.removeAll(true)
   }
 
 
   // Enable input on room after entering
   openRoom () {
-    if (__DEBUG__) console.log('opening room ' + this.currentRoom.name);
+    dlog('opening room ' + this.currentRoom.name);
 
     this.evalEvent(this.currentRoom.name);
     this.enableInput(true);
@@ -1437,7 +1540,7 @@ export default class extends Phaser.State {
     for (var i = 0 ; i < slots.length ; i++) {
 
       if (this.inBounds(item, slots[i])) {
-        if (__DEBUG__) console.log('removing item from: ' + slots[i].x + ' ' + slots[i].y);
+        dlog('removing item from: ' + slots[i].x + ' ' + slots[i].y);
         this.removeItemFromInventory(item, slots[i]);
       }
     };
@@ -1446,17 +1549,32 @@ export default class extends Phaser.State {
 
   // Handle dropping an item
   checkItemDest (item) {
-    var placed = false;
-
+    let placed = false;
 
     // Check if item hit room
     if (this.inBounds(item, this.room) && !placed) {
-      if (__DEBUG__) console.log('item hit room');
+      dlog('item hit room');
 
       // check for sprites hits -> event call them
-      this.spritesGroup.forEach(function (sprite) {
+      this.bgSprites.forEach(function (sprite) {
         if (this.inBounds(item, sprite) && sprite.inputEnabled) {
-          if (__DEBUG__) console.log(sprite.key + '-' + item.name);
+          dlog(sprite.key + '-' + item.name);
+          this.evalEvent(sprite.key + '-' + item.name);
+          this.tossItem(item);
+        }
+      }, this);
+
+      this.mgSprites.forEach(function (sprite) {
+        if (this.inBounds(item, sprite) && sprite.inputEnabled) {
+          dlog(sprite.key + '-' + item.name);
+          this.evalEvent(sprite.key + '-' + item.name);
+          this.tossItem(item);
+        }
+      }, this);
+
+      this.fg.forEach(function (sprite) {
+        if (this.inBounds(item, sprite) && sprite.inputEnabled) {
+          dlog(sprite.key + '-' + item.name);
           this.evalEvent(sprite.key + '-' + item.name);
           this.tossItem(item);
         }
@@ -1464,7 +1582,7 @@ export default class extends Phaser.State {
 
       this.blockGroup.forEach(function (block) {
         if (this.inBounds(item, block) && block.inputEnabled) {
-          if (__DEBUG__) console.log(block.name + '-' + item.name);
+          dlog(block.name + '-' + item.name);
           this.evalEvent(block.name + '-' + item.name);
           this.tossItem(item);
         }
@@ -1632,7 +1750,7 @@ export default class extends Phaser.State {
 
       if (this.currentMusic != null) {
 
-        if (__DEBUG__) console.log('playing music: '+this.currentMusic);
+        dlog('playing music: '+this.currentMusic);
         this.music = this.game.sound.add(this.currentMusic, 1, true);
         this.music.onDecoded.add(function() {
           //this.music.play();
@@ -1719,7 +1837,7 @@ export default class extends Phaser.State {
 
   // Toggle a sprite's alpha
   showSprite (sprite, bool) {
-    if (__DEBUG__) console.log('show sprite? ' + sprite.key + ':' + bool);
+    dlog('show sprite? ' + sprite.key + ':' + bool);
     var alpha = bool ? 1:0;
     sprite.alpha = alpha;
   }

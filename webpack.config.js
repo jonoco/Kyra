@@ -33,6 +33,9 @@ module.exports = env => {
       filename: '[name].js'
     },
     watch: true,
+    watchOptions: {
+      aggregateTimeout: 2000
+    },
     plugins: [
       new webpack.DefinePlugin({
         __DEV__: JSON.stringify(JSON.parse(env.dev || 'false')),

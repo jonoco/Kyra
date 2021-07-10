@@ -70,4 +70,4 @@
 ##### The UI is divided into five layers
 - from back to front: screen (background) | background sprites | midground sprites (player, items) | foreground sprites | gui
 - the depth of the player and items are arranged based on the relative position of the sprites; higher y-position sprites are pushed into the back
-- all sprites are placed into the background sprite layer by default, with other layers defined in their sprites.json entry
+- all sprites are placed into the background sprite layer by default, with alternate layers defined in their rooms.json entry

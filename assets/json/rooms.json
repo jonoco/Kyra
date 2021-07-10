@@ -155,7 +155,7 @@
 		"text": "The Temple of Kyrandia",
 		"music": "forest",
 		"items": [],
-		"sprites": [{ "name": "temple entrance", "x": 137, "y": 40 }],
+		"sprites": [{ "name": "temple entrance", "x": 137, "y": 40, "layer": "foreground" }],
 		"blocks": [],
 		"grid": "assets/json/room05.json",
 		"path": "assets/screens/healer_ext.png",
@@ -277,16 +277,17 @@
 		"music": "pool",
 		"items": [],
 		"sprites": [
-			{ "name": "stone1", "x": 186, "y": 94 },
+			{ "name": "stone1", "x": 186, "y": 94, "layer": "foreground" },
 			{ "name": "catch", "x": 167, "y": 8 },
 			{ "name": "drop1", "x": 70, "y": -3 },
 			{ "name": "drop2", "x": 143, "y": -13 },
 			{ "name": "drop3", "x": 113, "y": -7 },
 			{ "name": "drop4", "x": 87, "y": 0 },
-			{ "name": "drop5", "x": 123, "y": 0 },
-			{ "name": "pool", "x": 73, "y": 0 }
+			{ "name": "drop5", "x": 123, "y": 0 }
 		],
-		"blocks": [],
+		"blocks": [
+			{ "name": "pool", "x": 78, "y": 24, "height": 80, "width": 95 }
+		],
 		"grid": "assets/json/room09.json",
 		"path": "assets/screens/sorrow.png",
 		"doors": {
@@ -314,8 +315,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [
-			{ "name": "oak2", "x": 7, "y": 8 },
-			{ "name": "birch3", "x": 210, "y": 8 }
+			{ "name": "oak2", "x": 7, "y": 8, "layer": "foreground" },
+			{ "name": "birch3", "x": 210, "y": 8, "layer": "foreground" }
 		],
 		"blocks": [],
 		"grid": "assets/json/room11.json",

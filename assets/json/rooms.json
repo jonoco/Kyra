@@ -246,8 +246,8 @@
 		"music": "forest",
 		"items": [{ "name": "peridot", "x": 107, "y": 103}],
 		"sprites": [
-			{ "name": "birch2", "x": 99, "y": 9 },
-			{ "name": "redwood1", "x": 167, "y": 15 }
+			{ "name": "birch2", "x": 99, "y": 9, "layer": "foreground"},
+			{ "name": "redwood1", "x": 167, "y": 15, "layer": "foreground" }
 		],
 		"blocks": [],
 		"grid": "assets/json/room08.json",

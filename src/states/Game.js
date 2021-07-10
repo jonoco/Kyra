@@ -4,15 +4,17 @@ import lang from '../lang';
 import events from '../events'
 import Quests from '../quests'
 import itemAtlas from '../items'
-import { log, dlog } from '../utils'
+import Inventory from '../inventory';
+import { log, dlog, inBounds, moveToCenter } from '../utils'
 
 export default class extends Phaser.State {
   init() {
     this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room09';
+    this.startRoom = 'room08';
     this.debugOn = __DEBUG__ || false
+    this.playMusic = false
 
     // utility variables
     this.timer;
@@ -54,23 +56,9 @@ export default class extends Phaser.State {
         "brynn" : "#ff9999"
       };
 
-    // inventory variables
-    this.slots = [
-      {x: 95, y: 160, height: 16, width: 16, name: null, item: null, occupied: false},
-      {x: 115, y: 160, height: 16, width: 16, name: null, item: null, occupied: false},
-      {x: 135, y: 160, height: 16, width: 16, name: null, item: null, occupied: false},
-      {x: 155, y: 160, height: 16, width: 16, name: null, item: null, occupied: false},
-      {x: 175, y: 160, height: 16, width: 16, name: null, item: null, occupied: false},
-      {x: 95, y: 182, height: 16, width: 16, name: null, item: null, occupied: false},
-      {x: 115, y: 182, height: 16, width: 16, name: null, item: null, occupied: false},
-      {x: 135, y: 182, height: 16, width: 16, name: null, item: null, occupied: false},
-      {x: 155, y: 182, height: 16, width: 16, name: null, item: null, occupied: false},
-      {x: 175, y: 182, height: 16, width: 16, name: null, item: null, occupied: false}
-    ];
     this.itemAtlas = itemAtlas
     this.inventory;
-    this.slotsGroup;
-    this.itemGroup;
+    this.itemGroup;   // all items on the floor of the room
 
     // gui variables
     this.gui;
@@ -108,19 +96,19 @@ export default class extends Phaser.State {
 
     this.createRoom();
 
-    this.bgSprites = this.game.add.group();
-    this.mgSprites = this.game.add.group();
-    this.itemGroup = this.game.add.group();
-    this.fgSprites = this.game.add.group();
-    //this.spritesGroup = this.game.add.group();
-    
+    this.bgSprites = this.game.add.group(this.world, 'background sprites')
+    this.mgSprites = this.game.add.group(this.world, 'midground sprites')
+    this.itemGroup = this.game.add.group(this.world, 'item sprites')
+    this.fgSprites = this.game.add.group(this.world, 'foreground sprites')
     this.createGui();
+    this.inventory = new Inventory(this)
+    this.heldItem = this.game.add.group(this.world, 'held items')
+
     this.createText();
     
     this.createMap();
     this.createGrid();
     this.createInputs();
-    this.createInventory();
     this.doorGroup = this.game.add.group();
     this.doorDebug = this.game.add.group();
     this.blockGroup = this.add.group();
@@ -131,6 +119,9 @@ export default class extends Phaser.State {
     this.input.keyboard.addKeys({ "a": Phaser.KeyCode.A, "b": Phaser.KeyCode.B })
     let tildeKey = this.input.keyboard.addKey(Phaser.KeyCode.TILDE)
     tildeKey.onDown.add(this.toggleDebug, this)
+
+    let key_1 = this.input.keyboard.addKey(Phaser.KeyCode.ONE)
+    key_1.onDown.add(this.toggleMusic, this)
 
     log()
   }
@@ -174,17 +165,29 @@ export default class extends Phaser.State {
 
     i = this.addDebugText(`background sprites:`, i);
     this.bgSprites.forEach(spr => {
-      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} vis: ${spr.visible} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
     }, this)
 
     i = this.addDebugText(`midground sprites:`, i);
     this.mgSprites.forEach(spr => {
-      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} vis: ${spr.visible} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
     }, this)
 
     i = this.addDebugText(`foreground sprites:`, i);
     this.fgSprites.forEach(spr => {
-      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} vis: ${spr.visible} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+    }, this)
+    i = this.addDebugText(`held items:`, i);
+    this.heldItem.forEach(spr => {
+      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+    }, this)
+    i = this.addDebugText(`room items:`, i);
+    this.itemGroup.forEach(spr => {
+      i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+    }, this)
+    i = this.addDebugText(`inventory items:`, i);
+    this.inventory.inventory.forEach(spr => {
+      i = this.addDebugText(`    name: ${spr.name} parent: ${spr.parent.name}`, i);
     }, this)
   }
 
@@ -531,7 +534,6 @@ export default class extends Phaser.State {
 
   // Create GUI
   createGui () {
-
     this.gui = this.add.image( 0, 0, 'gui');
     this.gui.scale.setTo(window.game.scaleFactor);
 
@@ -552,36 +554,6 @@ export default class extends Phaser.State {
       "amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18",
       "amulet-19", "amulet-20", "amulet-21", "amulet-22", "amulet-23"],
       8, true, false);
-  }
-
-
-  // Create inventory
-  createInventory () {
-    this.slotsGroup = this.game.add.group(); // group for slot objects
-    this.inventory = this.game.add.group(); // group for items held in slots
-
-    for (var i = 0; i < this.slots.length ; i++) {
-      let x = this.slots[i].x * window.game.scaleFactor
-      let y = this.slots[i].y * window.game.scaleFactor
-      let height = this.slots[i].height * window.game.scaleFactor
-      let width = this.slots[i].width * window.game.scaleFactor
-
-      if (__DEBUG__) {
-        // for inventory size debugging
-        let slotBackground = this.game.make.graphics();
-        slotBackground.beginFill(0xffffff, 0.5);
-        slotBackground.drawRect(x, y, width, height);
-        slotBackground.endFill();
-        this.slotsGroup.add(slotBackground);
-      }
-
-      var slot = this.slotsGroup.create( x, y );
-      slot.width = width;
-      slot.height = height;
-      slot.name = null;
-      slot.item = null;
-      slot.occupied = false;
-    }
   }
 
 
@@ -756,7 +728,6 @@ export default class extends Phaser.State {
     }
 
     for (let item of this.itemGroup.children) {
-      dlog(`item: ${item.bottom} player: ${this.player.bottom}`)
       if (this.player.bottom < item.bottom) {
         item.bringToTop()
       } else {
@@ -1101,13 +1072,6 @@ export default class extends Phaser.State {
       if (child.name == spriteName) { child.destroy() }
     }, this)
 
-    // var i = sprites.length;
-    // while (i--) {
-    //   if (sprites[i].name == spriteName) {
-    //     this.spritesGroup.remove(sprites[i], true);
-    //   }
-    // }
-
     let j = spritesMeta.length;
     while (j--) {
       if (spritesMeta[j].name == spriteName) {
@@ -1141,7 +1105,8 @@ export default class extends Phaser.State {
   move (position) {
     dlog(`move to { ${position.x}, ${position.y} }`)
 
-    this.findWay(position);
+    let path = this.findWay(position);
+    this.tweenPath(path);
   }
 
 
@@ -1156,9 +1121,13 @@ export default class extends Phaser.State {
   }
 
 
-  // Find route in pathfinding grid
+  /**
+   * Tries to find a route in the pathfinding grid from a starting point
+   * 
+   * @param {Position} position starting position
+   * @returns grid path for tweening player
+   */
   findWay (position) {
-
     let startX = this.layer.getTileX(this.player.position.x);
     let startY = this.layer.getTileY(this.player.position.y);
     let endX = this.layer.getTileX(position.x);
@@ -1182,8 +1151,7 @@ export default class extends Phaser.State {
         return;
       }
 
-      var newPath = PF.Util.smoothenPath(this.grid, path);
-      this.tweenPath(newPath);
+      return PF.Util.smoothenPath(this.grid, path);
     }
   }
 
@@ -1259,12 +1227,6 @@ export default class extends Phaser.State {
     let exitSpriteName = myDoor.animation.exit;
     let exitSprite;
 
-    // for (var i = 0 ; i < this.spritesGroup.length ; i++) {
-    //   if (this.spritesGroup.children[i].key == exitSpriteName) {
-    //     exitSprite = this.spritesGroup.children[i];
-    //   }
-    // }
-
     this.bgSprites.forEach(child => { if (child.key == exitSpriteName) exitSprite = child }, this)
     this.mgSprites.forEach(child => { if (child.key == exitSpriteName) exitSprite = child }, this)
     this.fgSprites.forEach(child => { if (child.key == exitSpriteName) exitSprite = child }, this)
@@ -1307,16 +1269,9 @@ export default class extends Phaser.State {
     enterSpriteName = myDoor.animation.enter;
     let enterSprite;
 
-    // for (var i = 0 ; i < this.spritesGroup.length ; i++) {
-    //   if (this.spritesGroup.children[i].key == spriteName) {
-    //     enterSprite = this.spritesGroup.children[i];
-    //   }
-    // }
-
     this.bgSprites.forEach(child => { if (child.key == enterSpriteName) enterSprite = child }, this)
     this.mgSprites.forEach(child => { if (child.key == enterSpriteName) enterSprite = child }, this)
     this.fgSprites.forEach(child => { if (child.key == enterSpriteName) enterSprite = child }, this)
-
 
     enterSprite.alpha = 1;
     enterSprite.bringToTop();
@@ -1441,6 +1396,10 @@ export default class extends Phaser.State {
 
   // Move player along path
   tweenPath (path) {
+    if (!path) {
+      log(`null path, cannot tween path`)
+      return
+    }
 
     this.tween = this.add.tween(this.player);
     this.tween.onComplete.addOnce(this.tweenComplete, this);
@@ -1532,92 +1491,69 @@ export default class extends Phaser.State {
   // Item and inventory functions
 
 
-  // Clear inventory space if inven. item removed
-  checkItemOrigin (item) {
-
-    // if item is from inventory : clear its slot
-    var slots = this.slotsGroup.children;
-    for (var i = 0 ; i < slots.length ; i++) {
-
-      if (this.inBounds(item, slots[i])) {
-        dlog('removing item from: ' + slots[i].x + ' ' + slots[i].y);
-        this.removeItemFromInventory(item, slots[i]);
-      }
-    };
-  }
-
-
   // Handle dropping an item
-  checkItemDest (item) {
+  findItemDestination (item) {
     let placed = false;
+    let spriteHit = false
 
-    // Check if item hit room
-    if (this.inBounds(item, this.room) && !placed) {
-      dlog('item hit room');
+    // check if inventory hit
+    if (this.inventory.itemDroppedOnInventory(item) && !placed) {
+      dlog('item dropped onto inventory')
+
+      let swappedItem = this.inventory.moveItemToInventory(item)
+      if (swappedItem) {
+        // TODO remove duplicate data entry for currentRoom.items and itemGroup
+        this.itemGroup.add(swappedItem)
+        this.currentRoom.items.push({ 
+          name: swappedItem.name, 
+          x: swappedItem.position.x, 
+          y: swappedItem.position.y 
+        })
+      }
+
+      placed = true;
+    } else if (inBounds(item, this.room) && !placed) {
+      dlog('item hit room')
 
       // check for sprites hits -> event call them
       this.bgSprites.forEach(function (sprite) {
-        if (this.inBounds(item, sprite) && sprite.inputEnabled) {
-          dlog(sprite.key + '-' + item.name);
-          this.evalEvent(sprite.key + '-' + item.name);
-          this.tossItem(item);
-        }
-      }, this);
+        if (inBounds(item, sprite) && sprite.inputEnabled) { this.evalEvent(sprite.key + '-' + item.name) }
+      }, this)
 
       this.mgSprites.forEach(function (sprite) {
-        if (this.inBounds(item, sprite) && sprite.inputEnabled) {
-          dlog(sprite.key + '-' + item.name);
-          this.evalEvent(sprite.key + '-' + item.name);
-          this.tossItem(item);
-        }
-      }, this);
+        if (inBounds(item, sprite) && sprite.inputEnabled) { this.evalEvent(sprite.key + '-' + item.name) }
+      }, this)
 
-      this.fg.forEach(function (sprite) {
-        if (this.inBounds(item, sprite) && sprite.inputEnabled) {
-          dlog(sprite.key + '-' + item.name);
-          this.evalEvent(sprite.key + '-' + item.name);
-          this.tossItem(item);
+      this.fgSprites.forEach(function (sprite) {
+        if (inBounds(item, sprite)) { 
+          if (sprite.inputEnabled)
+            this.evalEvent(sprite.key + '-' + item.name) 
+            
+          spriteHit = true
         }
-      }, this);
+      }, this)
 
       this.blockGroup.forEach(function (block) {
-        if (this.inBounds(item, block) && block.inputEnabled) {
-          dlog(block.name + '-' + item.name);
-          this.evalEvent(block.name + '-' + item.name);
-          this.tossItem(item);
-        }
-      }, this);
-
-      placed = true;
-    }
-    //check if inventory hit
-    else if (this.inBounds(item, this.slotsGroup) && !placed) {
-      this.slotsGroup.forEach(function (slot) {
-        if (this.inBounds(item, slot)) {
-          this.moveItemToInventory(item, slot);
-          placed = true;
-        }
-      }, this);
-    }
-    //otherwise: toss item onto the ground
-    if (!placed) {
-      this.tossItem(item);
+        if (inBounds(item, block) && block.inputEnabled) { this.evalEvent(block.name + '-' + item.name) }
+      }, this)
+      
+      // place item under cursor if the location is walkable, and no foreground sprites hit
+      if (!spriteHit && this.findWay({x: item.x, y: item.y })) {
+        dlog(`placing ${item.name} into room at { ${item.position.x}, ${item.position.y} }`)
+        this.itemGroup.addChild(item)
+      } else {
+        this.tossItem(item)
+      }
     }
   }
-
-
-  // Clear inventory slot
-  clearSlot (slot) {
-    slot.name = null;
-    //slot.item = null;
-    slot.occupied = false;
-  }
-
 
   // Toss item into the room
   tossItem (item) {
-    item.x = this.player.x;
-    item.y = this.player.y - 25;
+    item.x = this.player.x
+    item.y = this.player.y - 25
+
+    dlog(`tossing ${item.name} into room at { ${item.position.x}, ${item.position.y} }`)
+    this.itemGroup.addChild(item)
   }
 
 
@@ -1634,86 +1570,31 @@ export default class extends Phaser.State {
     dlog(`spawn ${item.name} at x: ${item.position.x} y: ${item.position.y}`)
 
     // check if item was in inventory, if so, remove from slot
-    item.events.onDragStart.add(function (data) {
-      dlog(item.name + ' picked up');
-      this.changeRoomText(item.name + ' picked up');
-      this.checkItemOrigin(data);
-    }, this);
+    item.events.onDragStart.add((data) => {
+      dlog(`${data.name} picked up | parent ${data.parent.name}`);
 
-    // then check drop location
-    item.events.onDragStop.add(function (data) {
-      dlog(`${item.name} placed at { ${item.position.x/window.game.scaleFactor}, ${item.position.y/window.game.scaleFactor} }`);
-      this.changeRoomText(`${item.name} placed`);
-      this.checkItemDest(data);
+      this.changeRoomText(`${data.name} picked up`);
+
+      if (data.parent.name == 'inventory') {
+        dlog(`${data.name} is from inventory`)
+        this.inventory.removeItemFromInventory(data);
+      }
+
+      this.heldItem.addChild(data)
+    }, this)
+
+    // check drop location
+    item.events.onDragStop.add((data) => {
+      
+      this.changeRoomText(`${data.name} placed`);
+      this.heldItem.removeChild(data)
+
+      this.findItemDestination(data);
+
+      dlog(`${data.name} placed at { ${item.position.x}, ${item.position.y} } in ${item.parent}`)
     }, this);
 
     this.itemGroup.add(item);
-  }
-
-
-  // Move item from inventory to room
-  removeItemFromInventory (item, slot) {
-
-    this.currentRoom.items.push( {"name" : item.name} );
-
-    this.inventory.remove(slot.item);
-    this.itemGroup.add(item);
-    this.clearSlot(slot);
-  }
-
-
-  // Move item from room to inventory
-  moveItemToInventory (item, slot) {
-
-    // move item from itemGroup to inventory group
-    // if slot occupied, move item to room floor, random pos
-    // and move from inventory group to itemGroup
-
-    if (slot.occupied) {
-      slot.item.position = {
-        x: (Math.random()*100 + 50) * window.game.scaleFactor,
-        y: 100 * window.game.scaleFactor
-      }
-      this.inventory.remove(slot.item)
-      this.itemGroup.add(slot.item)
-    }
-
-    this.moveToCenter(item, slot)
-    slot.name = item.name
-    slot.item = item
-    slot.occupied = true
-
-    var i = this.currentRoom.items.length
-    while (i--)
-    {
-      if (this.currentRoom.items[i].name == item.name) {
-        this.currentRoom.items.splice( i, 1 )
-      }
-    }
-
-    this.itemGroup.remove(item)
-    this.inventory.add(item)
-  }
-
-
-  // Centers obj1 onto obj2
-  moveToCenter (obj1, obj2) {
-    obj1.x = obj2.x + obj2.width/2 - obj1.width/2;
-    obj1.y = obj2.y + obj2.height/2 - obj1.height/2;
-  }
-
-
-  // Sprite bounds comparison; checks if obj1 is in the bounds of obj2
-  inBounds (obj1, obj2) {
-    var obj = obj1.getBounds();
-    var bound = obj2.getBounds();
-
-    if (bound.x < obj.centerX && (bound.x + bound.width) > obj.centerX &&
-        bound.y < obj.centerY && (bound.y + bound.height) > obj.centerY) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
 
@@ -1743,6 +1624,9 @@ export default class extends Phaser.State {
 
   // Check if music needs to be updated
   checkMusic() {
+    if (!this.playMusic)
+      return
+
     if (this.currentMusic != this.currentRoom.music) {
 
       this.music ? this.music.fadeOut(): null;
@@ -1753,11 +1637,27 @@ export default class extends Phaser.State {
         dlog('playing music: '+this.currentMusic);
         this.music = this.game.sound.add(this.currentMusic, 1, true);
         this.music.onDecoded.add(function() {
-          //this.music.play();
+          
           this.music.fadeIn();
         }, this);
 
       }
+    }
+  }
+
+
+  toggleMusic() {
+    this.playMusic = !this.playMusic
+
+    dlog(`turning music ${this.playMusic ? 'on' : 'off'}`);
+
+    if (this.playMusic) {
+      this.checkMusic()
+
+      if (this.music)
+        this.music.play()
+    } else if (!this.playMusic && this.music) {
+      this.music.stop()
     }
   }
 

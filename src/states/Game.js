@@ -94,8 +94,8 @@ export default class extends Phaser.State {
     this.quests = this.Quests.quests
     this.eventTriggers = this.Quests.triggers
 
+    // display groups layered for correct z depths
     this.createRoom();
-
     this.bgSprites = this.game.add.group(this.world, 'background sprites')
     this.mgSprites = this.game.add.group(this.world, 'midground sprites')
     this.itemGroup = this.game.add.group(this.world, 'item sprites')
@@ -105,7 +105,6 @@ export default class extends Phaser.State {
     this.heldItem = this.game.add.group(this.world, 'held items')
 
     this.createText();
-    
     this.createMap();
     this.createGrid();
     this.createInputs();
@@ -150,6 +149,9 @@ export default class extends Phaser.State {
   }
 
 
+  /**
+   * Show debug text
+   */
   debugScreen() {
     let i = 1
     i = this.addDebugText(`Room: ${this.currentRoom.name}`, i);
@@ -192,6 +194,12 @@ export default class extends Phaser.State {
   }
 
 
+  /**
+   * Add debug text to the debug screen 
+   * @param {String} text debug text to display
+   * @param {number} pos row to place text
+   * @returns next open row
+   */
   addDebugText(text, pos) {
     this.game.debug.text(text, 5, pos * 25);
 
@@ -199,6 +207,9 @@ export default class extends Phaser.State {
   }
 
 
+  /**
+   * Toggle the debug screen
+   */
   toggleDebug() {
     this.debugOn = !this.debugOn 
     log(`toggling debug ${this.debugOn ? 'on': 'off'}`)
@@ -212,6 +223,9 @@ export default class extends Phaser.State {
   }
 
 
+  /**
+   * Show the game end message and return to the main menu
+   */
   quitGame () {
     var blockBg = this.make.graphics();
         blockBg.beginFill(0x000000, 1);
@@ -240,55 +254,68 @@ export default class extends Phaser.State {
   }
 
 
-  // Evaulate an event
-  evalEvent (event) {
-    dlog(event + ' has triggered')
+  /**
+   * Evaulate an event key, queuing any related events and starting event execution
+   * 
+   * @param {String} eventKey name of an event
+   */
+  evalEvent (eventKey) {
+    dlog(eventKey + ' has triggered')
 
     // check whether event is linked to quest event
-    if (this.eventTriggers[event]) {
+    if (this.eventTriggers[eventKey]) {
       dlog('there is a quest linked to this event')
-      var i = this.eventTriggers[event].length
+      var i = this.eventTriggers[eventKey].length
       while (i--) {
-        const events = this.Quests.updateQuest(this.eventTriggers[event][i])
+        const events = this.Quests.updateQuest(this.eventTriggers[eventKey][i])
         if (events) {
           this.queueEvents(events)
         }
       }
     }
 
-    // pop next item in eventQueue
-    if (event != null && this.eventQueue.length) {
-      this.popEventQueue();
-    }
+    this.popEventQueue()
   }
 
 
-  // Add an event array to the event queue
+  /**
+   * Add events to the event queue
+   * 
+   * @param {Event[] | Event} events events to add to queue
+   */
   queueEvents (events) {
-    var i = events.length;
-    while (i--) {
-      this.eventQueue.push(events[i]);
-    }
+    this.eventQueue.concat(events)
   }
 
 
-  // Pop next event from the event queue and execute it
+  /**
+   * Pop next event from the event queue and execute it
+   */
   popEventQueue () {
-    var event = this.eventQueue.pop();
-    event ? this.exeEvent(event): null;
+    let event = this.eventQueue.pop()
+    if (event)
+      this.exeEvent(event)
   }
 
 
-  // Evaluate a block, executing any related events
+  /**
+   * Evaluate a block, executing any related events
+   * 
+   * @param {String} block name of the block
+   */
   evalBlock (block) {
-    var events = this.blockEvents[block].slice();
+    let events = this.blockEvents[block].slice()
 
-    this.queueEvents(events);
-    this.popEventQueue();
+    this.queueEvents(events)
+    this.popEventQueue()
   }
 
 
-  // Determine event type then execute it
+  /**
+   * Determine event type then execute it
+   * 
+   * @param {Event} event event object to execute
+   */
   exeEvent (event) {
     event.say         ? this.say(event.say, event.sprite, event.color) : null;
     event.turn        ? this.turnPlayer(event.turn) : null;
@@ -314,7 +341,11 @@ export default class extends Phaser.State {
   // Events
 
 
-  // Remove block, e.g. after executing one-time block
+  /**
+   * Remove block, e.g. after executing one-time block
+   * 
+   * @param {Sprite} block block to destroy
+   */
   killBlock (block) {
     var blocks = this.blockGroup.children;
     var blocksMeta = this.currentRoom.blocks;
@@ -335,7 +366,12 @@ export default class extends Phaser.State {
   }
 
 
-  // Change sprite frame
+  /**
+   * Change sprite frame
+   * 
+   * @param {Sprite} sprite sprite to modify
+   * @param {String} frame name of frame to switch to
+   */
   setFrame (sprite, frame) {
     dlog('setting frame: ', frame);
     sprite.frameName = frame;
@@ -346,7 +382,9 @@ export default class extends Phaser.State {
   // Creation chain
 
 
-  // Create sprites for the current room
+  /**
+   * Create sprites for the current room
+   */
   createSprites () {
     const roomSprites = this.currentRoom.sprites;
 
@@ -403,7 +441,9 @@ export default class extends Phaser.State {
   }
 
 
-  // Create room blocks
+  /**
+   * Create room blocks
+   */
   createBlocks () {
     var blank;
     var blocks = this.currentRoom.blocks;
@@ -436,7 +476,12 @@ export default class extends Phaser.State {
   }
 
 
-  // Compile a sprite's animations
+  /**
+   * Compile a sprite's animations from sprites.json data
+   * 
+   * @param {Sprite} sprite sprite to create animations for
+   * @param {Object} property holds animation properties
+   */
   createSpriteAnimation (sprite, property) {
     var animations = property.animations;
 
@@ -458,7 +503,12 @@ export default class extends Phaser.State {
   }
 
 
-  // Add actions to sprite
+  /**
+   * Add actions to sprite
+   * 
+   * @param {Sprite} sprite sprite to add actions to
+   * @param {Object} property hold action properties
+   */
   createSpriteAction (sprite, property) {
     var action = property.action;
 
@@ -486,14 +536,16 @@ export default class extends Phaser.State {
     }// if has click action
 
     if (action.drag) {
-      // have sprite respond to item dragged onto it
+      // TODO have sprite respond to item dragged onto it
       // sprite should have array of drag-actionable items to compare to
 
     }// if has drag action
   }
 
 
-  // Create room
+  /**
+   * Create room sprite
+   */
   createRoom () {
     this.room = this.game.add.image(window.game.scaleFactor, window.game.scaleFactor );
     this.room.scale.setTo(window.game.scaleFactor);
@@ -501,7 +553,9 @@ export default class extends Phaser.State {
   }
 
 
-  // Create text
+  /**
+   * Create speech text and room description
+   */
   createText () {
     this.speech = this.add.text();
     this.speech.font = 'kyrandia';
@@ -518,7 +572,9 @@ export default class extends Phaser.State {
   }
 
 
-  // Create initial room
+  /**
+   * Create initial room
+   */
   createStartRoom () {
     this.currentRoom = this.roomsJSON[this.startRoom];
     this.room.loadTexture(this.startRoom);
@@ -532,16 +588,18 @@ export default class extends Phaser.State {
   }
 
 
-  // Create GUI
+  /**
+   * Create GUI
+   */
   createGui () {
     this.gui = this.add.image( 0, 0, 'gui');
     this.gui.scale.setTo(window.game.scaleFactor);
-
-    this.createAmulet();
   }
 
 
-  // Create amulet and animations
+  /**
+   * Create amulet and animations
+   */
   createAmulet () {
     this.amulet = this.add.sprite( 224 * window.game.scaleFactor, 152 * window.game.scaleFactor, 'amulet');
     this.amulet.inputEnabled = true;
@@ -557,7 +615,9 @@ export default class extends Phaser.State {
   }
 
 
-  // Create items
+  /**
+   * Create room items
+   */
   createItems () {
     /*
       iter each item in room.items
@@ -574,7 +634,9 @@ export default class extends Phaser.State {
   }
 
 
-  // Create player
+  /**
+   * Create player and animations
+   */
   createPlayer () {
 
     // Use the first door's entry as the starting position when spawning player
@@ -617,7 +679,9 @@ export default class extends Phaser.State {
   }
 
 
-  // Create grid
+  /**
+   * Create pathing grid
+   */
   createGrid () {
     this.grid = new PF.Grid(this.tileX, this.tileY);
     this.finder = new PF.AStarFinder({
@@ -631,7 +695,9 @@ export default class extends Phaser.State {
   }
 
 
-  // Create input events
+  /**
+   * Create input events
+   */
   createInputs () {
     //this.input.onTap.add(function () {}, this);
     this.amulet.events.onInputDown.add(function (pointer) {
@@ -651,7 +717,9 @@ export default class extends Phaser.State {
   }
 
 
-  // Create pathfinding map
+  /**
+   * Create pathfinding map
+   */
   createMap () {
 
     this.map = this.game.add.tilemap();
@@ -662,7 +730,9 @@ export default class extends Phaser.State {
   }
 
 
-  // Create doors
+  /**
+   * Create room doors
+   */
   createDoors () {
     this.doors = this.currentRoom.doors;
     for (const [door, _] of Object.entries(this.doors)) {
@@ -1525,10 +1595,12 @@ export default class extends Phaser.State {
       }, this)
 
       this.fgSprites.forEach(function (sprite) {
-        if (inBounds(item, sprite)) { 
+        if (sprite.overlap(item)) {
+        // if (inBounds(item, sprite)) { 
           if (sprite.inputEnabled)
             this.evalEvent(sprite.key + '-' + item.name) 
             
+          dlog(`item overlapped foreground sprite`)
           spriteHit = true
         }
       }, this)

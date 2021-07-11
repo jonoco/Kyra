@@ -67,7 +67,6 @@
 - sprite atlases can be used by defining a sprite with its atlas in sprites.json, then designating the "startFrame" frame
 
 #### 11. Layers
-##### The UI is divided into five layers
-- from back to front: screen (background) | background sprites | midground sprites (player, items) | foreground sprites | gui
-- the depth of the player and items are arranged based on the relative position of the sprites; higher y-position sprites are pushed into the back
+##### The UI is divided into Eight layers
+- from back to front: room (background) | background sprites | item sprites | midground sprites (player) | foreground sprites | gui | inventory | held items
 - all sprites are placed into the background sprite layer by default, with alternate layers defined in their rooms.json entry

@@ -27,23 +27,12 @@ export default class extends Phaser.State {
         this.eventQueue = [];
         this.blockEvents = events
 
-        // tilemap variables
-        // this.tileSize = (320/120) * window.game.scaleFactor; // native width / tile width
-        // this.tileX = 120;
-        // this.tileY = 75;
-        // this.map;
-        // this.layer;
-
-        // grid variables
-        // this.grid;
-        // this.finder;
-
         // sprite variables
         this.bgSprites;
         this.mgSprites;
         this.fgSprites;
         this.spritesJSON;
-        //this.spritesGroup;
+
         this.player;
         this.tween;
         this.between;
@@ -96,17 +85,17 @@ export default class extends Phaser.State {
         this.quests = this.Quests.quests
         this.eventTriggers = this.Quests.triggers
 
-        this.pathing = new Pathing(this)
-
         // display groups layered for correct z depths
         this.createRoom();
         this.bgSprites = this.game.add.group(this.world, 'background sprites')
-        this.mgSprites = this.game.add.group(this.world, 'midground sprites')
         this.itemGroup = this.game.add.group(this.world, 'item sprites')
+        this.mgSprites = this.game.add.group(this.world, 'midground sprites')
         this.fgSprites = this.game.add.group(this.world, 'foreground sprites')
         this.createGui();
         this.inventory = new Inventory(this)
         this.heldItem = this.game.add.group(this.world, 'held items')
+
+        this.pathing = new Pathing(this)
 
         this.createText();
         this.createInputs();
@@ -167,25 +156,25 @@ export default class extends Phaser.State {
 
         i = this.addDebugText(`background sprites:`, i);
         this.bgSprites.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name}`, i);
         }, this)
 
         i = this.addDebugText(`midground sprites:`, i);
         this.mgSprites.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name}`, i);
         }, this)
 
         i = this.addDebugText(`foreground sprites:`, i);
         this.fgSprites.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name}`, i);
         }, this)
         i = this.addDebugText(`held items:`, i);
         this.heldItem.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name}`, i);
         }, this)
         i = this.addDebugText(`room items:`, i);
         this.itemGroup.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name} w: ${spr.width} h: ${spr.height} pos: ${spr.position}`, i);
+        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name}`, i);
         }, this)
         i = this.addDebugText(`inventory items:`, i);
         this.inventory.inventory.forEach(spr => {
@@ -1146,7 +1135,7 @@ export default class extends Phaser.State {
   move (position) {
     dlog(`move to { ${position.x}, ${position.y} }`)
 
-    let path = this.pathing.findWay(position);
+    let path = this.pathing.findWay(this.player.position, position);
     this.tweenPath(path);
   }
 
@@ -1224,7 +1213,6 @@ export default class extends Phaser.State {
   // Run exiting animation
   exitRoomAnimation () {
     var myDoor = this.currentRoom.doors[this.door];
-    var spriteName;
     var anim;
 
     this.player.alpha = 0;
@@ -1301,7 +1289,7 @@ export default class extends Phaser.State {
     entryPoint.x *= window.game.scaleFactor
     entryPoint.y *= window.game.scaleFactor
 
-    let dist = this.physics.arcade.distanceBetween(this.player.position, entryPoint)/this.tileSize;
+    let dist = this.physics.arcade.distanceBetween(this.player.position, entryPoint)/this.pathing.tileSize;
 
     dlog(`tweening in to { ${entryPoint.x}, ${entryPoint.y} }`);
 
@@ -1324,7 +1312,7 @@ export default class extends Phaser.State {
     offPoint.x *= window.game.scaleFactor
     offPoint.y *= window.game.scaleFactor
 
-    let dist = this.physics.arcade.distanceBetween(this.player.position, offPoint)/this.tileSize;
+    let dist = this.physics.arcade.distanceBetween(this.player.position, offPoint)/this.pathing.tileSize;
 
     dlog(`tweening out to { ${offPoint.x}, ${offPoint.y} }`);
 
@@ -1374,8 +1362,8 @@ export default class extends Phaser.State {
     this.tween = this.add.tween(sprite);
     this.tween.onComplete.addOnce(this.tweenComplete, this);
 
-    var prevX = sprite.position.x/this.tileSize;
-    var prevY = sprite.position.y/this.tileSize;
+    var prevX = sprite.position.x/this.pathing.tileSize;
+    var prevY = sprite.position.y/this.pathing.tileSize;
     var x;
     var y;
     var dist;
@@ -1386,11 +1374,11 @@ export default class extends Phaser.State {
       dist = this.physics.arcade.distanceBetween({x: x, y: y}, {x: prevX, y: prevY});
 
       if (i == path.length - 1) {
-        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);
+        this.tween.to( { x: x*this.pathing.tileSize, y: y*this.pathing.tileSize }, dist*this.speed);
       } else if (x == prevX || y == prevY && i%3) {
         // pass
       }  else {
-        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);
+        this.tween.to( { x: x*this.pathing.tileSize, y: y*this.pathing.tileSize }, dist*this.speed);
         prevX = x;
         prevY = y;
       }
@@ -1410,8 +1398,8 @@ export default class extends Phaser.State {
     this.tween = this.add.tween(this.player);
     this.tween.onComplete.addOnce(this.tweenComplete, this);
 
-    var prevX = this.player.position.x/this.tileSize;
-    var prevY = this.player.position.y/this.tileSize;
+    var prevX = this.player.position.x/this.pathing.tileSize;
+    var prevY = this.player.position.y/this.pathing.tileSize;
 
     for ( var i = 0; i < path.length ; i++ ) {
       var x = path[i][0];
@@ -1419,11 +1407,11 @@ export default class extends Phaser.State {
       var dist = this.physics.arcade.distanceBetween({x: x, y: y}, {x: prevX, y: prevY});
 
       if (i == path.length - 1) {
-        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);
+        this.tween.to( { x: x*this.pathing.tileSize, y: y*this.pathing.tileSize }, dist*this.speed);
       } else if (x == prevX || y == prevY && i%3) {
         // pass
       }  else {
-        this.tween.to( { x: x*this.tileSize, y: y*this.tileSize }, dist*this.speed);
+        this.tween.to( { x: x*this.pathing.tileSize, y: y*this.pathing.tileSize }, dist*this.speed);
         prevX = x;
         prevY = y;
       }
@@ -1546,7 +1534,7 @@ export default class extends Phaser.State {
       }, this)
       
       // place item under cursor if the location is walkable, and no foreground sprites hit
-      if (!spriteHit && this.pathing.findWay({x: item.x, y: item.y })) {
+      if (!spriteHit && this.pathing.findWay(this.player.position, {x: item.x, y: item.y })) {
         dlog(`placing ${item.name} into room at { ${item.position.x}, ${item.position.y} }`)
         this.itemGroup.addChild(item)
       } else {

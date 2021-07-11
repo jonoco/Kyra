@@ -7,11 +7,11 @@ export default class Inventory {
     this.itemAtlas = itemAtlas
 
     this.slots = [
-      {x:  95, y: 160, height: 16, width: 16},
-      {x: 115, y: 160, height: 16, width: 16},
-      {x: 135, y: 160, height: 16, width: 16},
-      {x: 155, y: 160, height: 16, width: 16},
-      {x: 175, y: 160, height: 16, width: 16},
+      {x:  95, y: 161, height: 16, width: 16},
+      {x: 115, y: 161, height: 16, width: 16},
+      {x: 135, y: 161, height: 16, width: 16},
+      {x: 155, y: 161, height: 16, width: 16},
+      {x: 175, y: 161, height: 16, width: 16},
       {x:  95, y: 182, height: 16, width: 16},
       {x: 115, y: 182, height: 16, width: 16},
       {x: 135, y: 182, height: 16, width: 16},
@@ -20,9 +20,12 @@ export default class Inventory {
     ]
 
     // group for slot objects
-    this.slotsGroup = this.game.add.group(this.game.world, 'slots'); 
+    this.slotsGroup = this.game.add.group(this.game.world, 'slots')
+
+    this.slotDebug = this.game.add.group(this.game.world, 'slot debug')
+
     // group for items held in slots
-    this.inventory = this.game.add.group(this.game.world, 'inventory');  
+    this.inventory = this.game.add.group(this.game.world, 'inventory')
 
     for (let i = 0; i < this.slots.length ; i++) {
       let x = this.slots[i].x * window.game.scaleFactor
@@ -30,19 +33,36 @@ export default class Inventory {
       let height = this.slots[i].height * window.game.scaleFactor
       let width = this.slots[i].width * window.game.scaleFactor
 
-      if (__DEBUG__) {
-        // for inventory size debugging
-        let slotBackground = this.game.make.graphics();
-        slotBackground.beginFill(0xffffff, 0.5);
-        slotBackground.drawRect(x, y, width, height);
-        slotBackground.endFill();
-        this.slotsGroup.add(slotBackground);
-      }
-
       let slot = this.slotsGroup.create( x, y );
       slot.width = width;
       slot.height = height;
       slot.item = null;
+    }
+
+    this.dispalyDebugSlots()
+  }
+
+
+  /**
+   * Display inventory debug
+   */
+  dispalyDebugSlots() {
+    if (this.game.debugOn) {
+      for (let i = 0; i < this.slots.length ; i++) {
+        let x = this.slots[i].x * window.game.scaleFactor
+        let y = this.slots[i].y * window.game.scaleFactor
+        let height = this.slots[i].height * window.game.scaleFactor
+        let width = this.slots[i].width * window.game.scaleFactor
+
+        // for inventory size debugging
+        let slotBackground = this.game.make.graphics();
+        slotBackground.beginFill(0xffffff, 0.25);
+        slotBackground.drawRect(x, y, width, height);
+        slotBackground.endFill();
+        this.slotDebug.add(slotBackground);
+      }
+    } else {
+        this.slotDebug.removeAll(true)
     }
   }
 

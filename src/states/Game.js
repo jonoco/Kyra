@@ -201,7 +201,9 @@ export default class extends Phaser.State {
      */
     toggleDebug() {
         this.debugOn = !this.debugOn 
+
         log(`toggling debug ${this.debugOn ? 'on': 'off'}`)
+
         if (this.debugOn) {
             this.debugGroup.visible = true
             this.doorDebug.visible = true
@@ -209,6 +211,9 @@ export default class extends Phaser.State {
             this.debugGroup.visible = false
             this.doorDebug.visible = false
         }
+
+        this.pathing.displayDebugTiles()
+        this.inventory.dispalyDebugSlots()
     }
 
 

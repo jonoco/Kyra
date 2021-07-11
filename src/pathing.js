@@ -11,6 +11,7 @@ export default class Pathing {
         this.layer;
         this.grid;
         this.finder;
+        this.gridJson;
 
         this.createMap()
         this.createGrid()
@@ -53,23 +54,31 @@ export default class Pathing {
     importGrid(roomName) {
 
         let roomJson = roomName + '_json';
-        let gridJson = this.game.cache.getJSON(roomJson);
-        this.grid.nodes = gridJson;
+        this.gridJson = this.game.cache.getJSON(roomJson);
+        this.grid.nodes = this.gridJson;
+
+        this.displayDebugTiles()
+    }
+
+
+    /**
+     * Toggle debug tiles
+     */
+    displayDebugTiles() {
+        // Clear old debug tiles
+        for (let x = 0; x < this.tileX; x++) {
+            for (let y = 0; y < this.tileY; y++) {
+            this.map.removeTile(x, y, this.layer);
+            }
+        }
 
         if (this.game.debugOn) {
-            // Clear old debug tiles
-            for (let x = 0; x < this.tileX; x++) {
-                for (let y = 0; y < this.tileY; y++) {
-                this.map.removeTile(x, y, this.layer);
-                }
-            }
-
             // Make debug tiles
-            for (let i = 0; i < gridJson.length ; i++) {
-                for ( let j = 0 ; j < gridJson[i].length ; j++ ) {
-                    if (!gridJson[i][j].walkable) {
-                        let tile = this.map.putTile(0, gridJson[i][j].x, gridJson[i][j].y, this.layer);
-                        tile.alpha = 0.5;
+            for (let i = 0; i < this.gridJson.length ; i++) {
+                for ( let j = 0 ; j < this.gridJson[i].length ; j++ ) {
+                    if (!this.gridJson[i][j].walkable) {
+                        let tile = this.map.putTile(0, this.gridJson[i][j].x, this.gridJson[i][j].y, this.layer);
+                        tile.alpha = 0.5;``
                     }
                 }
             }

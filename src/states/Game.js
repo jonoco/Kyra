@@ -10,6 +10,8 @@ import Inventory from '../inventory'
 import { log, dlog, inBounds, moveToCenter } from '../utils'
 
 export default class extends Phaser.State {
+    static debugPos = 1
+
     init() {
         this.Quests = new Quests()
 
@@ -67,7 +69,7 @@ export default class extends Phaser.State {
         this.blockGroup;
         this.debugGroup;
         this.music;
-        this.text;
+        this.roomText;
         this.currentMusic;
         this.openDoor; // checks if last click was on a door > reset on move complete
     }
@@ -142,57 +144,58 @@ export default class extends Phaser.State {
      * Show debug text
      */
     debugScreen() {
-        let i = 1
-        i = this.addDebugText(`Room: ${this.currentRoom.name}`, i);
-        i = this.addDebugText(`Open door: ${this.openDoor}`, i);
-        i = this.addDebugText(`Player position: ${this.player.x}, ${this.player.y}`, i);
-        i = this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}`, i);
-        i = this.addDebugText(`Player z index: ${this.player.z}`, i);
-        i = this.addDebugText(`GUI z index: ${this.gui.z}`, i);
-        i = this.addDebugText(`room z index: ${this.room.z}`, i);
-        i = this.addDebugText(`bgSprites z index: ${this.bgSprites.z}`, i);
-        i = this.addDebugText(`mgSprites z index: ${this.mgSprites.z}`, i);
-        i = this.addDebugText(`fgSprites z index: ${this.fgSprites.z}`, i);
+        this.debugPos = 1
 
-        i = this.addDebugText(`background sprites:`, i);
-        this.bgSprites.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name}`, i);
-        }, this)
+        this.addDebugText(`Room: ${this.currentRoom.name}`);
+        this.addDebugText(`Open door: ${this.openDoor}`);
+        this.addDebugText(`Player position: ${this.player.x}, ${this.player.y}`);
+        this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}`);
+        this.addDebugText(`Player z index: ${this.player.z}`);
+        this.addDebugText(`GUI z index: ${this.gui.z}`);
+        this.addDebugText(`room z index: ${this.room.z}`);
+        this.addDebugText(`bgSprites z index: ${this.bgSprites.z}`);
+        this.addDebugText(`mgSprites z index: ${this.mgSprites.z}`);
+        this.addDebugText(`fgSprites z index: ${this.fgSprites.z}`);
 
-        i = this.addDebugText(`midground sprites:`, i);
-        this.mgSprites.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name}`, i);
-        }, this)
+        this.addDebugText(`background sprites:`);
+        this.bgSprites.forEach(spr => this.addDebugSprite(spr), this)
 
-        i = this.addDebugText(`foreground sprites:`, i);
-        this.fgSprites.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name}`, i);
-        }, this)
-        i = this.addDebugText(`held items:`, i);
-        this.heldItem.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name}`, i);
-        }, this)
-        i = this.addDebugText(`room items:`, i);
-        this.itemGroup.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} z: ${spr.z} parent: ${spr.parent.name}`, i);
-        }, this)
-        i = this.addDebugText(`inventory items:`, i);
-        this.inventory.inventory.forEach(spr => {
-        i = this.addDebugText(`    name: ${spr.name} parent: ${spr.parent.name}`, i);
-        }, this)
+        this.addDebugText(`midground sprites:`);
+        this.mgSprites.forEach(spr => this.addDebugSprite(spr), this)
+
+        this.addDebugText(`foreground sprites:`);
+        this.fgSprites.forEach(spr => this.addDebugSprite(spr), this)
+
+        this.addDebugText(`held items:`);
+        this.heldItem.forEach(spr => this.addDebugSprite(spr), this)
+
+        this.addDebugText(`room items:`);
+        this.itemGroup.forEach(spr => this.addDebugSprite(spr), this)
+
+        this.addDebugText(`inventory items:`);
+        this.inventory.inventory.forEach(spr => 
+            this.addDebugText(`    name: ${spr.name} parent: ${spr.parent.name}`), this)
     }
 
 
     /**
      * Add debug text to the debug screen 
      * @param {String} text debug text to display
-     * @param {number} pos row to place text
      * @returns next open row
      */
     addDebugText(text, pos) {
-        this.game.debug.text(text, 5, pos * 25);
+        this.game.debug.text(text, 5, this.debugPos * 25);
 
-        return pos + 1
+        this.debugPos++
+    }
+
+
+    /**
+     * Add sprite debug info
+     * @param {Sprite} sprite sprite to print debug 
+     */
+    addDebugSprite(sprite, pos) {
+      this.addDebugText(`   name: ${sprite.name} z: ${sprite.z} visible: ${sprite.visible}`)
     }
 
 
@@ -263,7 +266,7 @@ export default class extends Phaser.State {
             while (i--) {
                 const events = this.Quests.updateQuest(this.eventTriggers[eventKey][i])
                 if (events) {
-                this.queueEvents(events)
+                  this.queueEvents(events)
                 }
             }
         }
@@ -278,7 +281,11 @@ export default class extends Phaser.State {
      * @param {Event[] | Event} events events to add to queue
      */
     queueEvents (events) {
-        this.eventQueue.concat(events)
+      this.eventQueue = [...this.eventQueue, ...events]
+      
+      dlog(`current event queue: `)
+      for (let event of this.eventQueue)
+        dlog(event)
     }
 
 
@@ -286,9 +293,9 @@ export default class extends Phaser.State {
      * Pop next event from the event queue and execute it
      */
     popEventQueue () {
-        let event = this.eventQueue.pop()
-        if (event)
-            this.exeEvent(event)
+      let event = this.eventQueue.shift()
+      if (event) 
+        this.exeEvent(event)
     }
 
 
@@ -298,6 +305,8 @@ export default class extends Phaser.State {
      * @param {String} block name of the block
      */
     evalBlock (block) {
+        dlog(`evaluating block ${block}`)
+
         let events = this.blockEvents[block].slice()
 
         this.queueEvents(events)
@@ -311,6 +320,8 @@ export default class extends Phaser.State {
      * @param {Event} event event object to execute
      */
     exeEvent (event) {
+      dlog(`executing event: ${Object.keys(event)}`)
+
         event.say         ? this.say(event.say, event.sprite, event.color) : null;
         event.turn        ? this.turnPlayer(event.turn) : null;
         event.wait        ? this.wait(event.wait) : null;
@@ -455,7 +466,7 @@ export default class extends Phaser.State {
                     this.evalBlock(data.name);
             }, this);
 
-            if (__DEBUG__) {
+            if (this.debugOn) {
                 var blockBg = this.game.make.graphics();
                 blockBg.beginFill(0x00ffff, 0.5);
                 blockBg.drawRect(
@@ -551,18 +562,19 @@ export default class extends Phaser.State {
      * Create speech text and room description
      */
     createText () {
-        this.speech = this.add.text();
-        this.speech.font = 'kyrandia';
-        this.speech.fontSize = 22;
-        this.speech.stroke = '#000000';
-        this.speech.strokeThickness = 3;
-        this.speech.kill();
+        this.speech = this.add.text()
+        this.speech.font = 'kyrandia'
+        this.speech.fontSize = 6 * window.game.scaleFactor
+        this.speech.stroke = '#000000'
+        this.speech.strokeThickness = 3
+        this.speech.kill()
 
-        this.text = this.add.text();
-        this.text.font = 'kyrandia';
-        this.text.x = 8 * window.game.scaleFactor;
-        this.text.y = 145 * window.game.scaleFactor;
-        this.text.fill = '#bbbbbb';
+        this.roomText = this.add.text()
+        this.roomText.font = 'kyrandia'
+        this.roomText.fontSize = 6 * window.game.scaleFactor
+        this.roomText.x = 8 * window.game.scaleFactor
+        this.roomText.y = 145 * window.game.scaleFactor
+        this.roomText.fill = '#bbbbbb'
     }
 
 
@@ -579,6 +591,7 @@ export default class extends Phaser.State {
         this.pathing.importGrid(this.currentRoom.name);
         this.checkMusic();
         this.changeRoomText(this.currentRoom.text);
+        this.openRoom();
     }
 
 
@@ -726,7 +739,7 @@ export default class extends Phaser.State {
 
             newDoor.events.onInputDown.add(this.moveToDoor, this);
 
-            if (__DEBUG__) {
+            if (this.debugOn) {
                 var doorBg = this.game.make.graphics();
                 doorBg.beginFill(0x00ee00, 0.3);
                 doorBg.drawRect(x, y, width, height);
@@ -828,7 +841,7 @@ export default class extends Phaser.State {
 
 
   // Sprite talking
-  say (string, key, color) {
+  say (string, key, color, onComplete) {
 
     // include key for event evaluation
     var sprite = key ? this.getSprite(key): this.player
@@ -860,6 +873,9 @@ export default class extends Phaser.State {
     var timer = this.time.create();
     timer.add(length*400, function () {
       this.speech.kill();
+      
+      if (onComplete)
+        onComplete()
     },this);
     timer.start();
   }
@@ -978,10 +994,12 @@ export default class extends Phaser.State {
     var animName = data.animation;
     var kill = data.kill || false;
     var hide = data.hide || false;
-    var sprite;
     var loop = this.spritesJSON[key].animations[animName].loop;
 
-    sprite = this.getSprite(key);
+    let sprite = this.getSprite(key);
+    if (!sprite)
+      throw new Error(`sprite for animation not found: ${key}`)
+
     this.showSprite(sprite, true);
 
     sprite.events.onAnimationComplete.addOnce(function () {
@@ -1008,11 +1026,10 @@ export default class extends Phaser.State {
 
     sprite = this.getSprite(key);
     this.showSprite(sprite, true);
-    this.say(text, key, color);
+    this.say(text, key, color, () => this.showSprite(sprite, !hide));
 
-    sprite.events.onAnimationComplete.addOnce(function () {
-      hide ? this.showSprite(sprite, false):null;
-    }, this);
+    if (!loop)
+        sprite.events.onAnimationComplete.addOnce(() => this.showSprite(sprite, !hide), this)
 
     sprite.animations.play(animName, null, loop, kill);
   }
@@ -1265,7 +1282,7 @@ export default class extends Phaser.State {
     this.player.alpha = 0;
 
     // find and play the exiting sprite from the room's this.spritesGroup
-    enterSpriteName = myDoor.animation.enter;
+    let enterSpriteName = myDoor.animation.enter;
     let enterSprite;
 
     this.bgSprites.forEach(child => { if (child.key == enterSpriteName) enterSprite = child }, this)
@@ -1665,38 +1682,36 @@ export default class extends Phaser.State {
 
   // Change room GUI text
   changeRoomText (string) {
-    this.text.text = string;
+    this.roomText.text = string;
   }
 
 
   // Retrieve sprite by key from the cache
   getSprite (key) {
-    var i = this.world.children.length;
-    while (i--)
-    {
-      if (this.world.children[i].name == "group") {
+    dlog(`retrieving sprite from the sprite cache: ${key}`)
 
-        var j = this.world.children[i].children.length;
-        while (j--) {
+    let sprites = [
+      ...this.bgSprites.children,
+      ...this.mgSprites.children,
+      ...this.fgSprites.children,
+      ...this.itemGroup.children
+    ]
 
-          if (this.world.children[i].children[j].key == key) {
+    let sprite;
 
-            return this.world.children[i].children[j];
-          }
-        }
-      } else if (this.world.children[i].name != "group") {
-        if (this.world.children[i].key == key) {
-
-          return this.world.children[i];
-        }
+    sprites.forEach(spr => {
+      if (spr['name'] == key) {
+        sprite = spr
       }
-    }
+    })
+
+    return sprite
   }
 
 
   // Toggle a sprite's alpha
   showSprite (sprite, bool) {
-    dlog('show sprite? ' + sprite.key + ':' + bool);
+    dlog('show sprite? ' + sprite.name + ':' + bool);
     var alpha = bool ? 1:0;
     sprite.alpha = alpha;
   }

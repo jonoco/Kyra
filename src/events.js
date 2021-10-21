@@ -29,5 +29,8 @@ export default {
     { say: "Like Rocky Balboa" }],
   treehouseSymbol: [
     { say: "That's grandfather's mark as a magic user" },
-    { say: "so those damn kids will stay away" }]
+    { say: "so those damn kids will stay away" }],
+  brynn: [
+    { signal: "brynn" }
+  ]
 }

@@ -26,6 +26,9 @@ export default class Quests {
       this.quests[quest.name][quest.step] = true
 
       const events = this.quests[quest.name].events[quest.step]
+      dlog(`queuing events:`)
+      for (let event of events)
+        dlog(event)
       return events
     }
   }
@@ -91,14 +94,34 @@ const quests = {
   brynn: {
     active: false,
     amulet: false,
+    talk_1: false,
+    rose: false,
     events: {
       active: [
-        { wait: 4000 },
-        { modAttr: { sprite: "brynn enter", attr: "alpha", value: 0 } },
-        { sayAnim: { sprite: "brynn", animation: "talk", say: "Welcome, Brandon", color: "brynn" } },
+        { playAnim: { sprite: "brynn-enter", animation: "enter" } },
+        { sayAnim: 
+          { sprite: "brynn-talk", 
+            animation: "talk", 
+            say: "Welcome, Brandon", 
+            color: "brynn", 
+            hide: true } },
         { wait: 300 },
-        { playAnim: { sprite: "brynn", animation: "idle" } },
+        { sayAnim: 
+          { sprite: "brynn-talk", 
+            animation: "talk", 
+            say: "Why are you always bothering me?", 
+            color: "brynn", 
+            hide: true } },
+        { wait: 300 },
         { modAttr: { sprite: "altar", attr: "inputEnabled", value: true } }
+      ],
+      talk_1: [
+        { sayAnim: 
+          { sprite: "brynn-talk", 
+            animation: "talk", 
+            say: "Why haven't you gotten me a rose yet?", 
+            color: "brynn", 
+            hide: true }}
       ],
       amulet: [
         { playAnim: { sprite: "amulet", animation: "on" } },
@@ -170,15 +193,35 @@ const quests = {
 // all <conditions> must be true for <step> to occur
 // { name: "quest", step: "step", condition: "step" }
 const triggers = {
-  pool: [{ name: "willow", step: "gotTear", conditions: { active: true } }],
-  room03: [{ name: "willow", step: "active", conditions: { active: false } }],
-  "willow-tear": [{ name: "willow", step: "treeHealed", conditions: { gotTear: true } }],
-  room06: [{ name: "brynn", step: "active", conditions: { active: false } }],
-  altar: [{ name: "brynn", step: "amulet" }],
+  pool: [
+    { name: "willow", step: "gotTear", conditions: { active: true } }
+  ],
+  room03: [
+    { name: "willow", step: "active", conditions: { active: false } }
+  ],
+  "willow-tear": [
+    { name: "willow", step: "treeHealed", conditions: { gotTear: true } }
+  ],
+  room06: [
+    { name: "brynn", step: "active", conditions: { active: false } }
+  ],
+  altar: [
+    { name: "brynn", step: "amulet" }
+  ],
   room19: [
     { name: "bridge", step: "cave", conditions: { active: true }},
-    { name: "bridge", step: "complete", conditions: { fixed: true }}],
-  "saw_holder": [{ name: "bridge", step: "saw" }],
-  "herman-saw": [{ name: "bridge", step: "giveSaw" }],
-  room02: [{ name: "bridge", step: "fixed", conditions: { giveSaw: true } }]
+    { name: "bridge", step: "complete", conditions: { fixed: true }}
+  ],
+  "saw_holder": [
+    { name: "bridge", step: "saw" }
+  ],
+  "herman-saw": [
+    { name: "bridge", step: "giveSaw" }
+  ],
+  room02: [
+    { name: "bridge", step: "fixed", conditions: { giveSaw: true } }
+  ],
+  brynn: [
+    { name: "brynn", step: "talk_1", conditions: { talk_1: false }}
+  ]
 }

@@ -32,8 +32,16 @@
 	+ [x] update screens
 	+ [x] update asset coordinates
 	+ [x] update tween coordinates
+	+ [ ] fix sprites
+		- [ ] cliff
 	+ [ ] update animations
+		- [ ] brynn
+		- [ ] herman
+		- [ ] brandon
+		- [ ] bridge
+		- [ ] pond
 	+ [ ] update sprite scaling
+
 
 ### Bugs
 - [x] tapping on player causes him to disappear
@@ -47,5 +55,6 @@
 	- Uncaught TypeError: Cannot read property 'parent' of undefined
 - [x] willow tree animation is not triggering next event
 - [x] items coordinates scaled every time room is loaded
-
+- [x] say and sayAnim events need to be reworked to improve speaking behavior
+	- should be compatible with non-primary talking animations, e.g., brynn and her brynn-talk anims
 

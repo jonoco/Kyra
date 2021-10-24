@@ -57,4 +57,5 @@
 - [x] items coordinates scaled every time room is loaded
 - [x] say and sayAnim events need to be reworked to improve speaking behavior
 	- should be compatible with non-primary talking animations, e.g., brynn and her brynn-talk anims
-
+- [x] fix brandon's walk sync
+- [ ] crash entering bridge at modAttr

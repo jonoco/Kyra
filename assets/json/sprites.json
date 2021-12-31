@@ -777,5 +777,140 @@
 				"start": true
 			}
 		}
+	},
+	"sorrow_rock_glyph": {
+		"name": "sorrow_rock_glyph",
+		"png": "assets/sprites/sorrow_rock_glyph.png",
+		"json": null,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
+	"rain_drop": {
+		"name": "rain_drop",
+		"png": "assets/sprites/rain_drop.png",
+		"json": null,
+		"action": null,
+		"animated": false,
+		"animations": null
+	},
+	"pool_splash": {
+		"name": "pool_splash",
+		"png": "assets/sprites/splash.png",
+		"json": "assets/sprites/splash.json",
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+				"frames": [
+					"drop_1", "drop_2", "drop_3", "drop_4", "drop_5", "drop_6"
+				],
+				"speed": 6,
+				"loop": false,
+				"start": false
+			}
+		}
+	},
+	"pool_drop_a": {
+		"name": "pool_drop_a",
+		"png": "assets/sprites/sorrow_drops.png",
+		"json": "assets/sprites/sorrow_drops.json",
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+				"frames": [
+					"drop_a1", "drop_a2", "drop_a3", "drop_a4", "drop_a5", "drop_a6"
+				],
+				"speed": 6,
+				"loop": true,
+				"start": true
+			}
+		}
+	},
+	"pool_drop_b": {
+		"name": "pool_drop_b",
+		"png": "assets/sprites/sorrow_drops.png",
+		"json": "assets/sprites/sorrow_drops.json",
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+				"frames": [
+					"drop_b1", "drop_b2", "drop_b3", "drop_b4", "drop_b5", "drop_b6"
+				],
+				"speed": 6,
+				"loop": true,
+				"start": true
+			}
+		}
+	},
+	"pool_drop_c": {
+		"name": "pool_drop_c",
+		"png": "assets/sprites/sorrow_drops.png",
+		"json": "assets/sprites/sorrow_drops.json",
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+				"frames": [
+					"drop_c1", "drop_c2", "drop_c3", "drop_c4", "drop_c5", "drop_c6"
+				],
+				"speed": 6,
+				"loop": true,
+				"start": true
+			}
+		}
+	},
+	"pool_drop_d": {
+		"name": "pool_drop_d",
+		"png": "assets/sprites/sorrow_drops.png",
+		"json": "assets/sprites/sorrow_drops.json",
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+				"frames": [
+					"drop_d1", "drop_d2", "drop_d3", "drop_d4", "drop_d5", "drop_d6"
+				],
+				"speed": 6,
+				"loop": false,
+				"start": true
+			}
+		}
+	},
+	"pool_drop_e": {
+		"name": "pool_drop_e",
+		"png": "assets/sprites/sorrow_drops.png",
+		"json": "assets/sprites/sorrow_drops.json",
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+				"frames": [
+					"drop_e1", "drop_e2", "drop_e3", "drop_e4", "drop_e5", "drop_e6"
+				],
+				"speed": 6,
+				"loop": true,
+				"start": true
+			}
+		}
+	},
+	"pool_drop_f": {
+		"name": "pool_drop_f",
+		"png": "assets/sprites/sorrow_drops.png",
+		"json": "assets/sprites/sorrow_drops.json",
+		"animated": true,
+		"animations": {
+			"on": {
+				"name": "on",
+				"frames": [
+					"drop_f1", "drop_f2", "drop_f3", "drop_f4", "drop_f5", "drop_f6"
+				],
+				"speed": 6,
+				"loop": false,
+				"start": true
+			}
+		}
 	}
 }

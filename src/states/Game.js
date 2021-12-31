@@ -8,6 +8,7 @@ import Quests from '../quests'
 import itemAtlas from '../items'
 import Inventory from '../inventory'
 import { log, dlog, inBounds, moveToCenter } from '../utils'
+import PoolDrop from '../entities/PoolDrop'
 
 export default class extends Phaser.State {
     static debugPos = 1
@@ -16,7 +17,7 @@ export default class extends Phaser.State {
         this.Quests = new Quests()
 
         // game debugging
-        this.startRoom = 'room08';
+        this.startRoom = 'room09';
         this.debugOn = __DEBUG__ || false
         this.playMusic = false
 
@@ -307,10 +308,12 @@ export default class extends Phaser.State {
     evalBlock (block) {
         dlog(`evaluating block ${block}`)
 
-        let events = this.blockEvents[block].slice()
+        let events = this.blockEvents[block]
 
-        this.queueEvents(events)
-        this.popEventQueue()
+        if (events) {
+            this.queueEvents(events.slice())
+            this.popEventQueue()
+        }
     }
 
 
@@ -340,11 +343,22 @@ export default class extends Phaser.State {
         event.moveSprite  ? this.tweenSprite(event.moveSprite) : null;
         event.modRoomMeta ? this.modRoomMeta(event.modRoomMeta) : null;
         event.quit        ? this.quitGame() : null;
+        event.putSprite   ? this.putSprite(event.putSprite) : null;
     }
 
 
   // Events
 
+    putSprite (data) {
+      dlog(`putting ${this.spritesJSON[data.sprite].name}`)
+      let sprite = this.getSprite(data.sprite)
+
+      sprite.position = new PIXI.Point(data.x * window.game.scaleFactor, data.y * window.game.scaleFactor);
+
+      dlog(`put sprite to ${sprite.position}`)
+
+      this.evalEvent(`put-${data.sprite}`);
+    }
 
     /**
      * Remove block, e.g. after executing one-time block
@@ -405,16 +419,28 @@ export default class extends Phaser.State {
 
             switch (layer) {
             case 'background':
-                newSprite = this.bgSprites.create( roomSprites[i].x * window.game.scaleFactor, roomSprites[i].y * window.game.scaleFactor, roomSprites[i].name);
+                newSprite = this.bgSprites.create( 
+                    roomSprites[i].x * window.game.scaleFactor, 
+                    roomSprites[i].y * window.game.scaleFactor, 
+                    roomSprites[i].name);
                 break
             case 'midground':
-                newSprite = this.mgSprites.create( roomSprites[i].x * window.game.scaleFactor, roomSprites[i].y * window.game.scaleFactor, roomSprites[i].name);
+                newSprite = this.mgSprites.create( 
+                    roomSprites[i].x * window.game.scaleFactor, 
+                    roomSprites[i].y * window.game.scaleFactor, 
+                    roomSprites[i].name);
                 break
             case 'foreground':
-                newSprite = this.fgSprites.create( roomSprites[i].x * window.game.scaleFactor, roomSprites[i].y * window.game.scaleFactor, roomSprites[i].name);
+                newSprite = this.fgSprites.create( 
+                    roomSprites[i].x * window.game.scaleFactor, 
+                    roomSprites[i].y * window.game.scaleFactor, 
+                    roomSprites[i].name);
                 break
             default:
-                newSprite = this.bgSprites.create( roomSprites[i].x * window.game.scaleFactor, roomSprites[i].y * window.game.scaleFactor, roomSprites[i].name);
+                newSprite = this.bgSprites.create( 
+                    roomSprites[i].x * window.game.scaleFactor, 
+                    roomSprites[i].y * window.game.scaleFactor, 
+                    roomSprites[i].name);
             }
             
             newSprite.name = roomSprites[i].name
@@ -482,6 +508,53 @@ export default class extends Phaser.State {
 
 
     /**
+     * Create room entities
+     */
+    createEntities () {
+        if (!this.currentRoom.entities) {
+            dlog("room has no entities")
+            return
+        }
+
+        const entities = {
+            'poolDrop': PoolDrop
+        }
+
+        const roomEntities = this.currentRoom.entities;
+        for (let entityInfo of roomEntities) {
+            dlog('creating entity ' + entityInfo['name'])
+
+            let {name, layer} = entityInfo
+            let entityClass = entities[name]
+            let entity = new entityClass({game: this.game, ...entityInfo})
+            
+            // create animation for entity
+            let spriteProperty = this.spritesJSON[entity.animName];
+            this.createSpriteAnimation(entity.anim, spriteProperty)
+
+            // assumes the only animation is the 'on' anim for now
+            let animation = entity.anim.animations.getAnimation('on') 
+            animation.onComplete.add(entity.onAnimComplete, entity)
+            
+            switch (layer) {
+                case 'foreground':
+                    this.fgSprites.add(entity)
+                    this.fgSprites.add(entity.anim)
+                    break
+                case 'midground':
+                    this.mgSprites.add(entity)
+                    this.mgSprites.add(entity.anim)
+                    break
+                case 'background':
+                default:
+                    this.bgSprites.add(entity)
+                    this.bgSprites.add(entity.anim)
+                }
+        }
+    }
+
+
+    /**
      * Compile a sprite's animations from sprites.json data
      * 
      * @param {Sprite} sprite sprite to create animations for
@@ -500,9 +573,13 @@ export default class extends Phaser.State {
 
             // unless sprite is set to start automatically, hide it
             if (animations[anim].start) {
-                sprite.animations.play(animations[anim].name);
+                let animation = sprite.animations.play(animations[anim].name);
+
+                // hide non-looping animations after playing
+                animation.onComplete.add(
+                  (data) => this.showSprite(sprite, false), this)
             } else {
-                sprite.alpha = 0;
+                this.showSprite(sprite, false)
             }
         }
     }
@@ -588,6 +665,7 @@ export default class extends Phaser.State {
         this.createBlocks();
         this.createItems();
         this.createSprites();
+        this.createEntities();
         this.pathing.importGrid(this.currentRoom.name);
         this.checkMusic();
         this.changeRoomText(this.currentRoom.text);
@@ -1375,7 +1453,8 @@ export default class extends Phaser.State {
   // Move a sprite
   tweenSprite (data) {
 
-    this.playAnimation(data);
+    if (data.animation)
+      this.playAnimation(data);
 
     var path = data.path;
     var key = data.sprite;
@@ -1466,6 +1545,7 @@ export default class extends Phaser.State {
     this.createBlocks();
     this.createItems();
     this.createSprites();
+    this.createEntities();
 
     // return player sprite to spriteGroup
     this.world.remove(this.player);

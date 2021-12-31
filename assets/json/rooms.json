@@ -283,22 +283,61 @@
 		"sprites": [
 			{ "name": "stone1", "x": 186, "y": 94, "layer": "foreground" },
 			{ "name": "catch", "x": 167, "y": 8 },
-			{ "name": "drop1", "x": 70, "y": -3 },
-			{ "name": "drop2", "x": 143, "y": -13 },
-			{ "name": "drop3", "x": 113, "y": -7 },
-			{ "name": "drop4", "x": 87, "y": 0 },
-			{ "name": "drop5", "x": 123, "y": 0 }
+			{ "name": "sorrow_rock_glyph", "x": 9, "y": 40 }
 		],
 		"blocks": [
 			{ "name": "pool", "x": 78, "y": 24, "height": 80, "width": 95 }
+		],
+		"entities": [
+			{ 
+				"name": "poolDrop", 
+				"startPos": {"x": 70, "y": -5}, 
+				"endPos": {"x": 70, "y": 90},
+				"duration": 900,  
+				"layer": "midground",
+				"delay": 200
+			},
+			{ 
+				"name": "poolDrop", 
+				"startPos": {"x": 83, "y": -5}, 
+				"endPos": {"x": 83, "y": 95},
+				"duration": 900,  
+				"layer": "midground",
+				"delay": 500
+			},
+			{ 
+				"name": "poolDrop", 
+				"startPos": {"x": 145, "y": -5}, 
+				"endPos": {"x": 145, "y": 98},
+				"duration": 900,  
+				"layer": "midground",
+				"delay": 300
+			},
+			{ 
+				"name": "poolDrop", 
+				"startPos": {"x": 122, "y": -5}, 
+				"endPos": {"x": 122, "y": 88},
+				"duration": 900,  
+				"layer": "midground",
+				"delay": 650
+			}
+			,
+			{ 
+				"name": "poolDrop", 
+				"startPos": {"x": 162, "y": -5}, 
+				"endPos": {"x": 162, "y": 80},
+				"duration": 900,  
+				"layer": "midground",
+				"delay": 0
+			}
 		],
 		"grid": "assets/json/room09.json",
 		"path": "assets/screens/sorrow.png",
 		"doors": {
 			"room08": {
 				"name": "room08",
-				"x": 0, "y": 0,
-				"height": 200, "width": 20,
+				"x": 0, "y": 70,
+				"height": 80, "width": 20,
 				"entry": {"x": 20, "y": 128},
 				"offPoint": {"x": -17, "y": 128},
 				"animation": false

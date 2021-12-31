@@ -34,14 +34,16 @@
 	+ [x] update tween coordinates
 	+ [ ] fix sprites
 		- [ ] cliff
+		- [ ] rocky outcrop (room17)
 	+ [ ] update animations
-		- [ ] brynn
+		- [x] brynn
 		- [ ] herman
 		- [ ] brandon
 		- [ ] bridge
 		- [ ] pond
 	+ [ ] update sprite scaling
-
+- [ ] move brandon's sprite meta to json; animations are being described in *createPlayer*
+- [ ] remove outdated/deprecated assets
 
 ### Bugs
 - [x] tapping on player causes him to disappear
@@ -59,3 +61,9 @@
 	- should be compatible with non-primary talking animations, e.g., brynn and her brynn-talk anims
 - [x] fix brandon's walk sync
 - [ ] crash entering bridge at modAttr
+- [ ] entities are not instantiating after leaving room
+- [ ] willow quest is broken
+	- after visiting willow, clicking on pool gives a "no walkable path found" error, and locks player movement
+
+# drops
+{ "name": "pool_drop_c", "x": 113, "y": 89 },

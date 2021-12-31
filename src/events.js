@@ -32,5 +32,14 @@ export default {
     { say: "so those damn kids will stay away" }],
   brynn: [
     { signal: "brynn" }
+  ],
+  pool: [
+    { signal: "pool" }
+  ],
+  sorrow_rock_glyph: [
+    { putSprite: { sprite: "sorrow_rock_glyph", x: 50, y: 50 } },
+    { modAttr: { sprite: "saw_holder_empty", attr: "alpha", value: 1 } },
+    { moveSprite: { sprite: "sorrow_rock_glyph", path: [[50,5], [50, 50]] }},
+    { modAttr: { sprite: "sorrow_rock_glyph", attr: "alpha", value: 0 } },
   ]
 }

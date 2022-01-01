@@ -522,7 +522,9 @@ export default class extends Phaser.State {
 
         const roomEntities = this.currentRoom.entities;
         for (let entityInfo of roomEntities) {
-            dlog('creating entity ' + entityInfo['name'])
+            dlog(`creating entity ${entityInfo['name']}
+            in layer ${entityInfo['layer']} 
+            at { ${entityInfo['startPos'].x}, ${entityInfo['startPos'].y} }`)
 
             let {name, layer} = entityInfo
             let entityClass = entities[name]

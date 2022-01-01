@@ -40,7 +40,7 @@
 		- [ ] herman
 		- [ ] brandon
 		- [ ] bridge
-		- [ ] pond
+		- [x] pond
 	+ [ ] update sprite scaling
 - [ ] move brandon's sprite meta to json; animations are being described in *createPlayer*
 - [ ] remove outdated/deprecated assets
@@ -61,7 +61,7 @@
 	- should be compatible with non-primary talking animations, e.g., brynn and her brynn-talk anims
 - [x] fix brandon's walk sync
 - [ ] crash entering bridge at modAttr
-- [ ] entities are not instantiating after leaving room
+- [x] entities are not instantiating after leaving room
 - [ ] willow quest is broken
 	- after visiting willow, clicking on pool gives a "no walkable path found" error, and locks player movement
 

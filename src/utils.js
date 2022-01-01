@@ -45,3 +45,8 @@ export const dlog = msg => {
     log(msg)
   }
 }
+
+
+export const copy = obj => {
+  return JSON.parse(JSON.stringify(obj))
+}

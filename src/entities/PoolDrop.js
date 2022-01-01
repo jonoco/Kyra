@@ -1,18 +1,24 @@
+import { copy } from '../utils' 
+
 export default class PoolDrop extends Phaser.Sprite {
     animName = 'pool_splash'
 
     constructor ({ game, startPos, endPos, duration, delay }) {
+        startPos = copy(startPos)
+        endPos = copy(endPos)
+
         startPos.x *= window.game.scaleFactor
         startPos.y *= window.game.scaleFactor
-
         endPos.x *= window.game.scaleFactor
         endPos.y *= window.game.scaleFactor
 
         super(game, startPos.x, startPos.y, 'rain_drop')
 
-        this.scale.setTo(window.game.scaleFactor);
         this.startPos = startPos
         this.endPos = endPos
+
+        this.name = 'poolDrop'
+        this.scale.setTo(window.game.scaleFactor);
         this.duration = duration
 
         this.anim = new Phaser.Sprite(game, startPos.x, startPos.y, 'pool_splash')
@@ -22,7 +28,7 @@ export default class PoolDrop extends Phaser.Sprite {
 
         this.tween = this.game.add.tween(this);
         this.tween.onComplete.add(this.onMoveComplete, this);
-        this.tween.to(this.endPos, this.duration)
+        this.tween.to(endPos, this.duration)
         this.tween.delay(delay)
 
         setTimeout(() => this.start(), delay)

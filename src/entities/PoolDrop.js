@@ -22,6 +22,7 @@ export default class PoolDrop extends Phaser.Sprite {
         this.duration = duration
 
         this.anim = new Phaser.Sprite(game, startPos.x, startPos.y, 'pool_splash')
+        this.anim.name = `${this.name}-anim`
         this.anim.scale.setTo(window.game.scaleFactor)
        
         this.game.physics.arcade.enableBody(this);

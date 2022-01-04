@@ -1,7 +1,11 @@
-import Phaser from 'phaser'
+import 'phaser'
 import { centerGameObjects } from '../utils'
 
 export default class extends Phaser.State {
+  ready: boolean;
+  loaderBg: Phaser.Sprite;
+  message: Phaser.Text;
+
   init () {
     this.ready = false
   }

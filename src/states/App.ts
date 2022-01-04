@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import 'phaser';
 
 import BootState from './Boot';
 import SplashState from './Splash';
@@ -8,6 +8,8 @@ import Preloader from './Preloader';
 import config from '../config';
 
 export default class App extends Phaser.Game {
+  scaleFactor: number;
+  
   constructor () {
     const docElement = document.documentElement
     let height = innerHeight

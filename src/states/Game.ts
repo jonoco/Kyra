@@ -1,4 +1,6 @@
-import Phaser from 'phaser'
+import 'phaser'
+import 'pixi'
+
 import PF from 'pathfinding'
 
 import Pathing from '../pathing'
@@ -9,9 +11,60 @@ import itemAtlas from '../items'
 import Inventory from '../inventory'
 import { log, dlog, inBounds, moveToCenter } from '../utils'
 import PoolDrop from '../entities/PoolDrop'
+import Block from '../Block'
+
+const colorAtlas = {
+    "herman" : "#ffcc99",
+    "player" : "#eeeeee",
+    "brynn" : "#ff9999"
+};
+
 
 export default class extends Phaser.State {
-    static debugPos = 1
+    debugPos: number;
+
+    Quests: Quests;
+    startRoom: string;
+    debugOn: boolean;
+    playMusic: boolean;
+    quests: Array<Object>;
+    eventTriggers: Array<any>;
+    eventQueue: Array<any>;
+    bgSprites: Phaser.Group;
+    mgSprites: Phaser.Group;
+    fgSprites: Phaser.Group;
+    spritesJSON: Object;
+    player: Phaser.Sprite;
+    tween: Phaser.Tween;
+    between: Phaser.Tween;
+    speed: number;
+    direction: string;
+    speech: Phaser.Text;
+    animation: Phaser.Animation;
+    talkingSprite: Phaser.Sprite;
+    inventory: Inventory;
+    itemGroup: Phaser.Group;
+    gui: Phaser.Image;
+    amulet: Phaser.Sprite;
+    amuletGroup: Phaser.Group;
+    room: Phaser.Image;
+    roomsJSON: Object;
+    currentRoom: any;
+    previousRoom: any;
+    door: string
+    doors: Array<Object>;
+    doorGroup: Phaser.Group;
+    doorDebug: Phaser.Group;
+    blockGroup: Array<Block>;
+    debugGroup: Phaser.Group;
+    music: Phaser.Sound;
+    roomText: Phaser.Text;
+    currentMusic: string;
+    openDoor: string | null; // checks if last click was on a door > reset on move complete
+    heldItem: Phaser.Group;
+    pathing: Pathing;
+    items: Array<any>;
+
 
     init() {
         this.Quests = new Quests()
@@ -21,14 +74,10 @@ export default class extends Phaser.State {
         this.debugOn = __DEBUG__ || false
         this.playMusic = false
 
-        // utility variables
-        this.timer;
-
         // event variables
         this.quests;
         this.eventTriggers;
         this.eventQueue = [];
-        this.blockEvents = events
 
         // sprite variables
         this.bgSprites;
@@ -44,13 +93,7 @@ export default class extends Phaser.State {
         this.speech;
         this.animation;
         this.talkingSprite;
-        this.colorAtlas = {
-            "herman" : "#ffcc99",
-            "player" : "#eeeeee",
-            "brynn" : "#ff9999"
-        };
 
-        this.itemAtlas = itemAtlas
         this.inventory;
         this.itemGroup;   // all items on the floor of the room
 
@@ -60,7 +103,7 @@ export default class extends Phaser.State {
         this.amuletGroup;
 
         // room variables
-        this.room; // sprite of current room
+        this.room; // image of current room
         this.roomsJSON;
         this.currentRoom; // room meta from rooms.json
         this.previousRoom; // room meta from rooms.json
@@ -104,8 +147,8 @@ export default class extends Phaser.State {
         this.createInputs();
         this.doorGroup = this.game.add.group();
         this.doorDebug = this.game.add.group();
-        this.blockGroup = this.add.group();
-        this.debugGroup = this.add.group();;
+        this.blockGroup = [];
+        this.debugGroup = this.add.group();
         this.createStartRoom();
         this.createPlayer();
 
@@ -184,7 +227,7 @@ export default class extends Phaser.State {
      * @param {String} text debug text to display
      * @returns next open row
      */
-    addDebugText(text, pos) {
+    addDebugText(text: string) {
         this.game.debug.text(text, 5, this.debugPos * 25);
 
         this.debugPos++
@@ -195,7 +238,7 @@ export default class extends Phaser.State {
      * Add sprite debug info
      * @param {Sprite} sprite sprite to print debug 
      */
-    addDebugSprite(sprite, pos) {
+    addDebugSprite(sprite: Phaser.Sprite) {
       this.addDebugText(`   name: ${sprite.name} z: ${sprite.z} visible: ${sprite.visible}`)
     }
 
@@ -308,10 +351,10 @@ export default class extends Phaser.State {
     evalBlock (block) {
         dlog(`evaluating block ${block}`)
 
-        let events = this.blockEvents[block]
+        let blockEvents = events[block]
 
-        if (events) {
-            this.queueEvents(events.slice())
+        if (blockEvents) {
+            this.queueEvents(blockEvents.slice())
             this.popEventQueue()
         }
     }
@@ -366,13 +409,13 @@ export default class extends Phaser.State {
      * @param {Sprite} block block to destroy
      */
     killBlock (block) {
-        var blocks = this.blockGroup.children;
+        var blocks = this.blockGroup;
         var blocksMeta = this.currentRoom.blocks;
 
         var i = blocks.length;
         while (i--) {
             if (blocks[i].name == block) {
-                this.blockGroup.remove(blocks[i], true);
+                this.blockGroup.splice(i, 1);
             }
         }
 
@@ -476,21 +519,22 @@ export default class extends Phaser.State {
      * Create room blocks
      */
     createBlocks () {
-        var blank;
+        var block: Block;
         var blocks = this.currentRoom.blocks;
 
         var i = blocks.length;
         while (i--) {
-            blank = this.blockGroup.create( blocks[i].x, blocks[i].y);
-            blank.position.x *= window.game.scaleFactor
-            blank.position.y *= window.game.scaleFactor
-            blank.height = blocks[i].height * window.game.scaleFactor;
-            blank.width = blocks[i].width * window.game.scaleFactor;
-            blank.name = blocks[i].name;
-            blank.inputEnabled = true;
-            blank.events.onInputDown.add(function (data) {
+            block = new Block(this.game, blocks[i].x, blocks[i].y);
+            block.position.x *= window.game.scaleFactor
+            block.position.y *= window.game.scaleFactor
+            block.height = blocks[i].height * window.game.scaleFactor;
+            block.width = blocks[i].width * window.game.scaleFactor;
+            block.name = blocks[i].name;
+            block.inputEnabled = true;
+            block.events.onInputDown.add(function (data) {
                     this.evalBlock(data.name);
             }, this);
+            this.blockGroup.push(block)
 
             if (this.debugOn) {
                 var blockBg = this.game.make.graphics();
@@ -759,7 +803,8 @@ export default class extends Phaser.State {
         ], 8, true, false);
 
         this.player.scale.setTo(window.game.scaleFactor);
-        this.player.anchor = {x:0.5, y:0.9};
+        this.player.anchor.x = 0.5;
+        this.player.anchor.y = 0.9;
         this.physics.arcade.enableBody(this.player);
 
         this.mgSprites.add(this.player);
@@ -837,31 +882,29 @@ export default class extends Phaser.State {
   // Move sprites in front or behind player
   changeSpriteIndex () {
     // move sprites behind/in front of player
-    for (let i = 0 ; i < this.mgSprites.length ; i++) {
-      let sprite = this.mgSprites.children[i];
+    this.mgSprites.forEach((sprite: Phaser.Sprite) => {
+        if (sprite.name == 'player') {
+            //pass
+        } else if (this.player.bottom < sprite.bottom) {
+            // sprite is in front of player
+            sprite.bringToTop();
 
-      if (sprite.name == 'player') {
-        //pass
-      } else if (this.player.bottom < sprite.bottom) {
-        // sprite is in front of player
-        sprite.bringToTop();
+            //dlog(`pull ${sprite.name} in front of player`)
+        } else {
+            // sprite is behind player
+            sprite.sendToBack();
 
-       //dlog(`pull ${sprite.name} in front of player`)
-      } else {
-        // sprite is behind player
-        sprite.sendToBack();
+            //dlog(`push ${sprite.name} behind player`)
+        }  
+    })
 
-        //dlog(`push ${sprite.name} behind player`)
-      }
-    }
-
-    for (let item of this.itemGroup.children) {
-      if (this.player.bottom < item.bottom) {
-        item.bringToTop()
-      } else {
-        item.sendToBack()
-      }
-    }
+    this.itemGroup.forEach((item: Phaser.Sprite) => {
+        if (this.player.bottom < item.bottom) {
+            item.bringToTop()
+        } else {
+            item.sendToBack()
+        }
+    })
   }
 
 
@@ -921,7 +964,7 @@ export default class extends Phaser.State {
 
 
   // Sprite talking
-  say (string, key, color, onComplete) {
+say (string, key, color, onComplete = null) {
 
     // include key for event evaluation
     var sprite = key ? this.getSprite(key): this.player
@@ -933,7 +976,7 @@ export default class extends Phaser.State {
     this.speech.text = string
     this.speech.stroke = '#000000'
     this.speech.strokeThickness = 5
-    this.speech.fill = this.colorAtlas[textColor]
+    this.speech.fill = colorAtlas[textColor]
     this.speech.name = sprite.key
 
     if (this.speech.right > 306 * window.game.scaleFactor) {
@@ -1040,31 +1083,21 @@ export default class extends Phaser.State {
     var attr = data.attr;
     var value = data.value;
 
-    var i = this.world.children.length;
-    while (i--)
-    {
-      if (this.world.children[i].name == "group" && this.world.children[i].children.length) {
-
-        var j = this.world.children[i].children.length;
-        while (j--) {
-
-          if (this.world.children[i].children[j].key == key) {
-            // found object
-            this.world.children[i].children[j][attr] = value;
+    this.world.forEach((child: any) => {
+        if (child.name == "group" && child.children.length) {
+            child.forEach((groupChild: any) => {
+                if (groupChild.key == key) {
+                    groupChild[attr] = value;
+                    this.evalEvent('mod-' + key);
+                    return true;
+                }
+            });
+        } else if (child.name != "group") {
+            child[attr] = value;
             this.evalEvent('mod-' + key);
             return true;
-          }
-
         }
-      } else if (this.world.children[i].name != "group") {
-        if (this.world.children[i].key == key) {
-          // found object
-          this.world.children[i][attr] = value;
-          this.evalEvent('mod-' + key);
-          return true;
-         }
-      }
-    }
+    });
   }
 
 
@@ -1183,7 +1216,7 @@ export default class extends Phaser.State {
       this.world.remove(this.player);
       this.mgSprites.add(this.player);
     }
-    dlog('altering ' + this.roomsJSON[myRoom]);
+    dlog('altering ' + this.roomsJSON[room]);
 
     this.evalEvent('altRoom');
   }
@@ -1257,7 +1290,7 @@ export default class extends Phaser.State {
   peekInDoor (player, door) {
 
     if (door.name == this.openDoor) {
-      this.openDoor = false;
+      this.openDoor = null;
       this.door = door.name;
 
       this.exitRoom();
@@ -1566,7 +1599,7 @@ export default class extends Phaser.State {
     this.mgSprites.remove(this.player);
     this.world.addAt(this.player, 1);
 
-    this.blockGroup.removeAll(true)
+    for (let b of this.blockGroup) b.destroy()
     this.debugGroup.removeAll(true)
     this.doorGroup.removeAll(true)
     this.doorDebug.removeAll(true)
@@ -1661,7 +1694,7 @@ export default class extends Phaser.State {
   spawnItem (itemData) {
     var item = this.game.make.image(itemData.x * window.game.scaleFactor, itemData.y * window.game.scaleFactor, 'items');
     item.name = itemData.name;
-    var frame = this.itemAtlas[item.name];
+    var frame = itemAtlas[item.name];
     item.frame = frame;
     item.scale.setTo(0.5 * window.game.scaleFactor);
     item.inputEnabled = true;

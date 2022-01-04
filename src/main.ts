@@ -2,6 +2,13 @@ import 'pixi';
 import 'p2';
 import App from './states/App';
 
+declare global {
+  interface Window {
+      game: any;
+      cordova: any;
+  }
+}
+
 window.game = new App()
 
 if (window.cordova) {
@@ -23,7 +30,7 @@ if (window.cordova) {
       window.game.state.start('Boot');
     },
 
-    receivedEvent: function (id) {
+    receivedEvent: function (id: any) {
       console.log('Received Event: ' + id);
     }
   }

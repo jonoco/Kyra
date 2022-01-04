@@ -1,8 +1,12 @@
-import Phaser from 'phaser'
-import WebFont from 'webfontloader'
+import 'phaser'
+import * as WebFontLoader from 'webfontloader';
 import config from '../config';
 
+
 export default class extends Phaser.State {
+  fontsReady: boolean;
+  kyrandiaFont: any;
+
   init() {
     this.stage.backgroundColor = '#EDEEC9'
     this.fontsReady = false
@@ -14,7 +18,7 @@ export default class extends Phaser.State {
 
   preload() {
     if (config.webfonts.length) {
-      WebFont.load({
+      WebFontLoader.load({
         google: {
           families: config.webfonts
         },

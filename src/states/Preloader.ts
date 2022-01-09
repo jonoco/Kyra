@@ -46,6 +46,8 @@ export default class extends Phaser.State {
     this.load.json('rooms', 'assets/json/rooms.json')
     this.load.json('music', 'assets/json/music.json')
     this.load.json('sprites', 'assets/json/sprites.json')
+    this.load.json('events', 'assets/json/events.json')
+    this.load.json('quests', 'assets/json/quests.json')
 
     this.load.spritesheet('items', 'assets/img/item_sheet.png', 32, 32)
 

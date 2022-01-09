@@ -1,878 +1,883 @@
 import 'phaser'
 import 'pixi'
 
-import PF from 'pathfinding'
-
 import Pathing from '../pathing'
-import lang from '../lang'
-import events from '../events'
-import Quests from '../quests'
 import itemAtlas from '../items'
 import Inventory from '../inventory'
 import { log, dlog, inBounds, moveToCenter } from '../utils'
 import PoolDrop from '../entities/PoolDrop'
 import Block from '../Block'
+import { 
+  Action, ActionType, AddItemAction, AltRoomAction, KillBlockAction, 
+  KillSpriteAction, ModAttrAction, ModMetaAction, ModRoomMetaAction, 
+  MoveAction, MoveSpriteAction, parseAction, PlayAnimAction, 
+  PutSpriteAction, RemoveItemAction, SayAction, SayAnimAction, 
+  TogAnimAction, TurnAction, WaitAction 
+} from '../Action'
+import { Event, eventsContainsTrigger, parseEvents } from '../Event'
+import { parseQuests, Quest } from '../Quest'
 
 const colorAtlas = {
-    "herman" : "#ffcc99",
-    "player" : "#eeeeee",
-    "brynn" : "#ff9999"
+  "herman" : "#ffcc99",
+  "player" : "#eeeeee",
+  "brynn" : "#ff9999"
 };
 
 
 export default class extends Phaser.State {
-    debugPos: number;
+  debugPos: number;
 
-    Quests: Quests;
-    startRoom: string;
-    debugOn: boolean;
-    playMusic: boolean;
-    quests: Array<Object>;
-    eventTriggers: Array<any>;
-    eventQueue: Array<any>;
-    bgSprites: Phaser.Group;
-    mgSprites: Phaser.Group;
-    fgSprites: Phaser.Group;
-    spritesJSON: Object;
-    player: Phaser.Sprite;
-    tween: Phaser.Tween;
-    between: Phaser.Tween;
-    speed: number;
-    direction: string;
-    speech: Phaser.Text;
-    animation: Phaser.Animation;
-    talkingSprite: Phaser.Sprite;
-    inventory: Inventory;
-    itemGroup: Phaser.Group;
-    gui: Phaser.Image;
-    amulet: Phaser.Sprite;
-    amuletGroup: Phaser.Group;
-    room: Phaser.Image;
-    roomsJSON: Object;
-    currentRoom: any;
-    previousRoom: any;
-    door: string
-    doors: Array<Object>;
-    doorGroup: Phaser.Group;
-    doorDebug: Phaser.Group;
-    blockGroup: Array<Block>;
-    debugGroup: Phaser.Group;
-    music: Phaser.Sound;
-    roomText: Phaser.Text;
-    currentMusic: string;
-    openDoor: string | null; // checks if last click was on a door > reset on move complete
-    heldItem: Phaser.Group;
-    pathing: Pathing;
-    items: Array<any>;
+  startRoom: string;
+  debugOn: boolean;
+  playMusic: boolean;
+  eventQueue: Array<any>;
+  bgSprites: Phaser.Group;
+  mgSprites: Phaser.Group;
+  fgSprites: Phaser.Group;
+  spritesJSON: Object;
+  player: Phaser.Sprite;
+  tween: Phaser.Tween;
+  between: Phaser.Tween;
+  speed: number;
+  direction: string;
+  speech: Phaser.Text;
+  animation: Phaser.Animation;
+  talkingSprite: Phaser.Sprite;
+  inventory: Inventory;
+  itemGroup: Phaser.Group;
+  gui: Phaser.Image;
+  amulet: Phaser.Sprite;
+  amuletGroup: Phaser.Group;
+  room: Phaser.Image;
+  roomsJSON: Object;
+  currentRoom: any;
+  previousRoom: any;
+  door: string
+  doors: Array<Object>;
+  doorGroup: Phaser.Group;
+  doorDebug: Phaser.Group;
+  blockGroup: Array<Block>;
+  debugGroup: Phaser.Group;
+  music: Phaser.Sound;
+  roomText: Phaser.Text;
+  currentMusic: string;
+  openDoor: string | null; // checks if last click was on a door > reset on move complete
+  heldItem: Phaser.Group;
+  pathing: Pathing;
+  items: Array<any>;
+  events: Event[];
+  quests: Quest[];
 
 
-    init() {
-        this.Quests = new Quests()
+  init() {
+    // this.Quests = new Quests()
 
-        // game debugging
-        this.startRoom = 'room09';
-        this.debugOn = __DEBUG__ || false
-        this.playMusic = false
+    // game debugging
+    this.startRoom = 'room09';
+    this.debugOn = __DEBUG__ || false
+    this.playMusic = false
 
-        // event variables
-        this.quests;
-        this.eventTriggers;
-        this.eventQueue = [];
+    // event variables
+    // this.quests;
+    // this.eventTriggers;
+    this.eventQueue = [];
 
-        // sprite variables
-        this.bgSprites;
-        this.mgSprites;
-        this.fgSprites;
-        this.spritesJSON;
+    // sprite variables
+    this.bgSprites;
+    this.mgSprites;
+    this.fgSprites;
+    this.spritesJSON;
 
-        this.player;
-        this.tween;
-        this.between;
-        this.speed = 40; // lower is faster tweening
-        this.direction;
-        this.speech;
-        this.animation;
-        this.talkingSprite;
+    this.player;
+    this.tween;
+    this.between;
+    this.speed = 40; // lower is faster tweening
+    this.direction;
+    this.speech;
+    this.animation;
+    this.talkingSprite;
 
-        this.inventory;
-        this.itemGroup;   // all items on the floor of the room
+    this.inventory;
+    this.itemGroup;   // all items on the floor of the room
 
-        // gui variables
-        this.gui;
-        this.amulet;
-        this.amuletGroup;
+    // gui variables
+    this.gui;
+    this.amulet;
+    this.amuletGroup;
 
-        // room variables
-        this.room; // image of current room
-        this.roomsJSON;
-        this.currentRoom; // room meta from rooms.json
-        this.previousRoom; // room meta from rooms.json
-        this.door; // door name
-        this.doors;
-        this.doorGroup;
-        this.blockGroup;
-        this.debugGroup;
-        this.music;
-        this.roomText;
-        this.currentMusic;
-        this.openDoor; // checks if last click was on a door > reset on move complete
+    // room variables
+    this.room; // image of current room
+    this.roomsJSON;
+    this.currentRoom; // room meta from rooms.json
+    this.previousRoom; // room meta from rooms.json
+    this.door; // door name
+    this.doors;
+    this.doorGroup;
+    this.blockGroup;
+    this.debugGroup;
+    this.music;
+    this.roomText;
+    this.currentMusic;
+    this.openDoor; // checks if last click was on a door > reset on move complete
+  }
+
+
+  preload() { }
+
+
+  create() {
+    this.events = parseEvents(this.cache.getJSON('events').events)
+    this.quests = parseQuests(this.cache.getJSON('quests').quests)
+
+    this.roomsJSON = this.cache.getJSON('rooms');
+    this.spritesJSON = this.cache.getJSON('sprites');
+    this.stage.backgroundColor = '#2d2d2d';
+    this.physics.startSystem(Phaser.Physics.ARCADE);
+
+    // this.quests = this.Quests.quests
+    // this.eventTriggers = this.Quests.triggers
+
+    // display groups layered for correct z depths
+    this.createRoom();
+    this.bgSprites = this.game.add.group(this.world, 'background sprites')
+    this.itemGroup = this.game.add.group(this.world, 'item sprites')
+    this.mgSprites = this.game.add.group(this.world, 'midground sprites')
+    this.fgSprites = this.game.add.group(this.world, 'foreground sprites')
+    this.createGui();
+    this.inventory = new Inventory(this)
+    this.heldItem = this.game.add.group(this.world, 'held items')
+
+    this.pathing = new Pathing(this)
+
+    this.createText();
+    this.createInputs();
+    this.doorGroup = this.game.add.group();
+    this.doorDebug = this.game.add.group();
+    this.blockGroup = [];
+    this.debugGroup = this.add.group();
+    this.createStartRoom();
+    this.createPlayer();
+
+    this.input.keyboard.addKeys({ "a": Phaser.KeyCode.A, "b": Phaser.KeyCode.B })
+    let tildeKey = this.input.keyboard.addKey(Phaser.KeyCode.TILDE)
+    tildeKey.onDown.add(this.toggleDebug, this)
+
+    let key_1 = this.input.keyboard.addKey(Phaser.KeyCode.ONE)
+    key_1.onDown.add(this.toggleMusic, this)
+  }
+
+
+  update () {
+    if (this.openDoor) {
+        this.physics.arcade.overlap(this.player, this.doorGroup, this.peekInDoor, null, this);
     }
 
+    if (this.eventQueue.length) {
+        this.enableInput(false);
+    } else {
+        this.enableInput(true);
+    }
+  }
 
-    preload() { }
+
+  render() {
+    this.changeSpriteIndex();
+    this.changePlayerAnimation();
+    
+    if (this.debugOn) {
+      this.debugScreen()
+    }
+  }
 
 
-    create() {
-        this.roomsJSON = this.cache.getJSON('rooms');
-        this.spritesJSON = this.cache.getJSON('sprites');
-        this.stage.backgroundColor = '#2d2d2d';
-        this.physics.startSystem(Phaser.Physics.ARCADE);
+  /**
+   * Show debug text
+   */
+  debugScreen() {
+    this.debugPos = 1
 
-        this.quests = this.Quests.quests
-        this.eventTriggers = this.Quests.triggers
+    this.addDebugText(`Room: ${this.currentRoom.name}`);
+    this.addDebugText(`Open door: ${this.openDoor}`);
+    this.addDebugText(`Player position: ${this.player.x}, ${this.player.y}`);
+    this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}`);
+    this.addDebugText(`Player z index: ${this.player.z}`);
+    this.addDebugText(`GUI z index: ${this.gui.z}`);
+    this.addDebugText(`room z index: ${this.room.z}`);
+    this.addDebugText(`bgSprites z index: ${this.bgSprites.z}`);
+    this.addDebugText(`mgSprites z index: ${this.mgSprites.z}`);
+    this.addDebugText(`fgSprites z index: ${this.fgSprites.z}`);
 
-        // display groups layered for correct z depths
-        this.createRoom();
-        this.bgSprites = this.game.add.group(this.world, 'background sprites')
-        this.itemGroup = this.game.add.group(this.world, 'item sprites')
-        this.mgSprites = this.game.add.group(this.world, 'midground sprites')
-        this.fgSprites = this.game.add.group(this.world, 'foreground sprites')
-        this.createGui();
-        this.inventory = new Inventory(this)
-        this.heldItem = this.game.add.group(this.world, 'held items')
+    this.addDebugText(`background sprites:`);
+    this.bgSprites.forEach(spr => this.addDebugSprite(spr), this)
 
-        this.pathing = new Pathing(this)
+    this.addDebugText(`midground sprites:`);
+    this.mgSprites.forEach(spr => this.addDebugSprite(spr), this)
 
-        this.createText();
-        this.createInputs();
-        this.doorGroup = this.game.add.group();
-        this.doorDebug = this.game.add.group();
-        this.blockGroup = [];
-        this.debugGroup = this.add.group();
-        this.createStartRoom();
-        this.createPlayer();
+    this.addDebugText(`foreground sprites:`);
+    this.fgSprites.forEach(spr => this.addDebugSprite(spr), this)
 
-        this.input.keyboard.addKeys({ "a": Phaser.KeyCode.A, "b": Phaser.KeyCode.B })
-        let tildeKey = this.input.keyboard.addKey(Phaser.KeyCode.TILDE)
-        tildeKey.onDown.add(this.toggleDebug, this)
+    this.addDebugText(`held items:`);
+    this.heldItem.forEach(spr => this.addDebugSprite(spr), this)
 
-        let key_1 = this.input.keyboard.addKey(Phaser.KeyCode.ONE)
-        key_1.onDown.add(this.toggleMusic, this)
+    this.addDebugText(`room items:`);
+    this.itemGroup.forEach(spr => this.addDebugSprite(spr), this)
+
+    this.addDebugText(`inventory items:`);
+    this.inventory.inventory.forEach(spr => 
+        this.addDebugText(`    name: ${spr.name} parent: ${spr.parent.name}`), this)
+  }
+
+
+  /**
+   * Add debug text to the debug screen 
+   * @param {String} text debug text to display
+   * @returns next open row
+   */
+  addDebugText(text: string) {
+    this.game.debug.text(text, 5, this.debugPos * 25);
+
+    this.debugPos++
+  }
+
+
+  /**
+   * Add sprite debug info
+   * @param {Sprite} sprite sprite to print debug 
+   */
+  addDebugSprite(sprite: Phaser.Sprite) {
+    this.addDebugText(`   name: ${sprite.name} z: ${sprite.z} visible: ${sprite.visible}`)
+  }
+
+
+  /**
+   * Toggle the debug screen
+   */
+  toggleDebug() {
+    this.debugOn = !this.debugOn 
+
+    log(`toggling debug ${this.debugOn ? 'on': 'off'}`)
+
+    if (this.debugOn) {
+      this.debugGroup.visible = true
+      this.doorDebug.visible = true
+    } else {
+      this.debugGroup.visible = false
+      this.doorDebug.visible = false
     }
 
-
-    update () {
-        if (this.openDoor) {
-            this.physics.arcade.overlap(this.player, this.doorGroup, this.peekInDoor, null, this);
-        }
-
-        if (this.eventQueue.length) {
-            this.enableInput(false);
-        } else {
-            this.enableInput(true);
-        }
-    }
-
-
-    render() {
-        this.changeSpriteIndex();
-        this.changePlayerAnimation();
-        
-        if (this.debugOn) {
-         this.debugScreen()
-        }
-    }
-
-
-    /**
-     * Show debug text
-     */
-    debugScreen() {
-        this.debugPos = 1
-
-        this.addDebugText(`Room: ${this.currentRoom.name}`);
-        this.addDebugText(`Open door: ${this.openDoor}`);
-        this.addDebugText(`Player position: ${this.player.x}, ${this.player.y}`);
-        this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}`);
-        this.addDebugText(`Player z index: ${this.player.z}`);
-        this.addDebugText(`GUI z index: ${this.gui.z}`);
-        this.addDebugText(`room z index: ${this.room.z}`);
-        this.addDebugText(`bgSprites z index: ${this.bgSprites.z}`);
-        this.addDebugText(`mgSprites z index: ${this.mgSprites.z}`);
-        this.addDebugText(`fgSprites z index: ${this.fgSprites.z}`);
-
-        this.addDebugText(`background sprites:`);
-        this.bgSprites.forEach(spr => this.addDebugSprite(spr), this)
-
-        this.addDebugText(`midground sprites:`);
-        this.mgSprites.forEach(spr => this.addDebugSprite(spr), this)
-
-        this.addDebugText(`foreground sprites:`);
-        this.fgSprites.forEach(spr => this.addDebugSprite(spr), this)
-
-        this.addDebugText(`held items:`);
-        this.heldItem.forEach(spr => this.addDebugSprite(spr), this)
-
-        this.addDebugText(`room items:`);
-        this.itemGroup.forEach(spr => this.addDebugSprite(spr), this)
-
-        this.addDebugText(`inventory items:`);
-        this.inventory.inventory.forEach(spr => 
-            this.addDebugText(`    name: ${spr.name} parent: ${spr.parent.name}`), this)
-    }
-
-
-    /**
-     * Add debug text to the debug screen 
-     * @param {String} text debug text to display
-     * @returns next open row
-     */
-    addDebugText(text: string) {
-        this.game.debug.text(text, 5, this.debugPos * 25);
-
-        this.debugPos++
-    }
-
-
-    /**
-     * Add sprite debug info
-     * @param {Sprite} sprite sprite to print debug 
-     */
-    addDebugSprite(sprite: Phaser.Sprite) {
-      this.addDebugText(`   name: ${sprite.name} z: ${sprite.z} visible: ${sprite.visible}`)
-    }
-
-
-    /**
-     * Toggle the debug screen
-     */
-    toggleDebug() {
-        this.debugOn = !this.debugOn 
-
-        log(`toggling debug ${this.debugOn ? 'on': 'off'}`)
-
-        if (this.debugOn) {
-            this.debugGroup.visible = true
-            this.doorDebug.visible = true
-        } else {
-            this.debugGroup.visible = false
-            this.doorDebug.visible = false
-        }
-
-        this.pathing.displayDebugTiles()
-        this.inventory.dispalyDebugSlots()
-    }
+    this.pathing.displayDebugTiles()
+    this.inventory.dispalyDebugSlots()
+  }
 
 
     /**
      * Show the game end message and return to the main menu
      */
-    quitGame () {
-        var blockBg = this.make.graphics();
-            blockBg.beginFill(0x000000, 1);
-            blockBg.drawRect(0, 0, this.game.width, this.game.height);
-            blockBg.endFill();
-            blockBg.alpha = 0;
-        this.world.add(blockBg);
+  quitGame () {
+    var blockBg = this.make.graphics();
+        blockBg.beginFill(0x000000, 1);
+        blockBg.drawRect(0, 0, this.game.width, this.game.height);
+        blockBg.endFill();
+        blockBg.alpha = 0;
+    this.world.add(blockBg);
 
-        var endMessage = this.add.image( 0, 0, 'end');
-            endMessage.scale.setTo(window.game.scaleFactor);
-            endMessage.alpha = 0;
-            endMessage.inputEnabled = true;
+    var endMessage = this.add.image( 0, 0, 'end');
+        endMessage.scale.setTo(window.game.scaleFactor);
+        endMessage.alpha = 0;
+        endMessage.inputEnabled = true;
 
-        var fade = this.game.add.tween(blockBg);
-            fade.to({ alpha: 1 }, 2000);
-            fade.start();
+    var fade = this.game.add.tween(blockBg);
+        fade.to({ alpha: 1 }, 2000);
+        fade.start();
 
-        var message = this.game.add.tween(endMessage);
-            message.to({ alpha: 1 }, 2000);
-            message.start();
+    var message = this.game.add.tween(endMessage);
+        message.to({ alpha: 1 }, 2000);
+        message.start();
 
-        endMessage.events.onInputDown.add(function () {
-        this.cache.destroy();
-        this.state.start('MainMenu');
-        }, this);
+    endMessage.events.onInputDown.add(function () {
+    this.cache.destroy();
+    this.state.start('MainMenu');
+    }, this);
+  }
+
+
+  /**
+   * Evaulate an event key, queuing any related events and starting event execution
+   * 
+   * @param {String} trigger name of an event
+   */
+  evalEvent (trigger: string) {
+    dlog(trigger + ' has triggered')
+
+    for (let quest of this.quests) {
+      let actions = quest.updateQuest(trigger)
+      this.queueActions(actions)
     }
 
+    this.popEventQueue()
+  }
 
-    /**
-     * Evaulate an event key, queuing any related events and starting event execution
-     * 
-     * @param {String} eventKey name of an event
-     */
-    evalEvent (eventKey) {
-        dlog(eventKey + ' has triggered')
 
-        // check whether event is linked to quest event
-        if (this.eventTriggers[eventKey]) {
-            dlog('there is a quest linked to this event')
-            var i = this.eventTriggers[eventKey].length
-            while (i--) {
-                const events = this.Quests.updateQuest(this.eventTriggers[eventKey][i])
-                if (events) {
-                  this.queueEvents(events)
-                }
-            }
-        }
+  /**
+   * Add actions to the action queue
+   */
+  queueActions (actions: Action[]) {
+    this.eventQueue = [...this.eventQueue, ...actions]
+    
+    dlog(`current event queue: `)
+    for (let event of this.eventQueue)
+      dlog(event)
+  }
 
-        this.popEventQueue()
+
+  /**
+   * Pop next event from the event queue and execute it
+   */
+  popEventQueue () {
+    let event = this.eventQueue.shift()
+    if (event) 
+      this.executeAction(event)
+  }
+
+
+  /**
+   * Evaluate a block, executing any related events
+   * 
+   * @param {String} block name of the block
+   */
+  evalBlock (block: string) {
+    dlog(`evaluating block ${block}`)
+
+    let blockEvents = this.events.filter(e => e.trigger == block)
+
+    for (let event of blockEvents) {
+      this.queueActions(event.actions)
     }
+    
+    this.popEventQueue()
+  }
 
 
-    /**
-     * Add events to the event queue
-     * 
-     * @param {Event[] | Event} events events to add to queue
-     */
-    queueEvents (events) {
-      this.eventQueue = [...this.eventQueue, ...events]
-      
-      dlog(`current event queue: `)
-      for (let event of this.eventQueue)
-        dlog(event)
+  /**
+   * Determine event type then execute it
+   * 
+   * @param {Action} action event object to execute
+   */
+  executeAction (action: Action) {
+    /*
+    Concept of `event` is being replaced by `actions`
+    */
+
+    dlog(`executing event: ${Object.keys(action)}`)
+
+    switch (action.type) {
+      case ActionType.addItem:     return this.addItem(action as AddItemAction)
+      case ActionType.altRoom:     return this.altRoom(action as AltRoomAction)
+      case ActionType.killBlock:   return this.killBlock(action as KillBlockAction)
+      case ActionType.killSprite:  return this.killSprite(action as KillSpriteAction)
+      case ActionType.modAttr:     return this.modAttribute(action as ModAttrAction)
+      case ActionType.modMeta:     return this.modMeta(action as ModMetaAction)
+      case ActionType.modRoomMeta: return this.modRoomMeta(action as ModRoomMetaAction)
+      case ActionType.move:        return this.move(action as MoveAction)
+      case ActionType.moveSprite:  return this.tweenSprite(action as MoveSpriteAction)
+      case ActionType.playAnim:    return this.playAnimation(action as PlayAnimAction)
+      case ActionType.putSprite:   return this.putSprite(action as PutSpriteAction)
+      case ActionType.quit:        return this.quitGame()
+      case ActionType.removeItem:  return this.removeItem(action as RemoveItemAction)
+      case ActionType.say:         return this.say(action as SayAction)
+      case ActionType.sayAnim:     return this.sayAnim(action as SayAnimAction)
+      case ActionType.signal:      return this.evalEvent(action.getType())
+      case ActionType.togAnim:     return this.toggleAnimation(action as TogAnimAction)
+      case ActionType.turn:        return this.turnPlayer(action as TurnAction)
+      case ActionType.wait:        return this.wait(action as WaitAction)
     }
-
-
-    /**
-     * Pop next event from the event queue and execute it
-     */
-    popEventQueue () {
-      let event = this.eventQueue.shift()
-      if (event) 
-        this.exeEvent(event)
-    }
-
-
-    /**
-     * Evaluate a block, executing any related events
-     * 
-     * @param {String} block name of the block
-     */
-    evalBlock (block) {
-        dlog(`evaluating block ${block}`)
-
-        let blockEvents = events[block]
-
-        if (blockEvents) {
-            this.queueEvents(blockEvents.slice())
-            this.popEventQueue()
-        }
-    }
-
-
-    /**
-     * Determine event type then execute it
-     * 
-     * @param {Event} event event object to execute
-     */
-    exeEvent (event) {
-      dlog(`executing event: ${Object.keys(event)}`)
-
-        event.say         ? this.say(event.say, event.sprite, event.color) : null;
-        event.turn        ? this.turnPlayer(event.turn) : null;
-        event.wait        ? this.wait(event.wait) : null;
-        event.togAnim     ? this.toggleAnimation(event.togAnim) : null;
-        event.modAttr     ? this.modAttribute(event.modAttr) : null;
-        event.playAnim    ? this.playAnimation(event.playAnim) : null;
-        event.addItem     ? this.addItem(event.addItem) : null;
-        event.removeItem  ? this.removeItem(event.removeItem) : null;
-        event.move        ? this.move(event.move) : null;
-        event.signal      ? this.evalEvent(event.signal) : null;
-        event.altRoom     ? this.altRoom(event.altRoom) : null;
-        event.killBlock   ? this.killBlock(event.killBlock) : null;
-        event.killSprite  ? this.killSprite(event.killSprite) : null;
-        event.modMeta     ? this.modMeta(event.modMeta) : null;
-        event.sayAnim     ? this.sayAnim(event.sayAnim) : null;
-        event.moveSprite  ? this.tweenSprite(event.moveSprite) : null;
-        event.modRoomMeta ? this.modRoomMeta(event.modRoomMeta) : null;
-        event.quit        ? this.quitGame() : null;
-        event.putSprite   ? this.putSprite(event.putSprite) : null;
-    }
-
+  }
 
   // Events
 
-    putSprite (data) {
-      dlog(`putting ${this.spritesJSON[data.sprite].name}`)
-      let sprite = this.getSprite(data.sprite)
+  putSprite (action: PutSpriteAction) {
+    dlog(`putting ${this.spritesJSON[action.sprite].name}`)
+    let sprite = this.getSprite(action.sprite)
 
-      sprite.position = new PIXI.Point(data.x * window.game.scaleFactor, data.y * window.game.scaleFactor);
+    sprite.position = new PIXI.Point(action.x * window.game.scaleFactor, action.y * window.game.scaleFactor);
 
-      dlog(`put sprite to ${sprite.position}`)
+    dlog(`put sprite to ${sprite.position}`)
 
-      this.evalEvent(`put-${data.sprite}`);
-    }
+    this.evalEvent(`put-${action.sprite}`);
+  }
 
-    /**
-     * Remove block, e.g. after executing one-time block
-     * 
-     * @param {Sprite} block block to destroy
-     */
-    killBlock (block) {
-        var blocks = this.blockGroup;
-        var blocksMeta = this.currentRoom.blocks;
+  /**
+   * Remove block, e.g. after executing one-time block
+   * 
+   * @param {Sprite} block block to destroy
+   */
+  killBlock (action: KillBlockAction) {
+    let block = action.block
+  
+    var blocks = this.blockGroup;
+    var blocksMeta = this.currentRoom.blocks;
 
-        var i = blocks.length;
-        while (i--) {
-            if (blocks[i].name == block) {
-                this.blockGroup.splice(i, 1);
-            }
-        }
-
-        var j = blocksMeta.length;
-        while (j--) {
-            if (blocksMeta[j].name == block) {
-                blocksMeta.splice( j, 1 );
-            }
+    var i = blocks.length;
+    while (i--) {
+        if (blocks[i].name == block) {
+            this.blockGroup.splice(i, 1);
         }
     }
 
-
-    /**
-     * Change sprite frame
-     * 
-     * @param {Sprite} sprite sprite to modify
-     * @param {String} frame name of frame to switch to
-     */
-    setFrame (sprite, frame) {
-        dlog('setting frame: ', frame);
-        sprite.frameName = frame;
-        sprite.alpha = 1;
-    }
-
-
-    // Creation chain
-
-
-    /**
-     * Create sprites for the current room
-     */
-    createSprites () {
-        const roomSprites = this.currentRoom.sprites;
-
-        for (let i = 0 ; i < roomSprites.length ; i++ ) {
-            let spriteProperty = this.spritesJSON[roomSprites[i].name];
-            
-            if (!spriteProperty) {
-                throw new Error(`Sprite for room [${this.currentRoom.name}] not found in cache: check if sprite [${roomSprites[i].name}] exists`)
-            }
-
-            let newSprite;
-            let layer = roomSprites[i].layer || 'background'
-
-            switch (layer) {
-            case 'background':
-                newSprite = this.bgSprites.create( 
-                    roomSprites[i].x * window.game.scaleFactor, 
-                    roomSprites[i].y * window.game.scaleFactor, 
-                    roomSprites[i].name);
-                break
-            case 'midground':
-                newSprite = this.mgSprites.create( 
-                    roomSprites[i].x * window.game.scaleFactor, 
-                    roomSprites[i].y * window.game.scaleFactor, 
-                    roomSprites[i].name);
-                break
-            case 'foreground':
-                newSprite = this.fgSprites.create( 
-                    roomSprites[i].x * window.game.scaleFactor, 
-                    roomSprites[i].y * window.game.scaleFactor, 
-                    roomSprites[i].name);
-                break
-            default:
-                newSprite = this.bgSprites.create( 
-                    roomSprites[i].x * window.game.scaleFactor, 
-                    roomSprites[i].y * window.game.scaleFactor, 
-                    roomSprites[i].name);
-            }
-            
-            newSprite.name = roomSprites[i].name
-
-            if (spriteProperty.scale) {
-                newSprite.scale.setTo(spriteProperty.scale * window.game.scaleFactor);
-            } else {
-                newSprite.scale.setTo(window.game.scaleFactor);
-            }
-
-            if (spriteProperty.invisible) {
-                this.showSprite(newSprite, false);
-            }
-
-            if (spriteProperty.reverse) {
-                newSprite.anchor.x = 0.5;
-                newSprite.scale.x *= -1;
-            }
-
-            dlog(`creating sprite ${newSprite.name}
-            in layer ${layer} at { ${newSprite.position.x}, ${newSprite.position.y} } 
-            with scale: ${newSprite.scale} 
-            h: ${newSprite.height} w: ${newSprite.width}`)
-
-            spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;
-            spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null;
-            spriteProperty.startFrame ? this.setFrame(newSprite, spriteProperty.startFrame):null;
+    var j = blocksMeta.length;
+    while (j--) {
+        if (blocksMeta[j].name == block) {
+            blocksMeta.splice( j, 1 );
         }
     }
+  }
 
 
-    /**
-     * Create room blocks
-     */
-    createBlocks () {
-        var block: Block;
-        var blocks = this.currentRoom.blocks;
-
-        var i = blocks.length;
-        while (i--) {
-            block = new Block(this.game, blocks[i].x, blocks[i].y);
-            block.position.x *= window.game.scaleFactor
-            block.position.y *= window.game.scaleFactor
-            block.height = blocks[i].height * window.game.scaleFactor;
-            block.width = blocks[i].width * window.game.scaleFactor;
-            block.name = blocks[i].name;
-            block.inputEnabled = true;
-            block.events.onInputDown.add(function (data) {
-                    this.evalBlock(data.name);
-            }, this);
-            this.blockGroup.push(block)
-
-            if (this.debugOn) {
-                var blockBg = this.game.make.graphics();
-                blockBg.beginFill(0x00ffff, 0.5);
-                blockBg.drawRect(
-                    blocks[i].x * window.game.scaleFactor,
-                    blocks[i].y * window.game.scaleFactor,
-                    blocks[i].width * window.game.scaleFactor,
-                    blocks[i].height * window.game.scaleFactor);
-                blockBg.endFill();
-                this.debugGroup.add(blockBg);
-            }
-        }
-    }
+  /**
+   * Change sprite frame
+   * 
+   * @param {Sprite} sprite sprite to modify
+   * @param {String} frame name of frame to switch to
+   */
+  setFrame (sprite, frame) {
+      dlog('setting frame: ', frame);
+      sprite.frameName = frame;
+      sprite.alpha = 1;
+  }
 
 
-    /**
-     * Create room entities
-     */
-    createEntities () {
-        if (!this.currentRoom.entities) {
-            dlog("room has no entities")
-            return
-        }
-
-        const entities = {
-            'poolDrop': PoolDrop
-        }
-
-        const roomEntities = this.currentRoom.entities;
-        for (let entityInfo of roomEntities) {
-            dlog(`creating entity ${entityInfo['name']}
-            in layer ${entityInfo['layer']} 
-            at { ${entityInfo['startPos'].x}, ${entityInfo['startPos'].y} }`)
-
-            let {name, layer} = entityInfo
-            let entityClass = entities[name]
-            let entity = new entityClass({game: this.game, ...entityInfo})
-            
-            // create animation for entity
-            let spriteProperty = this.spritesJSON[entity.animName];
-            this.createSpriteAnimation(entity.anim, spriteProperty)
-
-            // assumes the only animation is the 'on' anim for now
-            let animation = entity.anim.animations.getAnimation('on') 
-            animation.onComplete.add(entity.onAnimComplete, entity)
-            
-            switch (layer) {
-                case 'foreground':
-                    this.fgSprites.add(entity)
-                    this.fgSprites.add(entity.anim)
-                    break
-                case 'midground':
-                    this.mgSprites.add(entity)
-                    this.mgSprites.add(entity.anim)
-                    break
-                case 'background':
-                default:
-                    this.bgSprites.add(entity)
-                    this.bgSprites.add(entity.anim)
-                }
-        }
-    }
+  // Creation chain
 
 
-    /**
-     * Compile a sprite's animations from sprites.json data
-     * 
-     * @param {Sprite} sprite sprite to create animations for
-     * @param {Object} property holds animation properties
-     */
-    createSpriteAnimation (sprite, property) {
-        var animations = property.animations;
+  /**
+   * Create sprites for the current room
+   */
+  createSprites () {
+      const roomSprites = this.currentRoom.sprites;
 
-        for (const [anim, _] of Object.entries(animations)) {
-            sprite.animations.add(
-                animations[anim].name,
-                animations[anim].frames,
-                animations[anim].speed,
-                animations[anim].loop,
-                false);
+      for (let i = 0 ; i < roomSprites.length ; i++ ) {
+          let spriteProperty = this.spritesJSON[roomSprites[i].name];
+          
+          if (!spriteProperty) {
+              throw new Error(`Sprite for room [${this.currentRoom.name}] not found in cache: check if sprite [${roomSprites[i].name}] exists`)
+          }
 
-            // unless sprite is set to start automatically, hide it
-            if (animations[anim].start) {
-                let animation = sprite.animations.play(animations[anim].name);
+          let newSprite;
+          let layer = roomSprites[i].layer || 'background'
 
-                // hide non-looping animations after playing
-                animation.onComplete.add(
-                  (data) => this.showSprite(sprite, false), this)
-            } else {
-                this.showSprite(sprite, false)
-            }
-        }
-    }
+          switch (layer) {
+          case 'background':
+              newSprite = this.bgSprites.create( 
+                  roomSprites[i].x * window.game.scaleFactor, 
+                  roomSprites[i].y * window.game.scaleFactor, 
+                  roomSprites[i].name);
+              break
+          case 'midground':
+              newSprite = this.mgSprites.create( 
+                  roomSprites[i].x * window.game.scaleFactor, 
+                  roomSprites[i].y * window.game.scaleFactor, 
+                  roomSprites[i].name);
+              break
+          case 'foreground':
+              newSprite = this.fgSprites.create( 
+                  roomSprites[i].x * window.game.scaleFactor, 
+                  roomSprites[i].y * window.game.scaleFactor, 
+                  roomSprites[i].name);
+              break
+          default:
+              newSprite = this.bgSprites.create( 
+                  roomSprites[i].x * window.game.scaleFactor, 
+                  roomSprites[i].y * window.game.scaleFactor, 
+                  roomSprites[i].name);
+          }
+          
+          newSprite.name = roomSprites[i].name
 
+          if (spriteProperty.scale) {
+              newSprite.scale.setTo(spriteProperty.scale * window.game.scaleFactor);
+          } else {
+              newSprite.scale.setTo(window.game.scaleFactor);
+          }
 
-    /**
-     * Add actions to sprite
-     * 
-     * @param {Sprite} sprite sprite to add actions to
-     * @param {Object} property hold action properties
-     */
-    createSpriteAction (sprite, property) {
-        var action = property.action;
+          if (spriteProperty.invisible) {
+              this.showSprite(newSprite, false);
+          }
 
-        sprite.inputEnabled = true;
-        if (action.click) {
-            sprite.events.onInputDown.add(function (data) {
-                this.evalEvent(sprite.key);
+          if (spriteProperty.reverse) {
+              newSprite.anchor.x = 0.5;
+              newSprite.scale.x *= -1;
+          }
 
-                if (action.click.animation) {
+          dlog(`creating sprite ${newSprite.name}
+          in layer ${layer} at { ${newSprite.position.x}, ${newSprite.position.y} } 
+          with scale: ${newSprite.scale} 
+          h: ${newSprite.height} w: ${newSprite.width}`)
 
-                sprite.alpha = 1;
-                this.animation = sprite.animations.play(action.click.animation, null, false, true);
-                this.animation.onComplete.add(function (data) {
-                    dlog('animation complete');
-                    this.evalEvent(action.click.animation);
-                }, this);
-                }// if has animation on click
-
-                if (action.click.text) {
-                //say something
-                this.say(action.click.text);
-                }// if has text on click
-
-            }, this);
-        }// if has click action
-
-        if (action.drag) {
-        // TODO have sprite respond to item dragged onto it
-        // sprite should have array of drag-actionable items to compare to
-
-        }// if has drag action
-    }
-
-
-    /**
-     * Create room sprite
-     */
-    createRoom () {
-        this.room = this.game.add.image(window.game.scaleFactor, window.game.scaleFactor );
-        this.room.scale.setTo(window.game.scaleFactor);
-        this.room.inputEnabled = true;
-    }
+          spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;
+          spriteProperty.action ? this.createSpriteAction(newSprite, spriteProperty):null;
+          spriteProperty.startFrame ? this.setFrame(newSprite, spriteProperty.startFrame):null;
+      }
+  }
 
 
-    /**
-     * Create speech text and room description
-     */
-    createText () {
-        this.speech = this.add.text()
-        this.speech.font = 'kyrandia'
-        this.speech.fontSize = 6 * window.game.scaleFactor
-        this.speech.stroke = '#000000'
-        this.speech.strokeThickness = 3
-        this.speech.kill()
+  /**
+   * Create room blocks
+   */
+  createBlocks () {
+      var block: Block;
+      var blocks = this.currentRoom.blocks;
 
-        this.roomText = this.add.text()
-        this.roomText.font = 'kyrandia'
-        this.roomText.fontSize = 6 * window.game.scaleFactor
-        this.roomText.x = 8 * window.game.scaleFactor
-        this.roomText.y = 145 * window.game.scaleFactor
-        this.roomText.fill = '#bbbbbb'
-    }
+      var i = blocks.length;
+      while (i--) {
+          block = new Block(this.game, blocks[i].x, blocks[i].y);
+          block.position.x *= window.game.scaleFactor
+          block.position.y *= window.game.scaleFactor
+          block.height = blocks[i].height * window.game.scaleFactor;
+          block.width = blocks[i].width * window.game.scaleFactor;
+          block.name = blocks[i].name;
+          block.inputEnabled = true;
+          block.events.onInputDown.add(function (data) {
+                  this.evalBlock(data.name);
+          }, this);
+          this.blockGroup.push(block)
 
-
-    /**
-     * Create initial room
-     */
-    createStartRoom () {
-        this.currentRoom = this.roomsJSON[this.startRoom];
-        this.room.loadTexture(this.startRoom);
-        this.createDoors();
-        this.createBlocks();
-        this.createItems();
-        this.createSprites();
-        this.createEntities();
-        this.pathing.importGrid(this.currentRoom.name);
-        this.checkMusic();
-        this.changeRoomText(this.currentRoom.text);
-        this.openRoom();
-    }
+          if (this.debugOn) {
+              var blockBg = this.game.make.graphics();
+              blockBg.beginFill(0x00ffff, 0.5);
+              blockBg.drawRect(
+                  blocks[i].x * window.game.scaleFactor,
+                  blocks[i].y * window.game.scaleFactor,
+                  blocks[i].width * window.game.scaleFactor,
+                  blocks[i].height * window.game.scaleFactor);
+              blockBg.endFill();
+              this.debugGroup.add(blockBg);
+          }
+      }
+  }
 
 
-    /**
-     * Create GUI
-     */
-    createGui () {
-        this.gui = this.add.image( 0, 0, 'gui');
-        this.gui.scale.setTo(window.game.scaleFactor);
-    }
+  /**
+   * Create room entities
+   */
+  createEntities () {
+      if (!this.currentRoom.entities) {
+          dlog("room has no entities")
+          return
+      }
+
+      const entities = {
+          'poolDrop': PoolDrop
+      }
+
+      const roomEntities = this.currentRoom.entities;
+      for (let entityInfo of roomEntities) {
+          dlog(`creating entity ${entityInfo['name']}
+          in layer ${entityInfo['layer']} 
+          at { ${entityInfo['startPos'].x}, ${entityInfo['startPos'].y} }`)
+
+          let {name, layer} = entityInfo
+          let entityClass = entities[name]
+          let entity = new entityClass({game: this.game, ...entityInfo})
+          
+          // create animation for entity
+          let spriteProperty = this.spritesJSON[entity.animName];
+          this.createSpriteAnimation(entity.anim, spriteProperty)
+
+          // assumes the only animation is the 'on' anim for now
+          let animation = entity.anim.animations.getAnimation('on') 
+          animation.onComplete.add(entity.onAnimComplete, entity)
+          
+          switch (layer) {
+              case 'foreground':
+                  this.fgSprites.add(entity)
+                  this.fgSprites.add(entity.anim)
+                  break
+              case 'midground':
+                  this.mgSprites.add(entity)
+                  this.mgSprites.add(entity.anim)
+                  break
+              case 'background':
+              default:
+                  this.bgSprites.add(entity)
+                  this.bgSprites.add(entity.anim)
+              }
+      }
+  }
 
 
-    /**
-     * Create amulet and animations
-     */
-    createAmulet () {
-        this.amulet = this.add.sprite( 224 * window.game.scaleFactor, 152 * window.game.scaleFactor, 'amulet');
-        this.amulet.inputEnabled = true;
-        this.amulet.scale.setTo(window.game.scaleFactor);
-        this.amulet.alpha = 0;
+  /**
+   * Compile a sprite's animations from sprites.json data
+   * 
+   * @param {Sprite} sprite sprite to create animations for
+   * @param {Object} property holds animation properties
+   */
+  createSpriteAnimation (sprite, property) {
+      var animations = property.animations;
 
-        this.amulet.animations.add('on', [
-        "amulet-1", "amulet-2", "amulet-3", "amulet-4", "amulet-5", "amulet-6",
-        "amulet-7", "amulet-8", "amulet-9", "amulet-10", "amulet-11", "amulet-12",
-        "amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18",
-        "amulet-19", "amulet-20", "amulet-21", "amulet-22", "amulet-23"],
-        8, true, false);
-    }
+      for (const [anim, _] of Object.entries(animations)) {
+          sprite.animations.add(
+              animations[anim].name,
+              animations[anim].frames,
+              animations[anim].speed,
+              animations[anim].loop,
+              false);
 
+          // unless sprite is set to start automatically, hide it
+          if (animations[anim].start) {
+              let animation = sprite.animations.play(animations[anim].name);
 
-    /**
-     * Create room items
-     */
-    createItems () {
-        /*
-        iter each item in room.items
-        check item sprite sheet frame from itemAtlas
-        make each item draggable
-        save inventory items in separate inventory object
-        */
-
-        this.items = this.currentRoom.items;
-
-        for (var i = 0 ; i < this.items.length ;i++) {
-        this.spawnItem(this.items[i]);
-        }
-    }
+              // hide non-looping animations after playing
+              animation.onComplete.add(
+                (data) => this.showSprite(sprite, false), this)
+          } else {
+              this.showSprite(sprite, false)
+          }
+      }
+  }
 
 
-    /**
-     * Create player and animations
-     */
-    createPlayer () {
+  /**
+   * Add actions to sprite
+   * 
+   * @param {Sprite} sprite sprite to add actions to
+   * @param {Object} property hold action properties
+   */
+  createSpriteAction (sprite, property) {
+      var action = property.action;
 
-        // Use the first door's entry as the starting position when spawning player
-        const startPosition = this.doors[Object.keys(this.doors)[0]].entry
+      sprite.inputEnabled = true;
+      if (action.click) {
+          sprite.events.onInputDown.add(function (data) {
+              this.evalEvent(sprite.key);
 
-        this.player = this.game.add.sprite(startPosition.x * window.game.scaleFactor, startPosition.y * window.game.scaleFactor, 'player', 'stand-right');
-        this.player.name = 'player';
+              if (action.click.animation) {
 
-        this.player.animations.add('walk-right', [
-        'right-1','right-2','right-3','right-4',
-        'right-5','right-6','right-7', 'right-8'
-        ], 15, true, false);
+              sprite.alpha = 1;
+              this.animation = sprite.animations.play(action.click.animation, null, false, true);
+              this.animation.onComplete.add(function (data) {
+                  dlog('animation complete');
+                  this.evalEvent(action.click.animation);
+              }, this);
+              }// if has animation on click
 
-        this.player.animations.add('walk-left', [
-        'left-1','left-2','left-3','left-4',
-        'left-5','left-6','left-7', 'left-7'
-        ], 15, true, false);
+              if (action.click.text) {
+              //say something
+              this.say(action.click.text);
+              }// if has text on click
 
-        this.player.animations.add('walk-up', [
-        'up-1','up-2','up-3','up-4',
-        'up-5','up-6'
-        ], 15, true, false);
+          }, this);
+      }// if has click action
 
-        this.player.animations.add('walk-down', [
-        'down-1','down-2','down-3','down-4',
-        'down-5','down-6'
-        ], 15, true, false);
+      if (action.drag) {
+      // TODO have sprite respond to item dragged onto it
+      // sprite should have array of drag-actionable items to compare to
 
-        this.player.animations.add('talk', [
-        'talk-1', 'talk-2', 'talk-3', 'talk-4',
-        'talk-5', 'talk-6', 'talk-7', 'talk-8',
-        'talk-9', 'talk-10', 'talk-11', 'talk-12',
-        ], 8, true, false);
-
-        this.player.scale.setTo(window.game.scaleFactor);
-        this.player.anchor.x = 0.5;
-        this.player.anchor.y = 0.9;
-        this.physics.arcade.enableBody(this.player);
-
-        this.mgSprites.add(this.player);
-    }
+      }// if has drag action
+  }
 
 
-    /**
-     * Create input events
-     */
-    createInputs () {
-        //this.input.onTap.add(function () {}, this);
-        // this.amulet.events.onInputDown.add(function (pointer) {
-        //   dlog('amulet hit');
-        // }, this);
-
-        this.room.events.onInputDown.add(function (pointer) {
-        if (this.speech.alive) {
-            this.speech.kill();
-            return null;
-        }
-
-        this.closeDoor();
-        this.stopMoving();
-        this.move(this.game.input.position);
-        }, this);
-    }
+  /**
+   * Create room sprite
+   */
+  createRoom () {
+      this.room = this.game.add.image(window.game.scaleFactor, window.game.scaleFactor );
+      this.room.scale.setTo(window.game.scaleFactor);
+      this.room.inputEnabled = true;
+  }
 
 
-    /**
-     * Create room doors
-     */
-    createDoors () {
-        this.doors = this.currentRoom.doors;
-        for (const [door, _] of Object.entries(this.doors)) {
+  /**
+   * Create speech text and room description
+   */
+  createText () {
+      this.speech = this.add.text()
+      this.speech.font = 'kyrandia'
+      this.speech.fontSize = 6 * window.game.scaleFactor
+      this.speech.stroke = '#000000'
+      this.speech.strokeThickness = 3
+      this.speech.kill()
 
-            let x = this.doors[door].x * window.game.scaleFactor
-            let y = this.doors[door].y * window.game.scaleFactor
-            let height = this.doors[door].height * window.game.scaleFactor
-            let width = this.doors[door].width * window.game.scaleFactor
-            let entry = this.doors[door].entry
+      this.roomText = this.add.text()
+      this.roomText.font = 'kyrandia'
+      this.roomText.fontSize = 6 * window.game.scaleFactor
+      this.roomText.x = 8 * window.game.scaleFactor
+      this.roomText.y = 145 * window.game.scaleFactor
+      this.roomText.fill = '#bbbbbb'
+  }
 
-            let newDoor = this.doorGroup.create( x, y );
-            newDoor.height = height;
-            newDoor.width = width;
-            newDoor.name = this.doors[door].name;
-            newDoor.inputEnabled = true;
-            // newDoor.input.useHandCursor = true;
-            this.physics.arcade.enable(newDoor);
 
-            // door cursor
-            newDoor.events.onInputOver.add(function () {
-            this.game.canvas.style.cursor = "pointer";
-            }, this);
-            newDoor.events.onInputOut.add(function () {
-            this.game.canvas.style.cursor = "default";
-            }, this);
+  /**
+   * Create initial room
+   */
+  createStartRoom () {
+      this.currentRoom = this.roomsJSON[this.startRoom];
+      this.room.loadTexture(this.startRoom);
+      this.createDoors();
+      this.createBlocks();
+      this.createItems();
+      this.createSprites();
+      this.createEntities();
+      this.pathing.importGrid(this.currentRoom.name);
+      this.checkMusic();
+      this.changeRoomText(this.currentRoom.text);
+      this.openRoom();
+  }
 
-            newDoor.events.onInputDown.add(this.moveToDoor, this);
 
-            if (this.debugOn) {
-                var doorBg = this.game.make.graphics();
-                doorBg.beginFill(0x00ee00, 0.3);
-                doorBg.drawRect(x, y, width, height);
-                doorBg.endFill();
+  /**
+   * Create GUI
+   */
+  createGui () {
+      this.gui = this.add.image( 0, 0, 'gui');
+      this.gui.scale.setTo(window.game.scaleFactor);
+  }
 
-                this.doorDebug.add(doorBg);
-            }
-        }
+
+  /**
+   * Create amulet and animations
+   */
+  createAmulet () {
+      this.amulet = this.add.sprite( 224 * window.game.scaleFactor, 152 * window.game.scaleFactor, 'amulet');
+      this.amulet.inputEnabled = true;
+      this.amulet.scale.setTo(window.game.scaleFactor);
+      this.amulet.alpha = 0;
+
+      this.amulet.animations.add('on', [
+      "amulet-1", "amulet-2", "amulet-3", "amulet-4", "amulet-5", "amulet-6",
+      "amulet-7", "amulet-8", "amulet-9", "amulet-10", "amulet-11", "amulet-12",
+      "amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18",
+      "amulet-19", "amulet-20", "amulet-21", "amulet-22", "amulet-23"],
+      8, true, false);
+  }
+
+
+  /**
+   * Create room items
+   */
+  createItems () {
+      /*
+      iter each item in room.items
+      check item sprite sheet frame from itemAtlas
+      make each item draggable
+      save inventory items in separate inventory object
+      */
+
+      this.items = this.currentRoom.items;
+
+      for (var i = 0 ; i < this.items.length ;i++) {
+      this.spawnItem(this.items[i]);
+      }
+  }
+
+
+  /**
+   * Create player and animations
+   */
+  createPlayer () {
+
+      // Use the first door's entry as the starting position when spawning player
+      const startPosition = this.doors[Object.keys(this.doors)[0]].entry
+
+      this.player = this.game.add.sprite(startPosition.x * window.game.scaleFactor, startPosition.y * window.game.scaleFactor, 'player', 'stand-right');
+      this.player.name = 'player';
+
+      this.player.animations.add('walk-right', [
+      'right-1','right-2','right-3','right-4',
+      'right-5','right-6','right-7', 'right-8'
+      ], 15, true, false);
+
+      this.player.animations.add('walk-left', [
+      'left-1','left-2','left-3','left-4',
+      'left-5','left-6','left-7', 'left-7'
+      ], 15, true, false);
+
+      this.player.animations.add('walk-up', [
+      'up-1','up-2','up-3','up-4',
+      'up-5','up-6'
+      ], 15, true, false);
+
+      this.player.animations.add('walk-down', [
+      'down-1','down-2','down-3','down-4',
+      'down-5','down-6'
+      ], 15, true, false);
+
+      this.player.animations.add('talk', [
+      'talk-1', 'talk-2', 'talk-3', 'talk-4',
+      'talk-5', 'talk-6', 'talk-7', 'talk-8',
+      'talk-9', 'talk-10', 'talk-11', 'talk-12',
+      ], 8, true, false);
+
+      this.player.scale.setTo(window.game.scaleFactor);
+      this.player.anchor.x = 0.5;
+      this.player.anchor.y = 0.9;
+      this.physics.arcade.enableBody(this.player);
+
+      this.mgSprites.add(this.player);
+  }
+
+
+  /**
+   * Create input events
+   */
+  createInputs () {
+      //this.input.onTap.add(function () {}, this);
+      // this.amulet.events.onInputDown.add(function (pointer) {
+      //   dlog('amulet hit');
+      // }, this);
+
+      this.room.events.onInputDown.add(function (pointer) {
+      if (this.speech.alive) {
+          this.speech.kill();
+          return null;
+      }
+
+      this.closeDoor();
+      this.stopMoving();
+      this.move(this.game.input.position);
+      }, this);
+  }
+
+
+  /**
+   * Create room doors
+   */
+  createDoors () {
+      this.doors = this.currentRoom.doors;
+      for (const [door, _] of Object.entries(this.doors)) {
+
+          let x = this.doors[door].x * window.game.scaleFactor
+          let y = this.doors[door].y * window.game.scaleFactor
+          let height = this.doors[door].height * window.game.scaleFactor
+          let width = this.doors[door].width * window.game.scaleFactor
+          let entry = this.doors[door].entry
+
+          let newDoor = this.doorGroup.create( x, y );
+          newDoor.height = height;
+          newDoor.width = width;
+          newDoor.name = this.doors[door].name;
+          newDoor.inputEnabled = true;
+          // newDoor.input.useHandCursor = true;
+          this.physics.arcade.enable(newDoor);
+
+          // door cursor
+          newDoor.events.onInputOver.add(function () {
+          this.game.canvas.style.cursor = "pointer";
+          }, this);
+          newDoor.events.onInputOut.add(function () {
+          this.game.canvas.style.cursor = "default";
+          }, this);
+
+          newDoor.events.onInputDown.add(this.moveToDoor, this);
+
+          if (this.debugOn) {
+              var doorBg = this.game.make.graphics();
+              doorBg.beginFill(0x00ee00, 0.3);
+              doorBg.drawRect(x, y, width, height);
+              doorBg.endFill();
+
+              this.doorDebug.add(doorBg);
+          }
+      }
   }
 
 
@@ -964,7 +969,10 @@ export default class extends Phaser.State {
 
 
   // Sprite talking
-say (string, key, color, onComplete = null) {
+  say (action: SayAction, onComplete = null) {
+    let text = action.text 
+    let key = action.sprite 
+    let color = action.color
 
     // include key for event evaluation
     var sprite = key ? this.getSprite(key): this.player
@@ -973,7 +981,7 @@ say (string, key, color, onComplete = null) {
     this.speech.revive()
     this.speech.x = sprite.x
     this.speech.y = sprite.top - 40
-    this.speech.text = string
+    this.speech.text = text
     this.speech.stroke = '#000000'
     this.speech.strokeThickness = 5
     this.speech.fill = colorAtlas[textColor]
@@ -987,25 +995,27 @@ say (string, key, color, onComplete = null) {
       this.speech.y = 40
     }
 
-    this.speech.events.onKilled.addOnce(function (data) {
-
+    this.speech.events.onKilled.addOnce(function () {
       this.evalEvent(sprite.key);
     }, this);
 
-    var length = string.split(' ').length;
+    var length = text.split(' ').length;
     var timer = this.time.create();
     timer.add(length*400, function () {
       this.speech.kill();
-      
+        
       if (onComplete)
         onComplete()
-    },this);
-    timer.start();
+
+    }, this);
+
+      timer.start();
   }
 
 
   // Change player sprite frame
-  turnPlayer (direction) {
+  turnPlayer (action: TurnAction) {
+    let direction = action.direction
     dlog('turning ' + direction);
 
     if (direction == 'left') {
@@ -1019,7 +1029,9 @@ say (string, key, color, onComplete = null) {
 
 
   // Delay events
-  wait (time) {
+  wait (action: WaitAction) {
+    let time = action.duration
+
     dlog('wait called for ' + time + ' ms');
 
     var timer;
@@ -1034,10 +1046,10 @@ say (string, key, color, onComplete = null) {
 
 
   // Change sprite animation
-  toggleAnimation (data) {
-    var sprite = data.sprite;
-    var animation = data.animation;
-    var toggle = data.start;
+  toggleAnimation (action: TogAnimAction) {
+    var sprite = action.sprite;
+    var animation = action.animName;
+    var toggle = action.start;
 
     this.spritesJSON[sprite].animations[animation].start = toggle;
 
@@ -1046,10 +1058,10 @@ say (string, key, color, onComplete = null) {
 
 
   // Modify a sprite's meta information
-  modMeta (data) {
-    var sprite = data.sprite;
-    var attr = data.attr;
-    var val = data.value;
+  modMeta (action: ModMetaAction) {
+    var sprite = action.sprite;
+    var attr = action.attr;
+    var val = action.value;
 
     this.spritesJSON[sprite][attr] = val;
 
@@ -1058,11 +1070,11 @@ say (string, key, color, onComplete = null) {
 
 
   // Modify a room's meta information
-  modRoomMeta (data) {
-    var room = data.room;
-    var attr = data.attr;
-    var value = data.value;
-    var door = data.door || null;
+  modRoomMeta (action: ModRoomMetaAction) {
+    var room = action.room;
+    var attr = action.attr;
+    var value = action.value;
+    var door = action.door || null;
 
     if (door) {
       this.roomsJSON[room][attr][door] = value;
@@ -1075,13 +1087,13 @@ say (string, key, color, onComplete = null) {
 
 
   // Modify an object's meta information
-  modAttribute (data) {
+  modAttribute (action: ModAttrAction) {
     // much more powerful function to modify sprites, images
     // can find objects within groups
     // this.world.set(child, key, value);
-    var key = data.sprite;
-    var attr = data.attr;
-    var value = data.value;
+    var key = action.sprite;
+    var attr = action.attr;
+    var value = action.value;
 
     this.world.forEach((child: any) => {
         if (child.name == "group" && child.children.length) {
@@ -1102,11 +1114,11 @@ say (string, key, color, onComplete = null) {
 
 
   // Play sprite animation
-  playAnimation (data) {
-    var key = data.sprite;
-    var animName = data.animation;
-    var kill = data.kill || false;
-    var hide = data.hide || false;
+  playAnimation (action: PlayAnimAction) {
+    var key = action.sprite;
+    var animName = action.animName;
+    var kill = action.kill || false;
+    var hide = action.hide || false;
     var loop = this.spritesJSON[key].animations[animName].loop;
 
     let sprite = this.getSprite(key);
@@ -1125,21 +1137,23 @@ say (string, key, color, onComplete = null) {
 
 
   // Play animation with simultaneous speech
-  sayAnim (data) {
+  sayAnim (action: SayAnimAction) {
     // event called by call to this.say()
 
-    var key = data.sprite;
-    var animName = data.animation;
-    var kill = data.kill ? data.kill: false;
-    var hide = data.hide ? data.hide: false;
-    var text = data.say;
-    var color = data.color;
-    var sprite;
+    var key = action.sprite;
+    var animName = action.animName;
+    var kill = action.kill ? action.kill: false;
+    var hide = action.hide ? action.hide: false;
+    var text = action.text;
+    var color = action.color;
     var loop = this.spritesJSON[key].animations[animName].loop;
 
-    sprite = this.getSprite(key);
+    let sprite = this.getSprite(key);
     this.showSprite(sprite, true);
-    this.say(text, key, color, () => this.showSprite(sprite, !hide));
+    
+    this.say(
+      new SayAction('say', { text, sprite: key, color }), 
+      () => this.showSprite(sprite, !hide));
 
     if (!loop)
         sprite.events.onAnimationComplete.addOnce(() => this.showSprite(sprite, !hide), this)
@@ -1149,12 +1163,13 @@ say (string, key, color, onComplete = null) {
 
 
   // Add an item to the room
-  addItem (data) {
-    var item = { name: data.item, x: data.x, y: data.y };
+  addItem (action: AddItemAction) {
+    // todo; create item class
+    var item = { name: action.item, x: action.x, y: action.y };
     this.currentRoom.items.push(item);
     this.spawnItem(item);
 
-    this.evalEvent(data.item);
+    this.evalEvent(action.item);
   }
 
 
@@ -1186,7 +1201,8 @@ say (string, key, color, onComplete = null) {
 
 
   // Change room to alternate version
-  altRoom (room) {
+  altRoom (action: AltRoomAction) {
+    let room = action.roomName
 
     var newTexture = room + '-alt';
     var newText = this.roomsJSON[room].altText;
@@ -1223,7 +1239,9 @@ say (string, key, color, onComplete = null) {
 
 
   // Remove sprite by name
-  killSprite (spriteName) {
+  killSprite (action: KillSpriteAction) {
+    let spriteName = action.sprite
+
     // var sprites = this.spritesGroup.children;
     let spritesMeta = this.currentRoom.sprites;
 
@@ -1259,15 +1277,21 @@ say (string, key, color, onComplete = null) {
 
     this.stopMoving()
     this.openDoor = myDoor.name
-    this.move({
-      x: myDoor.entry.x * window.game.scaleFactor,
-      y: myDoor.entry.y * window.game.scaleFactor
-    })
+    this.move(
+      new MoveAction(
+        'move', 
+        {
+          x: myDoor.entry.x * window.game.scaleFactor,
+          y: myDoor.entry.y * window.game.scaleFactor
+        }
+    ))
   }
 
 
   // Move player
-  move (position) {
+  move (action: MoveAction) {
+    let position = {x: action.x, y: action.y}
+
     dlog(`move to { ${position.x}, ${position.y} }`)
 
     let path = this.pathing.findWay(this.player.position, position);
@@ -1486,13 +1510,15 @@ say (string, key, color, onComplete = null) {
 
 
   // Move a sprite
-  tweenSprite (data) {
+  tweenSprite (action: MoveSpriteAction) {
+    if (action.animName)
+      this.playAnimation(
+        new PlayAnimAction(
+          'playAnim', 
+          {sprite: action.sprite, animName: action.animName, kill: false,  hide: false}));
 
-    if (data.animation)
-      this.playAnimation(data);
-
-    var path = data.path;
-    var key = data.sprite;
+    var path = action.path;
+    var key = action.sprite;
     var sprite = this.getSprite(key);
 
     this.tween = this.add.tween(sprite);

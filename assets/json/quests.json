@@ -1,0 +1,244 @@
+{
+  "quests": [
+    {
+      "name": "willow",
+      "steps": [
+        { 
+          "step": "active",
+          "trigger": "room03",
+          "conditions": [{ "step": "active", "complete": false }],
+          "actions": [
+            { "type": "say", "value": { "text": "Even the willow tree is dying" }},
+            { "type": "wait", "value": 100 },
+            { "type": "say", "value": { "text": "What's going on around here?!" }}
+          ] 
+        },
+        {
+          "step": "gotTear",
+          "trigger": "pool",
+          "conditions": [{ "step": "active", "complete": true }],
+          "actions": [
+            { "type": "say", "value": { "text": "I bet I could catch a tear drop" }},
+            { "type": "wait", "value": 1300 },
+            { "type": "say", "value": { "text": "I'll take that bet!" }},
+            { "type": "move", "value": { "x": 204, "y": 88 } },
+            { "type": "playAnim", "value": { "sprite": "catch", "animName": "on", "kill": true } },
+            { "type": "addItem", "value": { "item": "tear", "x": 190, "y": 97} },
+            { "type": "say", "value": { "text": "Now i can heal the willow tree!" }}
+          ]
+        },
+        {
+          "step": "treeHealed",
+          "trigger": "willow-tear",
+          "conditions": [{ "step": "gotTear", "complete": true}],
+          "actions": [
+            { "type": "removeItem", "value": {"item": "tear" }},
+            { "type": "move", "value": { "x": 128, "y": 115 } },
+            { "type": "say", "value": { "text": "I think this tear drop should fit" }},
+            { "type": "playAnim", "value": { 
+              "sprite": "willow", "animName": "on", "hide": false } },
+            { "type": "altRoom", "value": "room03" },
+            { "type": "wait", "value": 300 },
+            { "type": "modAttr", "value": { "sprite": "player", "attr": "alpha", "value": 0 } },
+            { "type": "sayAnim", "value": { "sprite": "brandon wow", "animName": "on", "kill": true, "say": "wow!" } },
+            { "type": "wait", "value": 1500 },
+            { "type": "modAttr", "value": { "sprite": "player", "attr": "alpha", "value": 1 } }
+          ]
+        } 
+      ]
+  },
+  {
+    "name": "brynn",
+    "steps": [
+      { 
+        "step": "active",
+        "trigger": "room06",
+        "conditions": [{ "step": "active", "complete": false }],
+        "actions": [
+            { "type": "playAnim", "value": { 
+                "sprite": "brynn-enter", 
+                "animName": "enter" } },
+            { "type": "sayAnim", "value": { 
+                "sprite": "brynn-talk", 
+                "animName": "talk", 
+                "say": "Welcome, Brandon", 
+                "color": "brynn", 
+                "hide": true } },
+            { "type": "wait", "value": 300 },
+            { "type": "sayAnim", "value": { 
+                "sprite": "brynn-talk", 
+                "animName": "talk", 
+                "say": "Why are you always bothering me?", 
+                "color": "brynn", 
+                "hide": true } },
+            { "type": "wait", "value": 300 },
+            { "type": "modAttr", "value": { 
+                "sprite": "altar", 
+                "attr": "inputEnabled", 
+                "value": true } }
+        ]
+      },
+      {
+        "step": "amulet",
+        "trigger": "altar",
+        "conditions": [],
+        "actions": [
+          { "type": "playAnim", "value": { 
+              "sprite": "amulet", 
+              "animName": "on" }},
+          { "type": "modAttr", "value": { 
+              "sprite": "altar", 
+              "attr": "alpha", 
+              "value": 1 } },
+          { "type": "say", "value": { "text": "I can feel the power!!" }}
+        ]
+      },
+      {
+        "step": "talk_1",
+        "trigger": "brynn",
+        "conditions": [{ "step": "talk_1", "complete": false }],
+        "actions": [
+          { 
+              "type": "sayAnim", 
+              "value": { 
+                  "sprite": "brynn-talk", 
+                  "animName": "talk", 
+                  "say": "Why haven't you gotten me a rose yet?", 
+                  "color": "brynn", 
+                  "hide": true }}
+        ]
+      },
+      {
+        "step": "rose",
+        "trigger": "",
+        "conditions": [],
+        "actions": []
+      } 
+    ]
+  },
+  {
+    "name": "bridge",
+    "steps": [
+      {
+        "step": "cave",
+        "trigger": "room19",
+        "conditions": [],
+        "actions": [
+          { "type": "modAttr", "value": { 
+              "sprite": "herman", 
+              "attr": "alpha", 
+              "value": 1 } },
+          { "type": "playAnim", "value": { 
+              "sprite": "herman", 
+              "animName": "stand up" } },
+          { "type": "sayAnim", "value": { 
+              "sprite": "herman", 
+              "animName": "stand talk 1", 
+              "say": "It's not my fault", 
+              "color": "herman" } },
+          { "type": "playAnim", "value": { 
+              "sprite": "herman", 
+              "animName": "hunch down" } }
+        ]
+      },
+      {
+        "step": "saw",
+        "trigger": "saw_holder",
+        "conditions": [],
+        "actions": [
+          { "type": "say", "value": { "text": "Grandfather's saw" }},
+          { "type": "killSprite", "value": "saw_holder" },
+          { "type": "modMeta", "value": { 
+              "sprite": "saw_holder_empty", 
+              "attr": "invisible", 
+              "value": false } },
+          { "type": "modAttr", "value": { 
+              "sprite": "saw_holder", 
+              "attr": "alpha", 
+              "value": 0 } },
+          { "type": "modAttr", "value": { 
+              "sprite": "saw_holder_empty", 
+              "attr": "alpha", 
+              "value": 1 } },
+          { "type": "addItem", "value": {
+              "item": "saw", 
+              "x": 250, 
+              "y": 113} }
+        ]
+      },
+      {
+        "step": "giveSaw",
+        "trigger": "herman-saw",
+        "conditions": [],
+        "actions": [
+          { "type": "removeItem", "value": { "item": "saw" }},
+          { "type": "move", "value": { 
+              "x": 256, "y": 93 }},
+          { "type": "playAnim", "value": { 
+              "sprite": "herman", 
+              "animName": "stand up" } },
+          { "type": "sayAnim", "value": { 
+              "sprite": "herman", 
+              "animName": "stand talk 3", 
+              "say": "That's a pretty old saw", 
+              "color": "herman" } },
+          { "type": "playAnim", "value": { 
+              "sprite": "herman", 
+              "animName": "stand idle" } },
+          { "type": "say", "value": {"text": "Oh, this is just a stiff old sock" }},
+          { "type": "say", "value": {"text": "But it could probably cut down a tree now" }},
+          { "type": "wait", "value": 1200 },
+          { "type": "sayAnim", "value": { 
+              "sprite": "herman", 
+              "animName": "stand talk 3", 
+              "say": "Uh, yeah ...", 
+              "color": "herman" } },
+          { "type": "sayAnim", "value": { 
+              "sprite": "herman", 
+              "animName": "stand talk 1", 
+              "say": "Well, I'll go cut down some trees then", 
+              "color": "herman" } },
+          { "type": "moveSprite", "value": { 
+              "sprite": "herman", 
+              "path": [[30,9], [40, 9]], 
+              "animName": "walk" } },
+          { "type": "turn", "value": "right" },
+          { "type": "wait", "value": 900 },
+          { "type": "say", "value": { "text": "I hope he doesn't cut his leg off" }},
+          { "type": "togAnim", "value": { 
+              "sprite": "herman sawing", 
+              "animName": "saw", 
+              "start": true } }
+        ]
+      },
+      {
+        "step": "fixed",
+        "trigger": "room02",
+        "conditions": [{ "step": "giveSaw", "complete": true }],
+        "actions": [
+          { "type": "say", "value": { "text": "I wonder if the bridge is fixed..." }},
+          { "type": "altRoom", "value": "room19" },
+          { "type": "modMeta", "value": { 
+            "sprite": "cut tree", "attr": "invisible", "value": false } },
+          { "type": "modMeta", "value": { 
+            "sprite": "herman sawing", "attr": "invisible", "value": true } },
+          { "type": "modAttr", "value": { 
+            "sprite": "herman sawing", "attr": "inputEnabled", "value": false } }
+          ]
+        },
+        {
+          "step": "complete",
+          "trigger": "room19",
+          "conditions": [{ "step": "fixed", "complete": true }],
+          "actions": [
+            { "type": "say", "value": { "text": "The bridge is repaired!" }},
+            { "type": "move", "value": { "x": 253, "y": 100 }},
+            { "type": "say", "value": { "text": "But where did Herman go? ..." }},
+            { "type": "wait", "value": 1000 },
+            { "type": "quit", "value": true }
+          ]
+        } 
+      ]
+    }
+  ]
+}

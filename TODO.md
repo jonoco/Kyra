@@ -44,6 +44,9 @@
 	+ [ ] update sprite scaling
 - [ ] move brandon's sprite meta to json; animations are being described in *createPlayer*
 - [ ] remove outdated/deprecated assets
+- [ ] migrate to typescript
+  - [ ] migrate events/actions
+  - [ ] migrate items
 
 ### Bugs
 - [x] tapping on player causes him to disappear

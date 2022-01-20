@@ -4,17 +4,17 @@ import 'pixi'
 import Pathing from '../pathing'
 import itemAtlas from '../items'
 import Inventory from '../inventory'
-import { log, dlog, inBounds, moveToCenter } from '../utils'
+import { log, dlog, inBounds } from '../utils'
 import PoolDrop from '../entities/PoolDrop'
 import Block from '../Block'
-import { 
-  Action, ActionType, AddItemAction, AltRoomAction, KillBlockAction, 
-  KillSpriteAction, ModAttrAction, ModMetaAction, ModRoomMetaAction, 
-  MoveAction, MoveSpriteAction, parseAction, PlayAnimAction, 
-  PutSpriteAction, RemoveItemAction, SayAction, SayAnimAction, 
-  TogAnimAction, TurnAction, WaitAction 
+import {
+  Action, ActionType, AddItemAction, AltRoomAction, KillBlockAction,
+  KillSpriteAction, ModAttrAction, ModMetaAction, ModRoomMetaAction,
+  MoveAction, MoveSpriteAction, PlayAnimAction,
+  PutSpriteAction, RemoveItemAction, SayAction, SayAnimAction,
+  TogAnimAction, TurnAction, WaitAction
 } from '../Action'
-import { Event, eventsContainsTrigger, parseEvents } from '../Event'
+import { Event, parseEvents } from '../Event'
 import { parseQuests, Quest } from '../Quest'
 
 const colorAtlas = {
@@ -27,46 +27,46 @@ const colorAtlas = {
 export default class extends Phaser.State {
   debugPos: number;
 
-  startRoom: string;
-  debugOn: boolean;
-  playMusic: boolean;
-  eventQueue: Array<any>;
-  bgSprites: Phaser.Group;
-  mgSprites: Phaser.Group;
-  fgSprites: Phaser.Group;
-  spritesJSON: Object;
-  player: Phaser.Sprite;
-  tween: Phaser.Tween;
-  between: Phaser.Tween;
-  speed: number;
-  direction: string;
-  speech: Phaser.Text;
-  animation: Phaser.Animation;
-  talkingSprite: Phaser.Sprite;
-  inventory: Inventory;
-  itemGroup: Phaser.Group;
-  gui: Phaser.Image;
   amulet: Phaser.Sprite;
   amuletGroup: Phaser.Group;
+  animation: Phaser.Animation;
+  between: Phaser.Tween;
+  bgSprites: Phaser.Group;
+  blockGroup: Array<Block>;
+  currentMusic: string;
+  currentRoom: any;
+  debugGroup: Phaser.Group;
+  debugOn: boolean;
+  direction: string;
+  door: string
+  doorDebug: Phaser.Group;
+  doorGroup: Phaser.Group;
+  doors: Array<Object>;
+  eventQueue: Array<any>;
+  events: Event[];
+  fgSprites: Phaser.Group;
+  gui: Phaser.Image;
+  heldItem: Phaser.Group;
+  inventory: Inventory;
+  itemGroup: Phaser.Group;
+  items: Array<any>;
+  mgSprites: Phaser.Group;
+  music: Phaser.Sound;
+  openDoor: string | null; // checks if last click was on a door > reset on move complete
+  pathing: Pathing;
+  player: Phaser.Sprite;
+  playMusic: boolean;
+  previousRoom: any;
+  quests: Quest[];
   room: Phaser.Image;
   roomsJSON: Object;
-  currentRoom: any;
-  previousRoom: any;
-  door: string
-  doors: Array<Object>;
-  doorGroup: Phaser.Group;
-  doorDebug: Phaser.Group;
-  blockGroup: Array<Block>;
-  debugGroup: Phaser.Group;
-  music: Phaser.Sound;
   roomText: Phaser.Text;
-  currentMusic: string;
-  openDoor: string | null; // checks if last click was on a door > reset on move complete
-  heldItem: Phaser.Group;
-  pathing: Pathing;
-  items: Array<any>;
-  events: Event[];
-  quests: Quest[];
+  speech: Phaser.Text;
+  speed: number;
+  spritesJSON: Object;
+  startRoom: string;
+  talkingSprite: Phaser.Sprite;
+  tween: Phaser.Tween;
 
 
   init() {
@@ -183,7 +183,7 @@ export default class extends Phaser.State {
   render() {
     this.changeSpriteIndex();
     this.changePlayerAnimation();
-    
+
     if (this.debugOn) {
       this.debugScreen()
     }
@@ -223,13 +223,13 @@ export default class extends Phaser.State {
     this.itemGroup.forEach(spr => this.addDebugSprite(spr), this)
 
     this.addDebugText(`inventory items:`);
-    this.inventory.inventory.forEach(spr => 
+    this.inventory.inventory.forEach(spr =>
         this.addDebugText(`    name: ${spr.name} parent: ${spr.parent.name}`), this)
   }
 
 
   /**
-   * Add debug text to the debug screen 
+   * Add debug text to the debug screen
    * @param {String} text debug text to display
    * @returns next open row
    */
@@ -242,7 +242,7 @@ export default class extends Phaser.State {
 
   /**
    * Add sprite debug info
-   * @param {Sprite} sprite sprite to print debug 
+   * @param {Sprite} sprite sprite to print debug
    */
   addDebugSprite(sprite: Phaser.Sprite) {
     this.addDebugText(`   name: ${sprite.name} z: ${sprite.z} visible: ${sprite.visible}`)
@@ -253,7 +253,7 @@ export default class extends Phaser.State {
    * Toggle the debug screen
    */
   toggleDebug() {
-    this.debugOn = !this.debugOn 
+    this.debugOn = !this.debugOn
 
     log(`toggling debug ${this.debugOn ? 'on': 'off'}`)
 
@@ -303,7 +303,7 @@ export default class extends Phaser.State {
 
   /**
    * Evaulate an event key, queuing any related events and starting event execution
-   * 
+   *
    * @param {String} trigger name of an event
    */
   evalEvent (trigger: string) {
@@ -323,7 +323,7 @@ export default class extends Phaser.State {
    */
   queueActions (actions: Action[]) {
     this.eventQueue = [...this.eventQueue, ...actions]
-    
+
     dlog(`current event queue: `)
     for (let event of this.eventQueue)
       dlog(event)
@@ -335,14 +335,14 @@ export default class extends Phaser.State {
    */
   popEventQueue () {
     let event = this.eventQueue.shift()
-    if (event) 
+    if (event)
       this.executeAction(event)
   }
 
 
   /**
    * Evaluate a block, executing any related events
-   * 
+   *
    * @param {String} block name of the block
    */
   evalBlock (block: string) {
@@ -353,14 +353,14 @@ export default class extends Phaser.State {
     for (let event of blockEvents) {
       this.queueActions(event.actions)
     }
-    
+
     this.popEventQueue()
   }
 
 
   /**
    * Determine event type then execute it
-   * 
+   *
    * @param {Action} action event object to execute
    */
   executeAction (action: Action) {
@@ -408,12 +408,12 @@ export default class extends Phaser.State {
 
   /**
    * Remove block, e.g. after executing one-time block
-   * 
+   *
    * @param {Sprite} block block to destroy
    */
   killBlock (action: KillBlockAction) {
     let block = action.block
-  
+
     var blocks = this.blockGroup;
     var blocksMeta = this.currentRoom.blocks;
 
@@ -435,7 +435,7 @@ export default class extends Phaser.State {
 
   /**
    * Change sprite frame
-   * 
+   *
    * @param {Sprite} sprite sprite to modify
    * @param {String} frame name of frame to switch to
    */
@@ -457,9 +457,12 @@ export default class extends Phaser.State {
 
       for (let i = 0 ; i < roomSprites.length ; i++ ) {
           let spriteProperty = this.spritesJSON[roomSprites[i].name];
-          
+
           if (!spriteProperty) {
-              throw new Error(`Sprite for room [${this.currentRoom.name}] not found in cache: check if sprite [${roomSprites[i].name}] exists`)
+            let error = `Sprite for room [${this.currentRoom.name}] not found in cache: `+
+            `check if sprite [${roomSprites[i].name}] exists`
+
+            throw new Error(error)
           }
 
           let newSprite;
@@ -467,30 +470,30 @@ export default class extends Phaser.State {
 
           switch (layer) {
           case 'background':
-              newSprite = this.bgSprites.create( 
-                  roomSprites[i].x * window.game.scaleFactor, 
-                  roomSprites[i].y * window.game.scaleFactor, 
+              newSprite = this.bgSprites.create(
+                  roomSprites[i].x * window.game.scaleFactor,
+                  roomSprites[i].y * window.game.scaleFactor,
                   roomSprites[i].name);
               break
           case 'midground':
-              newSprite = this.mgSprites.create( 
-                  roomSprites[i].x * window.game.scaleFactor, 
-                  roomSprites[i].y * window.game.scaleFactor, 
+              newSprite = this.mgSprites.create(
+                  roomSprites[i].x * window.game.scaleFactor,
+                  roomSprites[i].y * window.game.scaleFactor,
                   roomSprites[i].name);
               break
           case 'foreground':
-              newSprite = this.fgSprites.create( 
-                  roomSprites[i].x * window.game.scaleFactor, 
-                  roomSprites[i].y * window.game.scaleFactor, 
+              newSprite = this.fgSprites.create(
+                  roomSprites[i].x * window.game.scaleFactor,
+                  roomSprites[i].y * window.game.scaleFactor,
                   roomSprites[i].name);
               break
           default:
-              newSprite = this.bgSprites.create( 
-                  roomSprites[i].x * window.game.scaleFactor, 
-                  roomSprites[i].y * window.game.scaleFactor, 
+              newSprite = this.bgSprites.create(
+                  roomSprites[i].x * window.game.scaleFactor,
+                  roomSprites[i].y * window.game.scaleFactor,
                   roomSprites[i].name);
           }
-          
+
           newSprite.name = roomSprites[i].name
 
           if (spriteProperty.scale) {
@@ -509,8 +512,8 @@ export default class extends Phaser.State {
           }
 
           dlog(`creating sprite ${newSprite.name}
-          in layer ${layer} at { ${newSprite.position.x}, ${newSprite.position.y} } 
-          with scale: ${newSprite.scale} 
+          in layer ${layer} at { ${newSprite.position.x}, ${newSprite.position.y} }
+          with scale: ${newSprite.scale}
           h: ${newSprite.height} w: ${newSprite.width}`)
 
           spriteProperty.animated ? this.createSpriteAnimation(newSprite, spriteProperty):null;
@@ -572,21 +575,21 @@ export default class extends Phaser.State {
       const roomEntities = this.currentRoom.entities;
       for (let entityInfo of roomEntities) {
           dlog(`creating entity ${entityInfo['name']}
-          in layer ${entityInfo['layer']} 
+          in layer ${entityInfo['layer']}
           at { ${entityInfo['startPos'].x}, ${entityInfo['startPos'].y} }`)
 
           let {name, layer} = entityInfo
           let entityClass = entities[name]
           let entity = new entityClass({game: this.game, ...entityInfo})
-          
+
           // create animation for entity
           let spriteProperty = this.spritesJSON[entity.animName];
           this.createSpriteAnimation(entity.anim, spriteProperty)
 
           // assumes the only animation is the 'on' anim for now
-          let animation = entity.anim.animations.getAnimation('on') 
+          let animation = entity.anim.animations.getAnimation('on')
           animation.onComplete.add(entity.onAnimComplete, entity)
-          
+
           switch (layer) {
               case 'foreground':
                   this.fgSprites.add(entity)
@@ -607,7 +610,7 @@ export default class extends Phaser.State {
 
   /**
    * Compile a sprite's animations from sprites.json data
-   * 
+   *
    * @param {Sprite} sprite sprite to create animations for
    * @param {Object} property holds animation properties
    */
@@ -638,7 +641,7 @@ export default class extends Phaser.State {
 
   /**
    * Add actions to sprite
-   * 
+   *
    * @param {Sprite} sprite sprite to add actions to
    * @param {Object} property hold action properties
    */
@@ -778,7 +781,11 @@ export default class extends Phaser.State {
       // Use the first door's entry as the starting position when spawning player
       const startPosition = this.doors[Object.keys(this.doors)[0]].entry
 
-      this.player = this.game.add.sprite(startPosition.x * window.game.scaleFactor, startPosition.y * window.game.scaleFactor, 'player', 'stand-right');
+      this.player = this.game.add.sprite(
+          startPosition.x * window.game.scaleFactor,
+          startPosition.y * window.game.scaleFactor,
+          'player',
+          'stand-right');
       this.player.name = 'player';
 
       this.player.animations.add('walk-right', [
@@ -900,7 +907,7 @@ export default class extends Phaser.State {
             sprite.sendToBack();
 
             //dlog(`push ${sprite.name} behind player`)
-        }  
+        }
     })
 
     this.itemGroup.forEach((item: Phaser.Sprite) => {
@@ -970,8 +977,8 @@ export default class extends Phaser.State {
 
   // Sprite talking
   say (action: SayAction, onComplete = null) {
-    let text = action.text 
-    let key = action.sprite 
+    let text = action.text
+    let key = action.sprite
     let color = action.color
 
     // include key for event evaluation
@@ -1003,7 +1010,7 @@ export default class extends Phaser.State {
     var timer = this.time.create();
     timer.add(length*400, function () {
       this.speech.kill();
-        
+
       if (onComplete)
         onComplete()
 
@@ -1150,9 +1157,9 @@ export default class extends Phaser.State {
 
     let sprite = this.getSprite(key);
     this.showSprite(sprite, true);
-    
+
     this.say(
-      new SayAction('say', { text, sprite: key, color }), 
+      new SayAction('say', { text, sprite: key, color }),
       () => this.showSprite(sprite, !hide));
 
     if (!loop)
@@ -1245,13 +1252,13 @@ export default class extends Phaser.State {
     // var sprites = this.spritesGroup.children;
     let spritesMeta = this.currentRoom.sprites;
 
-    this.bgSprites.forEach(child => { 
+    this.bgSprites.forEach(child => {
       if (child.name == spriteName) { child.destroy() }
     }, this)
-    this.mgSprites.forEach(child => { 
+    this.mgSprites.forEach(child => {
       if (child.name == spriteName) { child.destroy() }
     }, this)
-    this.fgSprites.forEach(child => { 
+    this.fgSprites.forEach(child => {
       if (child.name == spriteName) { child.destroy() }
     }, this)
 
@@ -1279,7 +1286,7 @@ export default class extends Phaser.State {
     this.openDoor = myDoor.name
     this.move(
       new MoveAction(
-        'move', 
+        'move',
         {
           x: myDoor.entry.x * window.game.scaleFactor,
           y: myDoor.entry.y * window.game.scaleFactor
@@ -1514,7 +1521,7 @@ export default class extends Phaser.State {
     if (action.animName)
       this.playAnimation(
         new PlayAnimAction(
-          'playAnim', 
+          'playAnim',
           {sprite: action.sprite, animName: action.animName, kill: false,  hide: false}));
 
     var path = action.path;
@@ -1661,10 +1668,10 @@ export default class extends Phaser.State {
       if (swappedItem) {
         // TODO remove duplicate data entry for currentRoom.items and itemGroup
         this.itemGroup.add(swappedItem)
-        this.currentRoom.items.push({ 
-          name: swappedItem.name, 
-          x: swappedItem.position.x, 
-          y: swappedItem.position.y 
+        this.currentRoom.items.push({
+          name: swappedItem.name,
+          x: swappedItem.position.x,
+          y: swappedItem.position.y
         })
       }
 
@@ -1683,10 +1690,10 @@ export default class extends Phaser.State {
 
       this.fgSprites.forEach(function (sprite) {
         if (sprite.overlap(item)) {
-        // if (inBounds(item, sprite)) { 
+        // if (inBounds(item, sprite)) {
           if (sprite.inputEnabled)
-            this.evalEvent(sprite.key + '-' + item.name) 
-            
+            this.evalEvent(sprite.key + '-' + item.name)
+
           dlog(`item overlapped foreground sprite`)
           spriteHit = true
         }
@@ -1695,7 +1702,7 @@ export default class extends Phaser.State {
       this.blockGroup.forEach(function (block) {
         if (inBounds(item, block) && block.inputEnabled) { this.evalEvent(block.name + '-' + item.name) }
       }, this)
-      
+
       // place item under cursor if the location is walkable, and no foreground sprites hit
       if (!spriteHit && this.pathing.findWay(this.player.position, {x: item.x, y: item.y })) {
         dlog(`placing ${item.name} into room at { ${item.position.x}, ${item.position.y} }`)
@@ -1744,7 +1751,7 @@ export default class extends Phaser.State {
 
     // check drop location
     item.events.onDragStop.add((data) => {
-      
+
       this.changeRoomText(`${data.name} placed`);
       this.heldItem.removeChild(data)
 
@@ -1796,7 +1803,7 @@ export default class extends Phaser.State {
         dlog('playing music: '+this.currentMusic);
         this.music = this.game.sound.add(this.currentMusic, 1, true);
         this.music.onDecoded.add(function() {
-          
+
           this.music.fadeIn();
         }, this);
 

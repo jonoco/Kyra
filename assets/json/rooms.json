@@ -21,6 +21,7 @@
 			{ "name": "books", "x": 243, "y": 60, "height": 10, "width": 23 },
 			{ "name": "cauldron", "x": 25, "y": 97, "height": 20, "width": 35 }
 		],
+		"entities": [],
 		"grid": "assets/json/room01.json",
 		"path": "assets/screens/home.png",
 		"doors": {
@@ -46,6 +47,7 @@
 			{ "name": "branch down", "x": 233, "y": 9 }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room02.json",
 		"path": "assets/screens/trunk.png",
 		"doors": {
@@ -93,6 +95,7 @@
 			{ "name": "brandon wow", "x": 96, "y": 67 }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room03.json",
 		"path": "assets/screens/willow_sick.png",
 		"doors": {
@@ -129,6 +132,7 @@
 			{ "name": "oak1", "x": 141, "y": 9 }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room04.json",
 		"path": "assets/screens/zrock.png",
 		"doors": {
@@ -157,6 +161,7 @@
 		"items": [],
 		"sprites": [{ "name": "temple entrance", "x": 137, "y": 40, "layer": "foreground" }],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room05.json",
 		"path": "assets/screens/healer_ext.png",
 		"doors": {
@@ -193,6 +198,7 @@
 		"blocks": [
 			{ "name": "brynn", "x": 35, "y": 64, "height": 46, "width": 20 }
 		],
+		"entities": [],
 		"grid": "assets/json/room06.json",
 		"path": "assets/screens/healer.png",
 		"doors": {
@@ -220,6 +226,7 @@
 			{ "name": "flowerbox", "x": 100, "y": 83, "height": 17, "width": 50 },
 			{ "name": "treehouseSymbol", "x": 95, "y": 30, "height": 27, "width": 30 }
 		],
+		"entities": [],
 		"grid": "assets/json/room07.json",
 		"path": "assets/screens/home_ext.png",
 		"doors": {
@@ -254,6 +261,7 @@
 			{ "name": "redwood1", "x": 167, "y": 15, "layer": "foreground" }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room08.json",
 		"path": "assets/screens/forest_north.png",
 		"doors": {
@@ -320,8 +328,7 @@
 				"duration": 900,  
 				"layer": "midground",
 				"delay": 650
-			}
-			,
+			},
 			{ 
 				"name": "poolDrop", 
 				"startPos": {"x": 162, "y": -5}, 
@@ -362,6 +369,7 @@
 			{ "name": "birch3", "x": 210, "y": 8, "layer": "foreground" }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room11.json",
 		"path": "assets/screens/forest_a.png",
 		"doors":  {
@@ -401,6 +409,7 @@
 			{ "name": "oak2-r", "x": 67, "y": 8 }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room12.json",
 		"path": "assets/screens/forest_east.png",
 		"doors": {
@@ -437,6 +446,7 @@
 		"items": [],
 		"sprites": [],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room13.json",
 		"path": "assets/screens/forest_corner_rock.png",
 		"doors": {
@@ -462,6 +472,7 @@
 		  { "name": "altar", "x": 128, "y": 33 }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room14.json",
 		"path": "assets/screens/altar.png",
 		"doors": {
@@ -490,6 +501,7 @@
 		"items": [{ "name": "amythyst", "x": 133, "y": 117 }],
 		"sprites": [],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room16.json",
 		"path": "assets/screens/cliff_nw_b.png",
 		"doors": {
@@ -513,6 +525,7 @@
 			{ "name": "cut tree", "x": 9, "y": 8 }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room17.json",
 		"path": "assets/screens/xedge.png",
 		"doors": {
@@ -541,6 +554,7 @@
 		"items": [],
 		"sprites": [{ "name": "cave entrance", "x": 7, "y": 8 }],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room18.json",
 		"path": "assets/screens/cave.png",
 		"doors": {
@@ -571,6 +585,7 @@
 		"sprites": [{ "name": "herman", "x": 23, "y": 49 }],
 		"altSprites": [],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room19.json",
 		"path": "assets/screens/bridge_broken.png",
 		"doors": {

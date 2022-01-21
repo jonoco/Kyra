@@ -2,7 +2,7 @@ import 'phaser'
 import 'pixi'
 
 import Pathing from '../pathing'
-import itemAtlas from '../items'
+import Item from '../Item';
 import Inventory from '../inventory'
 import { log, dlog, inBounds } from '../utils'
 import PoolDrop from '../entities/PoolDrop'
@@ -1725,10 +1725,14 @@ export default class extends Phaser.State {
 
   // Spawn item into room
   spawnItem (itemData) {
-    var item = this.game.make.image(itemData.x * window.game.scaleFactor, itemData.y * window.game.scaleFactor, 'items');
-    item.name = itemData.name;
-    var frame = itemAtlas[item.name];
-    item.frame = frame;
+    let { name, x, y } = itemData;
+
+    let item = new Item(
+        name, 
+        this.game, 
+        x * window.game.scaleFactor, 
+        y * window.game.scaleFactor);
+
     item.scale.setTo(0.5 * window.game.scaleFactor);
     item.inputEnabled = true;
     item.input.enableDrag(true, true);

@@ -4,6 +4,7 @@ import 'pixi'
 import Pathing from '../pathing'
 import Item from '../Item';
 import Inventory from '../inventory'
+import Door from '../Door';
 import { log, dlog, inBounds } from '../utils'
 import PoolDrop from '../entities/PoolDrop'
 import Block from '../Block'
@@ -849,42 +850,43 @@ export default class extends Phaser.State {
    * Create room doors
    */
   createDoors () {
-      this.doors = this.currentRoom.doors;
-      for (const [door, _] of Object.entries(this.doors)) {
+    this.doors = this.currentRoom.doors;
+    for (const [doorName, _] of Object.entries(this.doors)) {
+      let { x, y, height, width, entry } = this.doors[doorName]
 
-          let x = this.doors[door].x * window.game.scaleFactor
-          let y = this.doors[door].y * window.game.scaleFactor
-          let height = this.doors[door].height * window.game.scaleFactor
-          let width = this.doors[door].width * window.game.scaleFactor
-          let entry = this.doors[door].entry
+      x *= window.game.scaleFactor
+      y *= window.game.scaleFactor
+      height *= window.game.scaleFactor
+      width *= window.game.scaleFactor
 
-          let newDoor = this.doorGroup.create( x, y );
-          newDoor.height = height;
-          newDoor.width = width;
-          newDoor.name = this.doors[door].name;
-          newDoor.inputEnabled = true;
-          // newDoor.input.useHandCursor = true;
-          this.physics.arcade.enable(newDoor);
+      let door = new Door(this.game, x, y);
+      door.height = height;
+      door.width = width;
+      door.name = this.doors[doorName].name;
+      door.inputEnabled = true;
+      
+      this.doorGroup.add(door);
+      this.physics.arcade.enable(door);
 
-          // door cursor
-          newDoor.events.onInputOver.add(function () {
-          this.game.canvas.style.cursor = "pointer";
-          }, this);
-          newDoor.events.onInputOut.add(function () {
-          this.game.canvas.style.cursor = "default";
-          }, this);
+      // door cursor
+      door.events.onInputOver.add(() => {
+        this.game.canvas.style.cursor = "pointer";
+      }, this);
+      door.events.onInputOut.add(() => {
+        this.game.canvas.style.cursor = "default";
+      }, this);
 
-          newDoor.events.onInputDown.add(this.moveToDoor, this);
+      door.events.onInputDown.add(this.moveToDoor, this);
 
-          if (this.debugOn) {
-              var doorBg = this.game.make.graphics();
-              doorBg.beginFill(0x00ee00, 0.3);
-              doorBg.drawRect(x, y, width, height);
-              doorBg.endFill();
+      if (this.debugOn) {
+        var doorBg = this.game.make.graphics();
+        doorBg.beginFill(0x00ee00, 0.3);
+        doorBg.drawRect(x, y, width, height);
+        doorBg.endFill();
 
-              this.doorDebug.add(doorBg);
-          }
+        this.doorDebug.add(doorBg);
       }
+    }
   }
 
 

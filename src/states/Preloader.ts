@@ -82,16 +82,15 @@ export default class extends Phaser.State {
 
   // Static and animated sprites
   loadSprites () {
-    var sprites = this.cache.getJSON('sprites')
+    const sprites = this.cache.getJSON('sprites')['sprites']
 
-    for (const [sprite, value] of Object.entries(sprites)) {
-
+    for (const spriteData of sprites) {
       // Sprite has json information
-      if (sprites[sprite].json) {
-        this.load.atlasJSONArray(sprites[sprite].name, sprites[sprite].png, sprites[sprite].json)
+      if (spriteData.json) {
+        this.load.atlasJSONArray(spriteData.name, spriteData.png, spriteData.json)
       // Simple sprite
       } else {
-        this.load.image(sprites[sprite].name, sprites[sprite].png)
+        this.load.image(spriteData.name, spriteData.png)
       }
     }
   }

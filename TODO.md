@@ -26,7 +26,7 @@
 - [x] use original Kyrandia font
 - [x] add door animations
 - [x] host production build of the game
-- [ ] add better condition checking to quest events
+- [x] add better condition checking to quest events
 - [ ] add 'active' property to sprites to allow or prevent creating them
 - [ ] switch assets to native resolution
 	+ [x] update screens
@@ -45,8 +45,16 @@
 - [ ] move brandon's sprite meta to json; animations are being described in *createPlayer*
 - [ ] remove outdated/deprecated assets
 - [ ] migrate to typescript
-  - [ ] migrate events/actions
+  - [x] migrate events/actions
   - [ ] migrate items
+  - [ ] migrate sprites
+  - [ ] migrate player to sprite class
+  - [ ] migrate rooms
+- [ ] move state to individual rooms
+- [ ] improve json schema
+  - [x] change room.doors to array
+  - [ ] improve alternate room handling
+  - [ ] improve animation json schema
 
 ### Bugs
 - [x] tapping on player causes him to disappear
@@ -67,6 +75,6 @@
 - [x] entities are not instantiating after leaving room
 - [ ] willow quest is broken
 	- after visiting willow, clicking on pool gives a "no walkable path found" error, and locks player movement
-
-# drops
-{ "name": "pool_drop_c", "x": 113, "y": 89 },
+- [ ] items dropped onto inventory can fall between slots
+- [ ] clicking on treehouse door while next to it causes null path error
+- [ ] ! blocks not emitting events

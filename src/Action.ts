@@ -222,20 +222,23 @@ export class PlayAnimAction extends Action {
     }
 }
 
+/** Spawn new sprite instance at a location */
 export class PutSpriteAction extends Action {
     sprite: string;
     x: number;
     y: number;
+    layer: Layer;
 
     constructor(
         type: string, 
-        { sprite, x, y }: 
-        { sprite: string, x: number, y: number }
+        { sprite, x, y, layer }: 
+        { sprite: string, x: number, y: number, layer: Layer }
     ) {
         super(type);
         this.sprite = sprite;
         this.x = x;
         this.y = y;
+        this.layer = layer;
     }
 }
 

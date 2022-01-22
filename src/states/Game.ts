@@ -396,11 +396,33 @@ export default class extends Phaser.State {
 
   // Events
 
+  /**
+   * Spawn a new sprite
+   */
   putSprite (action: PutSpriteAction) {
-    dlog(`putting ${this.spritesJSON[action.sprite].name}`)
-    let sprite = this.getSprite(action.sprite)
+    dlog(`putting ${action.sprite}`)
+    let spriteData = this.spritesJSON.find(s => s.name == action.sprite)
+    
+    // let sprite = this.getSprite(action.sprite)
 
-    sprite.position = new PIXI.Point(action.x * window.game.scaleFactor, action.y * window.game.scaleFactor);
+    let sprite = new Sprite(this.game, action.x, action.y, spriteData.name)
+    sprite.position.x = action.x * window.game.scaleFactor;
+    sprite.position.y = action.y * window.game.scaleFactor;
+
+    let layer = action.layer || 'background';
+    switch (layer) {
+      case 'background':
+        this.bgSprites.add(sprite);
+          break;
+      case 'midground':
+        this.mgSprites.add(sprite);
+          break;
+      case 'foreground':
+        this.fgSprites.add(sprite);
+          break;
+      default:
+        this.bgSprites.add(sprite);
+      }
 
     dlog(`put sprite to ${sprite.position}`)
 

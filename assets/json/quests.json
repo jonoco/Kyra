@@ -32,17 +32,39 @@
           "trigger": "willow-tear",
           "conditions": [{ "step": "gotTear", "complete": true}],
           "actions": [
-            { "type": "removeItem", "value": {"item": "tear" }},
-            { "type": "move", "value": { "x": 128, "y": 115 } },
-            { "type": "say", "value": { "text": "I think this tear drop should fit" }},
-            { "type": "playAnim", "value": { 
-              "sprite": "willow", "animName": "on", "hide": false } },
-            { "type": "altRoom", "value": "room03" },
-            { "type": "wait", "value": 300 },
-            { "type": "modAttr", "value": { "sprite": "player", "attr": "alpha", "value": 0 } },
-            { "type": "sayAnim", "value": { "sprite": "brandon wow", "animName": "on", "kill": true, "say": "wow!" } },
-            { "type": "wait", "value": 1500 },
-            { "type": "modAttr", "value": { "sprite": "player", "attr": "alpha", "value": 1 } }
+            { "type": "removeItem", 
+              "value": {"item": "tear" }},
+            { "type": "move", 
+              "value": { "x": 128, "y": 115 } },
+            { "type": "say", 
+              "value": { "text": "I think this tear drop should fit" }},
+            { "type": "playAnim", 
+              "value": { 
+                "sprite": "willow", 
+                "animName": "on", 
+                "hide": false } },
+            { "type": "altRoom", 
+              "value": "room03" },
+            { "type": "wait", 
+              "value": 300 },
+            { "type": "modAttr", 
+              "value": { 
+                "sprite": "player", 
+                "attr": "alpha", 
+                "value": 0 } },
+            { "type": "sayAnim", 
+              "value": { 
+                "sprite": "brandon wow", 
+                "animName": "on", 
+                "kill": true, 
+                "text": "wow!" } },
+            { "type": "wait", 
+              "value": 1500 },
+            { "type": "modAttr", 
+              "value": { 
+                "sprite": "player", 
+                "attr": "alpha", 
+                "value": 1 } }
           ]
         } 
       ]
@@ -55,24 +77,29 @@
         "trigger": "room06",
         "conditions": [{ "step": "active", "complete": false }],
         "actions": [
-            { "type": "playAnim", "value": { 
+            { "type": "playAnim", 
+              "value": { 
                 "sprite": "brynn-enter", 
                 "animName": "enter" } },
-            { "type": "sayAnim", "value": { 
+            { "type": "sayAnim", 
+              "value": { 
                 "sprite": "brynn-talk", 
                 "animName": "talk", 
-                "say": "Welcome, Brandon", 
+                "text": "Welcome, Brandon", 
                 "color": "brynn", 
                 "hide": true } },
             { "type": "wait", "value": 300 },
-            { "type": "sayAnim", "value": { 
+            { "type": "sayAnim", 
+              "value": { 
                 "sprite": "brynn-talk", 
                 "animName": "talk", 
-                "say": "Why are you always bothering me?", 
+                "text": "Why are you always bothering me?", 
                 "color": "brynn", 
                 "hide": true } },
-            { "type": "wait", "value": 300 },
-            { "type": "modAttr", "value": { 
+            { "type": "wait", 
+              "value": 300 },
+            { "type": "modAttr", 
+              "value": { 
                 "sprite": "altar", 
                 "attr": "inputEnabled", 
                 "value": true } }
@@ -90,7 +117,9 @@
               "sprite": "altar", 
               "attr": "alpha", 
               "value": 1 } },
-          { "type": "say", "value": { "text": "I can feel the power!!" }}
+          { "type": "say", 
+            "value": { 
+              "text": "I can feel the power!!" }}
         ]
       },
       {
@@ -99,13 +128,13 @@
         "conditions": [{ "step": "talk_1", "complete": false }],
         "actions": [
           { 
-              "type": "sayAnim", 
-              "value": { 
-                  "sprite": "brynn-talk", 
-                  "animName": "talk", 
-                  "say": "Why haven't you gotten me a rose yet?", 
-                  "color": "brynn", 
-                  "hide": true }}
+            "type": "sayAnim", 
+            "value": { 
+              "sprite": "brynn-talk", 
+              "animName": "talk", 
+              "text": "Why haven't you gotten me a rose yet?", 
+              "color": "brynn", 
+              "hide": true }}
         ]
       },
       {
@@ -134,7 +163,7 @@
           { "type": "sayAnim", "value": { 
               "sprite": "herman", 
               "animName": "stand talk 1", 
-              "say": "It's not my fault", 
+              "text": "It's not my fault", 
               "color": "herman" } },
           { "type": "playAnim", "value": { 
               "sprite": "herman", 
@@ -180,7 +209,7 @@
           { "type": "sayAnim", "value": { 
               "sprite": "herman", 
               "animName": "stand talk 3", 
-              "say": "That's a pretty old saw", 
+              "text": "That's a pretty old saw", 
               "color": "herman" } },
           { "type": "playAnim", "value": { 
               "sprite": "herman", 
@@ -191,12 +220,12 @@
           { "type": "sayAnim", "value": { 
               "sprite": "herman", 
               "animName": "stand talk 3", 
-              "say": "Uh, yeah ...", 
+              "text": "Uh, yeah ...", 
               "color": "herman" } },
           { "type": "sayAnim", "value": { 
               "sprite": "herman", 
               "animName": "stand talk 1", 
-              "say": "Well, I'll go cut down some trees then", 
+              "text": "Well, I'll go cut down some trees then", 
               "color": "herman" } },
           { "type": "moveSprite", "value": { 
               "sprite": "herman", 

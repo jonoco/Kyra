@@ -1,23 +1,16 @@
-import { Graphics } from "phaser-ce";
-import { onDebug } from "./signals";
-import { dlog } from "./utils";
+import KSprite from "./KSprite";
 
 
-export default class Door extends Phaser.Sprite {
+export default class Door extends KSprite {
   open: boolean = false;
   entry: Point;
   offPoint: Point;
   animation?: DoorAnimData;
-  debugBlock: Phaser.Graphics;
-  debugText: Phaser.Text;
-  debugColor: number = 0x5555ff;
 
-  constructor(game: Phaser.Game, x: number, y: number, name: string) {
-    super(game, x, y, null);
-
+  constructor(game: Phaser.Game, x: number, y: number, name: string, debugColor: number) {
+    super(game, x, y, null, debugColor);
+    
     this.name = name;
-
-    this.initDebug()
   }
 
 
@@ -32,7 +25,12 @@ export default class Door extends Phaser.Sprite {
     offPoint: Point,
     animation?: DoorAnimData
   ) {
-    let door = new this(game, x * window.app.scaleFactor, y * window.app.scaleFactor, name)
+    let door = new this(
+      game, 
+      x * window.app.scaleFactor, 
+      y * window.app.scaleFactor, 
+      name,
+      0x5555ff)
 
     door.height = height * window.app.scaleFactor;
     door.width = width * window.app.scaleFactor;
@@ -52,21 +50,6 @@ export default class Door extends Phaser.Sprite {
     return door
   }
 
-
-  initDebug() {
-    this.debugBlock = this.game.make.graphics();
-    this.debugBlock.beginFill(this.debugColor, 0.5);
-    this.debugBlock.drawRect(0, 0, this.width, this.height);
-    this.debugBlock.endFill();
-    this.addChild(this.debugBlock);
-
-    this.debugText = new Phaser.Text(this.game, 0, 0, this.name, { fontSize: 8, fontWeight: 'normal' })
-    this.addChild(this.debugText)
-
-    onDebug.add(this.debugSprite, this);
-  }
-
-
   static parseDoors(game: Phaser.Game, doorsData: DoorData[]) {
     let doors: Door[] = [];
 
@@ -77,11 +60,5 @@ export default class Door extends Phaser.Sprite {
     }
 
     return doors;
-  }
-
-
-  debugSprite(debugOn: boolean) {
-    this.debugBlock.visible = debugOn
-    this.debugText.visible = debugOn
   }
 }

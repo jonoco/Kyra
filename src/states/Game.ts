@@ -4,6 +4,7 @@ import 'pixi'
 import Pathing from '../pathing'
 import Item from '../Item';
 import Inventory from '../inventory'
+import Debugger from '../Debug'
 import Door from '../Door';
 import { log, dlog, inBounds, LOG_LEVEL } from '../utils'
 import PoolDrop from '../entities/PoolDrop'
@@ -19,7 +20,7 @@ import {
 } from '../Action'
 import { Event, parseEvents } from '../Event'
 import { parseQuests, Quest } from '../Quest'
-import { onDebug } from '../signals'
+import { onDebug, enterRoom } from '../signals'
 import Sprite from '../Sprite';
 
 const colorAtlas = {
@@ -30,8 +31,6 @@ const colorAtlas = {
 
 
 export default class Game extends Phaser.State {
-  debugPos: number;
-
   amulet: Phaser.Sprite;
   amuletGroup: Phaser.Group;
   animation: Phaser.Animation;
@@ -77,18 +76,17 @@ export default class Game extends Phaser.State {
   talkingSprite: Phaser.Sprite;
   tween: Phaser.Tween;
 
+  debugger: Debugger;
+
 
   init() {
     // this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room09';
-    this.debugOn = __DEBUG__ || false
+    this.startRoom = 'room05';
     this.playMusic = false
 
     // event variables
-    // this.quests;
-    // this.eventTriggers;
     this.eventQueue = [];
 
     // sprite variables
@@ -143,9 +141,6 @@ export default class Game extends Phaser.State {
       window.app.scaleFactor, 
       window.app.scaleFactor,
       this.roomsJSON[this.startRoom] as RoomData)
-
-    // this.game.world.add(this.room)
-    // dlog(this.room)
     
     this.bgSprites = this.game.add.group(this.world, 'background sprites')
     this.itemGroup = this.game.add.group(this.world, 'item sprites')
@@ -166,12 +161,14 @@ export default class Game extends Phaser.State {
     this.createStartRoom();
     this.createPlayer();
 
-    this.input.keyboard.addKeys({ "a": Phaser.KeyCode.A, "b": Phaser.KeyCode.B })
-    let tildeKey = this.input.keyboard.addKey(Phaser.KeyCode.TILDE)
-    tildeKey.onDown.add(this.toggleDebug, this)
+    // this.input.keyboard.addKeys({ "a": Phaser.KeyCode.A, "b": Phaser.KeyCode.B })
+    // let tildeKey = this.input.keyboard.addKey(Phaser.KeyCode.TILDE)
+    // tildeKey.onDown.add(this.toggleDebug, this)
 
     let key_1 = this.input.keyboard.addKey(Phaser.KeyCode.ONE)
     key_1.onDown.add(this.toggleMusic, this)
+
+    this.debugger = new Debugger(this.game, this);
   }
 
 
@@ -190,93 +187,107 @@ export default class Game extends Phaser.State {
     this.changeSpriteIndex();
     this.changePlayerAnimation();
 
-    if (this.debugOn) {
-      // todo find better way to present debug screen
-      // this.debugScreen()
-    }
+    this.debugger.display()
+    // if (this.debugOn) {
+    //   // todo find better way to present debug screen
+    //   // this.debugScreen()
+    // }
   }
 
 
-  /**
-   * Show debug text
-   */
-  debugScreen() {
-    this.debugPos = 1
+  // /**
+  //  * Show debug text
+  //  */
+  // debugScreen() {
+  //   this.debugPos = 1
 
-    this.addDebugText(`Room: ${this.currentRoom.name}`);
-    this.addDebugText(`Player position: ${this.player.x}, ${this.player.y}`);
-    this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}`);
-    this.addDebugText(`Player z index: ${this.player.z}`);
-    this.addDebugText(`GUI z index: ${this.gui.z}`);
-    this.addDebugText(`room z index: ${this.room.z}`);
-    this.addDebugText(`blocks z index: ${this.blockGroup.z}`)
-    this.addDebugText(`bgSprites z index: ${this.bgSprites.z}`);
-    this.addDebugText(`mgSprites z index: ${this.mgSprites.z}`);
-    this.addDebugText(`fgSprites z index: ${this.fgSprites.z}`);
+  //   this.addDebugText(`Room: ${this.currentRoom.name}`);
+  //   this.addDebugText(`Player position: ${this.player.x}, ${this.player.y}`);
+  //   this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}`);
+  //   this.addDebugText(`Player z index: ${this.player.z}`);
+  //   this.addDebugText(`GUI z index: ${this.gui.z}`);
+  //   this.addDebugText(`room z index: ${this.room.z}`);
+  //   this.addDebugText(`blocks z index: ${this.blockGroup.z}`)
+  //   this.addDebugText(`bgSprites z index: ${this.bgSprites.z}`);
+  //   this.addDebugText(`mgSprites z index: ${this.mgSprites.z}`);
+  //   this.addDebugText(`fgSprites z index: ${this.fgSprites.z}`);
 
-    this.addDebugText(`background sprites:`);
-    this.bgSprites.forEach(spr => this.addDebugSprite(spr), this)
+  //   this.addDebugText(`background sprites:`);
+  //   this.bgSprites.forEach(spr => this.addDebugSprite(spr), this)
 
-    this.addDebugText(`midground sprites:`);
-    this.mgSprites.forEach(spr => this.addDebugSprite(spr), this)
+  //   this.addDebugText(`midground sprites:`);
+  //   this.mgSprites.forEach(spr => this.addDebugSprite(spr), this)
 
-    this.addDebugText(`foreground sprites:`);
-    this.fgSprites.forEach(spr => this.addDebugSprite(spr), this)
+  //   this.addDebugText(`foreground sprites:`);
+  //   this.fgSprites.forEach(spr => this.addDebugSprite(spr), this)
 
-    this.addDebugText(`held items:`);
-    this.heldItem.forEach(spr => this.addDebugSprite(spr), this)
+  //   this.addDebugText(`held items:`);
+  //   this.heldItem.forEach(spr => this.addDebugSprite(spr), this)
 
-    this.addDebugText(`room items:`);
-    this.itemGroup.forEach(spr => this.addDebugSprite(spr), this)
+  //   this.addDebugText(`room items:`);
+  //   this.itemGroup.forEach(spr => this.addDebugSprite(spr), this)
 
-    this.addDebugText(`inventory items:`);
-    this.inventory.inventory.forEach(spr =>
-        this.addDebugText(`    name: ${spr.name} parent: ${spr.parent.name}`), this)
-  }
-
-
-  /**
-   * Add debug text to the debug screen
-   * @param {String} text debug text to display
-   * @returns next open row
-   */
-  addDebugText(text: string) {
-    this.game.debug.text(text, 5, this.debugPos * 25);
-
-    this.debugPos++
-  }
+  //   this.addDebugText(`inventory items:`);
+  //   this.inventory.inventory.forEach(spr =>
+  //       this.addDebugText(`    name: ${spr.name} parent: ${spr.parent.name}`), this)
+  // }
 
 
-  /**
-   * Add sprite debug info
-   * @param {Sprite} sprite sprite to print debug
-   */
-  addDebugSprite(sprite: Phaser.Sprite) {
-    this.addDebugText(`   name: ${sprite.name}`)
-  }
+  // /**
+  //  * Add debug text to the debug screen
+  //  * @param {String} text debug text to display
+  //  * @returns next open row
+  //  */
+  // addDebugText(text: string) {
+  //   this.game.debug.text(text, 5, this.debugPos * 25);
+
+  //   this.debugPos++
+  // }
 
 
-  /**
-   * Toggle the debug screen
-   */
-  toggleDebug() {
-    this.debugOn = !this.debugOn
+  // /**
+  //  * Add sprite debug info
+  //  * @param {Sprite} sprite sprite to print debug
+  //  */
+  // addDebugSprite(sprite: Phaser.Sprite) {
+  //   this.addDebugText(`   name: ${sprite.name}`)
+  // }
 
-    log(`toggling debug ${this.debugOn ? 'on': 'off'}`)
 
-    onDebug.dispatch(this.debugOn)
+  // /**
+  //  * Toggle the debug screen
+  //  */
+  // toggleDebug() {
+  //   this.debugLevel = (
+  //     this.debugLevel + 1 >= Object.keys(DebugLevel).length/2 
+  //     ? 0 : this.debugLevel + 1);
 
-    if (this.debugOn) {
-      this.debugGroup.visible = true
-      this.doorDebug.visible = true
-    } else {
-      this.debugGroup.visible = false
-      this.doorDebug.visible = false
-    }
+  //   log(`toggling debug level ${this.debugLevel} ${DebugLevel[this.debugLevel]}`)
 
-    this.pathing.displayDebugTiles()
-    this.inventory.dispalyDebugSlots()
-  }
+  //   onDebug.dispatch(this.debugLevel)
+
+  //   switch(this.debugLevel) {
+  //     case DebugLevel.off:
+  //       break;
+  //     case DebugLevel.screen:
+  //       break;
+  //     case DebugLevel.info:
+  //       break;
+  //     default:
+  //       throw Error('Unknown debug level')
+  //   }
+
+  //   // if (this.debugOn) {
+  //   //   this.debugGroup.visible = true
+  //   //   this.doorDebug.visible = true
+  //   // } else {
+  //   //   this.debugGroup.visible = false
+  //   //   this.doorDebug.visible = false
+  //   // }
+
+  //   // this.pathing.displayDebugTiles()
+  //   this.inventory.dispalyDebugSlots()
+  // }
 
 
     /**
@@ -1320,6 +1331,8 @@ export default class Game extends Phaser.State {
 
   // Transfer into room by currently selected door
   enterRoom () {
+    enterRoom.dispatch();
+
     let myDoor = this.currentRoom.doors.find(d => d.name == this.previousRoom.name);
 
     // check for enter animation

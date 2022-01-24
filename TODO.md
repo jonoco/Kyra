@@ -46,15 +46,19 @@
 - [ ] remove outdated/deprecated assets
 - [ ] migrate to typescript
   - [x] migrate events/actions
-  - [ ] migrate items
-  - [ ] migrate sprites
+  - [x] migrate items
+  - [x] migrate sprites
   - [ ] migrate player to sprite class
-  - [ ] migrate rooms
+  - [x] migrate rooms
+  - [ ] migrate inventory
 - [ ] move state to individual rooms
 - [ ] improve json schema
   - [x] change room.doors to array
   - [ ] improve alternate room handling
   - [ ] improve animation json schema
+- [ ] improve debugging features
+  - [ ] create in-game command interface to debug in-memory state, e.g., inspect current quest states
+  - [ ] fix debug text distortion
 
 ### Bugs
 - [x] tapping on player causes him to disappear
@@ -71,10 +75,13 @@
 - [x] say and sayAnim events need to be reworked to improve speaking behavior
 	- should be compatible with non-primary talking animations, e.g., brynn and her brynn-talk anims
 - [x] fix brandon's walk sync
-- [ ] crash entering bridge at modAttr
+- [x] ! crash entering bridge at modAttr
+  - [ ] same crash on entering temple
 - [x] entities are not instantiating after leaving room
-- [ ] willow quest is broken
+- [x] willow quest is broken
 	- after visiting willow, clicking on pool gives a "no walkable path found" error, and locks player movement
 - [ ] items dropped onto inventory can fall between slots
-- [ ] clicking on treehouse door while next to it causes null path error
-- [ ] ! blocks not emitting events
+- [x] clicking on treehouse door while next to it causes null path error
+- [x] ! blocks not emitting events
+- [ ] player doesn't finish tweening into the cave before the quest event starts
+- [ ] player cannot move after brynn enters, can only interact with door

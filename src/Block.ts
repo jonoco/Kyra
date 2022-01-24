@@ -1,18 +1,18 @@
 import 'phaser';
+import { DebugLevel } from './Debug';
+import KSprite from './KSprite';
 import { onDebug } from './signals';
 
 
-export default class Block extends Phaser.Sprite {
-  debugBlock: Phaser.Graphics;
-  debugText: Phaser.Text;
-  debugColor: number = 0x77ff88;
-
-  constructor(game: Phaser.Game, x: number, y: number, name: string) {
-    super(game, x, y, null);
-    
-    this.name = name
-
-    this.initDebug()
+export default class Block extends KSprite {
+  constructor(
+    game: Phaser.Game, 
+    x: number, 
+    y: number, 
+    name: string, 
+    debugColor: number
+  ) {
+    super(game, x, y, null, debugColor);
   }
 
   static of(
@@ -23,7 +23,13 @@ export default class Block extends Phaser.Sprite {
     height: number,
     width: number
   ) {
-    let block = new this(game, x * window.app.scaleFactor, y * window.app.scaleFactor, name);
+    let block = new this(
+      game, 
+      x * window.app.scaleFactor, 
+      y * window.app.scaleFactor, 
+      name,
+      0x77ff88);
+      
     block.height = height * window.app.scaleFactor;
     block.width = width * window.app.scaleFactor;
     block.inputEnabled = true;
@@ -32,34 +38,15 @@ export default class Block extends Phaser.Sprite {
   }
 
 
-  initDebug() {
-    this.debugBlock = this.game.make.graphics();
-    this.debugBlock.beginFill(this.debugColor, 0.5);
-    this.debugBlock.drawRect(0, 0, this.width, this.height);
-    this.debugBlock.endFill();
-    this.addChild(this.debugBlock);
-
-    this.debugText = new Phaser.Text(this.game, 0, 0, this.name, { fontSize: 8, fontWeight: 'normal' })
-    this.addChild(this.debugText)
-
-    onDebug.add(this.debugSprite, this);
-  }
-
-
   static parseBlocks(game: Phaser.Game, blocksData: BlockData[]) {
     let blocks: Block[] = [];
 
     for (let blockData of blocksData) {
-      let {name, x, y} = blockData;
-      let block = new this(game, x, y, name);
+      let {name, x, y, height, width} = blockData;
+      let block = Block.of(game, x, y, name, height, width);
       blocks.push(block);
     }
 
     return blocks;
-  }
-
-  debugSprite(debugOn: boolean) {
-    this.debugBlock.visible = debugOn
-    this.debugText.visible = debugOn
   }
 }

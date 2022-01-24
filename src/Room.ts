@@ -1,6 +1,6 @@
 import 'phaser';
 
-import Block, { BlockData } from './Block';
+import Block from './Block';
 import Door from './Door';
 import Item from './Item';
 import Entity from './entities/Entity';

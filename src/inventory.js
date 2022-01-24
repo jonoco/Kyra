@@ -28,10 +28,10 @@ export default class Inventory {
     this.inventory = this.game.add.group(this.game.world, 'inventory')
 
     for (let i = 0; i < this.slots.length ; i++) {
-      let x = this.slots[i].x * window.game.scaleFactor
-      let y = this.slots[i].y * window.game.scaleFactor
-      let height = this.slots[i].height * window.game.scaleFactor
-      let width = this.slots[i].width * window.game.scaleFactor
+      let x = this.slots[i].x * window.app.scaleFactor
+      let y = this.slots[i].y * window.app.scaleFactor
+      let height = this.slots[i].height * window.app.scaleFactor
+      let width = this.slots[i].width * window.app.scaleFactor
 
       let slot = this.slotsGroup.create( x, y );
       slot.width = width;
@@ -49,10 +49,10 @@ export default class Inventory {
   dispalyDebugSlots() {
     if (this.game.debugOn) {
       for (let i = 0; i < this.slots.length ; i++) {
-        let x = this.slots[i].x * window.game.scaleFactor
-        let y = this.slots[i].y * window.game.scaleFactor
-        let height = this.slots[i].height * window.game.scaleFactor
-        let width = this.slots[i].width * window.game.scaleFactor
+        let x = this.slots[i].x * window.app.scaleFactor
+        let y = this.slots[i].y * window.app.scaleFactor
+        let height = this.slots[i].height * window.app.scaleFactor
+        let width = this.slots[i].width * window.app.scaleFactor
 
         // for inventory size debugging
         let slotBackground = this.game.make.graphics();
@@ -114,8 +114,8 @@ export default class Inventory {
     // swap items in occupied slot if necessary
     if (slot.item) {
       slot.item.position = {
-        x: (Math.random()*100 + 50) * window.game.scaleFactor,
-        y: 100 * window.game.scaleFactor
+        x: (Math.random()*100 + 50) * window.app.scaleFactor,
+        y: 100 * window.app.scaleFactor
       }
 
       swappedItem = this.inventory.removeChild(slot.item)

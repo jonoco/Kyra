@@ -4,7 +4,7 @@ import { dlog, log } from './utils'
 export default class Pathing {
     constructor(game) {
         this.game = game
-        this.tileSize = (320/120) * window.game.scaleFactor; // native width / tile width
+        this.tileSize = (320/120) * window.app.scaleFactor; // native width / tile width
         this.tileX = 120;
         this.tileY = 75;
         this.map;
@@ -99,7 +99,7 @@ export default class Pathing {
         let endX = this.layer.getTileX(endPos.x);
         let endY = this.layer.getTileY(endPos.y);
 
-        dlog(`moving from tile { ${startX},${startY} } to { ${endX}, ${endY} }`);
+        dlog(`moving from tile { ${startX}, ${startY} } to { ${endX}, ${endY} }`);
 
         if (endX > this.tileX || endX < 0 || endY > this.tileY || endY < 0) {
             log(`cannot move to tile { ${endX}, ${endY} }`)

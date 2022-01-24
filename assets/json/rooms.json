@@ -65,7 +65,7 @@
 			{
 				"name": "room03",
 			 	"x": 0, "y": 0,
-			  "height": 200, "width": 13,
+			  "height": 140, "width": 20,
 			  "entry": {"x": 13, "y": 110},
 			  "offPoint": {"x": -17, "y": 110},
 			  "animation": null
@@ -73,7 +73,7 @@
 			{
 				"name": "room08",
 			 	"x": 300, "y": 0,
-			  "height": 200, "width": 13,
+			  "height": 140, "width": 20,
 			  "entry": {"x": 307, "y": 110},
 			  "offPoint": {"x": 340, "y": 110},
 			  "animation": null
@@ -268,15 +268,15 @@
 			{
 				"name": "room02",
 				"x": 0, "y": 0,
-				"height": 167, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 20, "y": 92},
 				"offPoint": {"x": -17, "y": 75},
 				"animation": null
 			},
 			{
 				"name": "room09",
-				"x": 300, "y": 33,
-				"height": 117, "width": 20,
+				"x": 300, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 307, "y": 92},
 				"offPoint": {"x": 340, "y": 92},
 				"animation": null
@@ -290,7 +290,7 @@
 		"items": [],
 		"sprites": [
 			{ "name": "stone1", "x": 186, "y": 94, "layer": "foreground" },
-			{ "name": "catch", "x": 167, "y": 8 },
+			{ "name": "catch", "x": 167, "y": 9 },
 			{ "name": "sorrow_rock_glyph", "x": 9, "y": 40 }
 		],
 		"blocks": [
@@ -344,7 +344,7 @@
 			{
 				"name": "room08",
 				"x": 0, "y": 70,
-				"height": 80, "width": 20,
+				"height": 70, "width": 20,
 				"entry": {"x": 20, "y": 128},
 				"offPoint": {"x": -17, "y": 128},
 				"animation": null
@@ -352,7 +352,7 @@
 			{
 				"name": "room11",
 				"x": 300, "y": 0,
-				"height": 200, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 307, "y": 108},
 				"offPoint": {"x": 340, "y": 108},
 				"animation": null

@@ -10,27 +10,27 @@ export default class PoolDrop extends Entity {
   tween: Phaser.Tween;
 
   constructor ({ game, startPos, endPos, duration, delay }) {
-    super(game, startPos.x * window.game.scaleFactor, 
-      startPos.y * window.game.scaleFactor, 'rain_drop')
+    super(game, startPos.x * window.app.scaleFactor, 
+      startPos.y * window.app.scaleFactor, 'rain_drop')
     
     startPos = copy(startPos)
     endPos = copy(endPos)
 
-    startPos.x *= window.game.scaleFactor
-    startPos.y *= window.game.scaleFactor
-    endPos.x *= window.game.scaleFactor
-    endPos.y *= window.game.scaleFactor
+    startPos.x *= window.app.scaleFactor
+    startPos.y *= window.app.scaleFactor
+    endPos.x *= window.app.scaleFactor
+    endPos.y *= window.app.scaleFactor
 
     this.startPos = startPos
     this.endPos = endPos
 
     this.name = 'poolDrop'
-    this.scale.setTo(window.game.scaleFactor);
+    this.scale.setTo(window.app.scaleFactor);
     this.duration = duration
 
     this.anim = new Phaser.Sprite(game, startPos.x, startPos.y, 'pool_splash')
     this.anim.name = `${this.name}-anim`
-    this.anim.scale.setTo(window.game.scaleFactor)
+    this.anim.scale.setTo(window.app.scaleFactor)
     
     this.game.physics.arcade.enableBody(this);
 
@@ -52,7 +52,7 @@ export default class PoolDrop extends Entity {
     // play anim
     this.alpha = 0
     this.anim.alpha = 1
-    this.anim.x = this.x - ((this.anim.getLocalBounds().width/2 - 1) * window.game.scaleFactor)
+    this.anim.x = this.x - ((this.anim.getLocalBounds().width/2 - 1) * window.app.scaleFactor)
     this.anim.y = this.y
     this.anim.play('on')
   }

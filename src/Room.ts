@@ -40,7 +40,7 @@ export default class Room extends Phaser.Image {
     room.path = path;
     room.doors = Door.parseDoors(game, Object.values(doors));
 
-    room.scale.setTo(window.game.scaleFactor);
+    room.scale.setTo(window.app.scaleFactor);
     room.inputEnabled = true;
     room.game.world.add(room);
 

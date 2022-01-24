@@ -50,8 +50,6 @@ export const parseActions = (rawActions: any[]): Action[] => {
     let actions: Action[] = []
     
     for (let rawAction of rawActions) {
-        console.log(rawAction)
-        
         actions.push(parseAction(rawAction.type, rawAction.value))
     }
 
@@ -86,8 +84,8 @@ export class AddItemAction extends Action {
     ) {
         super(type);
         this.item = item;
-        this.x = x;
-        this.y = y;
+        this.x = x * window.app.scaleFactor;
+        this.y = y * window.app.scaleFactor;
     }
 }
 
@@ -181,8 +179,8 @@ export class MoveAction extends Action {
         { x: number, y: number }
     ) {
         super(type);
-        this.x = x;
-        this.y = y;
+        this.x = x * window.app.scaleFactor;
+        this.y = y * window.app.scaleFactor;
     }    
 }
 
@@ -236,8 +234,8 @@ export class PutSpriteAction extends Action {
     ) {
         super(type);
         this.sprite = sprite;
-        this.x = x;
-        this.y = y;
+        this.x = x * window.app.scaleFactor;
+        this.y = y * window.app.scaleFactor;
         this.layer = layer;
     }
 }

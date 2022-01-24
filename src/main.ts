@@ -4,12 +4,12 @@ import App from './states/App';
 
 declare global {
   interface Window {
-      game: any;
-      cordova: any;
+    app: App;
+    cordova: any;
   }
 }
 
-window.game = new App()
+window.app = new App()
 
 if (window.cordova) {
   var app = {
@@ -27,7 +27,7 @@ if (window.cordova) {
       this.receivedEvent('deviceready');
 
       // When the device is ready, start Phaser Boot state.
-      window.game.state.start('Boot');
+      window.app.state.start('Boot');
     },
 
     receivedEvent: function (id: any) {

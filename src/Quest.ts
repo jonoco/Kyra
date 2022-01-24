@@ -89,8 +89,6 @@ const parseSteps = (rawSteps: any[]) => {
     const steps: QuestStep[] = []
 
     for (const rawStep of rawSteps) {
-        console.log(rawStep)
-        
         steps.push(
             new QuestStep(
                 rawStep.step, 
@@ -107,8 +105,6 @@ export const parseQuests = (questsJSON: Array<any>) => {
     const quests: Array<Quest> = []
 
     for (const rawQuest of questsJSON) {
-        console.log(rawQuest)
-
         quests.push(new Quest(
             rawQuest.name, 
             parseSteps(rawQuest.steps)))

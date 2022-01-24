@@ -5,7 +5,7 @@ import Pathing from '../pathing'
 import Item from '../Item';
 import Inventory from '../inventory'
 import Door from '../Door';
-import { log, dlog, inBounds } from '../utils'
+import { log, dlog, inBounds, LOG_LEVEL } from '../utils'
 import PoolDrop from '../entities/PoolDrop'
 import Block from '../Block'
 import Room from '../Room';
@@ -14,10 +14,12 @@ import {
   KillSpriteAction, ModAttrAction, ModMetaAction, ModRoomMetaAction,
   MoveAction, MoveSpriteAction, PlayAnimAction,
   PutSpriteAction, RemoveItemAction, SayAction, SayAnimAction,
+  SignalAction,
   TogAnimAction, TurnAction, WaitAction
 } from '../Action'
 import { Event, parseEvents } from '../Event'
 import { parseQuests, Quest } from '../Quest'
+import { onDebug } from '../signals'
 import Sprite from '../Sprite';
 
 const colorAtlas = {
@@ -27,7 +29,7 @@ const colorAtlas = {
 };
 
 
-export default class extends Phaser.State {
+export default class Game extends Phaser.State {
   debugPos: number;
 
   amulet: Phaser.Sprite;
@@ -35,7 +37,7 @@ export default class extends Phaser.State {
   animation: Phaser.Animation;
   between: Phaser.Tween;
   bgSprites: Phaser.Group;
-  blockGroup: Array<Block>;
+  blockGroup: Phaser.Group;
   currentMusic: string;
   
   /** todo: refactor to use Room object instead of pulling in from JSON */
@@ -60,9 +62,7 @@ export default class extends Phaser.State {
   items: Array<any>;
   mgSprites: Phaser.Group;
   music: Phaser.Sound;
-  
-  /** checks if last click was on a door > reset on move complete */
-  openDoor?: Door;  
+    
   pathing: Pathing;
   player: Phaser.Sprite;
   playMusic: boolean;
@@ -140,8 +140,8 @@ export default class extends Phaser.State {
     // display groups layered for correct z depths
     this.room = Room.of(
       this.game, 
-      window.game.scaleFactor, 
-      window.game.scaleFactor,
+      window.app.scaleFactor, 
+      window.app.scaleFactor,
       this.roomsJSON[this.startRoom] as RoomData)
 
     // this.game.world.add(this.room)
@@ -161,7 +161,7 @@ export default class extends Phaser.State {
     this.createInputs();
     this.doorGroup = this.game.add.group();
     this.doorDebug = this.game.add.group();
-    this.blockGroup = [];
+    this.blockGroup = this.game.add.group();
     this.debugGroup = this.add.group();
     this.createStartRoom();
     this.createPlayer();
@@ -176,9 +176,7 @@ export default class extends Phaser.State {
 
 
   update () {
-    if (this.openDoor) {
-        this.physics.arcade.overlap(this.player, this.doorGroup, this.peekInDoor, null, this);
-    }
+    this.physics.arcade.overlap(this.player, this.doorGroup, this.peekInDoor, null, this);
 
     if (this.eventQueue.length) {
         this.enableInput(false);
@@ -193,7 +191,8 @@ export default class extends Phaser.State {
     this.changePlayerAnimation();
 
     if (this.debugOn) {
-      this.debugScreen()
+      // todo find better way to present debug screen
+      // this.debugScreen()
     }
   }
 
@@ -205,12 +204,12 @@ export default class extends Phaser.State {
     this.debugPos = 1
 
     this.addDebugText(`Room: ${this.currentRoom.name}`);
-    this.addDebugText(`Open door: ${this.openDoor ? this.openDoor.name : "no doors open"}`);
     this.addDebugText(`Player position: ${this.player.x}, ${this.player.y}`);
     this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}`);
     this.addDebugText(`Player z index: ${this.player.z}`);
     this.addDebugText(`GUI z index: ${this.gui.z}`);
     this.addDebugText(`room z index: ${this.room.z}`);
+    this.addDebugText(`blocks z index: ${this.blockGroup.z}`)
     this.addDebugText(`bgSprites z index: ${this.bgSprites.z}`);
     this.addDebugText(`mgSprites z index: ${this.mgSprites.z}`);
     this.addDebugText(`fgSprites z index: ${this.fgSprites.z}`);
@@ -253,7 +252,7 @@ export default class extends Phaser.State {
    * @param {Sprite} sprite sprite to print debug
    */
   addDebugSprite(sprite: Phaser.Sprite) {
-    this.addDebugText(`   name: ${sprite.name} z: ${sprite.z} visible: ${sprite.visible}`)
+    this.addDebugText(`   name: ${sprite.name}`)
   }
 
 
@@ -264,6 +263,8 @@ export default class extends Phaser.State {
     this.debugOn = !this.debugOn
 
     log(`toggling debug ${this.debugOn ? 'on': 'off'}`)
+
+    onDebug.dispatch(this.debugOn)
 
     if (this.debugOn) {
       this.debugGroup.visible = true
@@ -290,7 +291,7 @@ export default class extends Phaser.State {
     this.world.add(blockBg);
 
     var endMessage = this.add.image( 0, 0, 'end');
-        endMessage.scale.setTo(window.game.scaleFactor);
+        endMessage.scale.setTo(window.app.scaleFactor);
         endMessage.alpha = 0;
         endMessage.inputEnabled = true;
 
@@ -332,7 +333,6 @@ export default class extends Phaser.State {
   queueActions (actions: Action[]) {
     this.eventQueue = [...this.eventQueue, ...actions]
 
-    dlog(`current event queue: `)
     for (let event of this.eventQueue)
       dlog(event)
   }
@@ -376,7 +376,7 @@ export default class extends Phaser.State {
     Concept of `event` is being replaced by `actions`
     */
 
-    dlog(`executing event: ${Object.keys(action)}`)
+    dlog(`executing event: ${action.getType()}`)
 
     switch (action.type) {
       case ActionType.addItem:     return this.addItem(action as AddItemAction)
@@ -394,7 +394,7 @@ export default class extends Phaser.State {
       case ActionType.removeItem:  return this.removeItem(action as RemoveItemAction)
       case ActionType.say:         return this.say(action as SayAction)
       case ActionType.sayAnim:     return this.sayAnim(action as SayAnimAction)
-      case ActionType.signal:      return this.evalEvent(action.getType())
+      case ActionType.signal:      return this.evalEvent((action as SignalAction).signal)
       case ActionType.togAnim:     return this.toggleAnimation(action as TogAnimAction)
       case ActionType.turn:        return this.turnPlayer(action as TurnAction)
       case ActionType.wait:        return this.wait(action as WaitAction)
@@ -413,8 +413,8 @@ export default class extends Phaser.State {
     // let sprite = this.getSprite(action.sprite)
 
     let sprite = new Sprite(this.game, action.x, action.y, spriteData.name)
-    sprite.position.x = action.x * window.game.scaleFactor;
-    sprite.position.y = action.y * window.game.scaleFactor;
+    sprite.position.x = action.x * window.app.scaleFactor;
+    sprite.position.y = action.y * window.app.scaleFactor;
 
     let layer = action.layer || 'background';
     switch (layer) {
@@ -438,26 +438,17 @@ export default class extends Phaser.State {
 
   /**
    * Remove block, e.g. after executing one-time block
-   *
-   * @param {Sprite} block block to destroy
    */
   killBlock (action: KillBlockAction) {
-    let block = action.block
+    let blockName = action.block
 
-    var blocks = this.blockGroup;
-    var blocksMeta = this.currentRoom.blocks;
-
-    var i = blocks.length;
-    while (i--) {
-        if (blocks[i].name == block) {
-            this.blockGroup.splice(i, 1);
-        }
-    }
-
-    var j = blocksMeta.length;
+    let block: Block = this.blockGroup.getByName(blockName);
+    block.destroy();
+    
+    let j = this.currentRoom.blocks.length;
     while (j--) {
-        if (blocksMeta[j].name == block) {
-            blocksMeta.splice( j, 1 );
+        if (this.currentRoom.blocks[j].name == blockName) {
+          this.currentRoom.blocks.splice(j, 1);
         }
     }
   }
@@ -470,7 +461,8 @@ export default class extends Phaser.State {
    * @param {String} frame name of frame to switch to
    */
   setFrame (sprite, frame) {
-      dlog('setting frame: ', frame);
+      log(`setting frame: ${frame}`, LOG_LEVEL.INFO);
+
       sprite.frameName = frame;
       sprite.alpha = 1;
   }
@@ -496,8 +488,8 @@ export default class extends Phaser.State {
 
       let newSprite = new Sprite(
         this.game, 
-        roomSprite.x * window.game.scaleFactor,
-        roomSprite.y * window.game.scaleFactor,
+        roomSprite.x * window.app.scaleFactor,
+        roomSprite.y * window.app.scaleFactor,
         roomSprite.name);
 
       let layer = roomSprite.layer || 'background'
@@ -516,8 +508,7 @@ export default class extends Phaser.State {
           this.bgSprites.add(newSprite);
       }
 
-      newSprite.name = roomSprite.name
-      newSprite.scale.setTo(window.game.scaleFactor);
+      newSprite.scale.setTo(window.app.scaleFactor);
 
       if (spriteData.invisible) {
         this.showSprite(newSprite, false);
@@ -544,35 +535,19 @@ export default class extends Phaser.State {
    * Create room blocks
    */
   createBlocks () {
-      var block: Block;
-      var blocks = this.currentRoom.blocks;
+    for (let blockData of this.currentRoom.blocks) {
+      dlog(`creating block ${blockData.name}`)
 
-      var i = blocks.length;
-      while (i--) {
-          block = new Block(this.game, blocks[i].x, blocks[i].y);
-          block.position.x *= window.game.scaleFactor
-          block.position.y *= window.game.scaleFactor
-          block.height = blocks[i].height * window.game.scaleFactor;
-          block.width = blocks[i].width * window.game.scaleFactor;
-          block.name = blocks[i].name;
-          block.inputEnabled = true;
-          block.events.onInputDown.add(function (data) {
-                  this.evalBlock(data.name);
-          }, this);
-          this.blockGroup.push(block)
+      let block = Block.of(
+        this.game, blockData.x, blockData.y, blockData.name, blockData.height, blockData.width);
 
-          if (this.debugOn) {
-              var blockBg = this.game.make.graphics();
-              blockBg.beginFill(0x00ffff, 0.5);
-              blockBg.drawRect(
-                  blocks[i].x * window.game.scaleFactor,
-                  blocks[i].y * window.game.scaleFactor,
-                  blocks[i].width * window.game.scaleFactor,
-                  blocks[i].height * window.game.scaleFactor);
-              blockBg.endFill();
-              this.debugGroup.add(blockBg);
-          }
-      }
+      block.events.onInputDown.add((b: Block) => {
+        dlog(`clicked block ${b.name}`)
+        this.evalBlock(b.name);
+      }, this);
+      
+      this.blockGroup.add(block)
+    }
   }
 
 
@@ -702,16 +677,16 @@ export default class extends Phaser.State {
   createText () {
       this.speech = this.add.text()
       this.speech.font = 'kyrandia'
-      this.speech.fontSize = 6 * window.game.scaleFactor
+      this.speech.fontSize = 6 * window.app.scaleFactor
       this.speech.stroke = '#000000'
       this.speech.strokeThickness = 3
       this.speech.kill()
 
       this.roomText = this.add.text()
       this.roomText.font = 'kyrandia'
-      this.roomText.fontSize = 6 * window.game.scaleFactor
-      this.roomText.x = 8 * window.game.scaleFactor
-      this.roomText.y = 145 * window.game.scaleFactor
+      this.roomText.fontSize = 6 * window.app.scaleFactor
+      this.roomText.x = 8 * window.app.scaleFactor
+      this.roomText.y = 145 * window.app.scaleFactor
       this.roomText.fill = '#bbbbbb'
   }
 
@@ -740,7 +715,7 @@ export default class extends Phaser.State {
    */
   createGui () {
       this.gui = this.add.image( 0, 0, 'gui');
-      this.gui.scale.setTo(window.game.scaleFactor);
+      this.gui.scale.setTo(window.app.scaleFactor);
   }
 
 
@@ -748,9 +723,9 @@ export default class extends Phaser.State {
    * Create amulet and animations
    */
   createAmulet () {
-      this.amulet = this.add.sprite( 224 * window.game.scaleFactor, 152 * window.game.scaleFactor, 'amulet');
+      this.amulet = this.add.sprite( 224 * window.app.scaleFactor, 152 * window.app.scaleFactor, 'amulet');
       this.amulet.inputEnabled = true;
-      this.amulet.scale.setTo(window.game.scaleFactor);
+      this.amulet.scale.setTo(window.app.scaleFactor);
       this.amulet.alpha = 0;
 
       this.amulet.animations.add('on', [
@@ -790,8 +765,8 @@ export default class extends Phaser.State {
       const startPosition = this.doors[Object.keys(this.doors)[0]].entry
 
       this.player = this.game.add.sprite(
-          startPosition.x * window.game.scaleFactor,
-          startPosition.y * window.game.scaleFactor,
+          startPosition.x * window.app.scaleFactor,
+          startPosition.y * window.app.scaleFactor,
           'player',
           'stand-right');
       this.player.name = 'player';
@@ -822,7 +797,7 @@ export default class extends Phaser.State {
       'talk-9', 'talk-10', 'talk-11', 'talk-12',
       ], 8, true, false);
 
-      this.player.scale.setTo(window.game.scaleFactor);
+      this.player.scale.setTo(window.app.scaleFactor);
       this.player.anchor.x = 0.5;
       this.player.anchor.y = 0.9;
       this.physics.arcade.enableBody(this.player);
@@ -841,16 +816,21 @@ export default class extends Phaser.State {
       //   dlog('amulet hit');
       // }, this);
 
-      this.room.events.onInputDown.add(function (pointer) {
+    this.room.events.onInputDown.add(pointer => {
       if (this.speech.alive) {
-          this.speech.kill();
-          return null;
+        this.speech.kill();
+        return null;
       }
 
       this.closeDoor();
       this.stopMoving();
-      this.move(this.game.input.position);
-      }, this);
+      
+      let { x, y } = this.game.input.position;
+      this.move(
+        new MoveAction(
+          'move', 
+          { x: x / window.app.scaleFactor, y: y / window.app.scaleFactor }))
+    }, this);
   }
 
 
@@ -868,15 +848,6 @@ export default class extends Phaser.State {
       this.physics.arcade.enable(door);
 
       door.events.onInputDown.add(this.moveToDoor, this);
-
-      if (this.debugOn) {
-        var doorBg = this.game.make.graphics();
-        doorBg.beginFill(0x00ee00, 0.3);
-        doorBg.drawRect(x, y, width, height);
-        doorBg.endFill();
-
-        this.doorDebug.add(doorBg);
-      }
     }
   }
 
@@ -987,8 +958,8 @@ export default class extends Phaser.State {
     this.speech.fill = colorAtlas[textColor]
     this.speech.name = sprite.key
 
-    if (this.speech.right > 306 * window.game.scaleFactor) {
-      this.speech.x -= this.speech.right - (306 * window.game.scaleFactor)
+    if (this.speech.right > 306 * window.app.scaleFactor) {
+      this.speech.x -= this.speech.right - (306 * window.app.scaleFactor)
     }
 
     if (this.speech.top < 40) {
@@ -1141,7 +1112,7 @@ export default class extends Phaser.State {
   sayAnim (action: SayAnimAction) {
     // event called by call to this.say()
     dlog(`sayAnim: ${key} anim: ${animName}`)
-    
+
     var key = action.sprite;
     var animName = action.animName;
     var kill = action.kill ? action.kill: false;
@@ -1273,13 +1244,13 @@ export default class extends Phaser.State {
 
   // Move with intent to change rooms
   moveToDoor (door: Door) {
-    dlog(door)
-    // let myDoor = this.currentRoom.doors[door.name]
-
     dlog(`moving to door ${door.name} at { ${door.entry.x}, ${door.entry.y} }`)
 
     this.stopMoving()
-    this.openDoor = door
+    this.closeDoor();
+    
+    door.open = true;
+    
     this.move(
       new MoveAction(
         'move',
@@ -1291,7 +1262,7 @@ export default class extends Phaser.State {
   }
 
 
-  // Move player
+  /** Move player to scaled position */ 
   move (action: MoveAction) {
     let position = {x: action.x, y: action.y}
 
@@ -1315,8 +1286,9 @@ export default class extends Phaser.State {
 
   /** Check if door will allow travel */
   peekInDoor (player: Phaser.Sprite, door: Door) {
-    if (door.name == this.openDoor.name) {
-      this.openDoor = null;
+    if (door.open) {
+      this.closeDoor()
+      
       this.door = door;
 
       this.exitRoom();
@@ -1324,9 +1296,9 @@ export default class extends Phaser.State {
   }
 
 
-  /** Close door */ 
+  /** Close all doors */ 
   closeDoor () {
-    this.openDoor = null;
+    this.doorGroup.forEach(d => d.open = false)
   }
 
 
@@ -1349,7 +1321,6 @@ export default class extends Phaser.State {
   // Transfer into room by currently selected door
   enterRoom () {
     let myDoor = this.currentRoom.doors.find(d => d.name == this.previousRoom.name);
-    dlog(myDoor)
 
     // check for enter animation
     if (myDoor.animation) {
@@ -1359,8 +1330,8 @@ export default class extends Phaser.State {
       let startPoint = { ... myDoor.offPoint }
 
       // scale starting point coords
-      startPoint.x *= window.game.scaleFactor
-      startPoint.y *= window.game.scaleFactor
+      startPoint.x *= window.app.scaleFactor
+      startPoint.y *= window.app.scaleFactor
 
       dlog(`entering ${myDoor.name} at { ${startPoint.x}, ${startPoint.y} }`)
 
@@ -1417,8 +1388,8 @@ export default class extends Phaser.State {
     let startPoint = {...myDoor.entry}
 
     // scale starting point coords
-    startPoint.x *= window.game.scaleFactor
-    startPoint.y *= window.game.scaleFactor
+    startPoint.x *= window.app.scaleFactor
+    startPoint.y *= window.app.scaleFactor
 
     this.player.alpha = 0;
 
@@ -1449,8 +1420,8 @@ export default class extends Phaser.State {
     let entryPoint = {...door.entry}
 
     // scale entry point coord
-    entryPoint.x *= window.game.scaleFactor
-    entryPoint.y *= window.game.scaleFactor
+    entryPoint.x *= window.app.scaleFactor
+    entryPoint.y *= window.app.scaleFactor
 
     let dist = this.physics.arcade.distanceBetween(this.player.position, entryPoint)/this.pathing.tileSize;
 
@@ -1474,8 +1445,8 @@ export default class extends Phaser.State {
     // let offPoint = {...this.currentRoom.doors[this.door.name].offPoint}
 
     // scale off point coord
-    // offPoint.x *= window.game.scaleFactor
-    // offPoint.y *= window.game.scaleFactor
+    offPoint.x *= window.app.scaleFactor
+    offPoint.y *= window.app.scaleFactor
 
     let dist = this.physics.arcade.distanceBetween(this.player.position, offPoint)/this.pathing.tileSize;
 
@@ -1631,7 +1602,7 @@ export default class extends Phaser.State {
     this.mgSprites.remove(this.player);
     this.world.addAt(this.player, 1);
 
-    for (let b of this.blockGroup) b.destroy()
+    this.blockGroup.removeAll(true)
     this.debugGroup.removeAll(true)
     this.doorGroup.removeAll(true)
     this.doorDebug.removeAll(true)
@@ -1729,10 +1700,10 @@ export default class extends Phaser.State {
     let item = new Item(
       this.game, 
       name, 
-      x * window.game.scaleFactor, 
-      y * window.game.scaleFactor);
+      x * window.app.scaleFactor, 
+      y * window.app.scaleFactor);
 
-    item.scale.setTo(0.5 * window.game.scaleFactor);
+    item.scale.setTo(0.5 * window.app.scaleFactor);
     item.inputEnabled = true;
     item.input.enableDrag(true, true);
 
@@ -1776,8 +1747,8 @@ export default class extends Phaser.State {
       for (var i = 0; i < this.currentRoom.items.length ; i++) {
         if (item.name == this.currentRoom.items[i].name) {
           dlog('saving ' + item.name + ' location');
-          this.currentRoom.items[i].x = item.x / window.game.scaleFactor
-          this.currentRoom.items[i].y = item.y / window.game.scaleFactor
+          this.currentRoom.items[i].x = item.x / window.app.scaleFactor
+          this.currentRoom.items[i].y = item.y / window.app.scaleFactor
           break;
         }
       }

@@ -9,7 +9,7 @@ export default class extends Phaser.State {
 
   preload () {
     this.loaderBg = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'preloaderBackground');
-    this.loaderBg.scale.setTo(3 * window.game.scaleFactor);
+    this.loaderBg.scale.setTo(3 * window.app.scaleFactor);
 
     this.message = this.add.text();
     this.message.x = this.game.world.centerX;

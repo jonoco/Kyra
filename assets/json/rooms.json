@@ -53,8 +53,8 @@
 		"doors": [
 			{
 				"name": "room07",
-				"x": 238, "y": 73,
-			 	"height": 40, "width": 30,
+				"x": 230, "y": 60,
+			 	"height": 50, "width": 40,
 			 	"entry": {"x": 280, "y": 112},
 			 	"offPoint": {"x": 280, "y": 110},
 			 	"animation": {
@@ -102,7 +102,7 @@
 			{
 				"name": "room04",
 				"x": 0, "y": 0,
-				"height": 200, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 17, "y": 127},
 				"offPoint": {"x": -17, "y": 127},
 				"animation": null
@@ -110,7 +110,7 @@
 			{
 				"name": "room02",
 			 	"x": 300, "y": 0,
-				"height": 167, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 307, "y": 127},
 			  "offPoint": {"x": 340, "y": 127},
 			  "animation": null
@@ -138,8 +138,8 @@
 		"doors": [
 			{
 				"name": "room03",
-				"x": 290, "y": 7,
-				"height": 147, "width": 23,
+				"x": 300, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 293, "y": 61},
 				"offPoint": {"x": 340, "y": 27},
 				"animation": null
@@ -147,7 +147,7 @@
 			{
 				"name": "room05",
 				"x": 0, "y": 0,
-				"height": 17, "width": 300,
+				"height": 20, "width": 280,
 				"entry": {"x": 183, "y": 10},
 				"offPoint": {"x": 193, "y": 0},
 				"animation": null
@@ -167,16 +167,16 @@
 		"doors": [
 			{
 				"name": "room04",
-				"x": 107, "y": 127,
-				"height": 27, "width": 200,
+				"x": 100, "y": 120,
+				"height": 20, "width": 220,
 				"entry": {"x": 200, "y": 130},
 				"offPoint": {"x": 200, "y": 160},
 				"animation": null
 			},
 			{
 				"name": "room06",
-				"x": 147, "y": 33,
-				"height": 67, "width": 43,
+				"x": 150, "y": 36,
+				"height": 60, "width": 50,
 				"entry": {"x": 193, "y": 93},
 				"offPoint": {"x": 167, "y": 93},
 				"animation": null
@@ -205,7 +205,7 @@
 			{
 				"name": "room05",
 				"x": 300, "y": 0,
-				"height": 167, "width": 13,
+				"height": 140, "width": 20,
 				"entry": {"x": 303, "y": 127},
 				"offPoint": {"x": 340, "y": 127},
 				"animation": null
@@ -375,26 +375,26 @@
 		"doors": [
 			{
 				"name": "room09",
-				"x": 0, "y": 7,
-				"height": 183, "width": 20,
+				"x": 0, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 20, "y": 108},
 				"offPoint": {"x": -17, "y": 108},
 				"animation": null
 			},
 			{
 				"name": "room12",
-				"x": 0, "y": 0,
-				"height": 60, "width": 320,
+				"x": 20, "y": 0,
+				"height": 20, "width": 300,
 				"entry": {"x": 167, "y": 58},
 				"offPoint": {"x": 168, "y": -7},
 				"animation": null
 			},
 			{
 				"name": "room17",
-				"x": 17, "y": 127,
-				"height": 27, "width": 300,
+				"x": 20, "y": 120,
+				"height": 20, "width": 300,
 				"entry": {"x": 150, "y": 133},
-				"offPoint": {"x": 150, "y": 167},
+				"offPoint": {"x": 150, "y": 187},
 				"animation": null
 			}
 		]
@@ -415,8 +415,8 @@
 		"doors": [
 			{
 				"name": "room11",
-				"x": 67, "y": 127,
-				"height": 27, "width": 233,
+				"x": 20, "y": 120,
+				"height": 20, "width": 280,
 				"entry": {"x": 150, "y": 133},
 				"offPoint": {"x": 150, "y": 167},
 				"animation": null
@@ -424,15 +424,15 @@
 			{
 				"name": "room13",
 				"x": 0, "y": 0,
-				"height": 167, "width": 20,
+				"height": 120, "width": 20,
 				"entry": {"x": 13, "y": 118},
 				"offPoint": {"x": -17, "y": 73},
 				"animation": null
 			},
 			{
 				"name": "room14",
-				"x": 300, "y": 7,
-				"height": 117, "width": 20,
+				"x": 300, "y": 0,
+				"height": 120, "width": 20,
 				"entry": {"x": 307, "y": 83},
 				"offPoint": {"x": 340, "y": 83},
 				"animation": null
@@ -452,8 +452,8 @@
 		"doors": [
 			{
 				"name": "room12",
-				"x": 297, "y": 83,
-				"height": 83, "width": 20,
+				"x": 300, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 300, "y": 120},
 				"offPoint": {"x": 340, "y": 120},
 				"animation": null
@@ -479,15 +479,15 @@
 			{
 				"name": "room12",
 				"x": 0, "y": 0,
-				"height": 167, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 15, "y": 83},
 				"offPoint": {"x": -17, "y": 83},
 				"animation": null
 			},
 			{
 				"name": "room16",
-				"x": 300, "y": 33,
-				"height": 73, "width": 20,
+				"x": 300, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 303, "y": 63},
 				"offPoint": {"x": 340, "y": 63},
 				"animation": null
@@ -508,7 +508,7 @@
 			{
 				"name": "room14",
 				"x": 0, "y": 0,
-				"height": 167, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 15, "y": 101},
 				"offPoint": {"x": -17, "y": 101},
 				"animation": null
@@ -540,7 +540,7 @@
 			{
 				"name": "room18",
 				"x": 0, "y": 120,
-				"height": 27, "width": 320,
+				"height": 20, "width": 320,
 				"entry": {"x": 107, "y": 130},
 				"offPoint": {"x": 100, "y": 173},
 				"animation": null
@@ -561,7 +561,7 @@
 			{
 				"name": "room17",
 				"x": 150, "y": 0,
-				"height": 23, "width": 170,
+				"height": 20, "width": 170,
 				"entry": {"x": 247, "y": 60},
 				"offPoint": {"x": 250, "y": -10},
 				"animation": null
@@ -591,8 +591,8 @@
 		"doors": [
 			{
 				"name": "room18",
-				"x": 297, "y": 67,
-				"height": 90, "width": 20,
+				"x": 300, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 300, "y": 107},
 				"offPoint": {"x": 340, "y": 107},
 				"animation": null

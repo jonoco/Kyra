@@ -77,32 +77,22 @@
         "trigger": "room06",
         "conditions": [{ "step": "active", "complete": false }],
         "actions": [
-            { "type": "playAnim", 
-              "value": { 
-                "sprite": "brynn-enter", 
-                "animName": "enter" } },
-            { "type": "sayAnim", 
-              "value": { 
-                "sprite": "brynn-talk", 
-                "animName": "talk", 
-                "text": "Welcome, Brandon", 
-                "color": "brynn", 
-                "hide": true } },
-            { "type": "wait", "value": 300 },
-            { "type": "sayAnim", 
-              "value": { 
-                "sprite": "brynn-talk", 
-                "animName": "talk", 
-                "text": "Why are you always bothering me?", 
-                "color": "brynn", 
-                "hide": true } },
-            { "type": "wait", 
-              "value": 300 },
-            { "type": "modAttr", 
-              "value": { 
-                "sprite": "altar", 
-                "attr": "inputEnabled", 
-                "value": true } }
+          { "type": "wait", "value": 4000 },
+          { "type": "sayAnim", 
+            "value": { 
+              "sprite": "brynn-talk", 
+              "animName": "talk", 
+              "text": "Welcome, Brandon", 
+              "color": "brynn", 
+              "hide": true } },
+          { "type": "wait", "value": 400 },
+          { "type": "sayAnim", 
+            "value": { 
+              "sprite": "brynn-talk", 
+              "animName": "talk", 
+              "text": "Why are you always bothering me?", 
+              "color": "brynn", 
+              "hide": true } }
         ]
       },
       {
@@ -127,21 +117,108 @@
         "trigger": "brynn",
         "conditions": [{ "step": "talk_1", "complete": false }],
         "actions": [
-          { 
-            "type": "sayAnim", 
+          { "type": "move", "value": { "x": 93, "y": 112 }},
+          { "type": "wait", "value": 100 },
+          { "type": "sayAnim", 
             "value": { 
               "sprite": "brynn-talk", 
               "animName": "talk", 
               "text": "Why haven't you gotten me a rose yet?", 
               "color": "brynn", 
-              "hide": true }}
+              "hide": true }
+          },
+          { "type": "wait", "value": 200 },
+          { "type": "say", "value": {"text": "Oh, right..."} },
+          { "type": "wait", "value": 200 },
+          { "type": "move", "value": {"x": 96, "y": 112} },
+          { "type": "wait", "value": 1000 },
+          { "type": "move", "value": {"x": 93, "y": 112} },
+          { "type": "wait", "value": 200 },
+          { "type": "say", "value": {"text": "Wait, what rose?"} }
+        ]
+      },
+      {
+        "step": "talk_2",
+        "trigger": "brynn",
+        "conditions": [
+          { "step": "talk_1", "complete": true },
+          { "step": "talk_2", "complete": false }
+        ],
+        "actions": [
+          { "type": "move", "value": { "x": 93, "y": 112 }},
+          { "type": "say", "value": {"text": "Have we met before?"} },
+          { "type": "wait", "value": 200 },
+          { "type": "sayAnim", 
+            "value": { 
+              "sprite": "brynn-talk", 
+              "animName": "talk", 
+              "text": "Didn't I tell you already?", 
+              "color": "brynn", 
+              "hide": true }
+          },
+          { "type": "sayAnim", 
+            "value": { 
+              "sprite": "brynn-talk", 
+              "animName": "talk", 
+              "text": "I want a rose.", 
+              "color": "brynn", 
+              "hide": true }
+          },
+          { "type": "wait", "value": 300 },
+          { "type": "say", "value": {"text": "Ooh, a ROSE!"} },
+          { "type": "wait", "value": 1000 },
+          { "type": "say", "value": {"text": "I thought you said ARROWS."} },
+          { "type": "wait", "value": 200 },
+          { "type": "playAnim", "value": { 
+            "sprite": "brynn-talk", 
+            "animName": "turn-right" } },
+          { "type": "wait", "value": 1000 },
+          { "type": "playAnim", "value": { 
+            "sprite": "brynn-talk", 
+            "animName": "turn-left" } },
+          { "type": "playAnim", "value": { 
+            "sprite": "brynn-talk", 
+            "animName": "turn-right" } },
+          { "type": "wait", "value": 1000 },
+          { "type": "sayAnim", 
+            "value": { 
+              "sprite": "brynn-talk", 
+              "animName": "talk", 
+              "text": "Was that a joke?", 
+              "color": "brynn", 
+              "hide": true }
+          }
         ]
       },
       {
         "step": "rose",
         "trigger": "",
         "conditions": [],
-        "actions": []
+        "actions": [
+          { "type": "sayAnim", 
+            "value": { 
+              "sprite": "brynn-talk", 
+              "animName": "talk", 
+              "text": "What a perfect rose!", 
+              "color": "brynn", 
+              "hide": true }
+          },
+          { "type": "wait", "value": 1000 },
+          { "type": "sayAnim", 
+            "value": { 
+              "sprite": "brynn-talk", 
+              "animName": "talk", 
+              "text": "So you didn't find any arrows?", 
+              "color": "brynn", 
+              "hide": true }
+          },
+          { "type": "wait", "value": 500 },
+          { "type": "turn", "value": {"direction": "right"} },
+          { "type": "wait", "value": 500 },
+          { "type": "turn", "value": {"direction": "left"} },
+          { "type": "wait", "value": 1000 },
+          { "type": "say", "value": {"text": "Was that a joke?"} }
+        ]
       } 
     ]
   },

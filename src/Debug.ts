@@ -61,8 +61,14 @@ export default class Debugger {
     this.debugPos = 1
 
     this.addDebugText(`Room: ${this.state.currentRoom.name}`);
-    this.addDebugText(`Player position: ${this.state.player.x}, ${this.state.player.y}`);
-    this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}`);
+    this.addDebugText(`Input enabled: ${this.state.input.enabled ? 'input on' : 'input off'}`)
+    this.addDebugText(`Events queue length : ${this.state.eventQueue.length}`);
+    this.addDebugText(`Player position: ${this.state.player.x}, ${this.state.player.y}\
+    [${Math.floor(this.state.player.x/window.app.scaleFactor)}, ${Math.floor(this.state.player.y/window.app.scaleFactor)}]`);
+    
+    this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}\
+    [${Math.floor(this.game.input.position.x/window.app.scaleFactor)}, ${Math.floor(this.game.input.position.y/window.app.scaleFactor)}]`);
+    
     this.addDebugText(`Player z index: ${this.state.player.z}`);
     this.addDebugText(`GUI z index: ${this.state.gui.z}`);
     this.addDebugText(`room z index: ${this.state.room.z}`);

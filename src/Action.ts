@@ -1,3 +1,5 @@
+import { QuestStep } from "./Quest";
+
 export enum ActionType {
     addItem,
     altRoom,
@@ -15,6 +17,7 @@ export enum ActionType {
     say,
     sayAnim,
     signal,
+    stepCompletion,
     togAnim,
     turn,
     wait,
@@ -38,9 +41,10 @@ export const parseAction = (type: string, value: object | string | number): Acti
         case ActionType.say:        return SayAction.of(type, value);
         case ActionType.sayAnim:    return SayAnimAction.of(type, value);
         case ActionType.signal:     return SignalAction.of(type, value);
-        case ActionType.togAnim:    return TogAnimAction.of(type, value);
-        case ActionType.turn:       return TurnAction.of(type, value);
-        case ActionType.wait:       return WaitAction.of(type, value);
+        case ActionType.stepCompletion: return StepCompletionAction.of(type, value);
+        case ActionType.togAnim:        return TogAnimAction.of(type, value);
+        case ActionType.turn:           return TurnAction.of(type, value);
+        case ActionType.wait:           return WaitAction.of(type, value);
         default: 
             throw new Error(`Error: could not parse action of type ${type} with value ${value}`)
     }
@@ -304,6 +308,19 @@ export class SignalAction extends Action {
     constructor(type: string, signal: string ) {
         super(type);
         this.signal = signal;
+    }
+}
+
+export class StepCompletionAction extends Action {
+    step: QuestStep;
+
+    constructor(
+        type: string, 
+        { step }: 
+        { step: QuestStep }
+    ) {
+        super(type);
+        this.step = step;
     }
 }
 

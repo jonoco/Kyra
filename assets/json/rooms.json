@@ -191,9 +191,9 @@
 		"sprites": [
 			{ "name": "temple-fire", "x": 133, "y": 45 },
 			{ "name": "temple-fire-glow", "x": 157, "y": 45 },
-			{ "name": "brynn-enter", "x": 9, "y": 60 },
+			{ "name": "brynn-enter", "x": 9, "y": 57 },
 			{ "name": "brynn-spell", "x": 35, "y": 60 },
-			{ "name": "brynn-talk", "x": 36, "y": 64 }
+			{ "name": "brynn-talk", "x": 36, "y": 61 }
 		],
 		"blocks": [
 			{ "name": "brynn", "x": 35, "y": 64, "height": 46, "width": 20 }

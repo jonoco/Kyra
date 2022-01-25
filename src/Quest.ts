@@ -1,5 +1,7 @@
-import { Action, parseActions } from './Action'
+import { Action, parseActions, StepCompletionAction } from './Action'
+import { DebugLevel } from './Debug'
 import { Event, parseEvents } from './Event'
+import { dlog, log, LOG_LEVEL } from './utils'
 
 export class Condition {
     step: string
@@ -52,8 +54,8 @@ export class Quest {
         // & conditions are met
         for (let step of this.steps) {
             if (step.trigger == trigger && this.areConditionsMet(step)) {
-                step.complete = true
                 actions.push(...step.actions)
+                actions.push(StepCompletionAction.of('stepCompletion', { step }))
             }
         }
 
@@ -66,6 +68,7 @@ export class Quest {
             if (conditionStep.complete != condition.complete)
                 return false
         }
+        log(`conditions met for quest ${this.name}, step ${step.step}, queuing ${step.actions.length} actions`, LOG_LEVEL.INFO);
         return true
     }
 }

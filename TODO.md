@@ -76,7 +76,7 @@
 	- should be compatible with non-primary talking animations, e.g., brynn and her brynn-talk anims
 - [x] fix brandon's walk sync
 - [x] ! crash entering bridge at modAttr
-  - [ ] same crash on entering temple
+  - [x] same crash on entering temple
 - [x] entities are not instantiating after leaving room
 - [x] willow quest is broken
 	- after visiting willow, clicking on pool gives a "no walkable path found" error, and locks player movement
@@ -84,4 +84,5 @@
 - [x] clicking on treehouse door while next to it causes null path error
 - [x] ! blocks not emitting events
 - [ ] player doesn't finish tweening into the cave before the quest event starts
-- [ ] player cannot move after brynn enters, can only interact with door
+- [x] player cannot move after brynn enters, can only interact with door
+- [ ] player movement is sometimes hindered while they stand on a door

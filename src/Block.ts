@@ -13,6 +13,8 @@ export default class Block extends KSprite {
     debugColor: number
   ) {
     super(game, x, y, null, debugColor);
+
+    this.name = name;
   }
 
   static of(
@@ -29,7 +31,7 @@ export default class Block extends KSprite {
       y * window.app.scaleFactor, 
       name,
       0x77ff88);
-      
+
     block.height = height * window.app.scaleFactor;
     block.width = width * window.app.scaleFactor;
     block.inputEnabled = true;

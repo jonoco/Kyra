@@ -16,6 +16,7 @@ import {
   MoveAction, MoveSpriteAction, PlayAnimAction,
   PutSpriteAction, RemoveItemAction, SayAction, SayAnimAction,
   SignalAction,
+  StepCompletionAction,
   TogAnimAction, TurnAction, WaitAction
 } from '../Action'
 import { Event, parseEvents } from '../Event'
@@ -83,7 +84,7 @@ export default class Game extends Phaser.State {
     // this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room05';
+    this.startRoom = 'room06';
     this.playMusic = false
 
     // event variables
@@ -188,111 +189,11 @@ export default class Game extends Phaser.State {
     this.changePlayerAnimation();
 
     this.debugger.display()
-    // if (this.debugOn) {
-    //   // todo find better way to present debug screen
-    //   // this.debugScreen()
-    // }
   }
 
-
-  // /**
-  //  * Show debug text
-  //  */
-  // debugScreen() {
-  //   this.debugPos = 1
-
-  //   this.addDebugText(`Room: ${this.currentRoom.name}`);
-  //   this.addDebugText(`Player position: ${this.player.x}, ${this.player.y}`);
-  //   this.addDebugText(`Pointer position: ${this.game.input.position.x}, ${this.game.input.position.y}`);
-  //   this.addDebugText(`Player z index: ${this.player.z}`);
-  //   this.addDebugText(`GUI z index: ${this.gui.z}`);
-  //   this.addDebugText(`room z index: ${this.room.z}`);
-  //   this.addDebugText(`blocks z index: ${this.blockGroup.z}`)
-  //   this.addDebugText(`bgSprites z index: ${this.bgSprites.z}`);
-  //   this.addDebugText(`mgSprites z index: ${this.mgSprites.z}`);
-  //   this.addDebugText(`fgSprites z index: ${this.fgSprites.z}`);
-
-  //   this.addDebugText(`background sprites:`);
-  //   this.bgSprites.forEach(spr => this.addDebugSprite(spr), this)
-
-  //   this.addDebugText(`midground sprites:`);
-  //   this.mgSprites.forEach(spr => this.addDebugSprite(spr), this)
-
-  //   this.addDebugText(`foreground sprites:`);
-  //   this.fgSprites.forEach(spr => this.addDebugSprite(spr), this)
-
-  //   this.addDebugText(`held items:`);
-  //   this.heldItem.forEach(spr => this.addDebugSprite(spr), this)
-
-  //   this.addDebugText(`room items:`);
-  //   this.itemGroup.forEach(spr => this.addDebugSprite(spr), this)
-
-  //   this.addDebugText(`inventory items:`);
-  //   this.inventory.inventory.forEach(spr =>
-  //       this.addDebugText(`    name: ${spr.name} parent: ${spr.parent.name}`), this)
-  // }
-
-
-  // /**
-  //  * Add debug text to the debug screen
-  //  * @param {String} text debug text to display
-  //  * @returns next open row
-  //  */
-  // addDebugText(text: string) {
-  //   this.game.debug.text(text, 5, this.debugPos * 25);
-
-  //   this.debugPos++
-  // }
-
-
-  // /**
-  //  * Add sprite debug info
-  //  * @param {Sprite} sprite sprite to print debug
-  //  */
-  // addDebugSprite(sprite: Phaser.Sprite) {
-  //   this.addDebugText(`   name: ${sprite.name}`)
-  // }
-
-
-  // /**
-  //  * Toggle the debug screen
-  //  */
-  // toggleDebug() {
-  //   this.debugLevel = (
-  //     this.debugLevel + 1 >= Object.keys(DebugLevel).length/2 
-  //     ? 0 : this.debugLevel + 1);
-
-  //   log(`toggling debug level ${this.debugLevel} ${DebugLevel[this.debugLevel]}`)
-
-  //   onDebug.dispatch(this.debugLevel)
-
-  //   switch(this.debugLevel) {
-  //     case DebugLevel.off:
-  //       break;
-  //     case DebugLevel.screen:
-  //       break;
-  //     case DebugLevel.info:
-  //       break;
-  //     default:
-  //       throw Error('Unknown debug level')
-  //   }
-
-  //   // if (this.debugOn) {
-  //   //   this.debugGroup.visible = true
-  //   //   this.doorDebug.visible = true
-  //   // } else {
-  //   //   this.debugGroup.visible = false
-  //   //   this.doorDebug.visible = false
-  //   // }
-
-  //   // this.pathing.displayDebugTiles()
-  //   this.inventory.dispalyDebugSlots()
-  // }
-
-
-    /**
-     * Show the game end message and return to the main menu
-     */
+  /**
+   * Show the game end message and return to the main menu
+   */
   quitGame () {
     var blockBg = this.make.graphics();
         blockBg.beginFill(0x000000, 1);
@@ -327,7 +228,7 @@ export default class Game extends Phaser.State {
    * @param {String} trigger name of an event
    */
   evalEvent (trigger: string) {
-    dlog(trigger + ' has triggered')
+    dlog(`${trigger} has triggered`)
 
     for (let quest of this.quests) {
       let actions = quest.updateQuest(trigger)
@@ -343,9 +244,6 @@ export default class Game extends Phaser.State {
    */
   queueActions (actions: Action[]) {
     this.eventQueue = [...this.eventQueue, ...actions]
-
-    for (let event of this.eventQueue)
-      dlog(event)
   }
 
 
@@ -406,6 +304,7 @@ export default class Game extends Phaser.State {
       case ActionType.say:         return this.say(action as SayAction)
       case ActionType.sayAnim:     return this.sayAnim(action as SayAnimAction)
       case ActionType.signal:      return this.evalEvent((action as SignalAction).signal)
+      case ActionType.stepCompletion: return this.completeStep(action as StepCompletionAction)
       case ActionType.togAnim:     return this.toggleAnimation(action as TogAnimAction)
       case ActionType.turn:        return this.turnPlayer(action as TurnAction)
       case ActionType.wait:        return this.wait(action as WaitAction)
@@ -413,6 +312,15 @@ export default class Game extends Phaser.State {
   }
 
   // Events
+
+  completeStep(action: StepCompletionAction) {
+    log(`completing step ${action.step.step}`, LOG_LEVEL.DEBUG)
+
+    if (action.step.complete)
+      log(`quest step already complete`, LOG_LEVEL.WARN)
+
+    action.step.complete = true
+  }
 
   /**
    * Spawn a new sprite
@@ -554,6 +462,7 @@ export default class Game extends Phaser.State {
 
       block.events.onInputDown.add((b: Block) => {
         dlog(`clicked block ${b.name}`)
+        this.stopMoving();
         this.evalBlock(b.name);
       }, this);
       
@@ -1280,7 +1189,13 @@ export default class Game extends Phaser.State {
     dlog(`move to { ${position.x}, ${position.y} }`)
 
     let path = this.pathing.findWay(this.player.position, position);
-    this.tweenPath(path);
+    
+    if (!path) {
+      dlog(`no path found to travel`)
+      this.tweenComplete();
+    } else {
+      this.tweenPath(path);
+    }
   }
 
 
@@ -1489,13 +1404,6 @@ export default class Game extends Phaser.State {
   // Signal player tweening complete
   tweenComplete () {
     this.evalEvent('moved');
-
-    // Close any open doors
-    // TODO
-    // closeDoor timer callback losing lexical scope, causing bug
-    //var timer = this.time.create();
-    //timer.add(500, this.closeDoor);
-    //timer.start();
   }
 
 
@@ -1543,7 +1451,7 @@ export default class Game extends Phaser.State {
   // Move player along path
   tweenPath (path) {
     if (!path) {
-      log(`null path, cannot tween path`)
+      log(`null path, cannot tween path`, LOG_LEVEL.ERROR)
       return
     }
 
@@ -1823,7 +1731,7 @@ export default class Game extends Phaser.State {
 
   /** Retrieve active sprite by key from the scene */
   getSprite (key: string) {
-    dlog(`retrieving sprite from the sprite scene: ${key}`)
+    dlog(`get sprite from the scene: ${key}`)
 
     let sprites = [
       ...this.bgSprites.children,

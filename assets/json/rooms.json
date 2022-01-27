@@ -582,7 +582,7 @@
 		"text": "A rickety bridge",
 		"music": "cave",
 		"items": [],
-		"sprites": [{ "name": "herman", "x": 23, "y": 49 }],
+		"sprites": [{ "name": "herman", "x": 207, "y": 52 }],
 		"altSprites": [],
 		"blocks": [],
 		"entities": [],

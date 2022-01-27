@@ -117,6 +117,132 @@
 		{
 			"name": "herman",
 			"png": "assets/sprites/herman.png",
+			"json": "assets/sprites/herman-v2.json",
+			"action": { "click": true },
+			"animated": true,
+			"animations": {
+				"talk-hunch-hand-up": {
+					"name": "talk-hunch-hand-up",
+					"frames": [
+						"hunch-hand-up-5", "hunch-hand-up-4", "hunch-hand-up-3", 
+						"hunch-hand-up-2", "hunch-hand-up-1", "hunch-hand-up-3",
+					  "hunch-hand-up-4", "hunch-hand-up-2" ],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"talk-hunch-hand-down": {
+					"name": "talk-hunch-hand-down",
+					"frames": [
+						"hunch-4", "hunch-3", "hunch-2", "hunch-1", 
+						"hunch-3", "hunch-4", "hunch-2", "hunch-1" ],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"talk-hunch-point": {
+					"name": "talk-hunch-point",
+					"frames": [
+						"hunch-point-1", "hunch-point-2", "hunch-point-3",
+						"hunch-point-2", "hunch-point-3", "hunch-point-2"
+					],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"talk-hunch-turn": {
+					"name": "talk-hunch-turn",
+					"frames": [
+						"hunch-turn-1", "hunch-turn-2", "hunch-turn-3",
+						"hunch-turn-4", "hunch-turn-3", "hunch-turn-1",
+						"hunch-turn-3", "hunch-turn-2"
+					],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"talk-turn": {
+					"name": "talk-turn",
+					"frames": [
+						"hand-low-1", "hand-low-2", "hand-low-3",
+						"hand-low-4", "hand-low-5", "hand-low-3",
+						"hand-low-2", "hand-low-3", "hand-low-5"
+					],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"hunch-lower-hand": {
+					"name": "hunch-lower-hand",
+					"frames": [
+						"hunch-hand-up-2", "hunch-hand-raised", "hunch-3" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunch-raise-hand": {
+					"name": "hunch-lower-hand",
+					"frames": [
+						"hunch-3", "hunch-hand-raised", "hunch-hand-up-2" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunching-rise": {
+					"name": "hunching-rise",
+					"frames": [
+						"hunch-turn-1", "hunching-2", "hunching-1", "hand-low-5" 
+					],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunching-lower": {
+					"name": "hunching-lower",
+					"frames": [
+						"hand-low-5", "hunching-1", "hunching-2", "hunch-turn-1"
+					],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunch-scratch-head": {
+					"name": "hunch-scratch-head",
+					"frames": [
+						"hunch-4", "hunch-hand-raised", "hunch-hand-up-1", 
+						"hunch-hand-up-2", "hunch-hand-up-5", "hunch-hand-up-1",
+						"hunch-hand-up-2", "hunch-hand-up-5", "hunch-hand-raised", 
+						"hunch-4"
+					],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"walk": {
+					"name": "walk",
+					"frames": [
+						"walk-8", "walk-7", "walk-6", "walk-5",
+						"walk-4", "walk-3", "walk-2", "walk-1"
+					],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"stand-idle": {
+					"name": "stand-idle",
+					"frames": [
+						"stand-1"
+					],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				}
+			},
+			"startFrame": "hunch-1"
+		},
+		{
+			"name": "herman-2",
+			"png": "assets/sprites/herman.png",
 			"json": "assets/sprites/herman.json",
 			"action": { "click": true },
 			"animated": true,
@@ -176,7 +302,8 @@
 				"stand up": {
 					"name": "stand up",
 					"frames": [
-						"hunch-1", "hunch-5", "hunch-6", "hunch-7", "hunch-18" ,"hunch-19", "hunch-20" ],
+						"hunch-1", "hunch-5", "hunch-6", "hunch-8", "hunch-10", 
+						"hunch-14", "hunch-18" ,"hunch-19", "hunch-20" ],
 					"speed": 8,
 					"loop": false,
 					"start": false

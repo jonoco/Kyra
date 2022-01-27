@@ -59,6 +59,7 @@
 - [ ] improve debugging features
   - [ ] create in-game command interface to debug in-memory state, e.g., inspect current quest states
   - [ ] fix debug text distortion
+- [ ] update moveSprite to use standard coordinates rather than tile coords
 
 ### Bugs
 - [x] tapping on player causes him to disappear
@@ -83,6 +84,6 @@
 - [ ] items dropped onto inventory can fall between slots
 - [x] clicking on treehouse door while next to it causes null path error
 - [x] ! blocks not emitting events
-- [ ] player doesn't finish tweening into the cave before the quest event starts
+- [x] player doesn't finish tweening into the cave before the quest event starts
 - [x] player cannot move after brynn enters, can only interact with door
 - [ ] player movement is sometimes hindered while they stand on a door

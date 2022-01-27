@@ -230,21 +230,39 @@
           "trigger": "room19",
           "conditions": [],
           "actions": [
-            { "type": "wait", "value": 200 },
+            { "type": "wait", "value": 300 },
             { "type": "playAnim", 
               "value": { 
                 "sprite": "herman", 
-                "animName": "stand up" }},
+                "animName": "hunch-scratch-head" }},
+            { "type": "wait", "value": 500 },
             { "type": "sayAnim", 
               "value": { 
                 "sprite": "herman", 
-                "animName": "stand talk 1", 
-                "text": "It's not my fault", 
+                "animName": "talk-hunch-turn", 
+                "text": "Oh, Brandon!", 
                 "color": "herman" }},
             { "type": "playAnim", 
               "value": { 
                 "sprite": "herman", 
-                "animName": "hunch down" }}
+                "animName": "hunching-rise" }},
+                { "type": "wait", "value": 200 },
+            { "type": "sayAnim", 
+              "value": { 
+                "sprite": "herman", 
+                "animName": "talk-turn", 
+                "text": "The river is stuck, try again later.", 
+                "color": "herman" }},
+            { "type": "wait", "value": 200 },
+            { "type": "playAnim", 
+              "value": { 
+                "sprite": "herman", 
+                "animName": "hunching-lower" }},
+            { "type": "wait", "value": 200 },
+            { "type": "playAnim", 
+              "value": { 
+                "sprite": "herman", 
+                "animName": "hunch-scratch-head" }}
           ]
         },
         {
@@ -282,31 +300,36 @@
                 "x": 256, "y": 93 }},
             { "type": "playAnim", "value": { 
                 "sprite": "herman", 
-                "animName": "stand up" } },
+                "animName": "hunching-rise" } },
             { "type": "sayAnim", "value": { 
                 "sprite": "herman", 
-                "animName": "stand talk 3", 
+                "animName": "talk-turn", 
                 "text": "That's a pretty old saw", 
                 "color": "herman" } },
             { "type": "playAnim", "value": { 
                 "sprite": "herman", 
-                "animName": "stand idle" } },
-            { "type": "say", "value": {"text": "Oh, this is just a stiff old sock" }},
-            { "type": "say", "value": {"text": "But it could probably cut down a tree now" }},
-            { "type": "wait", "value": 1200 },
+                "animName": "stand-idle" } },
+            { "type": "say", 
+                "value": {
+                  "text": "Oh, this is just a stiff old sock" }},
+            { "type": "say", 
+                "value": {
+                  "text": "But it could probably cut down a tree now" }},
+            { "type": "wait", "value": 200 },
             { "type": "sayAnim", "value": { 
                 "sprite": "herman", 
-                "animName": "stand talk 3", 
+                "animName": "talk-turn", 
                 "text": "Uh, yeah ...", 
                 "color": "herman" } },
             { "type": "sayAnim", "value": { 
                 "sprite": "herman", 
-                "animName": "stand talk 1", 
+                "animName": "talk-turn", 
                 "text": "Well, I'll go cut down some trees then", 
                 "color": "herman" } },
+            { "type": "wait", "value": 100 },
             { "type": "moveSprite", "value": { 
                 "sprite": "herman", 
-                "path": [[30,9], [40, 9]], 
+                "path": [[95, 26], [120, 26]], 
                 "animName": "walk" } },
             { "type": "turn", "value": "right" },
             { "type": "wait", "value": 900 },

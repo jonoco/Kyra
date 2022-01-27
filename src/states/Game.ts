@@ -84,7 +84,7 @@ export default class Game extends Phaser.State {
     // this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room06';
+    this.startRoom = 'room19';
     this.playMusic = false
 
     // event variables
@@ -170,6 +170,8 @@ export default class Game extends Phaser.State {
     key_1.onDown.add(this.toggleMusic, this)
 
     this.debugger = new Debugger(this.game, this);
+
+    this.openRoom();
   }
 
 
@@ -626,7 +628,6 @@ export default class Game extends Phaser.State {
       this.pathing.importGrid(this.room.name);
       this.checkMusic();
       this.changeRoomText(this.currentRoom.text);
-      this.openRoom();
   }
 
 
@@ -1007,6 +1008,8 @@ export default class Game extends Phaser.State {
 
   // Play sprite animation
   playAnimation (action: PlayAnimAction) {
+    log(`play anim ${action.animName} for sprite ${action.sprite}`)
+
     var key = action.sprite;
     var animName = action.animName;
     var kill = action.kill || false;
@@ -1031,7 +1034,7 @@ export default class Game extends Phaser.State {
   // Play animation with simultaneous speech
   sayAnim (action: SayAnimAction) {
     // event called by call to this.say()
-    dlog(`sayAnim: ${key} anim: ${animName}`)
+    dlog(`sayAnim: ${action.sprite} anim: ${action.animName}`)
 
     var key = action.sprite;
     var animName = action.animName;
@@ -1067,9 +1070,10 @@ export default class Game extends Phaser.State {
 
 
   // Remove an item from the room
-  removeItem (data) {
-    dlog(`removing ${data}`)
-    let itemName = data
+  removeItem (action: RemoveItemAction) {
+    dlog(`removing item ${action.item}`)
+    
+    let itemName = action.item
     let removeItem = null
 
     this.itemGroup.forEach(function (item) {
@@ -1089,7 +1093,7 @@ export default class Game extends Phaser.State {
 
     this.itemGroup.remove(removeItem)
 
-    this.evalEvent('remove-' + data)
+    this.evalEvent('remove-' + itemName)
   }
 
 

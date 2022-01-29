@@ -97,9 +97,7 @@
 			"png": "assets/sprites/herman_sawing.png",
 			"json": "assets/sprites/herman_sawing.json",
 			"invisible": false,
-			"action": {
-				"click": { "text": "I better not bother him now" }
-				},
+			"action": { "click": true },
 			"animated": true,
 			"animations": {
 				"saw": {
@@ -482,7 +480,7 @@
 			"name": "saw_holder_empty",
 			"png": "assets/sprites/saw_holder2.png",
 			"json": null,
-			"invisible": true,
+			"invisible": false,
 			"action": null,
 			"animated": false,
 			"animations": null

@@ -63,6 +63,7 @@
   - [ ] create in-game command interface to debug in-memory state, e.g., inspect current quest states
   - [ ] fix debug text distortion
 - [ ] update moveSprite to use standard coordinates rather than tile coords
+- [ ] update *click* handling on sprites
 
 ### Bugs
 - [x] tapping on player causes him to disappear

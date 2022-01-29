@@ -88,8 +88,8 @@ export class AddItemAction extends Action {
     ) {
         super(type);
         this.item = item;
-        this.x = x * window.app.scaleFactor;
-        this.y = y * window.app.scaleFactor;
+        this.x = x;
+        this.y = y;
     }
 }
 

@@ -272,28 +272,33 @@
           ]
         },
         {
+          "step": "place-saw",
+          "trigger": "room01",
+          "conditions": [{ "step": "saw", "complete": false }],
+          "actions": [
+            { "type": "putSprite", 
+              "value": {
+                "sprite": "saw_holder", 
+                "x": 248, 
+                "y": 89} }
+          ]
+        },
+        {
           "step": "saw",
           "trigger": "saw_holder",
           "conditions": [],
           "actions": [
             { "type": "say", "value": { "text": "Grandfather's saw" }},
-            { "type": "killSprite", "value": "saw_holder" },
-            { "type": "modMeta", "value": { 
+            { "type": "killSprite", "value": { "sprite": "saw_holder" }},
+            { "type": "putSprite", 
+              "value": {
                 "sprite": "saw_holder_empty", 
-                "attr": "invisible", 
-                "value": false } },
-            { "type": "modAttr", "value": { 
-                "sprite": "saw_holder", 
-                "attr": "alpha", 
-                "value": 0 } },
-            { "type": "modAttr", "value": { 
-                "sprite": "saw_holder_empty", 
-                "attr": "alpha", 
-                "value": 1 } },
+                "x": 248, 
+                "y": 89}},
             { "type": "addItem", "value": {
                 "item": "saw", 
                 "x": 250, 
-                "y": 113} }
+                "y": 113}}
           ]
         },
         {
@@ -338,7 +343,7 @@
                 "path": [[95, 26], [120, 26]], 
                 "animName": "walk" } },
             { "type": "turn", "value": "right" },
-            { "type": "wait", "value": 900 },
+            { "type": "wait", "value": 400 },
             { "type": "say", "value": { "text": "I hope he doesn't cut his leg off" }},
             { "type": "togAnim", "value": { 
                 "sprite": "herman sawing", 

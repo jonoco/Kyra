@@ -9,9 +9,7 @@
 		"sprites": [
 			{ "name": "lamp", "x": 220, "y": 50 },
 			{ "name": "bed", "x": 7, "y": 111 },
-			{ "name": "coal_hanger", "x": 68, "y": 8 },
-			{ "name": "saw_holder_empty", "x": 248, "y": 88 },
-			{ "name": "saw_holder", "x": 248, "y": 89 }
+			{ "name": "coal_hanger", "x": 68, "y": 8 }
 		],
 		"blocks": [
 			{ "name": "coal_hanger", "x": 70,	"y": 64, "height": 17, "width": 33 },

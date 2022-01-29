@@ -237,6 +237,10 @@ export default class Game extends Phaser.State {
       this.queueActions(actions)
     }
 
+    for (let event of this.events.filter(e => e.trigger == trigger)) {
+      this.queueActions(event.actions)
+    }
+
     this.popEventQueue()
   }
 
@@ -328,31 +332,10 @@ export default class Game extends Phaser.State {
    * Spawn a new sprite
    */
   putSprite (action: PutSpriteAction) {
-    dlog(`putting ${action.sprite}`)
+    dlog(`put sprite ${action.sprite} to [${action.x}, ${action.y}]`)
+
     let spriteData = this.spritesJSON.find(s => s.name == action.sprite)
     this.createSprite(spriteData, action.x, action.y, action.layer)    
-    // let sprite = this.getSprite(action.sprite)
-
-    // let sprite = new Sprite(this.game, action.x, action.y, spriteData.name)
-    // // sprite.position.x = action.x * window.app.scaleFactor;
-    // // sprite.position.y = action.y * window.app.scaleFactor;
-
-    // let layer = action.layer || 'background';
-    // switch (layer) {
-    //   case 'background':
-    //     this.bgSprites.add(sprite);
-    //       break;
-    //   case 'midground':
-    //     this.mgSprites.add(sprite);
-    //       break;
-    //   case 'foreground':
-    //     this.fgSprites.add(sprite);
-    //       break;
-    //   default:
-    //     this.bgSprites.add(sprite);
-    //   }
-
-    dlog(`put sprite to [${action.x}, ${action.y}]`)
 
     this.evalEvent(`put-${action.sprite}`);
   }
@@ -874,7 +857,7 @@ export default class Game extends Phaser.State {
     this.speech.stroke = '#000000'
     this.speech.strokeThickness = 5
     this.speech.fill = colorAtlas[textColor]
-    this.speech.name = sprite.key
+    this.speech.name = key
 
     if (this.speech.right > 306 * window.app.scaleFactor) {
       this.speech.x -= this.speech.right - (306 * window.app.scaleFactor)
@@ -1137,26 +1120,29 @@ export default class Game extends Phaser.State {
     let spriteName = action.sprite
 
     // var sprites = this.spritesGroup.children;
-    let spritesMeta = this.currentRoom.sprites;
+    // let spritesMeta = this.currentRoom.sprites;
 
-    this.bgSprites.forEach(child => {
-      if (child.name == spriteName) { child.destroy() }
-    }, this)
-    this.mgSprites.forEach(child => {
-      if (child.name == spriteName) { child.destroy() }
-    }, this)
-    this.fgSprites.forEach(child => {
-      if (child.name == spriteName) { child.destroy() }
-    }, this)
+    let sprite = this.getSprite(spriteName);
+    sprite.destroy();
 
-    let j = spritesMeta.length;
-    while (j--) {
-      if (spritesMeta[j].name == spriteName) {
-        spritesMeta.splice( j, 1 );
-      }
-    }
+    // this.bgSprites.forEach(child => {
+    //   if (child.name == spriteName) { child.destroy() }
+    // }, this)
+    // this.mgSprites.forEach(child => {
+    //   if (child.name == spriteName) { child.destroy() }
+    // }, this)
+    // this.fgSprites.forEach(child => {
+    //   if (child.name == spriteName) { child.destroy() }
+    // }, this)
 
-    this.evalEvent(spriteName);
+    // let j = spritesMeta.length;
+    // while (j--) {
+    //   if (spritesMeta[j].name == spriteName) {
+    //     spritesMeta.splice( j, 1 );
+    //   }
+    // }
+
+    this.evalEvent(`kill-${spriteName}`);
   }
 
 
@@ -1741,11 +1727,11 @@ export default class Game extends Phaser.State {
       ...this.itemGroup.children
     ]
 
-    let sprite;
+    let sprite: Sprite;
 
     sprites.forEach(spr => {
       if (spr['name'] == key) {
-        sprite = spr
+        sprite = spr as Sprite
       }
     })
 

@@ -82,6 +82,12 @@
         { "type": "moveSprite", "value": { "sprite": "sorrow_rock_glyph", "path": [[50,5], [50, 50]] }},
         { "type": "modAttr", "value": { "sprite": "sorrow_rock_glyph", "attr": "alpha", "value": 0 } }
       ]
+    },
+    {
+      "trigger": "herman sawing",
+      "actions": [
+        { "type": "say", "value": { "text": "I better not bother him" }}
+      ]
     }
   ]
 }

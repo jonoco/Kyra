@@ -238,8 +238,8 @@ export class PutSpriteAction extends Action {
     ) {
         super(type);
         this.sprite = sprite;
-        this.x = x * window.app.scaleFactor;
-        this.y = y * window.app.scaleFactor;
+        this.x = x;
+        this.y = y;
         this.layer = layer;
     }
 }

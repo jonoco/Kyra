@@ -230,6 +230,12 @@
           "trigger": "room19",
           "conditions": [],
           "actions": [
+            { "type": "putSprite", 
+              "value": {
+                "sprite": "herman", 
+                "x": 207, 
+                "y": 52,
+                "layer": "foreground" }},
             { "type": "wait", "value": 300 },
             { "type": "playAnim", 
               "value": { 

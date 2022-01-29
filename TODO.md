@@ -35,6 +35,9 @@
 	+ [ ] fix sprites
 		- [ ] cliff
 		- [ ] rocky outcrop (room17)
+		- [ ] create cave animations
+  		- [ ] bridge
+  		- [ ] water
 	+ [ ] update animations
 		- [x] brynn
 		- [ ] herman

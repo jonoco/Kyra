@@ -330,29 +330,29 @@ export default class Game extends Phaser.State {
   putSprite (action: PutSpriteAction) {
     dlog(`putting ${action.sprite}`)
     let spriteData = this.spritesJSON.find(s => s.name == action.sprite)
-    
+    this.createSprite(spriteData, action.x, action.y, action.layer)    
     // let sprite = this.getSprite(action.sprite)
 
-    let sprite = new Sprite(this.game, action.x, action.y, spriteData.name)
-    sprite.position.x = action.x * window.app.scaleFactor;
-    sprite.position.y = action.y * window.app.scaleFactor;
+    // let sprite = new Sprite(this.game, action.x, action.y, spriteData.name)
+    // // sprite.position.x = action.x * window.app.scaleFactor;
+    // // sprite.position.y = action.y * window.app.scaleFactor;
 
-    let layer = action.layer || 'background';
-    switch (layer) {
-      case 'background':
-        this.bgSprites.add(sprite);
-          break;
-      case 'midground':
-        this.mgSprites.add(sprite);
-          break;
-      case 'foreground':
-        this.fgSprites.add(sprite);
-          break;
-      default:
-        this.bgSprites.add(sprite);
-      }
+    // let layer = action.layer || 'background';
+    // switch (layer) {
+    //   case 'background':
+    //     this.bgSprites.add(sprite);
+    //       break;
+    //   case 'midground':
+    //     this.mgSprites.add(sprite);
+    //       break;
+    //   case 'foreground':
+    //     this.fgSprites.add(sprite);
+    //       break;
+    //   default:
+    //     this.bgSprites.add(sprite);
+    //   }
 
-    dlog(`put sprite to ${sprite.position}`)
+    dlog(`put sprite to [${action.x}, ${action.y}]`)
 
     this.evalEvent(`put-${action.sprite}`);
   }
@@ -399,56 +399,50 @@ export default class Game extends Phaser.State {
     const roomSprites = this.currentRoom.sprites;
 
     for (let roomSprite of roomSprites) {
+      let { x, y, layer } = roomSprite;
       let spriteData = this.spritesJSON.find(s => s.name == roomSprite.name)
       if (!spriteData) {
         let error = `Sprite for room [${this.currentRoom.name}] not found in cache: `+
         `check if sprite [${roomSprite.name}] exists`
-
+        
         throw new Error(error)
       }
-
-      let newSprite = new Sprite(
-        this.game, 
-        roomSprite.x * window.app.scaleFactor,
-        roomSprite.y * window.app.scaleFactor,
-        roomSprite.name);
-
-      let layer = roomSprite.layer || 'background'
-
-      switch (layer) {
-      case 'background':
-          this.bgSprites.add(newSprite);
-          break
-      case 'midground':
-          this.mgSprites.add(newSprite);
-          break
-      case 'foreground':
-          this.fgSprites.add(newSprite);
-          break
-      default:
-          this.bgSprites.add(newSprite);
-      }
-
-      newSprite.scale.setTo(window.app.scaleFactor);
-
-      if (spriteData.invisible) {
-        this.showSprite(newSprite, false);
-      }
-
-      if (spriteData.reverse) {
-          newSprite.anchor.x = 0.5;
-          newSprite.scale.x *= -1;
-      }
-
-      dlog(`creating sprite ${newSprite.name}
-      in layer ${layer} at { ${newSprite.position.x}, ${newSprite.position.y} }
-      with scale: ${newSprite.scale}
-      h: ${newSprite.height} w: ${newSprite.width}`)
-
-      spriteData.animated ? this.createSpriteAnimation(newSprite, spriteData):null;
-      spriteData.action ? this.createSpriteAction(newSprite, spriteData):null;
-      spriteData.startFrame ? this.setFrame(newSprite, spriteData.startFrame):null;
+      this.createSprite(spriteData, x, y, layer)
     }
+  }
+
+
+  // /** Create sprite */
+  createSprite(spriteData: SpriteData, x: number, y: number, layer: Layer) {
+    const { name, invisible, reverse, animated, action, startFrame 
+    } = spriteData;
+
+    let newSprite = Sprite.of(this.game, x, y, name, invisible, reverse);
+
+    switch (layer) {
+    case 'background':
+        this.bgSprites.add(newSprite);
+        break
+    case 'midground':
+        this.mgSprites.add(newSprite);
+        break
+    case 'foreground':
+        this.fgSprites.add(newSprite);
+        break
+    default:
+        this.bgSprites.add(newSprite);
+    }
+
+    dlog(`creating sprite ${newSprite.name}
+    in layer ${layer} at { ${newSprite.position.x}, ${newSprite.position.y} }
+    with scale: ${newSprite.scale}
+    h: ${newSprite.height} w: ${newSprite.width},
+    visible: ${invisible ? 'invisible' : 'visible'},
+    reversed: ${reverse ? 'reversed' : 'normal'}`)
+
+    if (animated) this.createSpriteAnimation(newSprite, spriteData);
+    if (action) this.createSpriteAction(newSprite, spriteData);
+    if (startFrame) this.setFrame(newSprite, spriteData.startFrame);
   }
 
 
@@ -529,7 +523,9 @@ export default class Game extends Phaser.State {
    * @param {Object} property holds animation properties
    */
   createSpriteAnimation (sprite: Sprite, property: SpriteData) {
-      var animations = property.animations;
+    log(`create animation ${property.name} for sprite ${sprite.name}`, LOG_LEVEL.DEBUG)
+  
+    let animations = property.animations;
 
       for (const [anim, _] of Object.entries(animations)) {
           sprite.animations.add(
@@ -559,37 +555,38 @@ export default class Game extends Phaser.State {
    * @param {Sprite} sprite sprite to add actions to
    * @param {Object} property hold action properties
    */
-  createSpriteAction (sprite, property) {
-      var action = property.action;
+  createSpriteAction (sprite: Sprite, property: SpriteData) {
+    log(`create sprite action ${property.name} for ${sprite.name}`, LOG_LEVEL.DEBUG)
+      let action = property.action;
 
       sprite.inputEnabled = true;
       if (action.click) {
-          sprite.events.onInputDown.add(function (data) {
-              this.evalEvent(sprite.key);
+        sprite.events.onInputDown.add(function (data) {
+          this.evalEvent(sprite.key);
 
-              if (action.click.animation) {
+          if (action.click.text) {
 
-              sprite.alpha = 1;
-              this.animation = sprite.animations.play(action.click.animation, null, false, true);
-              this.animation.onComplete.add(function (data) {
-                  dlog('animation complete');
-                  this.evalEvent(action.click.animation);
-              }, this);
-              }// if has animation on click
+            sprite.alpha = 1;
+            this.animation = sprite.animations.play(action.click.text, null, false, true);
+            this.animation.onComplete.add(function (data) {
+                dlog('animation complete');
+                this.evalEvent(action.click.text);
+            }, this);
+          }// if has animation on click
 
-              if (action.click.text) {
-              //say something
-              this.say(action.click.text);
-              }// if has text on click
+          if (action.click.text) {
+            //say something
+            this.say(action.click.text);
+          }// if has text on click
 
-          }, this);
+        }, this);
       }// if has click action
 
-      if (action.drag) {
+      // if (action.drag) {
       // TODO have sprite respond to item dragged onto it
       // sprite should have array of drag-actionable items to compare to
 
-      }// if has drag action
+      // }// if has drag action
   }
 
 

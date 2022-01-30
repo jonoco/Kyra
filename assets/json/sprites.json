@@ -1,916 +1,1074 @@
 {
-	"_brandon": {
-		"name": "_brandon",
-		"png": "assets/sprites/brandon.png",
-		"json": "assets/sprites/brandon.json",
-		"action": {
-			"click": { "text": "I'm getting tired" }
-			},
-		"animated": true,
-		"animations": {
-			"walk-right": {
-				"frames": [ "right-1","right-2","right-3","right-4","right-5","right-6","right-7" ],
-				"speed": 8,
-				"loop": true,
-				"start": false
-			},
-			"walk-left" : {
-				"frames": [ "left-1", "left-2", "left-3", "left-4", "left-5", "left-6", "left-7" ],
-				"speed": 8,
-				"loop": true,
-				"start": false
-			}
-		}
-	},
-	"lamp": {
-		"name": "lamp",
-		"png": "assets/sprites/lamp.png",
-		"json": "assets/sprites/lamp.json",
-		"action": {
-			"click": { "text": "look at that damn lamp!" }
-			},
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [ "lamp-1", "lamp-2", "lamp-3"],
-			 	"speed": 5,
-			 	"loop": true,
-			 	"start": true
-			}
-		}
-	},
-	"river": {
-		"name": "river",
-		"png": "assets/sprites/river.png",
-		"json": "assets/sprites/river.json",
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"river-1", "river-2", "river-3",
-			 	 	"river-3", "river-3", "river-3", "river-3", "river-3", "river-3", "river-3",
-			 		"river-4", "river-5", "river-6", "river-7", "river-8", "river-9", "river-10", "river-11", "river-12"],
-			 	"speed": 5,
-			 	"loop": true,
-			 	"start": true
-			}
-		}
-	},
-	"temple entrance": {
-		"name": "temple entrance",
-		"png": "assets/sprites/temple_entrance.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"stone1": {
-		"name": "stone1",
-		"png": "assets/sprites/stone1.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"willow branch": {
-		"name": "willow branch",
-		"png": "assets/sprites/willowbranchs.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"cut tree": {
-		"name": "cut tree",
-		"png": "assets/sprites/cut_tree.png",
-		"scale": 0.5,
-		"invisible": true,
-		"action": null,
-		"animated": false
-	},
-	"herman sawing": {
-		"name": "herman sawing",
-		"png": "assets/sprites/herman_sawing.png",
-		"json": "assets/sprites/herman_sawing.json",
-		"invisible": false,
-		"action": {
-			"click": { "text": "I better not bother him now" }
-			},
-		"animated": true,
-		"animations": {
-			"saw": {
-				"name": "saw",
-			 	"frames": [ "saw-5", "saw-1", "saw-2", "saw-3", "saw-4", "saw-5", "saw-1",
-			 		"saw-2", "saw-3", "saw-4", "saw-5", "saw-1", "saw-2", "saw-3", "saw-4",
-			 		"saw-5", "saw-1", "saw-2", "saw-3", "saw-4", "saw-5",
-			 		"saw-6", "saw-7", "saw-8", "saw-7", "saw-6"],
-			 	"speed": 5,
-			 	"loop": true,
-			 	"start": false
-			}
-		}
-	},
-	"herman": {
-		"name": "herman",
-		"png": "assets/sprites/herman.png",
-		"json": "assets/sprites/herman.json",
-		"action": { "click": true },
-		"animated": true,
-		"animations": {
-			"stand talk 1": {
-		 		"name": "stand talk 1",
-		 		"frames": [
-		 			"stand-1", "stand-2", "stand-3", "stand-4", "stand-5" ],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": false
-			},
-			"stand talk 2": {
-		 		"name": "stand talk 2",
-		 		"frames": [
-		 			"stand-7", "stand-8", "stand-9", "stand-10", "stand-11", "stand-10", "stand-9", "stand-8" ],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": false
-			},
-			"stand talk 3": {
-		 		"name": "stand talk 3",
-		 		"frames": [
-		 			"stand-13", "stand-14", "stand-15", "stand-16" ],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": false
-			},
-		 	"hunch talk 1": {
-		 		"name": "hunch talk 1",
-		 		"frames": [ "hunch-1", "hunch-2", "hunch-3", "hunch-4", "hunch-5" ],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			},
-		 	"hunch talk 2": {
-		 		"name": "hunch talk 2",
-		 		"frames": [ "hunch-7", "hunch-8", "hunch-9", "hunch-10" ],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			},
-		 	"hunch talk 3": {
-		 		"name": "hunch talk 3",
-		 		"frames": [ "hunch-11", "hunch-12", "hunch-13", "hunch-14" ],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			},
-		 	"hunch talk 4": {
-		 		"name": "hunch talk 4",
-		 		"frames": [ "hunch-15", "hunch-16", "hunch-17", "hunch-18" ],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			},
-			"stand up": {
-		 		"name": "stand up",
-		 		"frames": [
-		 			"hunch-1", "hunch-5", "hunch-6", "hunch-7", "hunch-18" ,"hunch-19", "hunch-20" ],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			},
-			"hunch down": {
-		 		"name": "hunch down",
-		 		"frames": [
-		 			"hunch-20", "hunch-19", "hunch-18", "hunch-8" ],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			},
-			"stand hand to head": {
-				"name": "stand hand to head",
-				"frames": [ "stand-6", "stand-7" ],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			},
-			"stand idle": {
-				"name": "stand idle",
-				"frames": [ "stand-16" ],
-			 	"speed": 1,
-			 	"loop": false,
-			 	"start": false
-			},
-			"walk": {
-				"name": "walk",
-			 	"frames": [ "walk-1", "walk-2", "walk-3", "walk-4", "walk-5", "walk-6", "walk-7", "walk-8" ],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": false
+	"sprites": [
+		{
+			"name": "_brandon",
+			"png": "assets/sprites/brandon.png",
+			"json": "assets/sprites/brandon.json",
+			"action": {
+				"click": { "text": "I'm getting tired" }
+				},
+			"animated": true,
+			"animations": {
+				"walk-right": {
+					"frames": [ "right-1","right-2","right-3","right-4","right-5","right-6","right-7" ],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"walk-left" : {
+					"frames": [ "left-1", "left-2", "left-3", "left-4", "left-5", "left-6", "left-7" ],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				}
 			}
 		},
-		"startFrame": "hunch-1"
-	},
-	"glow": {
-		"name": "glow",
-		"png": "assets/sprites/glow.png",
-		"json": "assets/sprites/glow.json",
-		"action": {
-			"click": { "text": "What a lovely table" }
+		{
+			"name": "lamp",
+			"png": "assets/sprites/lamp.png",
+			"json": "assets/sprites/lamp.json",
+			"action": {
+				"click": { "text": "look at that damn lamp!" }
+				},
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [ "lamp-1", "lamp-2", "lamp-3"],
+					"speed": 5,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "river",
+			"png": "assets/sprites/river.png",
+			"json": "assets/sprites/river.json",
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"river-1", "river-2", "river-3",
+						"river-3", "river-3", "river-3", "river-3", "river-3", "river-3", "river-3",
+						"river-4", "river-5", "river-6", "river-7", "river-8", "river-9", "river-10", "river-11", "river-12"],
+					"speed": 5,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "temple entrance",
+			"png": "assets/sprites/temple_entrance.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "stone1",
+			"png": "assets/sprites/stone1.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "willow branch",
+			"png": "assets/sprites/willowbranchs.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "cut tree",
+			"png": "assets/sprites/cut_tree.png",
+			"scale": 0.5,
+			"invisible": true,
+			"action": null,
+			"animated": false
+		},
+		{
+			"name": "herman sawing",
+			"png": "assets/sprites/herman_sawing.png",
+			"json": "assets/sprites/herman_sawing.json",
+			"invisible": false,
+			"action": { "click": true },
+			"animated": true,
+			"animations": {
+				"saw": {
+					"name": "saw",
+					"frames": [ "saw-5", "saw-1", "saw-2", "saw-3", "saw-4", "saw-5", "saw-1",
+						"saw-2", "saw-3", "saw-4", "saw-5", "saw-1", "saw-2", "saw-3", "saw-4",
+						"saw-5", "saw-1", "saw-2", "saw-3", "saw-4", "saw-5",
+						"saw-6", "saw-7", "saw-8", "saw-7", "saw-6"],
+					"speed": 5,
+					"loop": true,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "herman",
+			"png": "assets/sprites/herman.png",
+			"json": "assets/sprites/herman-v2.json",
+			"action": { "click": true },
+			"animated": true,
+			"animations": {
+				"talk-hunch-hand-up": {
+					"name": "talk-hunch-hand-up",
+					"frames": [
+						"hunch-hand-up-5", "hunch-hand-up-4", "hunch-hand-up-3", 
+						"hunch-hand-up-2", "hunch-hand-up-1", "hunch-hand-up-3",
+					  "hunch-hand-up-4", "hunch-hand-up-2" ],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"talk-hunch-hand-down": {
+					"name": "talk-hunch-hand-down",
+					"frames": [
+						"hunch-4", "hunch-3", "hunch-2", "hunch-1", 
+						"hunch-3", "hunch-4", "hunch-2", "hunch-1" ],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"talk-hunch-point": {
+					"name": "talk-hunch-point",
+					"frames": [
+						"hunch-point-1", "hunch-point-2", "hunch-point-3",
+						"hunch-point-2", "hunch-point-3", "hunch-point-2"
+					],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"talk-hunch-turn": {
+					"name": "talk-hunch-turn",
+					"frames": [
+						"hunch-turn-1", "hunch-turn-2", "hunch-turn-3",
+						"hunch-turn-4", "hunch-turn-3", "hunch-turn-1",
+						"hunch-turn-3", "hunch-turn-2"
+					],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"talk-turn": {
+					"name": "talk-turn",
+					"frames": [
+						"hand-low-1", "hand-low-2", "hand-low-3",
+						"hand-low-4", "hand-low-5", "hand-low-3",
+						"hand-low-2", "hand-low-3", "hand-low-5"
+					],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"hunch-lower-hand": {
+					"name": "hunch-lower-hand",
+					"frames": [
+						"hunch-hand-up-2", "hunch-hand-raised", "hunch-3" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunch-raise-hand": {
+					"name": "hunch-lower-hand",
+					"frames": [
+						"hunch-3", "hunch-hand-raised", "hunch-hand-up-2" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunching-rise": {
+					"name": "hunching-rise",
+					"frames": [
+						"hunch-turn-1", "hunching-2", "hunching-1", "hand-low-5" 
+					],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunching-lower": {
+					"name": "hunching-lower",
+					"frames": [
+						"hand-low-5", "hunching-1", "hunching-2", "hunch-turn-1"
+					],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunch-scratch-head": {
+					"name": "hunch-scratch-head",
+					"frames": [
+						"hunch-4", "hunch-hand-raised", "hunch-hand-up-1", 
+						"hunch-hand-up-2", "hunch-hand-up-5", "hunch-hand-up-1",
+						"hunch-hand-up-2", "hunch-hand-up-5", "hunch-hand-raised", 
+						"hunch-4"
+					],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"walk": {
+					"name": "walk",
+					"frames": [
+						"walk-8", "walk-7", "walk-6", "walk-5",
+						"walk-4", "walk-3", "walk-2", "walk-1"
+					],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"stand-idle": {
+					"name": "stand-idle",
+					"frames": [
+						"stand-1"
+					],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				}
 			},
-		"animated": true,
-		"animations": {
-			"altar": {
-				"name": "altar",
-			 	"frames": [
-			 		"altar-1", "altar-2", "altar-3", "altar-4", "altar-5", "altar-6", "altar-5", "altar-4", "altar-3", "altar-2",
-			 		"altar-1", "altar-2", "altar-3", "altar-4", "altar-5", "altar-6", "altar-5", "altar-4", "altar-3", "altar-2",
-			 		"altar-1", "altar-2", "altar-3", "altar-4", "altar-5", "altar-6", "altar-5", "altar-4", "altar-3", "altar-2", "altar-1"
-			 	],
-			 	"speed": 10,
-			 	"loop": false,
-			 	"start": false
-			}
-		}
-	},
-	"altar": {
-		"name": "altar",
-		"png": "assets/sprites/altar.png",
-		"scale": 0.5,
-		"invisible": true,
-		"action": null,
-		"animated": false
-	},
-	"birch1": {
-		"name": "birch1",
-		"png": "assets/sprites/birch1.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"birch2": {
-		"name": "birch2",
-		"png": "assets/sprites/birch2.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"birch3": {
-		"name": "birch3",
-		"png": "assets/sprites/birch3.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"birch3-r": {
-		"name": "birch3-r",
-		"png": "assets/sprites/birch3.png",
-		"json": null,
-		"reverse": true,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"redwood1": {
-		"name": "redwood1",
-		"png": "assets/sprites/redwood1.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"oak1": {
-		"name": "oak1",
-		"png": "assets/sprites/oak1.png",
-		"json": null,
-		"scale": 0.5,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"oak2": {
-		"name": "oak2",
-		"png": "assets/sprites/oak2.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"oak2-r": {
-		"name": "oak2-r",
-		"png": "assets/sprites/oak2.png",
-		"reverse": true,
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"stone2": {
-		"name": "stone2",
-		"png": "assets/sprites/stone2.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"bed": {
-		"name": "bed",
-		"png": "assets/sprites/bed.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"coal_hanger": {
-		"name": "coal_hanger",
-		"png": "assets/sprites/coal_hanger.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"saw_holder": {
-		"name": "saw_holder",
-		"png": "assets/screens/home.png",
-		"json": "assets/sprites/saw_table.json",
-		"invisible": false,
-		"action": { "click": true },
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": ["saw"],
-				"speed": 1,
-				"loop": true,
-				"start": true
-			}
-		}
-	},
-	"saw_holder_empty": {
-		"name": "saw_holder_empty",
-		"png": "assets/sprites/saw_holder2.png",
-		"json": null,
-		"invisible": true,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"treehouse": {
-		"name": "treehouse",
-		"png": "assets/sprites/treehouse.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"amulet": {
-		"name": "amulet",
-		"png": "assets/sprites/amulet.png",
-		"json": "assets/sprites/amulet.json",
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": [
-					"amulet-1", "amulet-2", "amulet-3", "amulet-4", "amulet-5", "amulet-6",
-					"amulet-7", "amulet-8", "amulet-9", "amulet-10", "amulet-11", "amulet-12",
-					"amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18",
-					"amulet-19", "amulet-20", "amulet-21", "amulet-22", "amulet-23"],
-				"speed": 7,
-				"loop": false,
-				"start": false
-			}
-		}
-	},
-	"willow": {
-		"name": "willow",
-		"png": "assets/sprites/willow.png",
-		"json": "assets/sprites/willow.json",
-		"action": { "click": { "text": "This willow tree is withering" } },
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"willow-1", "willow-2", "willow-3", "willow-4", "willow-5",
-			 	 	"willow-6", "willow-7", "willow-8", "willow-9", "willow-10",
-			 	  "willow-11", "willow-12", "willow-13", "willow-14", "willow-15"],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			}
-		}
-	},
-	"brandon wow": {
-		"name": "brandon wow",
-		"png": "assets/sprites/brandon_wow.png",
-		"json": "assets/sprites/brandon_wow.json",
-		"action": false,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"wow-1", "wow-2", "wow-3", "wow-4", "wow-5",
-			 	 	"wow-6", "wow-7", "wow-8", "wow-9", "wow-10",
-			 	  "wow-11", "wow-12", "wow-13", "wow-14", "wow-15",
-			 	  "wow-16", "wow-17", "wow-18", "wow-19", "wow-20", "wow-21", "wow-22"],
-			 	"speed": 10,
-			 	"loop": false,
-			 	"start": false
-			}
-		}
-	},
-	"pool": {
-		"name": "pool",
-		"png": "assets/sprites/pool.png",
-		"scale": 0.5,
-		"json": null,
-		"action": { "click": true },
-		"animated": false
-	},
-	"cave entrance": {
-		"name": "cave entrance",
-		"png": "assets/sprites/cave_entrance.png",
-		"json": null,
-		"action": null,
-		"animated": false
-	},
-	"drop1": {
-		"name": "drop1",
-		"png": "assets/sprites/drop.png",
-		"json": "assets/sprites/drop.json",
-		"scale": 0.5,
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
-			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": true
-			}
-		}
-	},
-	"drop2": {
-		"name": "drop2",
-		"png": "assets/sprites/drop.png",
-		"json": "assets/sprites/drop.json",
-		"scale": 0.5,
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"blank", "blank",
-			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
-			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": true
-			}
-		}
-	},
-	"drop3": {
-		"name": "drop3",
-		"png": "assets/sprites/drop.png",
-		"json": "assets/sprites/drop.json",
-		"scale": 0.5,
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"blank", "blank", "blank", "blank",
-			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
-			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": true
-			}
-		}
-	},
-	"drop4": {
-		"name": "drop4",
-		"png": "assets/sprites/drop.png",
-		"json": "assets/sprites/drop.json",
-		"scale": 0.5,
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"blank", "blank", "blank", "blank", "blank", "blank",
-			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
-			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": true
-			}
-		}
-	},
-	"drop5": {
-		"name": "drop5",
-		"png": "assets/sprites/drop.png",
-		"json": "assets/sprites/drop.json",
-		"scale": 0.5,
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"blank", "blank", "blank", "blank", "blank", "blank", "blank", "blank",
-			 		"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
-			 	  "splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": true
-			}
-		}
-	},
-	"catch": {
-		"name": "catch",
-		"png": "assets/sprites/catch.png",
-		"json": "assets/sprites/catch.json",
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"tear-1", "tear-2", "tear-3", "tear-4", "tear-5", "tear-6",
-			 	 	"tear-7", "tear-8", "tear-9", "tear-10", "tear-11", "tear-12",
-			 	  "tear-13", "tear-14", "tear-15", "tear-16", "tear-17", "tear-18",
-			 	  "tear-19", "tear-20", "tear-21", "tear-22", "tear-23" ],
-			 	"speed": 5,
-			 	"loop": false,
-			 	"start": false
-			}
-		}
-	},
-	"lift down": {
-		"name": "lift down",
-		"png": "assets/sprites/liftdown.png",
-		"json": "assets/sprites/liftdown.json",
-		"scale": 1,
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"sprite1", "sprite2", "sprite3", "sprite4", "sprite5", "sprite6", "sprite7", "sprite8",
-			 		"sprite9", "sprite10", "sprite11", "sprite12", "sprite13", "sprite14", "sprite15", "sprite16",
-			 		"sprite17", "sprite18", "sprite19", "sprite20", "sprite21", "sprite22", "sprite23", "sprite24",
-			 		"sprite25", "sprite26", "sprite27"
-			 	],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			}
-		}
-	},
-	"lift up": {
-		"name": "lift up",
-		"png": "assets/sprites/liftup.png",
-		"json": "assets/sprites/liftup.json",
-		"scale": 1,
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"sprite1", "sprite2", "sprite3", "sprite4", "sprite5", "sprite6", "sprite7", "sprite8",
-			 		"sprite9", "sprite10", "sprite11", "sprite12", "sprite13", "sprite14", "sprite15", "sprite16",
-			 		"sprite17", "sprite18", "sprite19", "sprite20", "sprite21", "sprite22", "sprite23", "sprite24",
-			 		"sprite25", "sprite26", "sprite27", "sprite28", "sprite29", "sprite30"
-			 	],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			}
-		}
-	},
-	"branch up": {
-		"name": "branch up",
-		"png": "assets/sprites/branch_up.png",
-		"json": "assets/sprites/branch_up.json",
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"branch-1", "branch-2", "branch-3", "branch-4", "branch-5",
-			 	 	"branch-6", "branch-7", "branch-8", "branch-9", "branch-10",
-			 	  "branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
-			 	   "branch-16", "branch-17", "branch-18", "branch-19", "branch-20", "branch-21"],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			}
-		}
-	},
-	"branch down": {
-		"name": "branch down",
-		"png": "assets/sprites/branch_down.png",
-		"json": "assets/sprites/branch_down.json",
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [
-			 		"branch-1", "branch-2", "branch-3", "branch-4", "branch-5",
-			 	 	"branch-6", "branch-7", "branch-8", "branch-9", "branch-10",
-			 	  "branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
-			 	   "branch-16", "branch-17", "branch-18", "branch-19", "branch-20"],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			}
-		}
-	},
-	"temple fire": {
-		"name": "temple fire",
-		"png": "assets/sprites/temple_fire.png",
-		"json": "assets/sprites/temple_fire.json",
-		"scale": 0.5,
-		"action": null,
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-			 	"frames": [ "temple_fire-1", "temple_fire-2", "temple_fire-3" ],
-			 	"speed": 5,
-			 	"loop": true,
-			 	"start": true
-			}
-		}
-	},
-	"brynn-enter": {
-		"name": "brynn-enter",
-		"png": "assets/sprites/brynn_ente.png",
-		"json": "assets/sprites/brynn_enter.json",
-		"scale": 1,
-		"action": null,
-		"animated": true,
-		"animations": {
-			"enter": {
-				"name": "enter",
-			 	"frames": [
-			 		"sprite1", "sprite1", "sprite1", "sprite1","sprite2", "sprite3",
-					"sprite4", "sprite5","sprite6", "sprite7", "sprite8", "sprite9", 
-					"sprite10", "sprite11", "sprite12", "sprite13", "sprite14", "sprite15",
-			 	  	"sprite16", "sprite17", "sprite18", "sprite19", "sprite20", "sprite21", 
-				    "sprite22", "sprite23", "sprite24", "sprite25","sprite26", "sprite27"
-				],
-			 	"speed": 7,
-			 	"loop": false,
-			 	"start": false
-			}
-		}
-	},
-	"brynn": {
-		"name": "brynn",
-		"png": "assets/sprites/brynn.png",
-		"json": "assets/sprites/brynn.json",
-		"scale": 0.5,
-		"action": null,
-		"animated": true,
-		"animations": {
-			"talk": {
-				"name": "talk",
-			 	"frames": [
-			 		"talk-1", "talk-2", "talk-3", "talk-4", "talk-5",
-			 	 	"talk-6", "talk-7", "talk-8", "talk-9", "talk-10", "talk-11"],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": false
+			"startFrame": "hunch-1"
+		},
+		{
+			"name": "herman-2",
+			"png": "assets/sprites/herman.png",
+			"json": "assets/sprites/herman.json",
+			"action": { "click": true },
+			"animated": true,
+			"animations": {
+				"stand talk 1": {
+					"name": "stand talk 1",
+					"frames": [
+						"stand-1", "stand-2", "stand-3", "stand-4", "stand-5" ],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"stand talk 2": {
+					"name": "stand talk 2",
+					"frames": [
+						"stand-7", "stand-8", "stand-9", "stand-10", "stand-11", "stand-10", "stand-9", "stand-8" ],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"stand talk 3": {
+					"name": "stand talk 3",
+					"frames": [
+						"stand-13", "stand-14", "stand-15", "stand-16" ],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"hunch talk 1": {
+					"name": "hunch talk 1",
+					"frames": [ "hunch-1", "hunch-2", "hunch-3", "hunch-4", "hunch-5" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunch talk 2": {
+					"name": "hunch talk 2",
+					"frames": [ "hunch-7", "hunch-8", "hunch-9", "hunch-10" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunch talk 3": {
+					"name": "hunch talk 3",
+					"frames": [ "hunch-11", "hunch-12", "hunch-13", "hunch-14" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunch talk 4": {
+					"name": "hunch talk 4",
+					"frames": [ "hunch-15", "hunch-16", "hunch-17", "hunch-18" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"stand up": {
+					"name": "stand up",
+					"frames": [
+						"hunch-1", "hunch-5", "hunch-6", "hunch-8", "hunch-10", 
+						"hunch-14", "hunch-18" ,"hunch-19", "hunch-20" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"hunch down": {
+					"name": "hunch down",
+					"frames": [
+						"hunch-20", "hunch-19", "hunch-18", "hunch-8" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"stand hand to head": {
+					"name": "stand hand to head",
+					"frames": [ "stand-6", "stand-7" ],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				},
+				"stand idle": {
+					"name": "stand idle",
+					"frames": [ "stand-16" ],
+					"speed": 1,
+					"loop": false,
+					"start": false
+				},
+				"walk": {
+					"name": "walk",
+					"frames": [ "walk-1", "walk-2", "walk-3", "walk-4", "walk-5", "walk-6", "walk-7", "walk-8" ],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				}
 			},
-			"idle": {
-				"name": "idle",
-			 	"frames": [ "talk-1" ],
-			 	"speed": 1,
-			 	"loop": false,
-			 	"start": false
+			"startFrame": "hunch-1"
+		},
+		{
+			"name": "glow",
+			"png": "assets/sprites/glow.png",
+			"json": "assets/sprites/glow.json",
+			"action": {
+				"click": { "text": "What a lovely table" }
+				},
+			"animated": true,
+			"animations": {
+				"altar": {
+					"name": "altar",
+					"frames": [
+						"altar-1", "altar-2", "altar-3", "altar-4", "altar-5", "altar-6", "altar-5", "altar-4", "altar-3", "altar-2",
+						"altar-1", "altar-2", "altar-3", "altar-4", "altar-5", "altar-6", "altar-5", "altar-4", "altar-3", "altar-2",
+						"altar-1", "altar-2", "altar-3", "altar-4", "altar-5", "altar-6", "altar-5", "altar-4", "altar-3", "altar-2", "altar-1"
+					],
+					"speed": 10,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "altar",
+			"png": "assets/sprites/altar.png",
+			"scale": 0.5,
+			"invisible": true,
+			"action": null,
+			"animated": false
+		},
+		{
+			"name": "birch1",
+			"png": "assets/sprites/birch1.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "birch2",
+			"png": "assets/sprites/birch2.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "birch3",
+			"png": "assets/sprites/birch3.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "birch3-r",
+			"png": "assets/sprites/birch3.png",
+			"json": null,
+			"reverse": true,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "redwood1",
+			"png": "assets/sprites/redwood1.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "oak1",
+			"png": "assets/sprites/oak1.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "oak2",
+			"png": "assets/sprites/oak2.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "oak3",
+			"png": "assets/sprites/oak3.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "oak2-r",
+			"png": "assets/sprites/oak2.png",
+			"reverse": true,
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "stone2",
+			"png": "assets/sprites/stone2.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "bed",
+			"png": "assets/sprites/bed.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "coal_hanger",
+			"png": "assets/sprites/coal_hanger.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "saw_holder",
+			"png": "assets/screens/home.png",
+			"json": "assets/sprites/saw_table.json",
+			"invisible": false,
+			"action": { "click": true },
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": ["saw"],
+					"speed": 1,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "saw_holder_empty",
+			"png": "assets/sprites/saw_holder2.png",
+			"json": null,
+			"invisible": false,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "treehouse",
+			"png": "assets/sprites/treehouse.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "amulet",
+			"png": "assets/sprites/amulet.png",
+			"json": "assets/sprites/amulet.json",
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"amulet-1", "amulet-2", "amulet-3", "amulet-4", "amulet-5", "amulet-6",
+						"amulet-7", "amulet-8", "amulet-9", "amulet-10", "amulet-11", "amulet-12",
+						"amulet-13", "amulet-14", "amulet-15", "amulet-16", "amulet-17", "amulet-18",
+						"amulet-19", "amulet-20", "amulet-21", "amulet-22", "amulet-23"],
+					"speed": 7,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "willow",
+			"png": "assets/sprites/willow.png",
+			"json": "assets/sprites/willow.json",
+			"action": { "click": true },
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"willow-1", "willow-2", "willow-3", "willow-4", "willow-5",
+						"willow-6", "willow-7", "willow-8", "willow-9", "willow-10",
+						"willow-11", "willow-12", "willow-13", "willow-14", "willow-15"],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "willow_branchs",
+			"png": "assets/sprites/willowbranchs.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "brandon wow",
+			"png": "assets/sprites/brandon_wow.png",
+			"json": "assets/sprites/brandon_wow.json",
+			"action": false,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"wow-1", "wow-2", "wow-3", "wow-4", "wow-5",
+						"wow-6", "wow-7", "wow-8", "wow-9", "wow-10",
+						"wow-11", "wow-12", "wow-13", "wow-14", "wow-15",
+						"wow-16", "wow-17", "wow-18", "wow-19", "wow-20", "wow-21", "wow-22"],
+					"speed": 10,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "pool",
+			"png": "assets/sprites/pool.png",
+			"scale": 0.5,
+			"json": null,
+			"action": { "click": true },
+			"animated": false
+		},
+		{
+			"name": "cave entrance",
+			"png": "assets/sprites/cave_entrance.png",
+			"json": null,
+			"action": null,
+			"animated": false
+		},
+		{
+			"name": "drop1",
+			"png": "assets/sprites/drop.png",
+			"json": "assets/sprites/drop.json",
+			"scale": 0.5,
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
+						"splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
+					"speed": 8,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "drop2",
+			"png": "assets/sprites/drop.png",
+			"json": "assets/sprites/drop.json",
+			"scale": 0.5,
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"blank", "blank",
+						"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
+						"splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
+					"speed": 8,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "drop3",
+			"png": "assets/sprites/drop.png",
+			"json": "assets/sprites/drop.json",
+			"scale": 0.5,
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"blank", "blank", "blank", "blank",
+						"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
+						"splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
+					"speed": 8,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "drop4",
+			"png": "assets/sprites/drop.png",
+			"json": "assets/sprites/drop.json",
+			"scale": 0.5,
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"blank", "blank", "blank", "blank", "blank", "blank",
+						"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
+						"splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
+					"speed": 8,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "drop5",
+			"png": "assets/sprites/drop.png",
+			"json": "assets/sprites/drop.json",
+			"scale": 0.5,
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"blank", "blank", "blank", "blank", "blank", "blank", "blank", "blank",
+						"drop-1", "drop-2", "drop-3", "drop-4", "drop-5", "drop-6", "drop-7", "drop-8", "drop-9",
+						"splash-1", "splash-2", "splash-3", "splash-4", "splash-5", "splash-6" ],
+					"speed": 8,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "catch",
+			"png": "assets/sprites/catch.png",
+			"json": "assets/sprites/catch.json",
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"tear-1", "tear-2", "tear-3", "tear-4", "tear-5", "tear-6",
+						"tear-7", "tear-8", "tear-9", "tear-10", "tear-11", "tear-12",
+						"tear-13", "tear-14", "tear-15", "tear-16", "tear-17", "tear-18",
+						"tear-19", "tear-20", "tear-21", "tear-22", "tear-23" ],
+					"speed": 5,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "lift down",
+			"png": "assets/sprites/liftdown.png",
+			"json": "assets/sprites/liftdown.json",
+			"scale": 1,
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"sprite1", "sprite2", "sprite3", "sprite4", "sprite5", "sprite6", "sprite7", "sprite8",
+						"sprite9", "sprite10", "sprite11", "sprite12", "sprite13", "sprite14", "sprite15", "sprite16",
+						"sprite17", "sprite18", "sprite19", "sprite20", "sprite21", "sprite22", "sprite23", "sprite24",
+						"sprite25", "sprite26", "sprite27"
+					],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "lift up",
+			"png": "assets/sprites/liftup.png",
+			"json": "assets/sprites/liftup.json",
+			"scale": 1,
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"sprite1", "sprite2", "sprite3", "sprite4", "sprite5", "sprite6", "sprite7", "sprite8",
+						"sprite9", "sprite10", "sprite11", "sprite12", "sprite13", "sprite14", "sprite15", "sprite16",
+						"sprite17", "sprite18", "sprite19", "sprite20", "sprite21", "sprite22", "sprite23", "sprite24",
+						"sprite25", "sprite26", "sprite27", "sprite28", "sprite29", "sprite30"
+					],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "branch up",
+			"png": "assets/sprites/branch_up.png",
+			"json": "assets/sprites/branch_up.json",
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"branch-1", "branch-2", "branch-3", "branch-4", "branch-5",
+						"branch-6", "branch-7", "branch-8", "branch-9", "branch-10",
+						"branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
+						"branch-16", "branch-17", "branch-18", "branch-19", "branch-20", "branch-21"],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "branch down",
+			"png": "assets/sprites/branch_down.png",
+			"json": "assets/sprites/branch_down.json",
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"branch-1", "branch-2", "branch-3", "branch-4", "branch-5",
+						"branch-6", "branch-7", "branch-8", "branch-9", "branch-10",
+						"branch-11", "branch-12", "branch-13", "branch-14", "branch-15",
+						"branch-16", "branch-17", "branch-18", "branch-19", "branch-20"],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "temple fire",
+			"png": "assets/sprites/temple_fire.png",
+			"json": "assets/sprites/temple_fire.json",
+			"scale": 0.5,
+			"action": null,
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [ "temple_fire-1", "temple_fire-2", "temple_fire-3" ],
+					"speed": 5,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "brynn-enter",
+			"png": "assets/sprites/brynn_ente.png",
+			"json": "assets/sprites/brynn_enter.json",
+			"scale": 1,
+			"action": null,
+			"animated": true,
+			"animations": {
+				"enter": {
+					"name": "enter",
+					"frames": [
+						"sprite1", "sprite1", "sprite1", "sprite1","sprite2", "sprite3",
+						"sprite4", "sprite5","sprite6", "sprite7", "sprite8", "sprite9", 
+						"sprite10", "sprite11", "sprite12", "sprite13", "sprite14", "sprite15",
+						"sprite16", "sprite17", "sprite18", "sprite19", "sprite20", "sprite21", 
+						"sprite22", "sprite23", "sprite24", "sprite25","sprite26", "sprite27"
+					],
+					"speed": 7,
+					"loop": false,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "brynn",
+			"png": "assets/sprites/brynn.png",
+			"json": "assets/sprites/brynn.json",
+			"scale": 0.5,
+			"action": null,
+			"animated": true,
+			"animations": {
+				"talk": {
+					"name": "talk",
+					"frames": [
+						"talk-1", "talk-2", "talk-3", "talk-4", "talk-5",
+						"talk-6", "talk-7", "talk-8", "talk-9", "talk-10", "talk-11"],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"idle": {
+					"name": "idle",
+					"frames": [ "talk-1" ],
+					"speed": 1,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "brynn-spell",
+			"png": "assets/screens/healer.png",
+			"json": "assets/sprites/healer.json",
+			"animated": true,
+			"animations": {
+				"spell": {
+					"name": "spell",
+					"frames": [
+						"spell1", "spell2", "spell3", "spell4", "spell5",
+						"spell6", "spell7", "spell6", "spell5", "spell6",
+						"spell5", "spell4", "spell3", "spell2", "spell1"],
+					"speed": 8,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "brynn-talk",
+			"png": "assets/screens/healer.png",
+			"json": "assets/sprites/healer.json",
+			"animated": true,
+			"animations": {
+				"talk": {
+					"name": "talk",
+					"frames": [
+						"talk1", "talk2", "talk3", "talk4", "talk2", "talk4"],
+					"speed": 8,
+					"loop": true,
+					"start": false
+				},
+				"turn-right": {
+					"name": "turn-right",
+					"frames": [
+						"talk1", "talk2", "talk4"],
+					"speed": 4,
+					"loop": false,
+					"start": false
+				},
+				"turn-left": {
+					"name": "turn-left",
+					"frames": [
+						"talk4", "talk2", "talk1"],
+					"speed": 4,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "temple-fire",
+			"png": "assets/screens/healer.png",
+			"json": "assets/sprites/healer.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"fire1", "fire2", "fire3"
+					],
+					"speed": 8,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "temple-fire-glow",
+			"png": "assets/screens/healer.png",
+			"json": "assets/sprites/healer.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"reflection1", "reflection2", "reflection3"
+					],
+					"speed": 7,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "sorrow_rock_glyph",
+			"png": "assets/sprites/sorrow_rock_glyph.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "rain_drop",
+			"png": "assets/sprites/rain_drop.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "pool_splash",
+			"png": "assets/sprites/splash.png",
+			"json": "assets/sprites/splash.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"drop_1", "drop_2", "drop_3", "drop_4", "drop_5", "drop_6"
+					],
+					"speed": 6,
+					"loop": false,
+					"start": false
+				}
+			}
+		},
+		{
+			"name": "pool_drop_a",
+			"png": "assets/sprites/sorrow_drops.png",
+			"json": "assets/sprites/sorrow_drops.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"drop_a1", "drop_a2", "drop_a3", "drop_a4", "drop_a5", "drop_a6"
+					],
+					"speed": 6,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "pool_drop_b",
+			"png": "assets/sprites/sorrow_drops.png",
+			"json": "assets/sprites/sorrow_drops.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"drop_b1", "drop_b2", "drop_b3", "drop_b4", "drop_b5", "drop_b6"
+					],
+					"speed": 6,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "pool_drop_c",
+			"png": "assets/sprites/sorrow_drops.png",
+			"json": "assets/sprites/sorrow_drops.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"drop_c1", "drop_c2", "drop_c3", "drop_c4", "drop_c5", "drop_c6"
+					],
+					"speed": 6,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "pool_drop_d",
+			"png": "assets/sprites/sorrow_drops.png",
+			"json": "assets/sprites/sorrow_drops.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"drop_d1", "drop_d2", "drop_d3", "drop_d4", "drop_d5", "drop_d6"
+					],
+					"speed": 6,
+					"loop": false,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "pool_drop_e",
+			"png": "assets/sprites/sorrow_drops.png",
+			"json": "assets/sprites/sorrow_drops.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"drop_e1", "drop_e2", "drop_e3", "drop_e4", "drop_e5", "drop_e6"
+					],
+					"speed": 6,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "pool_drop_f",
+			"png": "assets/sprites/sorrow_drops.png",
+			"json": "assets/sprites/sorrow_drops.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"drop_f1", "drop_f2", "drop_f3", "drop_f4", "drop_f5", "drop_f6"
+					],
+					"speed": 6,
+					"loop": false,
+					"start": true
+				}
 			}
 		}
-	},
-	"brynn-spell": {
-		"name": "brynn-spell",
-		"png": "assets/screens/healer.png",
-		"json": "assets/sprites/healer.json",
-		"animated": true,
-		"animations": {
-			"spell": {
-				"name": "spell",
-			 	"frames": [
-			 		"spell1", "spell2", "spell3", "spell4", "spell5",
-			 	 	"spell6", "spell7", "spell6", "spell5", "spell6",
-					"spell5", "spell4", "spell3", "spell2", "spell1"],
-			 	"speed": 8,
-			 	"loop": false,
-			 	"start": false
-			}
-		}
-	},
-	"brynn-talk": {
-		"name": "brynn-talk",
-		"png": "assets/screens/healer.png",
-		"json": "assets/sprites/healer.json",
-		"animated": true,
-		"animations": {
-			"talk": {
-				"name": "talk",
-			 	"frames": [
-			 		"talk1", "talk2", "talk3", "talk4", "talk2", "talk4"],
-			 	"speed": 8,
-			 	"loop": true,
-			 	"start": false
-			}
-		}
-	},
-	"temple-fire": {
-		"name": "temple-fire",
-		"png": "assets/screens/healer.png",
-		"json": "assets/sprites/healer.json",
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": [
-					"fire1", "fire2", "fire3"
-				],
-				"speed": 8,
-				"loop": true,
-				"start": true
-			}
-		}
-	},
-	"temple-fire-glow": {
-		"name": "temple-fire-glow",
-		"png": "assets/screens/healer.png",
-		"json": "assets/sprites/healer.json",
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": [
-					"reflection1", "reflection2", "reflection3"
-				],
-				"speed": 7,
-				"loop": true,
-				"start": true
-			}
-		}
-	},
-	"sorrow_rock_glyph": {
-		"name": "sorrow_rock_glyph",
-		"png": "assets/sprites/sorrow_rock_glyph.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"rain_drop": {
-		"name": "rain_drop",
-		"png": "assets/sprites/rain_drop.png",
-		"json": null,
-		"action": null,
-		"animated": false,
-		"animations": null
-	},
-	"pool_splash": {
-		"name": "pool_splash",
-		"png": "assets/sprites/splash.png",
-		"json": "assets/sprites/splash.json",
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": [
-					"drop_1", "drop_2", "drop_3", "drop_4", "drop_5", "drop_6"
-				],
-				"speed": 6,
-				"loop": false,
-				"start": false
-			}
-		}
-	},
-	"pool_drop_a": {
-		"name": "pool_drop_a",
-		"png": "assets/sprites/sorrow_drops.png",
-		"json": "assets/sprites/sorrow_drops.json",
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": [
-					"drop_a1", "drop_a2", "drop_a3", "drop_a4", "drop_a5", "drop_a6"
-				],
-				"speed": 6,
-				"loop": true,
-				"start": true
-			}
-		}
-	},
-	"pool_drop_b": {
-		"name": "pool_drop_b",
-		"png": "assets/sprites/sorrow_drops.png",
-		"json": "assets/sprites/sorrow_drops.json",
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": [
-					"drop_b1", "drop_b2", "drop_b3", "drop_b4", "drop_b5", "drop_b6"
-				],
-				"speed": 6,
-				"loop": true,
-				"start": true
-			}
-		}
-	},
-	"pool_drop_c": {
-		"name": "pool_drop_c",
-		"png": "assets/sprites/sorrow_drops.png",
-		"json": "assets/sprites/sorrow_drops.json",
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": [
-					"drop_c1", "drop_c2", "drop_c3", "drop_c4", "drop_c5", "drop_c6"
-				],
-				"speed": 6,
-				"loop": true,
-				"start": true
-			}
-		}
-	},
-	"pool_drop_d": {
-		"name": "pool_drop_d",
-		"png": "assets/sprites/sorrow_drops.png",
-		"json": "assets/sprites/sorrow_drops.json",
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": [
-					"drop_d1", "drop_d2", "drop_d3", "drop_d4", "drop_d5", "drop_d6"
-				],
-				"speed": 6,
-				"loop": false,
-				"start": true
-			}
-		}
-	},
-	"pool_drop_e": {
-		"name": "pool_drop_e",
-		"png": "assets/sprites/sorrow_drops.png",
-		"json": "assets/sprites/sorrow_drops.json",
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": [
-					"drop_e1", "drop_e2", "drop_e3", "drop_e4", "drop_e5", "drop_e6"
-				],
-				"speed": 6,
-				"loop": true,
-				"start": true
-			}
-		}
-	},
-	"pool_drop_f": {
-		"name": "pool_drop_f",
-		"png": "assets/sprites/sorrow_drops.png",
-		"json": "assets/sprites/sorrow_drops.json",
-		"animated": true,
-		"animations": {
-			"on": {
-				"name": "on",
-				"frames": [
-					"drop_f1", "drop_f2", "drop_f3", "drop_f4", "drop_f5", "drop_f6"
-				],
-				"speed": 6,
-				"loop": false,
-				"start": true
-			}
-		}
-	}
+	]
 }

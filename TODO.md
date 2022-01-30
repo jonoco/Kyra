@@ -26,7 +26,7 @@
 - [x] use original Kyrandia font
 - [x] add door animations
 - [x] host production build of the game
-- [ ] add better condition checking to quest events
+- [x] add better condition checking to quest events
 - [ ] add 'active' property to sprites to allow or prevent creating them
 - [ ] switch assets to native resolution
 	+ [x] update screens
@@ -35,6 +35,9 @@
 	+ [ ] fix sprites
 		- [ ] cliff
 		- [ ] rocky outcrop (room17)
+		- [ ] create cave animations
+  		- [ ] bridge
+  		- [ ] water
 	+ [ ] update animations
 		- [x] brynn
 		- [ ] herman
@@ -44,6 +47,23 @@
 	+ [ ] update sprite scaling
 - [ ] move brandon's sprite meta to json; animations are being described in *createPlayer*
 - [ ] remove outdated/deprecated assets
+- [ ] migrate to typescript
+  - [x] migrate events/actions
+  - [x] migrate items
+  - [x] migrate sprites
+  - [ ] migrate player to sprite class
+  - [x] migrate rooms
+  - [ ] migrate inventory
+- [ ] move state to individual rooms
+- [ ] improve json schema
+  - [x] change room.doors to array
+  - [ ] improve alternate room handling
+  - [ ] improve animation json schema
+- [ ] improve debugging features
+  - [ ] create in-game command interface to debug in-memory state, e.g., inspect current quest states
+  - [ ] fix debug text distortion
+- [ ] update moveSprite to use standard coordinates rather than tile coords
+- [ ] update *click* handling on sprites
 
 ### Bugs
 - [x] tapping on player causes him to disappear
@@ -60,10 +80,14 @@
 - [x] say and sayAnim events need to be reworked to improve speaking behavior
 	- should be compatible with non-primary talking animations, e.g., brynn and her brynn-talk anims
 - [x] fix brandon's walk sync
-- [ ] crash entering bridge at modAttr
+- [x] ! crash entering bridge at modAttr
+  - [x] same crash on entering temple
 - [x] entities are not instantiating after leaving room
-- [ ] willow quest is broken
+- [x] willow quest is broken
 	- after visiting willow, clicking on pool gives a "no walkable path found" error, and locks player movement
-
-# drops
-{ "name": "pool_drop_c", "x": 113, "y": 89 },
+- [ ] items dropped onto inventory can fall between slots
+- [x] clicking on treehouse door while next to it causes null path error
+- [x] ! blocks not emitting events
+- [x] player doesn't finish tweening into the cave before the quest event starts
+- [x] player cannot move after brynn enters, can only interact with door
+- [ ] player movement is sometimes hindered while they stand on a door

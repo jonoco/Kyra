@@ -1,3 +1,8 @@
+export enum LOG_LEVEL {
+  INFO, WARN, ERROR, DEBUG
+}
+
+
 export const centerGameObjects = function (objects) {
   objects.forEach(function (object) {
     object.anchor.setTo(0.5);
@@ -35,15 +40,28 @@ export const inBounds = (obj1, obj2) => {
 }
 
 
-export const log = msg => {
-  console.log(msg)
+export const log = (msg: string, level: LOG_LEVEL = LOG_LEVEL.INFO) => {
+  const timeStyle = `background: #222; color: #666;`;
+  const infoStyle = `background: #222; color: #22dd11;`;
+  const warnStyle = `background: #222; color: #eeee11;`;
+  const errorStyle = `background: #222; color: #ee2211;`;
+  const debugStyle = `background: #222; color: #66aaff;`
+
+  const text = `%c${new Date().toLocaleTimeString()} - %c${msg}`;
+
+  switch(level) {
+    case LOG_LEVEL.DEBUG: console.log(text, timeStyle, debugStyle); break;
+    case LOG_LEVEL.INFO: console.log(text, timeStyle, infoStyle); break;
+    case LOG_LEVEL.WARN: console.warn(text, timeStyle, warnStyle); break;
+    case LOG_LEVEL.ERROR: console.error(text,timeStyle, errorStyle); break;
+    default:
+  }
 }
 
 
-export const dlog = msg => {
-  if (__DEBUG__) {
-    log(msg)
-  }
+export const dlog = (msg: string) => {
+  if (__DEBUG__)
+    log(msg, LOG_LEVEL.DEBUG)
 }
 
 

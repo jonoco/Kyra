@@ -1,7 +1,11 @@
-import Phaser from 'phaser'
+import 'phaser'
 import { centerGameObjects } from '../utils'
 
 export default class extends Phaser.State {
+  ready: boolean;
+  loaderBg: Phaser.Sprite;
+  message: Phaser.Text;
+
   init () {
     this.ready = false
   }
@@ -13,7 +17,7 @@ export default class extends Phaser.State {
       this.game.world.centerY,
       'preloaderBackground'
     )
-    this.loaderBg.scale.setTo(window.game.scaleFactor)
+    this.loaderBg.scale.setTo(window.app.scaleFactor)
 
     this.message = this.add.text()
     this.message.x = this.game.world.centerX
@@ -42,6 +46,8 @@ export default class extends Phaser.State {
     this.load.json('rooms', 'assets/json/rooms.json')
     this.load.json('music', 'assets/json/music.json')
     this.load.json('sprites', 'assets/json/sprites.json')
+    this.load.json('events', 'assets/json/events.json')
+    this.load.json('quests', 'assets/json/quests.json')
 
     this.load.spritesheet('items', 'assets/img/item_sheet.png', 32, 32)
 
@@ -76,16 +82,15 @@ export default class extends Phaser.State {
 
   // Static and animated sprites
   loadSprites () {
-    var sprites = this.cache.getJSON('sprites')
+    const sprites = this.cache.getJSON('sprites')['sprites']
 
-    for (const [sprite, value] of Object.entries(sprites)) {
-
+    for (const spriteData of sprites) {
       // Sprite has json information
-      if (sprites[sprite].json) {
-        this.load.atlasJSONArray(sprites[sprite].name, sprites[sprite].png, sprites[sprite].json)
+      if (spriteData.json) {
+        this.load.atlasJSONArray(spriteData.name, spriteData.png, spriteData.json)
       // Simple sprite
       } else {
-        this.load.image(sprites[sprite].name, sprites[sprite].png)
+        this.load.image(spriteData.name, spriteData.png)
       }
     }
   }

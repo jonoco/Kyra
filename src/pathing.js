@@ -1,10 +1,15 @@
+import 'phaser';
+
 import PF from 'pathfinding'
 import { dlog, log } from './utils'
+import { enterRoom, onDebug } from './signals';
+import { DebugLevel } from './Debug';
+
 
 export default class Pathing {
     constructor(game) {
         this.game = game
-        this.tileSize = (320/120) * window.game.scaleFactor; // native width / tile width
+        this.tileSize = (320/120) * window.app.scaleFactor; // native width / tile width
         this.tileX = 120;
         this.tileY = 75;
         this.map;
@@ -12,9 +17,13 @@ export default class Pathing {
         this.grid;
         this.finder;
         this.gridJson;
+        this.debugLevel = DebugLevel.off;
 
         this.createMap()
         this.createGrid()
+        
+        onDebug.add(this.toggleDebugLevel, this);
+        enterRoom.add(this.displayDebugTiles, this);
     }
 
     /**
@@ -26,11 +35,6 @@ export default class Pathing {
             allowDiagonal: true,
             dontCrossCorners: true
         });
-
-        if (this.game.debugOn) {
-            dlog('map debugging on')
-            this.map.addTilesetImage('pathing');
-        }
     }
 
 
@@ -41,7 +45,7 @@ export default class Pathing {
         this.map = this.game.add.tilemap();
         this.map.tileWidth = this.tileSize;
         this.map.tileHeight = this.tileSize;
-
+        this.map.addTilesetImage('pathing');
         this.layer = this.map.create('layer', this.tileX, this.tileY, this.tileSize, this.tileSize);
     }
 
@@ -56,10 +60,13 @@ export default class Pathing {
         let roomJson = roomName + '_json';
         this.gridJson = this.game.cache.getJSON(roomJson);
         this.grid.nodes = this.gridJson;
-
-        this.displayDebugTiles()
     }
 
+
+    toggleDebugLevel(debugLevel) {
+        this.debugLevel = debugLevel;
+        this.displayDebugTiles()
+    }
 
     /**
      * Toggle debug tiles
@@ -72,7 +79,7 @@ export default class Pathing {
             }
         }
 
-        if (this.game.debugOn) {
+        if (this.debugLevel == DebugLevel.screen) {
             // Make debug tiles
             for (let i = 0; i < this.gridJson.length ; i++) {
                 for ( let j = 0 ; j < this.gridJson[i].length ; j++ ) {
@@ -99,7 +106,7 @@ export default class Pathing {
         let endX = this.layer.getTileX(endPos.x);
         let endY = this.layer.getTileY(endPos.y);
 
-        dlog(`moving from tile { ${startX},${startY} } to { ${endX}, ${endY} }`);
+        dlog(`moving from tile { ${startX}, ${startY} } to { ${endX}, ${endY} }`);
 
         if (endX > this.tileX || endX < 0 || endY > this.tileY || endY < 0) {
             log(`cannot move to tile { ${endX}, ${endY} }`)

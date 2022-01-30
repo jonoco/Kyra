@@ -21,7 +21,7 @@ module.exports = env => {
     mode: 'development',
     entry: {
       app: [
-        path.resolve(__dirname, 'src/main.js')
+        path.resolve(__dirname, 'src/main.ts')
       ],
       vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
     },
@@ -81,7 +81,8 @@ module.exports = env => {
         },
         { test: /pixi\.js/, use: ['expose-loader?PIXI'] },
         { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
-        { test: /p2\.js/, use: ['expose-loader?p2'] }
+        { test: /p2\.js/, use: ['expose-loader?p2'] },
+        { test: /\.ts$/, loader: 'ts-loader', exclude: '/node_modules/' }
       ]
     },
     resolve: {
@@ -90,7 +91,8 @@ module.exports = env => {
         'phaser': phaser,
         'pixi': pixi,
         'p2': p2
-      }
+      },
+      extensions: ['.ts', '.js'],
     }
   }
 }

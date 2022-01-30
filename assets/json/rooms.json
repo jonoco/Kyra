@@ -9,9 +9,7 @@
 		"sprites": [
 			{ "name": "lamp", "x": 220, "y": 50 },
 			{ "name": "bed", "x": 7, "y": 111 },
-			{ "name": "coal_hanger", "x": 68, "y": 8 },
-			{ "name": "saw_holder_empty", "x": 248, "y": 88 },
-			{ "name": "saw_holder", "x": 248, "y": 89 }
+			{ "name": "coal_hanger", "x": 68, "y": 8 }
 		],
 		"blocks": [
 			{ "name": "coal_hanger", "x": 70,	"y": 64, "height": 17, "width": 33 },
@@ -21,18 +19,19 @@
 			{ "name": "books", "x": 243, "y": 60, "height": 10, "width": 23 },
 			{ "name": "cauldron", "x": 25, "y": 97, "height": 20, "width": 35 }
 		],
+		"entities": [],
 		"grid": "assets/json/room01.json",
 		"path": "assets/screens/home.png",
-		"doors": {
-			"room07": {
+		"doors": [
+			{
 				"name": "room07",
-			  "x": 150, "y": 126,
-			  "height": 15, "width": 100,
+				"x": 150, "y": 126,
+				"height": 15, "width": 100,
 				"entry": {"x": 170, "y": 126},
 				"offPoint": {"x": 170, "y": 176},
-				"animation": false
+				"animation": null
 			}
-		}
+		] 
 	},
 	"room02": {
 		"name": "room02",
@@ -46,37 +45,38 @@
 			{ "name": "branch down", "x": 233, "y": 9 }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room02.json",
 		"path": "assets/screens/trunk.png",
-		"doors": {
-			"room07": {
+		"doors": [
+			{
 				"name": "room07",
-				"x": 238, "y": 73,
-			 	"height": 40, "width": 30,
+				"x": 230, "y": 60,
+			 	"height": 50, "width": 40,
 			 	"entry": {"x": 280, "y": 112},
 			 	"offPoint": {"x": 280, "y": 110},
 			 	"animation": {
 			 		"exit": "branch up",
 			 		"enter": "branch down"
-			 	}
+				}
 			},
-			"room03": {
+			{
 				"name": "room03",
 			 	"x": 0, "y": 0,
-			  "height": 200, "width": 13,
+			  "height": 140, "width": 20,
 			  "entry": {"x": 13, "y": 110},
 			  "offPoint": {"x": -17, "y": 110},
-			  "animation": false
+			  "animation": null
 			},
-			"room08": {
+			{
 				"name": "room08",
 			 	"x": 300, "y": 0,
-			  "height": 200, "width": 13,
+			  "height": 140, "width": 20,
 			  "entry": {"x": 307, "y": 110},
 			  "offPoint": {"x": 340, "y": 110},
-			  "animation": false
+			  "animation": null
 			}
-		}
+		]
 	},
 	"room03": {
 		"name": "room03",
@@ -87,32 +87,33 @@
 		"items": [],
 		"sprites": [
 			{ "name": "willow", "x": 141, "y": 69 },
-			{ "name": "willow branch", "x": 27, "y": 17 }
+			{ "name": "willow_branchs", "x": 27, "y": 9, "layer": "foreground" }
 		],
 		"altSprites": [
 			{ "name": "brandon wow", "x": 96, "y": 67 }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room03.json",
 		"path": "assets/screens/willow_sick.png",
-		"doors": {
-			"room04": {
+		"doors": [
+			{
 				"name": "room04",
 				"x": 0, "y": 0,
-				"height": 200, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 17, "y": 127},
 				"offPoint": {"x": -17, "y": 127},
-				"animation": false
+				"animation": null
 			},
-			"room02": {
+			{
 				"name": "room02",
 			 	"x": 300, "y": 0,
-				"height": 167, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 307, "y": 127},
 			  "offPoint": {"x": 340, "y": 127},
-			  "animation": false
+			  "animation": null
 			}
-		}
+		]
 	},
 	"room03-alt":
 	{
@@ -126,29 +127,30 @@
 		"items": [ {"name": "prismarine", "x": 150, "y": 67 }],
 		"sprites": [
 			{ "name": "river", "x": 8, "y": 73 },
-			{ "name": "oak1", "x": 141, "y": 9 }
+			{ "name": "oak1", "x": 141, "y": 9, "layer": "foreground" }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room04.json",
 		"path": "assets/screens/zrock.png",
-		"doors": {
-			"room03": {
+		"doors": [
+			{
 				"name": "room03",
-				"x": 290, "y": 7,
-				"height": 147, "width": 23,
+				"x": 300, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 293, "y": 61},
 				"offPoint": {"x": 340, "y": 27},
-				"animation": false
+				"animation": null
 			},
-			"room05": {
+			{
 				"name": "room05",
 				"x": 0, "y": 0,
-				"height": 17, "width": 300,
+				"height": 20, "width": 280,
 				"entry": {"x": 183, "y": 10},
 				"offPoint": {"x": 193, "y": 0},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room05": {
 		"name": "room05",
@@ -157,26 +159,27 @@
 		"items": [],
 		"sprites": [{ "name": "temple entrance", "x": 137, "y": 40, "layer": "foreground" }],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room05.json",
 		"path": "assets/screens/healer_ext.png",
-		"doors": {
-			"room04": {
+		"doors": [
+			{
 				"name": "room04",
-				"x": 107, "y": 127,
-				"height": 27, "width": 200,
+				"x": 100, "y": 120,
+				"height": 20, "width": 220,
 				"entry": {"x": 200, "y": 130},
 				"offPoint": {"x": 200, "y": 160},
-				"animation": false
+				"animation": null
 			},
-			"room06": {
+			{
 				"name": "room06",
-				"x": 147, "y": 33,
-				"height": 67, "width": 43,
+				"x": 150, "y": 36,
+				"height": 60, "width": 50,
 				"entry": {"x": 193, "y": 93},
 				"offPoint": {"x": 167, "y": 93},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room06": {
 		"name": "room06",
@@ -186,25 +189,26 @@
 		"sprites": [
 			{ "name": "temple-fire", "x": 133, "y": 45 },
 			{ "name": "temple-fire-glow", "x": 157, "y": 45 },
-			{ "name": "brynn-enter", "x": 9, "y": 60 },
+			{ "name": "brynn-enter", "x": 9, "y": 57 },
 			{ "name": "brynn-spell", "x": 35, "y": 60 },
-			{ "name": "brynn-talk", "x": 36, "y": 64 }
+			{ "name": "brynn-talk", "x": 36, "y": 61 }
 		],
 		"blocks": [
 			{ "name": "brynn", "x": 35, "y": 64, "height": 46, "width": 20 }
 		],
+		"entities": [],
 		"grid": "assets/json/room06.json",
 		"path": "assets/screens/healer.png",
-		"doors": {
-			"room05": {
+		"doors": [
+			{
 				"name": "room05",
 				"x": 300, "y": 0,
-				"height": 167, "width": 13,
+				"height": 140, "width": 20,
 				"entry": {"x": 303, "y": 127},
 				"offPoint": {"x": 340, "y": 127},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room07": {
 		"name": "room07",
@@ -220,18 +224,19 @@
 			{ "name": "flowerbox", "x": 100, "y": 83, "height": 17, "width": 50 },
 			{ "name": "treehouseSymbol", "x": 95, "y": 30, "height": 27, "width": 30 }
 		],
+		"entities": [],
 		"grid": "assets/json/room07.json",
 		"path": "assets/screens/home_ext.png",
-		"doors": {
-			"room01": {
+		"doors": [
+			{
 				"name": "room01",
 				"x": 173, "y": 27,
 				"height": 60, "width": 40,
 				"entry": {"x": 197, "y": 97},
 				"offPoint": {"x": 183, "y": 67},
-				"animation": false
+				"animation": null
 			},
-			"room02": {
+			{
 				"name": "room02",
 				"x": 173, "y": 105,
 				"height": 33, "width": 67,
@@ -242,7 +247,7 @@
 					"exit": "lift down"
 				}
 			}
-		}
+		]
 	},
 	"room08": {
 		"name": "room08",
@@ -254,26 +259,27 @@
 			{ "name": "redwood1", "x": 167, "y": 15, "layer": "foreground" }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room08.json",
 		"path": "assets/screens/forest_north.png",
-		"doors": {
-			"room02": {
+		"doors": [
+			{
 				"name": "room02",
 				"x": 0, "y": 0,
-				"height": 167, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 20, "y": 92},
 				"offPoint": {"x": -17, "y": 75},
-				"animation": false
+				"animation": null
 			},
-			"room09": {
+			{
 				"name": "room09",
-				"x": 300, "y": 33,
-				"height": 117, "width": 20,
+				"x": 300, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 307, "y": 92},
 				"offPoint": {"x": 340, "y": 92},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room09": {
 		"name": "room09",
@@ -282,7 +288,7 @@
 		"items": [],
 		"sprites": [
 			{ "name": "stone1", "x": 186, "y": 94, "layer": "foreground" },
-			{ "name": "catch", "x": 167, "y": 8 },
+			{ "name": "catch", "x": 167, "y": 9 },
 			{ "name": "sorrow_rock_glyph", "x": 9, "y": 40 }
 		],
 		"blocks": [
@@ -320,8 +326,7 @@
 				"duration": 900,  
 				"layer": "midground",
 				"delay": 650
-			}
-			,
+			},
 			{ 
 				"name": "poolDrop", 
 				"startPos": {"x": 162, "y": -5}, 
@@ -333,24 +338,24 @@
 		],
 		"grid": "assets/json/room09.json",
 		"path": "assets/screens/sorrow.png",
-		"doors": {
-			"room08": {
+		"doors": [
+			{
 				"name": "room08",
 				"x": 0, "y": 70,
-				"height": 80, "width": 20,
+				"height": 70, "width": 20,
 				"entry": {"x": 20, "y": 128},
 				"offPoint": {"x": -17, "y": 128},
-				"animation": false
+				"animation": null
 			},
-			"room11": {
+			{
 				"name": "room11",
 				"x": 300, "y": 0,
-				"height": 200, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 307, "y": 108},
 				"offPoint": {"x": 340, "y": 108},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room11": {
 		"name": "room11",
@@ -359,37 +364,38 @@
 		"items": [],
 		"sprites": [
 			{ "name": "oak2", "x": 7, "y": 8, "layer": "foreground" },
-			{ "name": "birch3", "x": 210, "y": 8, "layer": "foreground" }
+			{ "name": "birch3", "x": 212, "y": 9, "layer": "foreground" }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room11.json",
 		"path": "assets/screens/forest_a.png",
-		"doors":  {
-			"room09": {
+		"doors": [
+			{
 				"name": "room09",
-				"x": 0, "y": 7,
-				"height": 183, "width": 20,
+				"x": 0, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 20, "y": 108},
 				"offPoint": {"x": -17, "y": 108},
-				"animation": false
+				"animation": null
 			},
-			"room12": {
+			{
 				"name": "room12",
-				"x": 0, "y": 0,
-				"height": 60, "width": 320,
+				"x": 20, "y": 0,
+				"height": 20, "width": 300,
 				"entry": {"x": 167, "y": 58},
 				"offPoint": {"x": 168, "y": -7},
-				"animation": false
+				"animation": null
 			},
-			"room17": {
+			{
 				"name": "room17",
-				"x": 17, "y": 127,
-				"height": 27, "width": 300,
+				"x": 20, "y": 120,
+				"height": 20, "width": 300,
 				"entry": {"x": 150, "y": 133},
-				"offPoint": {"x": 150, "y": 167},
-				"animation": false
+				"offPoint": {"x": 150, "y": 187},
+				"animation": null
 			}
-		}
+		]
 	},
 	"room12": {
 		"name": "room12",
@@ -397,38 +403,39 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [
-			{ "name": "birch3-r", "x": 308, "y": 8 },
-			{ "name": "oak2-r", "x": 67, "y": 8 }
+			{ "name": "birch3-r", "x": 210, "y": 9, "layer": "foreground" },
+			{ "name": "oak3", "x": 9, "y": 9, "layer": "foreground" }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room12.json",
 		"path": "assets/screens/forest_east.png",
-		"doors": {
-			"room11": {
+		"doors": [
+			{
 				"name": "room11",
-				"x": 67, "y": 127,
-				"height": 27, "width": 233,
+				"x": 20, "y": 120,
+				"height": 20, "width": 280,
 				"entry": {"x": 150, "y": 133},
 				"offPoint": {"x": 150, "y": 167},
-				"animation": false
+				"animation": null
 			},
-			"room13": {
+			{
 				"name": "room13",
 				"x": 0, "y": 0,
-				"height": 167, "width": 20,
+				"height": 120, "width": 20,
 				"entry": {"x": 13, "y": 118},
 				"offPoint": {"x": -17, "y": 73},
-				"animation": false
+				"animation": null
 			},
-			"room14": {
+			{
 				"name": "room14",
-				"x": 300, "y": 7,
-				"height": 117, "width": 20,
+				"x": 300, "y": 0,
+				"height": 120, "width": 20,
 				"entry": {"x": 307, "y": 83},
 				"offPoint": {"x": 340, "y": 83},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room13": {
 		"name": "room13",
@@ -437,18 +444,19 @@
 		"items": [],
 		"sprites": [],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room13.json",
 		"path": "assets/screens/forest_corner_rock.png",
-		"doors": {
-			"room12": {
+		"doors": [
+			{
 				"name": "room12",
-				"x": 297, "y": 83,
-				"height": 83, "width": 20,
+				"x": 300, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 300, "y": 120},
 				"offPoint": {"x": 340, "y": 120},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room14": {
 		"name": "room14",
@@ -462,26 +470,27 @@
 		  { "name": "altar", "x": 128, "y": 33 }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room14.json",
 		"path": "assets/screens/altar.png",
-		"doors": {
-			"room12": {
+		"doors": [
+			{
 				"name": "room12",
 				"x": 0, "y": 0,
-				"height": 167, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 15, "y": 83},
 				"offPoint": {"x": -17, "y": 83},
-				"animation": false
+				"animation": null
 			},
-			"room16": {
+			{
 				"name": "room16",
-				"x": 300, "y": 33,
-				"height": 73, "width": 20,
+				"x": 300, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 303, "y": 63},
 				"offPoint": {"x": 340, "y": 63},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room16": {
 		"name": "room16",
@@ -490,18 +499,19 @@
 		"items": [{ "name": "amythyst", "x": 133, "y": 117 }],
 		"sprites": [],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room16.json",
 		"path": "assets/screens/cliff_nw_b.png",
-		"doors": {
-			"room14": {
+		"doors": [
+			{
 				"name": "room14",
 				"x": 0, "y": 0,
-				"height": 167, "width": 20,
+				"height": 140, "width": 20,
 				"entry": {"x": 15, "y": 101},
 				"offPoint": {"x": -17, "y": 101},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room17": {
 		"name": "room17",
@@ -513,26 +523,27 @@
 			{ "name": "cut tree", "x": 9, "y": 8 }
 		],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room17.json",
 		"path": "assets/screens/xedge.png",
-		"doors": {
-			"room11": {
+		"doors": [
+			{
 				"name": "room11",
 				"x": 0, "y": 0,
 				"height": 20, "width": 320,
 				"entry": {"x": 190, "y": 60},
 				"offPoint": {"x": 200, "y": -7},
-				"animation": false
+				"animation": null
 			},
-			"room18": {
+			{
 				"name": "room18",
 				"x": 0, "y": 120,
-				"height": 27, "width": 320,
+				"height": 20, "width": 320,
 				"entry": {"x": 107, "y": 130},
 				"offPoint": {"x": 100, "y": 173},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room18": {
 		"name": "room18",
@@ -541,48 +552,50 @@
 		"items": [],
 		"sprites": [{ "name": "cave entrance", "x": 7, "y": 8 }],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room18.json",
 		"path": "assets/screens/cave.png",
-		"doors": {
-			"room17": {
+		"doors": [
+			{
 				"name": "room17",
 				"x": 150, "y": 0,
-				"height": 23, "width": 170,
+				"height": 20, "width": 170,
 				"entry": {"x": 247, "y": 60},
 				"offPoint": {"x": 250, "y": -10},
-				"animation": false
+				"animation": null
 			},
-			"room19": {
+			{
 				"name": "room19",
 				"x": 0, "y": 0,
 				"height": 100, "width": 93,
 				"entry": {"x": 83, "y": 95},
 				"offPoint": {"x": 17, "y": 63},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room19": {
 		"name": "room19",
 		"alt": false,
 		"text": "A rickety bridge",
 		"music": "cave",
-		"items": [],
-		"sprites": [{ "name": "herman", "x": 23, "y": 49 }],
+		"items": [{"name": "saw", "x": 50, "y": 50}],
+		"sprites": [],
 		"altSprites": [],
 		"blocks": [],
+		"entities": [],
 		"grid": "assets/json/room19.json",
 		"path": "assets/screens/bridge_broken.png",
-		"doors": {
-			"room18": {
+		"doors": [
+			{
 				"name": "room18",
-				"x": 297, "y": 67,
-				"height": 90, "width": 20,
+				"x": 300, "y": 0,
+				"height": 140, "width": 20,
 				"entry": {"x": 300, "y": 107},
 				"offPoint": {"x": 340, "y": 107},
-				"animation": false
+				"animation": null
 			}
-		}
+		]
 	},
 	"room19-alt": {
 		"name": "room19-alt",

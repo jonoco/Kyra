@@ -2,7 +2,14 @@ import 'pixi';
 import 'p2';
 import App from './states/App';
 
-window.game = new App()
+declare global {
+  interface Window {
+    app: App;
+    cordova: any;
+  }
+}
+
+window.app = new App()
 
 if (window.cordova) {
   var app = {
@@ -20,10 +27,10 @@ if (window.cordova) {
       this.receivedEvent('deviceready');
 
       // When the device is ready, start Phaser Boot state.
-      window.game.state.start('Boot');
+      window.app.state.start('Boot');
     },
 
-    receivedEvent: function (id) {
+    receivedEvent: function (id: any) {
       console.log('Received Event: ' + id);
     }
   }

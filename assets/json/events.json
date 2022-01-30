@@ -1,0 +1,99 @@
+{
+  "events": [
+    {
+      "trigger": "coal_hanger",
+      "actions": [
+        { "type": "say", "value": { "text": "I remember when I was born in that coal basket"}},
+        { "type": "wait", "value": 1000 },
+        { "type": "say", "value": { "text": "Haha, not really though" }},
+        { "type": "say", "value": { "text": "I can't remember a thing" }},
+        { "type": "wait", "value": 500 },
+        { "type": "say", "value": { "text": "Probably from inhaling coal dust as a baby" }}
+      ]
+    },
+    {
+      "trigger": "kallak",
+      "actions": [
+        { "type": "say", "value": { "text": "Lookin good old man" }},
+        { "type": "say", "value": { "text": "Very stoney" }},
+        { "type": "say", "value": { "text": "Like Rocky Balboa" }}
+      ]
+    },
+    {
+      "trigger": "bed",
+      "actions": [
+        { "type": "say", "value": { "text": "This bed was made from" }},
+        { "type": "say", "value": { "text": "the finest horses in Kyrandia" }},
+        { "type": "say", "value": { "text": "Like Rocky Balboa" }}
+      ]
+    },
+    {
+      "trigger": "window",
+      "actions": [
+        { "type": "say", "value": { "text": "The forest really is dying" }},
+        { "type": "say", "value": { "text": "Like Rocky Balboa" }}
+      ]
+    },
+    {
+      "trigger": "books",
+      "actions": [
+        { "type": "say", "value": { "text": "How To Seduce A Harpy, by Ono Badidia" }}
+      ]
+    },
+    {
+      "trigger": "cauldron",
+      "actions": [
+        { "type": "addItem", "value": { "item": "apple", "x": 110, "y": 260}},
+        { "type": "say", "value": { "text": "My apple!" }},
+        { "type": "killBlock", "value": "cauldron" }
+      ]
+    },
+    {
+      "trigger": "flowerbox",
+      "actions": [
+        { "type": "say", "value": { "text": "These flowers smell wonderful" }},
+        { "type": "say", "value": { "text": "Like Rocky Balboa" }}
+      ]
+    },
+    {
+      "trigger": "treehouseSymbol",
+      "actions": [
+        { "type": "say", "value": { "text": "That's grandfather's mark as a magic user" }},
+        { "type": "say", "value": { "text": "so those damn kids will stay away" }}
+      ]
+    },
+    {
+      "trigger": "brynn",
+      "actions": [
+        { "type": "signal",  "value": "brynn" }
+      ]
+    },
+    {
+      "trigger": "pool",
+      "actions": [
+        { "type": "signal", "value": "pool" }
+      ]
+    },
+    {
+      "trigger": "sorrow_rock_glyph",
+      "actions": [
+        { "type": "putSprite", "value": { "sprite": "sorrow_rock_glyph", "x": 50, "y": 50, "layer": "midground" } },
+        { "type": "modAttr", "value": { "sprite": "saw_holder_empty", "attr": "alpha", "value": 1 } },
+        { "type": "moveSprite", "value": { "sprite": "sorrow_rock_glyph", "path": [[50,5], [50, 50]] }},
+        { "type": "modAttr", "value": { "sprite": "sorrow_rock_glyph", "attr": "alpha", "value": 0 } }
+      ]
+    },
+    {
+      "trigger": "herman sawing",
+      "actions": [
+        { "type": "say", "value": { "text": "I better not bother him" }}
+      ]
+    },
+    {
+      "trigger": "willow",
+      "actions": [
+        { "type": "say", "value": { "text": "This willow is withering" }}
+      ]
+    }
+  ]
+}

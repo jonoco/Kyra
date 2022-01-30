@@ -288,7 +288,7 @@
 		"items": [],
 		"sprites": [
 			{ "name": "stone1", "x": 186, "y": 94, "layer": "foreground" },
-			{ "name": "catch", "x": 167, "y": 9 },
+			{ "name": "catch", "x": 169, "y": 9, "layer": "foreground" },
 			{ "name": "sorrow_rock_glyph", "x": 9, "y": 40 }
 		],
 		"blocks": [
@@ -403,8 +403,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [
-			{ "name": "birch3-r", "x": 210, "y": 9, "layer": "foreground" },
-			{ "name": "oak3", "x": 9, "y": 9, "layer": "foreground" }
+			{ "name": "birch3-r", "x": 218, "y": 9, "layer": "foreground" },
+			{ "name": "oak3", "x": 17, "y": 9, "layer": "foreground" }
 		],
 		"blocks": [],
 		"entities": [],
@@ -520,7 +520,8 @@
 		"items": [],
 		"sprites": [
 			{ "name": "herman sawing", "x": 57, "y": 67 },
-			{ "name": "cut tree", "x": 9, "y": 8 }
+			{ "name": "cut tree", "x": 9, "y": 8 },
+			{ "name": "oak4", "x": 139, "y": 9, "layer": "foreground" }
 		],
 		"blocks": [],
 		"entities": [],
@@ -550,7 +551,10 @@
 		"text": "A cavernous entrance",
 		"music": "forest",
 		"items": [],
-		"sprites": [{ "name": "cave entrance", "x": 7, "y": 8 }],
+		"sprites": [
+			{ "name": "cave_entrance", "x": 9, "y": 9, "layer": "foreground" },
+			{ "name": "oak5", "x": 160, "y": 9, "layer": "foreground" }
+		],
 		"blocks": [],
 		"entities": [],
 		"grid": "assets/json/room18.json",

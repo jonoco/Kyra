@@ -63,18 +63,6 @@
       ]
     },
     {
-      "trigger": "brynn",
-      "actions": [
-        { "type": "signal",  "value": "brynn" }
-      ]
-    },
-    {
-      "trigger": "pool",
-      "actions": [
-        { "type": "signal", "value": "pool" }
-      ]
-    },
-    {
       "trigger": "sorrow_rock_glyph",
       "actions": [
         { "type": "putSprite", "value": { "sprite": "sorrow_rock_glyph", "x": 50, "y": 50, "layer": "midground" } },

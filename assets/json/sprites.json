@@ -434,6 +434,22 @@
 			"animations": null
 		},
 		{
+			"name": "oak4",
+			"png": "assets/sprites/oak4.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "oak5",
+			"png": "assets/sprites/oak5.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
 			"name": "oak2-r",
 			"png": "assets/sprites/oak2.png",
 			"reverse": true,
@@ -576,7 +592,7 @@
 			"animated": false
 		},
 		{
-			"name": "cave entrance",
+			"name": "cave_entrance",
 			"png": "assets/sprites/cave_entrance.png",
 			"json": null,
 			"action": null,

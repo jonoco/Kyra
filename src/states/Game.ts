@@ -84,7 +84,7 @@ export default class Game extends Phaser.State {
     // this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room19';
+    this.startRoom = 'room09';
     this.playMusic = false
 
     // event variables
@@ -264,24 +264,6 @@ export default class Game extends Phaser.State {
 
 
   /**
-   * Evaluate a block, executing any related events
-   *
-   * @param {String} block name of the block
-   */
-  evalBlock (block: string) {
-    dlog(`evaluating block ${block}`)
-
-    let blockEvents = this.events.filter(e => e.trigger == block)
-
-    for (let event of blockEvents) {
-      this.queueActions(event.actions)
-    }
-
-    this.popEventQueue()
-  }
-
-
-  /**
    * Determine event type then execute it
    *
    * @param {Action} action event object to execute
@@ -442,7 +424,7 @@ export default class Game extends Phaser.State {
       block.events.onInputDown.add((b: Block) => {
         dlog(`clicked block ${b.name}`)
         this.stopMoving();
-        this.evalBlock(b.name);
+        this.evalEvent(b.name);
       }, this);
       
       this.blockGroup.add(block)
@@ -968,21 +950,9 @@ export default class Game extends Phaser.State {
     var attr = action.attr;
     var value = action.value;
 
-    this.world.forEach((child: any) => {
-        if (child.name == "group" && child.children.length) {
-            child.forEach((groupChild: any) => {
-                if (groupChild.key == key) {
-                    groupChild[attr] = value;
-                    this.evalEvent('mod-' + key);
-                    return true;
-                }
-            });
-        } else if (child.name != "group") {
-            child[attr] = value;
-            this.evalEvent('mod-' + key);
-            return true;
-        }
-    });
+    let sprite = this.getSprite(key);
+    sprite[attr] = value
+    this.evalEvent('mod-' + key);
   }
 
 
@@ -1119,28 +1089,8 @@ export default class Game extends Phaser.State {
   killSprite (action: KillSpriteAction) {
     let spriteName = action.sprite
 
-    // var sprites = this.spritesGroup.children;
-    // let spritesMeta = this.currentRoom.sprites;
-
     let sprite = this.getSprite(spriteName);
     sprite.destroy();
-
-    // this.bgSprites.forEach(child => {
-    //   if (child.name == spriteName) { child.destroy() }
-    // }, this)
-    // this.mgSprites.forEach(child => {
-    //   if (child.name == spriteName) { child.destroy() }
-    // }, this)
-    // this.fgSprites.forEach(child => {
-    //   if (child.name == spriteName) { child.destroy() }
-    // }, this)
-
-    // let j = spritesMeta.length;
-    // while (j--) {
-    //   if (spritesMeta[j].name == spriteName) {
-    //     spritesMeta.splice( j, 1 );
-    //   }
-    // }
 
     this.evalEvent(`kill-${spriteName}`);
   }

@@ -16,13 +16,23 @@
         {
           "step": "gotTear",
           "trigger": "pool",
-          "conditions": [{ "step": "active", "complete": true }],
+          "conditions": [{ "step": "active", "complete": false }],
           "actions": [
             { "type": "say", "value": { "text": "I bet I could catch a tear drop" }},
             { "type": "wait", "value": 1300 },
             { "type": "say", "value": { "text": "I'll take that bet!" }},
-            { "type": "move", "value": { "x": 204, "y": 88 } },
+            { "type": "move", "value": { "x": 207, "y": 90 } },
+            { "type": "modAttr", 
+              "value": { 
+                "sprite": "player", 
+                "attr": "alpha", 
+                "value": 0 } },
             { "type": "playAnim", "value": { "sprite": "catch", "animName": "on", "kill": true } },
+            { "type": "modAttr", 
+              "value": { 
+                "sprite": "player", 
+                "attr": "alpha", 
+                "value": 1 } },
             { "type": "addItem", "value": { "item": "tear", "x": 190, "y": 97} },
             { "type": "say", "value": { "text": "Now i can heal the willow tree!" }}
           ]

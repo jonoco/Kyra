@@ -87,7 +87,7 @@
 		"items": [],
 		"sprites": [
 			{ "name": "willow", "x": 141, "y": 69 },
-			{ "name": "willow branch", "x": 27, "y": 17 }
+			{ "name": "willow_branchs", "x": 27, "y": 9, "layer": "foreground" }
 		],
 		"altSprites": [
 			{ "name": "brandon wow", "x": 96, "y": 67 }
@@ -127,7 +127,7 @@
 		"items": [ {"name": "prismarine", "x": 150, "y": 67 }],
 		"sprites": [
 			{ "name": "river", "x": 8, "y": 73 },
-			{ "name": "oak1", "x": 141, "y": 9 }
+			{ "name": "oak1", "x": 141, "y": 9, "layer": "foreground" }
 		],
 		"blocks": [],
 		"entities": [],
@@ -364,7 +364,7 @@
 		"items": [],
 		"sprites": [
 			{ "name": "oak2", "x": 7, "y": 8, "layer": "foreground" },
-			{ "name": "birch3", "x": 210, "y": 8, "layer": "foreground" }
+			{ "name": "birch3", "x": 212, "y": 9, "layer": "foreground" }
 		],
 		"blocks": [],
 		"entities": [],
@@ -403,8 +403,8 @@
 		"music": "forest",
 		"items": [],
 		"sprites": [
-			{ "name": "birch3-r", "x": 308, "y": 8 },
-			{ "name": "oak2-r", "x": 67, "y": 8 }
+			{ "name": "birch3-r", "x": 210, "y": 9, "layer": "foreground" },
+			{ "name": "oak3", "x": 9, "y": 9, "layer": "foreground" }
 		],
 		"blocks": [],
 		"entities": [],
@@ -579,7 +579,7 @@
 		"alt": false,
 		"text": "A rickety bridge",
 		"music": "cave",
-		"items": [],
+		"items": [{"name": "saw", "x": 50, "y": 50}],
 		"sprites": [],
 		"altSprites": [],
 		"blocks": [],

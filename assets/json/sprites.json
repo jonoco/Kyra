@@ -413,7 +413,6 @@
 			"name": "oak1",
 			"png": "assets/sprites/oak1.png",
 			"json": null,
-			"scale": 0.5,
 			"action": null,
 			"animated": false,
 			"animations": null
@@ -421,6 +420,14 @@
 		{
 			"name": "oak2",
 			"png": "assets/sprites/oak2.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
+		},
+		{
+			"name": "oak3",
+			"png": "assets/sprites/oak3.png",
 			"json": null,
 			"action": null,
 			"animated": false,
@@ -517,7 +524,7 @@
 			"name": "willow",
 			"png": "assets/sprites/willow.png",
 			"json": "assets/sprites/willow.json",
-			"action": { "click": { "text": "This willow tree is withering" } },
+			"action": { "click": true },
 			"animated": true,
 			"animations": {
 				"on": {
@@ -531,6 +538,14 @@
 					"start": false
 				}
 			}
+		},
+		{
+			"name": "willow_branchs",
+			"png": "assets/sprites/willowbranchs.png",
+			"json": null,
+			"action": null,
+			"animated": false,
+			"animations": null
 		},
 		{
 			"name": "brandon wow",

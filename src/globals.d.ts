@@ -35,6 +35,7 @@ interface RoomSpriteData {
   x: number
   y: number
   layer?: Layer
+  reverse?: boolean
 }
 
 interface SpriteData {

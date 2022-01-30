@@ -31,7 +31,7 @@ export default class Sprite extends KSprite {
 
     sprite.alpha = invisible ? 0 : 1;
     if (reverse) {
-      sprite.anchor.x = 0.5;
+      sprite.anchor.setTo(.5, 0);
       sprite.scale.x *= -1;
     }
 

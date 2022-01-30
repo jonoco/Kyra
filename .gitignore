@@ -3,4 +3,5 @@ node_modules
 dist
 build
 .publish
-assets/.DS_Store
+
+.DS_Store

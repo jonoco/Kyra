@@ -53,12 +53,10 @@ export default class Pathing {
     /**
      * Change pathing grid
      * 
-     * @param {String} roomName room name for new grid
+     * @param {String} gridName name for new grid
      */
-    importGrid(roomName) {
-
-        let roomJson = roomName + '_json';
-        this.gridJson = this.game.cache.getJSON(roomJson);
+    importGrid(gridName) {
+        this.gridJson = this.game.cache.getJSON(gridName);
         this.grid.nodes = this.gridJson;
     }
 

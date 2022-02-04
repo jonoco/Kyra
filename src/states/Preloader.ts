@@ -97,12 +97,17 @@ export default class extends Phaser.State {
 
 
   // Room positioning, pathing, animations, etc.
-  loadRoomData (rooms) {
-    var rooms = this.cache.getJSON('rooms')
+  loadRoomData () {
+    let rooms: RoomData[] = this.cache.getJSON('rooms')['rooms']
 
-    for (const [room, data] of Object.entries(rooms)) {
-      this.load.image(rooms[room].name, rooms[room].path)
-      rooms[room].grid ? this.loadGrid(room, rooms):null
+    for (const room of rooms) {
+      this.load.image(room.path, room.path)
+
+      if (room.alt && room.alt.path) 
+        this.load.image(room.alt.path, room.alt.path)
+
+      if (room.grid)
+        this.loadGrid(room)
     }
   }
 
@@ -118,8 +123,11 @@ export default class extends Phaser.State {
 
 
   // Pathfinding grids
-  loadGrid (room, rooms) {
-    var roomJson = rooms[room].name + '_json'
-    this.load.json(roomJson, rooms[room].grid)
+  loadGrid (room) {
+    this.load.json(room.grid, room.grid)
+
+    if (room.alt && room.alt.grid) {
+      this.load.json(room.alt.grid, room.alt.grid)
+    }
   }
 }

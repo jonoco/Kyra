@@ -17,7 +17,21 @@ interface EntityData {
   delay: Phaser.Tween
 }
 
+interface AltRoomData {
+  active: boolean
+  text: string
+  path: string
+  blocks?: BlockData[]
+  doors?: DoorData[]
+  entities?: EntityData[]
+  grid?: string
+  items?: ItemData[]
+  music?: string
+  sprites?: RoomSpriteData[]
+}
+
 interface RoomData {
+  alt?: AltRoomData
   blocks: BlockData[]
   doors: DoorData[]
   entities: EntityData[]

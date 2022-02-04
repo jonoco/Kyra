@@ -27,13 +27,12 @@
 - [x] add door animations
 - [x] host production build of the game
 - [x] add better condition checking to quest events
-- [ ] add 'active' property to sprites to allow or prevent creating them
 - [ ] switch assets to native resolution
 	+ [x] update screens
 	+ [x] update asset coordinates
 	+ [x] update tween coordinates
 	+ [ ] fix sprites
-		- [ ] cliff
+		- [x] cliff
 		- [ ] rocky outcrop (room17)
 		- [ ] create cave animations
   		- [ ] bridge
@@ -54,10 +53,13 @@
   - [ ] migrate player to sprite class
   - [x] migrate rooms
   - [ ] migrate inventory
-- [ ] move state to individual rooms
+- [ ] improve state handling
+  - [ ] ? move state to individual rooms
+  - [ ] manage state via *Data objects
 - [ ] improve json schema
+  - [x] change rooms to array
   - [x] change room.doors to array
-  - [ ] improve alternate room handling
+  - [x] improve alternate room handling
   - [ ] improve animation json schema
 - [ ] improve debugging features
   - [ ] create in-game command interface to debug in-memory state, e.g., inspect current quest states
@@ -91,3 +93,5 @@
 - [x] player doesn't finish tweening into the cave before the quest event starts
 - [x] player cannot move after brynn enters, can only interact with door
 - [ ] player movement is sometimes hindered while they stand on a door
+- [x] block events trigger after quest events on blocks
+  - if quest events are triggered, block actions should be interdicted

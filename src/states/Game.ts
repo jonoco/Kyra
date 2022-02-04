@@ -68,7 +68,7 @@ export default class Game extends Phaser.State {
   playMusic: boolean;
   quests: Quest[];
   room: Room;
-  roomsJSON: Object;
+  roomsData: RoomData[];
   roomText: Phaser.Text;
   speech: Phaser.Text;
   speed: number;
@@ -84,7 +84,7 @@ export default class Game extends Phaser.State {
     // this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room09';
+    this.startRoom = 'room03';
     this.playMusic = false
 
     // event variables
@@ -131,7 +131,7 @@ export default class Game extends Phaser.State {
     this.events = parseEvents(this.cache.getJSON('events').events)
     this.quests = parseQuests(this.cache.getJSON('quests').quests)
 
-    this.roomsJSON = this.cache.getJSON('rooms');
+    this.roomsData = this.cache.getJSON('rooms')['rooms'];
     this.spritesJSON = this.cache.getJSON('sprites')['sprites'];
     this.stage.backgroundColor = '#2d2d2d';
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -141,7 +141,7 @@ export default class Game extends Phaser.State {
       this.game, 
       window.app.scaleFactor, 
       window.app.scaleFactor,
-      this.roomsJSON[this.startRoom] as RoomData)
+      this.roomsData.find(r => r.name == this.startRoom))
     
     this.bgSprites = this.game.add.group(this.world, 'background sprites')
     this.itemGroup = this.game.add.group(this.world, 'item sprites')
@@ -232,13 +232,13 @@ export default class Game extends Phaser.State {
   evalEvent (trigger: string) {
     dlog(`${trigger} has triggered`)
 
+    for (let event of this.events.filter(e => e.trigger == trigger)) {
+      this.queueActions(event.actions)
+    }
+    
     for (let quest of this.quests) {
       let actions = quest.updateQuest(trigger)
       this.queueActions(actions)
-    }
-
-    for (let event of this.events.filter(e => e.trigger == trigger)) {
-      this.queueActions(event.actions)
     }
 
     this.popEventQueue()
@@ -308,6 +308,8 @@ export default class Game extends Phaser.State {
       log(`quest step already complete`, LOG_LEVEL.WARN)
 
     action.step.complete = true
+
+    this.evalEvent(`step-${action.step.step}`)
   }
 
   /**
@@ -579,15 +581,14 @@ export default class Game extends Phaser.State {
    * Create initial room
    */
   createStartRoom () {
-      this.currentRoom = this.roomsJSON[this.startRoom];
-      this.room.loadRoom(this.startRoom)
-      // this.room.loadTexture(this.startRoom);
+      this.currentRoom = this.roomsData.find(r => r.name == this.startRoom);
+      this.room.loadTexture(this.currentRoom.path);
       this.createDoors();
       this.createBlocks();
       this.createItems();
       this.createSprites();
       this.createEntities();
-      this.pathing.importGrid(this.room.name);
+      this.pathing.importGrid(this.currentRoom.grid);
       this.checkMusic();
       this.changeRoomText(this.currentRoom.text);
   }
@@ -931,10 +932,11 @@ export default class Game extends Phaser.State {
     var value = action.value;
     var door = action.door || null;
 
+    let roomData = this.roomsData.find(r => r.name == room)
     if (door) {
-      this.roomsJSON[room][attr][door] = value;
+      roomData[attr][door] = value;
     } else {
-      this.roomsJSON[room][attr] = value;
+      roomData[attr] = value;
     }
 
     this.evalEvent(room+attr);
@@ -1049,39 +1051,32 @@ export default class Game extends Phaser.State {
 
   // Change room to alternate version
   altRoom (action: AltRoomAction) {
-    let room = action.roomName
+    let { roomName } = action;
 
-    var newTexture = room + '-alt';
-    var newText = this.roomsJSON[room].altText;
-    var newSprites = this.roomsJSON[room].altSprites;
+    dlog(`altering ${roomName}`);
 
-    this.roomsJSON[room].alt = true;
+    let room = this.roomsData.find(r => r.name == roomName);
+    if (!room.alt)
+      throw Error(`Attempting to alter room, ${roomName} has no alternate`)
 
-    if (newSprites) {
-      this.roomsJSON[room].sprites = this.roomsJSON[room].altSprites;
-    }
+    room.alt.active = true;
 
-    if (newText) {
-      this.roomsJSON[room].text = this.roomsJSON[room].altText;
-    }
+    let { text, music, items, sprites, blocks, entities, grid, path, doors } = room.alt;
 
-    if (this.currentRoom.name == room) {
-      this.room.loadTexture(newTexture);
-      this.changeRoomText(newText);
-      this.mgSprites.remove(this.player);
-      this.world.addAt(this.player, 1);
+    room.text = text || room.text;
+    room.music = music || room.music;
+    room.items = items || room.items;
+    room.sprites = sprites || room.sprites;
+    room.blocks = blocks || room.blocks;
+    room.entities = entities || room.entities;
+    room.grid = grid || room.grid;
+    room.path = path || room.path;
+    room.doors = doors || room.doors;
 
-      this.bgSprites.removeAll(true)
-      this.mgSprites.removeAll(true)
-      this.fgSprites.removeAll(true)
-
-      this.createSprites();
-      this.world.remove(this.player);
-      this.mgSprites.add(this.player);
-    }
-    dlog('altering ' + this.roomsJSON[room]);
-
-    this.evalEvent('altRoom');
+    this.closeRoom()
+    this.loadRoomAssets(this.currentRoom)
+    
+    this.evalEvent(`alt-${roomName}`);
   }
 
 
@@ -1168,7 +1163,7 @@ export default class Game extends Phaser.State {
   /** Transfer out of current rooms via current selected door */
   exitRoom () {
     // let myDoor = this.currentRoom.doors[this.door.name];
-    this.previousRoom = this.roomsJSON[this.currentRoom.name];
+    this.previousRoom = this.currentRoom;
 
     this.enableInput(false);
 
@@ -1420,34 +1415,33 @@ export default class Game extends Phaser.State {
 
   // Prepare a room for entrance
   loadRoom() {
-    var nextRoom = this.roomsJSON[this.door.name];
+    let nextRoom = this.roomsData.find(r => r.name == this.door.name);
     dlog('loading room ' + nextRoom.name);
 
     this.closeRoom();
 
-    // ready next room
+    this.currentRoom = nextRoom;
+    
+    this.loadRoomAssets(this.currentRoom);
 
-    if (nextRoom.alt) {
-      this.room.loadTexture(nextRoom.name + '-alt');
-    } else {
-      this.room.loadTexture(nextRoom.name);
-    }
+    this.enterRoom();
+  }
 
-    this.currentRoom = this.roomsJSON[nextRoom.name];
-    this.changeRoomText(nextRoom.text);
+
+  loadRoomAssets(room: RoomData) {
+    this.room.loadTexture(room.path);
+    this.changeRoomText(room.text);
     this.checkMusic();
-    this.pathing.importGrid(this.currentRoom.name);
+    this.pathing.importGrid(room.grid);
     this.createDoors();
     this.createBlocks();
     this.createItems();
     this.createSprites();
-    this.createEntities();
+    this.createEntities();  
 
     // return player sprite to spriteGroup
     this.world.remove(this.player);
     this.mgSprites.add(this.player);
-
-    this.enterRoom();
   }
 
 

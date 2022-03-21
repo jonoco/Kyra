@@ -1,27 +1,52 @@
 {
 	"sprites": [
 		{
-			"name": "_brandon",
+			"name": "player",
 			"png": "assets/sprites/brandon.png",
 			"json": "assets/sprites/brandon.json",
-			"action": {
-				"click": { "text": "I'm getting tired" }
-				},
+			"action": null,
 			"animated": true,
 			"animations": {
 				"walk-right": {
-					"frames": [ "right-1","right-2","right-3","right-4","right-5","right-6","right-7" ],
-					"speed": 8,
+					"name": "walk-right",
+					"frames": [ "right-1", "right-2", "right-3", "right-4", "right-5", "right-6", "right-7", "right-8" ],
+					"speed": 15,
 					"loop": true,
 					"start": false
 				},
-				"walk-left" : {
-					"frames": [ "left-1", "left-2", "left-3", "left-4", "left-5", "left-6", "left-7" ],
+				"walk-left": {
+					"name": "walk-left",
+					"frames": [ "left-1", "left-2", "left-3", "left-4", "left-5", "left-6", "left-7", "left-8" ],
+					"speed": 15,
+					"loop": true,
+					"start": false
+				},
+				"walk-up": {
+					"name": "walk-up",
+					"frames": [ "up-1", "up-2", "up-3", "up-4", "up-5", "up-6" ],
+					"speed": 15,
+					"loop": true,
+					"start": false
+				},
+				"walk-down": {
+					"name": "walk-down",
+					"frames": [ "down-1", "down-2", "down-3", "down-4", "down-5", "down-6" ],
+					"speed": 15,
+					"loop": true,
+					"start": false
+				},
+				"talk": {
+					"name": "talk",
+					"frames": [ 
+						"talk-1", "talk-2", "talk-3", "talk-4", "talk-5", "talk-6", 
+						"talk-7", "talk-8", "talk-9", "talk-10", "talk-11", "talk-12"
+					],
 					"speed": 8,
 					"loop": true,
 					"start": false
 				}
-			}
+			},
+			"startFrame": "stand-right"
 		},
 		{
 			"name": "lamp",

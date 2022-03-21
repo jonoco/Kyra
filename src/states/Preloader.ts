@@ -33,7 +33,6 @@ export default class extends Phaser.State {
 
     // Load assets
 
-    this.load.atlasJSONArray('player', 'assets/sprites/brandon.png', 'assets/sprites/brandon.json')
     this.load.atlasJSONArray('fairy', 'assets/sprites/fairy.png', 'assets/sprites/fairy.json')
 
     this.load.image('titlepage', 'assets/img/title.png')

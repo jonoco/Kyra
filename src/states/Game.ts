@@ -410,6 +410,8 @@ export default class Game extends Phaser.State {
     if (animated) this.createSpriteAnimation(newSprite, spriteData);
     if (action) this.createSpriteAction(newSprite, spriteData);
     if (startFrame) this.setFrame(newSprite, spriteData.startFrame);
+
+    return newSprite;
   }
 
 
@@ -644,49 +646,14 @@ export default class Game extends Phaser.State {
    * Create player and animations
    */
   createPlayer () {
-
-      // Use the first door's entry as the starting position when spawning player
-      const startPosition = this.doors[Object.keys(this.doors)[0]].entry
-
-      this.player = this.game.add.sprite(
-          startPosition.x * window.app.scaleFactor,
-          startPosition.y * window.app.scaleFactor,
-          'player',
-          'stand-right');
-      this.player.name = 'player';
-
-      this.player.animations.add('walk-right', [
-      'right-1','right-2','right-3','right-4',
-      'right-5','right-6','right-7', 'right-8'
-      ], 15, true, false);
-
-      this.player.animations.add('walk-left', [
-      'left-1','left-2','left-3','left-4',
-      'left-5','left-6','left-7', 'left-7'
-      ], 15, true, false);
-
-      this.player.animations.add('walk-up', [
-      'up-1','up-2','up-3','up-4',
-      'up-5','up-6'
-      ], 15, true, false);
-
-      this.player.animations.add('walk-down', [
-      'down-1','down-2','down-3','down-4',
-      'down-5','down-6'
-      ], 15, true, false);
-
-      this.player.animations.add('talk', [
-      'talk-1', 'talk-2', 'talk-3', 'talk-4',
-      'talk-5', 'talk-6', 'talk-7', 'talk-8',
-      'talk-9', 'talk-10', 'talk-11', 'talk-12',
-      ], 8, true, false);
-
-      this.player.scale.setTo(window.app.scaleFactor);
-      this.player.anchor.x = 0.5;
-      this.player.anchor.y = 0.9;
-      this.physics.arcade.enableBody(this.player);
-
-      this.mgSprites.add(this.player);
+    // Use the first door's entry as the starting position when spawning player
+    const startPosition = this.doors[Object.keys(this.doors)[0]].entry
+    const spriteData = this.spritesJSON.find(s => s.name == 'player')
+    
+    this.player = this.createSprite(spriteData, startPosition.x, startPosition.y, 'midground')
+    this.player.anchor.x = 0.5;
+    this.player.anchor.y = 0.9;
+    this.physics.arcade.enableBody(this.player);
   }
 
 

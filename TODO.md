@@ -50,7 +50,7 @@
   - [x] migrate events/actions
   - [x] migrate items
   - [x] migrate sprites
-  - [ ] migrate player to sprite class
+  - [x] migrate player to sprite class
   - [x] migrate rooms
   - [ ] migrate inventory
 - [ ] improve state handling
@@ -95,3 +95,6 @@
 - [ ] player movement is sometimes hindered while they stand on a door
 - [x] block events trigger after quest events on blocks
   - if quest events are triggered, block actions should be interdicted
+- [ ] items can be dropped on doors, making them impossible to retrieve
+  - prevent items from dropping on blocks, sprites, doors, etc.
+- [ ] tear drop falls on the ground when placing it on the willow tree

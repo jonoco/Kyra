@@ -93,8 +93,8 @@ export default class Debugger {
     this.state.itemGroup.forEach(spr => this.addDebugSprite(spr), this)
 
     this.addDebugText(`inventory items:`);
-    this.state.inventory.inventory.forEach(spr =>
-      this.addDebugText(`    name: ${spr.name} parent: ${spr.parent.name}`), this)
+    this.state.inventory.slots.forEach(spr =>
+      this.addDebugText(`    item: ${spr.item ? spr.item.name : 'empty'}`), this)
   }
 
 

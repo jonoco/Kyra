@@ -3,7 +3,7 @@ import 'pixi'
 
 import Pathing from '../pathing'
 import Item from '../Item';
-import Inventory from '../inventory'
+import Inventory from '../Inventory'
 import Debugger from '../Debug'
 import Door from '../Door';
 import { log, dlog, inBounds, LOG_LEVEL } from '../utils'
@@ -148,7 +148,7 @@ export default class Game extends Phaser.State {
     this.mgSprites = this.game.add.group(this.world, 'midground sprites')
     this.fgSprites = this.game.add.group(this.world, 'foreground sprites')
     this.createGui();
-    this.inventory = new Inventory(this)
+    this.inventory = this.game.world.add(new Inventory(this.game));
     this.heldItem = this.game.add.group(this.world, 'held items')
 
     this.pathing = new Pathing(this)
@@ -627,18 +627,18 @@ export default class Game extends Phaser.State {
    * Create room items
    */
   createItems () {
-      /*
-      iter each item in room.items
-      check item sprite sheet frame from itemAtlas
-      make each item draggable
-      save inventory items in separate inventory object
-      */
+    /*
+    iter each item in room.items
+    check item sprite sheet frame from itemAtlas
+    make each item draggable
+    save inventory items in separate inventory object
+    */
 
-      this.items = this.currentRoom.items;
+    this.items = this.currentRoom.items;
 
-      for (var i = 0 ; i < this.items.length ;i++) {
+    for (var i = 0 ; i < this.items.length ;i++) {
       this.spawnItem(this.items[i]);
-      }
+    }
   }
 
 
@@ -1383,7 +1383,7 @@ export default class Game extends Phaser.State {
   // Prepare a room for entrance
   loadRoom() {
     let nextRoom = this.roomsData.find(r => r.name == this.door.name);
-    dlog('loading room ' + nextRoom.name);
+    log(`loading room ${nextRoom.name}`, LOG_LEVEL.DEBUG);
 
     this.closeRoom();
 
@@ -1414,7 +1414,7 @@ export default class Game extends Phaser.State {
 
   // Prepare to leave current room
   closeRoom () {
-    dlog('closing room ' + this.currentRoom.name);
+    log(`closing room ${this.currentRoom.name}`, LOG_LEVEL.DEBUG);
     this.saveItems(); // save room state
 
     // save player sprite
@@ -1434,7 +1434,7 @@ export default class Game extends Phaser.State {
 
   // Enable input on room after entering
   openRoom () {
-    dlog('opening room ' + this.currentRoom.name);
+    log('opening room ' + this.currentRoom.name, LOG_LEVEL.DEBUG);
 
     this.evalEvent(this.currentRoom.name);
     this.enableInput(true);
@@ -1445,15 +1445,15 @@ export default class Game extends Phaser.State {
 
 
   // Handle dropping an item
-  findItemDestination (item) {
-    let placed = false;
+  findItemDestination (item: Item) {
     let spriteHit = false
 
     // check if inventory hit
-    if (this.inventory.itemDroppedOnInventory(item) && !placed) {
-      dlog('item dropped onto inventory')
+    const slot = this.inventory.getSlotOverlappingItem(item);
+    if (slot) {
+      log(`item dropped onto inventory slot ${slot.name}`)
 
-      let swappedItem = this.inventory.moveItemToInventory(item)
+      const swappedItem = this.inventory.moveItemToInventory(item, slot);
       if (swappedItem) {
         // TODO remove duplicate data entry for currentRoom.items and itemGroup
         this.itemGroup.add(swappedItem)
@@ -1463,10 +1463,8 @@ export default class Game extends Phaser.State {
           y: swappedItem.position.y
         })
       }
-
-      placed = true;
-    } else if (inBounds(item, this.room) && !placed) {
-      dlog('item hit room')
+    } else if (inBounds(item, this.room)) {
+      log('item hit room', LOG_LEVEL.DEBUG)
 
       // check for sprites hits -> event call them
       this.bgSprites.forEach(function (sprite) {
@@ -1483,7 +1481,7 @@ export default class Game extends Phaser.State {
           if (sprite.inputEnabled)
             this.evalEvent(sprite.key + '-' + item.name)
 
-          dlog(`item overlapped foreground sprite`)
+          log(`item overlapped foreground sprite`, LOG_LEVEL.DEBUG)
           spriteHit = true
         }
       }, this)
@@ -1494,7 +1492,7 @@ export default class Game extends Phaser.State {
 
       // place item under cursor if the location is walkable, and no foreground sprites hit
       if (!spriteHit && this.pathing.findWay(this.player.position, {x: item.x, y: item.y })) {
-        dlog(`placing ${item.name} into room at { ${item.position.x}, ${item.position.y} }`)
+        log(`placing ${item.name} into room at { ${item.position.x}, ${item.position.y} }`, LOG_LEVEL.INFO)
         this.itemGroup.addChild(item)
       } else {
         this.tossItem(item)
@@ -1507,13 +1505,13 @@ export default class Game extends Phaser.State {
     item.x = this.player.x
     item.y = this.player.y - 25
 
-    dlog(`tossing ${item.name} into room at { ${item.position.x}, ${item.position.y} }`)
+    log(`tossing ${item.name} into room at { ${item.position.x}, ${item.position.y} }`, LOG_LEVEL.INFO)
     this.itemGroup.addChild(item)
   }
 
 
   // Spawn item into room
-  spawnItem (itemData) {
+  spawnItem (itemData: ItemData) {
     let { name, x, y } = itemData;
 
     let item = new Item(
@@ -1526,31 +1524,31 @@ export default class Game extends Phaser.State {
     item.inputEnabled = true;
     item.input.enableDrag(true, true);
 
-    dlog(`spawn ${item.name} at x: ${item.position.x} y: ${item.position.y}`)
+    log(`spawn ${item.name} at x: ${item.position.x} y: ${item.position.y}`)
 
     // check if item was in inventory, if so, remove from slot
-    item.events.onDragStart.add((data) => {
-      dlog(`${data.name} picked up | parent ${data.parent.name}`);
+    item.events.onDragStart.add((draggedItem: Item) => {
+      log(`${draggedItem.name} picked up | parent ${draggedItem.parent.name}`);
 
-      this.changeRoomText(`${data.name} picked up`);
+      this.changeRoomText(`${draggedItem.name} picked up`);
 
-      if (data.parent.name == 'inventory') {
-        dlog(`${data.name} is from inventory`)
-        this.inventory.removeItemFromInventory(data);
+      if (draggedItem.parent.name == 'inventory') {
+        log(`${draggedItem.name} is from inventory`, LOG_LEVEL.DEBUG)
+        this.inventory.removeItemFromInventory(draggedItem);
       }
 
-      this.heldItem.addChild(data)
+      this.heldItem.addChild(draggedItem)
     }, this)
 
     // check drop location
-    item.events.onDragStop.add((data) => {
+    item.events.onDragStop.add((draggedItem: Item) => {
 
-      this.changeRoomText(`${data.name} placed`);
-      this.heldItem.removeChild(data)
+      this.changeRoomText(`${draggedItem.name} placed`);
+      this.heldItem.removeChild(draggedItem)
 
-      this.findItemDestination(data);
+      this.findItemDestination(draggedItem);
 
-      dlog(`${data.name} placed at { ${item.position.x}, ${item.position.y} } in ${item.parent}`)
+      log(`${draggedItem.name} placed at { ${item.position.x}, ${item.position.y} } in ${item.parent.name}`)
     }, this);
 
     this.itemGroup.add(item);
@@ -1565,7 +1563,7 @@ export default class Game extends Phaser.State {
     this.itemGroup.forEach(function(item) {
       for (var i = 0; i < this.currentRoom.items.length ; i++) {
         if (item.name == this.currentRoom.items[i].name) {
-          dlog('saving ' + item.name + ' location');
+          log('saving ' + item.name + ' location', LOG_LEVEL.DEBUG);
           this.currentRoom.items[i].x = item.x / window.app.scaleFactor
           this.currentRoom.items[i].y = item.y / window.app.scaleFactor
           break;
@@ -1593,7 +1591,7 @@ export default class Game extends Phaser.State {
 
       if (this.currentMusic != null) {
 
-        dlog('playing music: '+this.currentMusic);
+        log('playing music: '+this.currentMusic, LOG_LEVEL.INFO);
         this.music = this.game.sound.add(this.currentMusic, 1, true);
         this.music.onDecoded.add(function() {
 
@@ -1608,7 +1606,7 @@ export default class Game extends Phaser.State {
   toggleMusic() {
     this.playMusic = !this.playMusic
 
-    dlog(`turning music ${this.playMusic ? 'on' : 'off'}`);
+    log(`turning music ${this.playMusic ? 'on' : 'off'}`, LOG_LEVEL.DEBUG);
 
     if (this.playMusic) {
       this.checkMusic()
@@ -1629,7 +1627,7 @@ export default class Game extends Phaser.State {
 
   /** Retrieve active sprite by key from the scene */
   getSprite (key: string) {
-    dlog(`get sprite from the scene: ${key}`)
+    log(`get sprite from the scene: ${key}`, LOG_LEVEL.DEBUG)
 
     let sprites = [
       ...this.bgSprites.children,
@@ -1652,7 +1650,7 @@ export default class Game extends Phaser.State {
 
   // Toggle a sprite's alpha
   showSprite (sprite, bool) {
-    dlog('show sprite? ' + sprite.name + ':' + bool);
+    log('show sprite? ' + sprite.name + ':' + bool, LOG_LEVEL.DEBUG);
     var alpha = bool ? 1:0;
     sprite.alpha = alpha;
   }

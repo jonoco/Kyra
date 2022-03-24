@@ -87,7 +87,7 @@
 - [x] entities are not instantiating after leaving room
 - [x] willow quest is broken
 	- after visiting willow, clicking on pool gives a "no walkable path found" error, and locks player movement
-- [ ] items dropped onto inventory can fall between slots
+- [x] items dropped onto inventory can fall between slots
 - [x] clicking on treehouse door while next to it causes null path error
 - [x] ! blocks not emitting events
 - [x] player doesn't finish tweening into the cave before the quest event starts

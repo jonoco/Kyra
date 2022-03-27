@@ -5,7 +5,6 @@ import SplashState from './Splash';
 import GameState from './Game';
 import Preloader from './Preloader';
 
-import config from '../config';
 
 export default class App extends Phaser.Game {
   scaleFactor: number;
@@ -22,9 +21,6 @@ export default class App extends Phaser.Game {
     } else {
       height = Math.floor(width / 1.6)
     }
-
-    // const width = docElement.clientWidth > config.gameWidth ? config.gameWidth : docElement.clientWidth;
-    // const height = docElement.clientHeight > config.gameHeight ? config.gameHeight : docElement.clientHeight;
 
     super(width, height, Phaser.CANVAS, 'content', null, true, false);
 

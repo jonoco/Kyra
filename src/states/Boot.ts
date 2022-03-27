@@ -1,6 +1,4 @@
 import 'phaser'
-import * as WebFontLoader from 'webfontloader';
-import config from '../config';
 
 
 export default class extends Phaser.State {
@@ -17,15 +15,6 @@ export default class extends Phaser.State {
   }
 
   preload() {
-    if (config.webfonts.length) {
-      WebFontLoader.load({
-        google: {
-          families: config.webfonts
-        },
-        active: this.fontsLoaded
-      })
-    }
-
     this.kyrandiaFont = this.add.text()
     this.kyrandiaFont.font = 'kyrandia'
 

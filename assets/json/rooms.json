@@ -600,7 +600,9 @@
 			"alt": {
 				"active": false,
 				"text": "A rickety bridge",
-				"sprites": [],
+				"sprites": [
+					{ "name": "cave_rock", "x": 193, "y": 25, "layer": "background" }
+				],
 				"grid": "assets/json/room19.json",
 				"path": "assets/screens/bridge_fixed.png"
 			},

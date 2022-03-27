@@ -143,11 +143,15 @@ export default class Game extends Phaser.State {
       window.app.scaleFactor,
       this.roomsData.find(r => r.name == this.startRoom))
     
+    this.doorGroup = this.game.add.group();
+
     this.bgSprites = this.game.add.group(this.world, 'background sprites')
     this.itemGroup = this.game.add.group(this.world, 'item sprites')
     this.mgSprites = this.game.add.group(this.world, 'midground sprites')
     this.fgSprites = this.game.add.group(this.world, 'foreground sprites')
+
     this.createGui();
+
     this.inventory = this.game.world.add(new Inventory(this.game));
     this.heldItem = this.game.add.group(this.world, 'held items')
 
@@ -155,7 +159,6 @@ export default class Game extends Phaser.State {
 
     this.createText();
     this.createInputs();
-    this.doorGroup = this.game.add.group();
     this.doorDebug = this.game.add.group();
     this.blockGroup = this.game.add.group();
     this.debugGroup = this.add.group();
@@ -658,7 +661,7 @@ export default class Game extends Phaser.State {
    * Create input events
    */
   createInputs () {
-    this.room.events.onInputDown.add(pointer => {
+    this.room.events.onInputUp.add((obj: any, pointer: Phaser.Pointer, isOver: Boolean) => {
       if (this.speech.alive) {
         this.speech.kill();
         return null;
@@ -689,7 +692,7 @@ export default class Game extends Phaser.State {
       this.doorGroup.add(door);
       this.physics.arcade.enable(door);
 
-      door.events.onInputDown.add(this.moveToDoor, this);
+      door.events.onInputUp.add(this.moveToDoor, this);
     }
   }
 

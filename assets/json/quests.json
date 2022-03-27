@@ -16,7 +16,7 @@
         {
           "step": "gotTear",
           "trigger": "pool",
-          "conditions": [{ "step": "active", "complete": false }],
+          "conditions": [{ "step": "active", "complete": true }],
           "actions": [
             { "type": "say", "value": { "text": "I bet I could catch a tear drop" }},
             { "type": "wait", "value": 1300 },
@@ -238,7 +238,7 @@
         {
           "step": "cave",
           "trigger": "room19",
-          "conditions": [],
+          "conditions": [{ "step": "giveSaw", "complete": false }],
           "actions": [
             { "type": "putSprite", 
               "value": {
@@ -368,12 +368,7 @@
           "actions": [
             { "type": "say", "value": { "text": "I wonder if the bridge is fixed..." }},
             { "type": "altRoom", "value": "room19" },
-            { "type": "modMeta", "value": { 
-              "sprite": "cut tree", "attr": "invisible", "value": false } },
-            { "type": "modMeta", "value": { 
-              "sprite": "herman sawing", "attr": "invisible", "value": true } },
-            { "type": "modAttr", "value": { 
-              "sprite": "herman sawing", "attr": "inputEnabled", "value": false } }
+            { "type": "altRoom", "value": "room17" }
           ]
         },
         {

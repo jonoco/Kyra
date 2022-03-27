@@ -882,7 +882,7 @@ export default class Game extends Phaser.State {
     let spriteData = this.spritesJSON.find(s => s.name == sprite)
     spriteData[attr] = val;
 
-    this.evalEvent(sprite);
+    this.evalEvent(`mod-${sprite}-${attr}`);
   }
 
 
@@ -900,7 +900,7 @@ export default class Game extends Phaser.State {
       roomData[attr] = value;
     }
 
-    this.evalEvent(room+attr);
+    this.evalEvent(`${room}-${attr}`);
   }
 
 
@@ -1014,7 +1014,7 @@ export default class Game extends Phaser.State {
   altRoom (action: AltRoomAction) {
     let { roomName } = action;
 
-    dlog(`altering ${roomName}`);
+    log(`altering ${roomName}`);
 
     let room = this.roomsData.find(r => r.name == roomName);
     if (!room.alt)

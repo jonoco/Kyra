@@ -110,14 +110,6 @@
 			"animations": null
 		},
 		{
-			"name": "cut tree",
-			"png": "assets/sprites/cut_tree.png",
-			"scale": 0.5,
-			"invisible": true,
-			"action": null,
-			"animated": false
-		},
-		{
 			"name": "herman sawing",
 			"png": "assets/sprites/herman_sawing.png",
 			"json": "assets/sprites/herman_sawing.json",

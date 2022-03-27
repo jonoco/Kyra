@@ -526,13 +526,17 @@
 		},
 		{
 			"name": "room17",
-			"alt": null,
+			"alt": {
+				"path": "assets/screens/xedge_cut.png",
+				"sprites": [
+					{ "name": "oak4", "x": 139, "y": 9, "layer": "foreground" }
+				]
+			},
 			"text": "A rocky outcropping",
 			"music": "forest",
 			"items": [],
 			"sprites": [
 				{ "name": "herman sawing", "x": 57, "y": 67 },
-				{ "name": "cut tree", "x": 9, "y": 8 },
 				{ "name": "oak4", "x": 139, "y": 9, "layer": "foreground" }
 			],
 			"blocks": [],
@@ -596,6 +600,7 @@
 			"alt": {
 				"active": false,
 				"text": "A rickety bridge",
+				"sprites": [],
 				"grid": "assets/json/room19.json",
 				"path": "assets/screens/bridge_fixed.png"
 			},

@@ -27,23 +27,23 @@
 - [x] add door animations
 - [x] host production build of the game
 - [x] add better condition checking to quest events
-- [ ] switch assets to native resolution
+- [x] switch assets to native resolution
 	+ [x] update screens
 	+ [x] update asset coordinates
 	+ [x] update tween coordinates
-	+ [ ] fix sprites
+	+ [x] fix sprites
 		- [x] cliff
-		- [ ] rocky outcrop (room17)
+		- [x] rocky outcrop (room17)
 		- [x] create cave animations
-  		- [ ] bridge
-  		- [ ] water
-	+ [ ] update animations
+  		- [x] bridge
+  		- [x] water
+	+ [x] update animations
 		- [x] brynn
-		- [ ] herman
-		- [ ] brandon
+		- [x] herman
+		- [x] brandon
 		- [x] bridge
 		- [x] pond
-	+ [ ] update sprite scaling
+	+ [x] update sprite scaling
 - [x] move brandon's sprite meta to json; animations are being described in *createPlayer*
 - [ ] remove outdated/deprecated assets
 - [x] migrate to typescript

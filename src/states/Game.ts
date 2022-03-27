@@ -1615,6 +1615,7 @@ export default class Game extends Phaser.State {
 
   // Change room GUI text
   changeRoomText (text: string) {
+    text = text.charAt(0).toUpperCase() + text.slice(1);
     this.roomText.text = text;
   }
 

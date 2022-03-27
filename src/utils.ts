@@ -55,8 +55,8 @@ export const log = (msg: string, level: LOG_LEVEL = LOG_LEVEL.INFO) => {
   const text = `%c${new Date().toLocaleTimeString()} - %c${msg}`;
 
   switch(level) {
-    case LOG_LEVEL.DEBUG: console.log(text, timeStyle, debugStyle); break;
-    case LOG_LEVEL.INFO: console.log(text, timeStyle, infoStyle); break;
+    case LOG_LEVEL.DEBUG: console.debug(text, timeStyle, debugStyle); break;
+    case LOG_LEVEL.INFO: console.info(text, timeStyle, infoStyle); break;
     case LOG_LEVEL.WARN: console.warn(text, timeStyle, warnStyle); break;
     case LOG_LEVEL.ERROR: console.error(text,timeStyle, errorStyle); break;
     default:

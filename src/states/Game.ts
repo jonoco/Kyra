@@ -1101,7 +1101,9 @@ export default class Game extends Phaser.State {
 
 
   /** Check if door will allow travel */
-  peekInDoor (door: Door) {
+  peekInDoor (player: Sprite, door: Door) {
+    log(`peeking in door ${door.name}`, LOG_LEVEL.DEBUG)
+
     if (door.open) {
       this.closeDoor()
       

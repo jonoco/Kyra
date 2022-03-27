@@ -99,3 +99,4 @@
   - prevent items from dropping on blocks, sprites, doors, etc.
 - [ ] tear drop falls on the ground when placing it on the willow tree
 - [ ] method of spawning sprites in rooms through events causes sprites to only appear after the player tweens in
+- [x] cannot travel through doors

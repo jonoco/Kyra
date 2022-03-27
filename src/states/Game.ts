@@ -84,7 +84,7 @@ export default class Game extends Phaser.State {
     // this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room03';
+    this.startRoom = 'room08';
     this.playMusic = false
 
     // event variables
@@ -162,10 +162,6 @@ export default class Game extends Phaser.State {
     this.createStartRoom();
     this.createPlayer();
 
-    // this.input.keyboard.addKeys({ "a": Phaser.KeyCode.A, "b": Phaser.KeyCode.B })
-    // let tildeKey = this.input.keyboard.addKey(Phaser.KeyCode.TILDE)
-    // tildeKey.onDown.add(this.toggleDebug, this)
-
     let key_1 = this.input.keyboard.addKey(Phaser.KeyCode.ONE)
     key_1.onDown.add(this.toggleMusic, this)
 
@@ -197,29 +193,30 @@ export default class Game extends Phaser.State {
    * Show the game end message and return to the main menu
    */
   quitGame () {
-    var blockBg = this.make.graphics();
-        blockBg.beginFill(0x000000, 1);
-        blockBg.drawRect(0, 0, this.game.width, this.game.height);
-        blockBg.endFill();
-        blockBg.alpha = 0;
+    const blockBg = this.make.graphics();
+    blockBg.beginFill(0x000000, 1);
+    blockBg.drawRect(0, 0, this.game.width, this.game.height);
+    blockBg.endFill();
+    blockBg.alpha = 0;
+
     this.world.add(blockBg);
 
-    var endMessage = this.add.image( 0, 0, 'end');
-        endMessage.scale.setTo(window.app.scaleFactor);
-        endMessage.alpha = 0;
-        endMessage.inputEnabled = true;
+    const endMessage = this.add.image( 0, 0, 'end');
+    endMessage.scale.setTo(window.app.scaleFactor);
+    endMessage.alpha = 0;
+    endMessage.inputEnabled = true;
 
-    var fade = this.game.add.tween(blockBg);
-        fade.to({ alpha: 1 }, 2000);
-        fade.start();
+    const fade = this.game.add.tween(blockBg);
+    fade.to({ alpha: 1 }, 2000);
+    fade.start();
 
-    var message = this.game.add.tween(endMessage);
-        message.to({ alpha: 1 }, 2000);
-        message.start();
+    const message = this.game.add.tween(endMessage);
+    message.to({ alpha: 1 }, 2000);
+    message.start();
 
     endMessage.events.onInputDown.add(function () {
-    this.cache.destroy();
-    this.state.start('MainMenu');
+      this.cache.destroy();
+      this.state.start('MainMenu');
     }, this);
   }
 
@@ -348,7 +345,7 @@ export default class Game extends Phaser.State {
    * @param {Sprite} sprite sprite to modify
    * @param {String} frame name of frame to switch to
    */
-  setFrame (sprite, frame) {
+  setFrame (sprite: Sprite, frame: string) {
       log(`setting frame: ${frame}`, LOG_LEVEL.INFO);
 
       sprite.frameName = frame;
@@ -661,12 +658,6 @@ export default class Game extends Phaser.State {
    * Create input events
    */
   createInputs () {
-      // amulet input not implemented
-      //this.input.onTap.add(function () {}, this);
-      // this.amulet.events.onInputDown.add(function (pointer) {
-      //   dlog('amulet hit');
-      // }, this);
-
     this.room.events.onInputDown.add(pointer => {
       if (this.speech.alive) {
         this.speech.kill();
@@ -791,7 +782,7 @@ export default class Game extends Phaser.State {
 
 
   // Sprite talking
-  say (action: SayAction, onComplete = null) {
+  say (action: SayAction, onComplete: () => void = null) {
     let text = action.text
     let key = action.sprite
     let color = action.color
@@ -1110,7 +1101,7 @@ export default class Game extends Phaser.State {
 
 
   /** Check if door will allow travel */
-  peekInDoor (player: Phaser.Sprite, door: Door) {
+  peekInDoor (door: Door) {
     if (door.open) {
       this.closeDoor()
       
@@ -1242,7 +1233,7 @@ export default class Game extends Phaser.State {
 
 
   // Move player into room
-  tweenIn (door) {
+  tweenIn (door: DoorData) {
 
     let entryPoint = {...door.entry}
 
@@ -1348,7 +1339,7 @@ export default class Game extends Phaser.State {
 
 
   // Move player along path
-  tweenPath (path) {
+  tweenPath (path: [[number, number]]) {
     if (!path) {
       log(`null path, cannot tween path`, LOG_LEVEL.ERROR)
       return
@@ -1574,7 +1565,7 @@ export default class Game extends Phaser.State {
 
 
   // Toggle player input
-  enableInput (bool) {
+  enableInput (bool: boolean) {
     this.input.enabled = bool;
   }
 
@@ -1620,8 +1611,8 @@ export default class Game extends Phaser.State {
 
 
   // Change room GUI text
-  changeRoomText (string) {
-    this.roomText.text = string;
+  changeRoomText (text: string) {
+    this.roomText.text = text;
   }
 
 
@@ -1649,9 +1640,9 @@ export default class Game extends Phaser.State {
 
 
   // Toggle a sprite's alpha
-  showSprite (sprite, bool) {
-    log('show sprite? ' + sprite.name + ':' + bool, LOG_LEVEL.DEBUG);
-    var alpha = bool ? 1:0;
+  showSprite (sprite: Sprite, show: boolean) {
+    log(`show sprite ${sprite.name} = ${show}`, LOG_LEVEL.DEBUG);
+    let alpha = show ? 1:0;
     sprite.alpha = alpha;
   }
 }

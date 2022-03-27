@@ -44,15 +44,15 @@
 		- [ ] bridge
 		- [x] pond
 	+ [ ] update sprite scaling
-- [ ] move brandon's sprite meta to json; animations are being described in *createPlayer*
+- [x] move brandon's sprite meta to json; animations are being described in *createPlayer*
 - [ ] remove outdated/deprecated assets
-- [ ] migrate to typescript
+- [x] migrate to typescript
   - [x] migrate events/actions
   - [x] migrate items
   - [x] migrate sprites
   - [x] migrate player to sprite class
   - [x] migrate rooms
-  - [ ] migrate inventory
+  - [x] migrate inventory
 - [ ] improve state handling
   - [ ] ? move state to individual rooms
   - [ ] manage state via *Data objects
@@ -98,3 +98,4 @@
 - [ ] items can be dropped on doors, making them impossible to retrieve
   - prevent items from dropping on blocks, sprites, doors, etc.
 - [ ] tear drop falls on the ground when placing it on the willow tree
+- [ ] method of spawning sprites in rooms through events causes sprites to only appear after the player tweens in

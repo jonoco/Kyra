@@ -603,7 +603,15 @@
 			"text": "A perilous bridge",
 			"music": "cave",
 			"items": [{"name": "saw", "x": 50, "y": 50}],
-			"sprites": [],
+			"sprites": [
+				{ "name": "cave_rock", "x": 193, "y": 25, "layer": "background" },
+				{ "name": "cave_rope_1", "x": 129, "y": 89, "layer": "background" },
+				{ "name": "cave_rope_2", "x": 169, "y": 73, "layer": "background" },
+				{ "name": "cave_rope_3", "x": 93, "y": 98, "layer": "background" },
+				{ "name": "cave_water_1", "x": 80, "y": 106, "layer": "background" },
+				{ "name": "cave_water_2", "x": 121, "y": 113, "layer": "background" },
+				{ "name": "cave_water_3", "x": 134, "y": 105, "layer": "background" }
+			],
 			"altSprites": [],
 			"blocks": [],
 			"entities": [],

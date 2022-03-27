@@ -245,7 +245,7 @@
                 "sprite": "herman", 
                 "x": 207, 
                 "y": 52,
-                "layer": "foreground" }},
+                "layer": "background" }},
             { "type": "wait", "value": 300 },
             { "type": "playAnim", 
               "value": { 

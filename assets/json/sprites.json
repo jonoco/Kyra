@@ -232,10 +232,10 @@
 				"hunch-scratch-head": {
 					"name": "hunch-scratch-head",
 					"frames": [
-						"hunch-4", "hunch-hand-raised", "hunch-hand-up-1", 
+						"hunch-3", "hunch-hand-raised", "hunch-hand-up-1", 
 						"hunch-hand-up-2", "hunch-hand-up-5", "hunch-hand-up-1",
 						"hunch-hand-up-2", "hunch-hand-up-5", "hunch-hand-raised", 
-						"hunch-4"
+						"hunch-3"
 					],
 					"speed": 8,
 					"loop": false,
@@ -1107,6 +1107,125 @@
 					],
 					"speed": 6,
 					"loop": false,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "cave_rock",
+			"png": "assets/sprites/cave_rock.png",
+			"json": "assets/sprites/cave_rock.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"sprite1", "sprite2", "sprite3"
+					],
+					"speed": 8,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "cave_rope_1",
+			"png": "assets/sprites/cave_rope_1.png",
+			"json": "assets/sprites/cave_rope_1.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"sprite1", "sprite2", "sprite3"
+					],
+					"speed": 6,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "cave_rope_2",
+			"png": "assets/sprites/cave_rope_2.png",
+			"json": "assets/sprites/cave_rope_2.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"sprite1", "sprite2", "sprite3"
+					],
+					"speed": 6,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "cave_rope_3",
+			"png": "assets/sprites/cave_rope_3.png",
+			"json": "assets/sprites/cave_rope_3.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"sprite1", "sprite2", "sprite3"
+					],
+					"speed": 6,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "cave_water_1",
+			"png": "assets/sprites/cave_water_1.png",
+			"json": "assets/sprites/cave_water_1.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"sprite1", "sprite2", "sprite3", "sprite1", "sprite3"
+					],
+					"speed": 6,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "cave_water_2",
+			"png": "assets/sprites/cave_water_2.png",
+			"json": "assets/sprites/cave_water_2.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"sprite1", "sprite2", "sprite3"
+					],
+					"speed": 6,
+					"loop": true,
+					"start": true
+				}
+			}
+		},
+		{
+			"name": "cave_water_3",
+			"png": "assets/sprites/cave_water_3.png",
+			"json": "assets/sprites/cave_water_3.json",
+			"animated": true,
+			"animations": {
+				"on": {
+					"name": "on",
+					"frames": [
+						"sprite1", "sprite2", "sprite3"
+					],
+					"speed": 6,
+					"loop": true,
 					"start": true
 				}
 			}

@@ -84,7 +84,7 @@ export default class Game extends Phaser.State {
     // this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room08';
+    this.startRoom = 'room19';
     this.playMusic = false
 
     // event variables
@@ -1105,8 +1105,6 @@ export default class Game extends Phaser.State {
 
   /** Check if door will allow travel */
   peekInDoor (player: Sprite, door: Door) {
-    log(`peeking in door ${door.name}`, LOG_LEVEL.DEBUG)
-
     if (door.open) {
       this.closeDoor()
       

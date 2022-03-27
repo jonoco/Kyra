@@ -475,9 +475,8 @@
 			"music": "forest",
 			"items": [],
 			"sprites": [
-				{ "name": "birch1", "x": 229, "y": 8 },
-				{ "name": "stone2", "x": 7, "y": 30 },
-				{ "name": "glow", "x": 123, "y": 30 },
+				{ "name": "birch1", "x": 231, "y": 8, "layer": "foreground" },
+				{ "name": "stone2", "x": 7, "y": 30, "layer": "foreground" },
 				{ "name": "altar", "x": 128, "y": 33 }
 			],
 			"blocks": [],

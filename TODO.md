@@ -34,14 +34,14 @@
 	+ [ ] fix sprites
 		- [x] cliff
 		- [ ] rocky outcrop (room17)
-		- [ ] create cave animations
+		- [x] create cave animations
   		- [ ] bridge
   		- [ ] water
 	+ [ ] update animations
 		- [x] brynn
 		- [ ] herman
 		- [ ] brandon
-		- [ ] bridge
+		- [x] bridge
 		- [x] pond
 	+ [ ] update sprite scaling
 - [x] move brandon's sprite meta to json; animations are being described in *createPlayer*
@@ -100,3 +100,4 @@
 - [ ] tear drop falls on the ground when placing it on the willow tree
 - [ ] method of spawning sprites in rooms through events causes sprites to only appear after the player tweens in
 - [x] cannot travel through doors
+- [ ] clicking on a door during transit can cause unexpected teleporation

@@ -736,8 +736,8 @@
 		},
 		{
 			"name": "lift down",
-			"png": "assets/sprites/liftdown.png",
-			"json": "assets/sprites/liftdown.json",
+			"png": "assets/sprites/tree_liftdown.png",
+			"json": "assets/sprites/tree_liftdown.json",
 			"scale": 1,
 			"action": null,
 			"animated": true,
@@ -758,8 +758,8 @@
 		},
 		{
 			"name": "lift up",
-			"png": "assets/sprites/liftup.png",
-			"json": "assets/sprites/liftup.json",
+			"png": "assets/sprites/tree_liftup.png",
+			"json": "assets/sprites/tree_liftup.json",
 			"scale": 1,
 			"action": null,
 			"animated": true,

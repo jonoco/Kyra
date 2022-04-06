@@ -1,15 +1,13 @@
-var path = require('path')
-var webpack = require('webpack')
-var CleanWebpackPlugin = require('clean-webpack-plugin')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var CopyWebpackPlugin = require('copy-webpack-plugin')
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 
 // Phaser webpack config
-var phaserModule = path.join(__dirname, '/node_modules/phaser-ce/')
-var phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
-var pixi = path.join(phaserModule, 'build/custom/pixi.js')
-var p2 = path.join(phaserModule, 'build/custom/p2.js')
+const phaserModule = path.join(__dirname, '/node_modules/phaser-ce/')
+const phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
+const pixi = path.join(phaserModule, 'build/custom/pixi.js')
+const p2 = path.join(phaserModule, 'build/custom/p2.js')
 
 module.exports = env => {
 
@@ -19,31 +17,25 @@ module.exports = env => {
   console.log('env.debug: ' + env.debug);  
 
   return {
+    mode: 'production',
     entry: {
       app: [
-        'babel-polyfill',
-        path.resolve(__dirname, 'src/main.js')
+        path.resolve(__dirname, 'src/main.ts')
       ],
       vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
-
     },
-    loader: {},
     output: {
-      path: path.resolve(__dirname, 'build'),
-      publicPath: './',
-      filename: 'js/bundle.js'
+      path: path.resolve(__dirname, 'dist'),
+      publicPath: './dist/',
+      filename: '[name].js'
     },
     plugins: [
       new webpack.DefinePlugin({
           __DEV__: JSON.stringify(JSON.parse(env.dev || 'false')),
           __DEBUG__: JSON.stringify(JSON.parse(env.debug || 'false')),
         }),
-      new CleanWebpackPlugin(['build']),
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-      new UglifyJSPlugin(),
-      new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' /* chunkName= */ , filename: 'js/vendor.bundle.js' /* filename= */ }),
       new HtmlWebpackPlugin({
-        filename: 'index.html', // path.resolve(__dirname, 'build', 'index.html'),
+        filename: '../index.html', 
         template: './src/index.html',
         chunks: ['vendor', 'app'],
         chunksSortMode: 'manual',
@@ -58,30 +50,34 @@ module.exports = env => {
           removeEmptyAttributes: true
         },
         hash: true
-      }),
-      new CopyWebpackPlugin([
-        { from: 'assets', to: 'assets' }
-      ])
+      })
     ],
     module: {
       rules: [
-        { test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
+        {
+          test: /\.js$/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env']
+            }
+          },
+          include: path.join(__dirname, 'src')
+        },
         { test: /pixi\.js/, use: ['expose-loader?PIXI'] },
         { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
-        { test: /p2\.js/, use: ['expose-loader?p2'] }
+        { test: /p2\.js/, use: ['expose-loader?p2'] },
+        { test: /\.ts$/, loader: 'ts-loader', exclude: '/node_modules/' }
       ]
     },
-    node: {
-      fs: 'empty',
-      net: 'empty',
-      tls: 'empty'
-    },
     resolve: {
+      preferRelative: true,
       alias: {
         'phaser': phaser,
         'pixi': pixi,
         'p2': p2
-      }
+      },
+      extensions: ['.ts', '.js'],
     }
   }
 }

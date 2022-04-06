@@ -12,7 +12,7 @@
     "dev": "webpack --env dev",
     "debug": "webpack --env dev --env debug",
     "build": "webpack --config webpack.production.config.js",
-    "deploy": "webpack --config webpack.production.config.js; gh-pages -d build",
+    "deploy": "webpack --config webpack.production.config.js; gh-pages -d dist",
     "cordova": "webpack --config webpack.cordova.config.js",
     "test": "eslint './src/**/*.js'"
   },

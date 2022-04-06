@@ -837,7 +837,7 @@
 		},
 		{
 			"name": "brynn-enter",
-			"png": "assets/sprites/brynn_ente.png",
+			"png": "assets/sprites/brynn_enter.png",
 			"json": "assets/sprites/brynn_enter.json",
 			"scale": 1,
 			"action": null,

@@ -84,8 +84,8 @@ export default class Game extends Phaser.State {
     // this.Quests = new Quests()
 
     // game debugging
-    this.startRoom = 'room02';
-    this.playMusic = false
+    this.startRoom = 'room01';
+    this.playMusic = true;
 
     // event variables
     this.eventQueue = [];

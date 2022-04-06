@@ -101,3 +101,5 @@
 - [ ] method of spawning sprites in rooms through events causes sprites to only appear after the player tweens in
 - [x] cannot travel through doors
 - [ ] clicking on a door during transit can cause unexpected teleporation
+- [ ] tear drop respawns every time player enters sorrow pool after catching
+- [x] music won't start after click-to-start removed

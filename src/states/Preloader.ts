@@ -18,16 +18,21 @@ export default class extends Phaser.State {
       'preloaderBackground'
     )
     this.loaderBg.scale.setTo(window.app.scaleFactor)
+    this.loaderBg.inputEnabled = true;
+    this.loaderBg.events.onInputDown.add(() => {
+      if (this.ready) this.state.start('Game')
+    }, this)
 
     this.message = this.add.text()
     this.message.x = this.game.world.centerX
-    this.message.y = 420
+    this.message.y = 0.8 * this.game.world.height
     this.message.font = 'kyrandia'
     this.message.fontSize = 30
     this.message.fill = '#eeeeee'
     this.message.stroke = '#000000'
     this.message.strokeThickness = 3
     this.message.text = "loading ..."
+    this.message.moveUp()
 
     centerGameObjects([this.loaderBg, this.message])
 
@@ -64,18 +69,11 @@ export default class extends Phaser.State {
 
       if (progress == 100) {
         console.log('preload complete')
+        this.message.text = 'click to start'
         this.ready = true
       }
 
     }, this)
-  }
-
-
-  // Wait for asset loading to complete
-  update () {
-    if (this.ready) {
-      this.state.start('Game')
-    }
   }
 
 
